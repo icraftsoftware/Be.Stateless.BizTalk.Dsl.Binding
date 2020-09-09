@@ -1,0 +1,108 @@
+﻿#region Copyright & License
+
+// Copyright © 2012 - 2020 François Chabot
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#endregion
+
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.ServiceModel;
+using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
+using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using FluentAssertions;
+using Xunit;
+using static Be.Stateless.DelegateFactory;
+
+namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
+{
+	public class WcfNetMsmqAdapterOutboundFixture
+	{
+		[Fact]
+		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
+		public void SerializeToXml()
+		{
+			var nma = new WcfNetMsmqAdapter.Outbound(
+				a => {
+					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Identity = EndpointIdentityFactory.CreateCertificateIdentity(
+						StoreLocation.LocalMachine,
+						StoreName.TrustedPeople,
+						X509FindType.FindBySubjectName,
+						"subject-name");
+					a.SecurityMode = NetMsmqSecurityMode.Message;
+					a.SendTimeout = TimeSpan.FromMinutes(2);
+					a.UseSourceJournal = true;
+					a.DeadLetterQueue = DeadLetterQueue.Custom;
+					a.CustomDeadLetterQueue = "net.msmq://localhost/deadLetterQueueName";
+					a.StaticAction = "http://biztalk.stateless.be/action";
+				});
+			var xml = nma.GetAdapterBindingInfoSerializer().Serialize();
+			xml.Should().Be(
+				"<CustomProps>" +
+				"<TimeToLive vt=\"8\">1.00:00:00</TimeToLive>" +
+				"<UseSourceJournal vt=\"11\">-1</UseSourceJournal>" +
+				"<DeadLetterQueue vt=\"8\">Custom</DeadLetterQueue>" +
+				"<CustomDeadLetterQueue vt=\"8\">net.msmq://localhost/deadLetterQueueName</CustomDeadLetterQueue>" +
+				"<EnableTransaction vt=\"11\">-1</EnableTransaction>" +
+				"<SecurityMode vt=\"8\">Message</SecurityMode>" +
+				"<MessageClientCredentialType vt=\"8\">Windows</MessageClientCredentialType>" +
+				"<AlgorithmSuite vt=\"8\">Basic256</AlgorithmSuite>" +
+				"<MsmqAuthenticationMode vt=\"8\">WindowsDomain</MsmqAuthenticationMode>" +
+				"<MsmqProtectionLevel vt=\"8\">Sign</MsmqProtectionLevel>" +
+				"<MsmqSecureHashAlgorithm vt=\"8\">Sha1</MsmqSecureHashAlgorithm>" +
+				"<MsmqEncryptionAlgorithm vt=\"8\">RC4Stream</MsmqEncryptionAlgorithm>" +
+				"<UseSSO vt=\"11\">0</UseSSO>" +
+				"<StaticAction vt=\"8\">http://biztalk.stateless.be/action</StaticAction>" +
+				"<OutboundBodyLocation vt=\"8\">UseBodyElement</OutboundBodyLocation>" +
+				"<OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"xml\"/&gt;</OutboundXmlTemplate>" +
+				"<OpenTimeout vt=\"8\">00:01:00</OpenTimeout>" +
+				"<SendTimeout vt=\"8\">00:02:00</SendTimeout>" +
+				"<CloseTimeout vt=\"8\">00:01:00</CloseTimeout>" +
+				"<Identity vt=\"8\">" + (
+					"&lt;identity&gt;\r\n  " +
+					"&lt;certificateReference storeName=\"TrustedPeople\" " +
+					"storeLocation=\"LocalMachine\" " +
+					"x509FindType=\"FindBySubjectName\" " +
+					"findValue=\"subject-name\" " +
+					"isChainIncluded=\"False\" /&gt;\r\n" +
+					"&lt;/identity&gt;") +
+				"</Identity>" +
+				"</CustomProps>");
+		}
+
+		[Fact(Skip = "TODO")]
+		public void Validate()
+		{
+			// TODO Validate()
+		}
+
+		[Fact]
+		public void ValidateDoesNotThrow()
+		{
+			var nma = new WcfNetMsmqAdapter.Outbound(
+				a => {
+					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.SecurityMode = NetMsmqSecurityMode.Message;
+					a.UseSourceJournal = true;
+					a.DeadLetterQueue = DeadLetterQueue.Custom;
+					a.CustomDeadLetterQueue = "net.msmq://localhost/deadLetterQueueName";
+					a.StaticAction = "http://biztalk.stateless.be/action";
+				});
+
+			Action(() => ((ISupportValidation) nma).Validate()).Should().NotThrow();
+		}
+	}
+}

@@ -26,7 +26,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	public class SBMessagingAdapterFixture
 	{
 		[Fact]
-		public void ProtocolTypeSettingsAreReadFromRegistry()
+		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
 		{
 			var mock = new Mock<SBMessagingAdapter<SBMessagingRLConfig>> { CallBase = true };
 			var fa = mock.Object as IAdapter;

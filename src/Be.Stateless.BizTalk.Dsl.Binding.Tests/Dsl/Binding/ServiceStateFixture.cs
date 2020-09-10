@@ -16,8 +16,9 @@
 
 #endregion
 
+extern alias ExplorerOM;
+using ExplorerOM::Microsoft.BizTalk.ExplorerOM;
 using FluentAssertions;
-using Microsoft.BizTalk.ExplorerOM;
 using Xunit;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding

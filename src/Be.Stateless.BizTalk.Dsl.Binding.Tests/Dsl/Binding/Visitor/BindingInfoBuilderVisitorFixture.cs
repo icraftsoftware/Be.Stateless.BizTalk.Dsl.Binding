@@ -16,17 +16,25 @@
 
 #endregion
 
+extern alias ExplorerOM;
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.MicroPipelines;
 using Be.Stateless.BizTalk.Orchestrations.Bound;
+using ExplorerOM::Microsoft.BizTalk.ExplorerOM;
 using FluentAssertions;
+using Microsoft.BizTalk.BtsScheduleHelper;
 using Microsoft.BizTalk.Deployment.Binding;
-using Microsoft.BizTalk.ExplorerOM;
 using Moq;
 using Xunit;
 using static Be.Stateless.DelegateFactory;
+using BtsDayOfWeek = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.BtsDayOfWeek;
+using Month = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.Month;
+using MonthDay = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.MonthDay;
+using OrdinalType = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.OrdinalType;
+using ProtocolType = Microsoft.BizTalk.Deployment.Binding.ProtocolType;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
@@ -37,6 +45,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			var visitor = new BindingInfoBuilderVisitor();
 			visitor.VisitApplicationBinding(new TestApplication());
+
 			var binding = visitor.BindingInfo;
 
 			binding.BindingParameters.BindingActions.Should().Be(BindingParameters.BindingActionTypes.Bind);
@@ -65,30 +74,49 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		public void CreateReceiveLocationOneWay()
 		{
 			var dsl = new OneWayReceiveLocation();
-
 			var visitor = new BindingInfoBuilderVisitor();
 			var binding = visitor.CreateReceiveLocation(dsl);
 
 			binding.Name.Should().Be(nameof(OneWayReceiveLocation));
+			binding.Enable.Should().BeFalse();
 			binding.Address.Should().Be(@"c:\file\drops\*.xml");
 			binding.Description.Should().Be("Some Useless One-Way Test Receive Location");
-			binding.Enable.Should().BeFalse();
-			binding.EndDate.Should().Be(dsl.Transport.Schedule.StopDate);
-			binding.EndDateEnabled.Should().BeTrue();
-			binding.FromTime.Should().Be(dsl.Transport.Schedule.ServiceWindow.StartTime);
+
+			binding.TransportType.Should().BeEquivalentTo(new ProtocolType { Name = "Test Dummy" });
+			binding.TransportTypeData.Should().Be("<CustomProps />");
+			binding.ReceiveHandler.TransportType.Name.Should().Be("Test Dummy");
 			binding.ReceiveHandler.Name.Should().Be("Receive Host Name");
+
 			binding.ReceivePipeline.Name.Should().Be(typeof(PassThruReceive).FullName);
 			binding.ReceivePipeline.FullyQualifiedName.Should().Be(typeof(PassThruReceive).AssemblyQualifiedName);
 			binding.ReceivePipeline.TrackingOption.Should().Be(PipelineTrackingTypes.None);
-			binding.ReceiveHandler.TransportType.Name.Should().Be("Test Dummy");
 			binding.ReceivePipeline.Type.Should().Be(PipelineRef.ReceivePipelineRef().Type);
 			binding.ReceivePipelineData.Should().NotBeNullOrEmpty();
+
 			binding.SendPipeline.Should().BeNull();
 			binding.SendPipelineData.Should().BeNull();
-			binding.ServiceWindowEnabled.Should().BeTrue();
+
+			binding.ScheduleTimeZone.Should().Be(TimeZoneInfo.Utc.Id);
+			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeTrue();
 			binding.StartDate.Should().Be(dsl.Transport.Schedule.StartDate);
 			binding.StartDateEnabled.Should().BeTrue();
+			binding.EndDate.Should().Be(dsl.Transport.Schedule.StopDate);
+			binding.EndDateEnabled.Should().BeTrue();
+
+			binding.ServiceWindowEnabled.Should().BeTrue();
+			binding.FromTime.Should().Be(dsl.Transport.Schedule.ServiceWindow.StartTime);
 			binding.ToTime.Should().Be(dsl.Transport.Schedule.ServiceWindow.StopTime);
+
+			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.Day);
+			binding.ScheduleRecurFrom.Should().Be(new DailyServiceWindow().From);
+			binding.ScheduleRecurInterval.Should().Be(1);
+			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.None);
+			binding.ScheduleMonths.Should().Be(Month.None);
+			binding.ScheduleMonthDays.Should().Be(MonthDay.None);
+			binding.ScheduleLastDayOfMonth.Should().BeFalse();
+			binding.ScheduleOrdinalDayOfWeek.Should().Be(BtsDayOfWeek.None);
+			binding.ScheduleOrdinalType.Should().Be(OrdinalType.None);
+			binding.ScheduleIsOrdinal.Should().BeFalse();
 		}
 
 		[Fact]
@@ -98,28 +126,290 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var binding = visitor.CreateReceiveLocation(new TwoWayReceiveLocation());
 
 			binding.Name.Should().Be(nameof(TwoWayReceiveLocation));
+			binding.Enable.Should().BeFalse();
 			binding.Address.Should().Be(@"c:\file\drops\*.xml");
 			binding.Description.Should().Be("Some Useless Two-Way Test Receive Location");
-			binding.Enable.Should().BeFalse();
-			binding.EndDate.Should().Be(Schedule.None.StopDate);
-			binding.EndDateEnabled.Should().BeFalse();
-			binding.FromTime.Should().Be(ServiceWindow.None.StartTime);
+
+			binding.TransportType.Should().BeEquivalentTo(new ProtocolType { Name = "Test Dummy" });
+			binding.TransportTypeData.Should().Be("<CustomProps />");
 			binding.ReceiveHandler.Name.Should().Be("Receive Host Name");
+			binding.ReceiveHandler.TransportType.Name.Should().Be("Test Dummy");
+
 			binding.ReceivePipeline.Name.Should().Be(typeof(PassThruReceive).FullName);
 			binding.ReceivePipeline.FullyQualifiedName.Should().Be(typeof(PassThruReceive).AssemblyQualifiedName);
 			binding.ReceivePipeline.TrackingOption.Should().Be(PipelineTrackingTypes.None);
-			binding.ReceiveHandler.TransportType.Name.Should().Be("Test Dummy");
 			binding.ReceivePipeline.Type.Should().Be(PipelineRef.ReceivePipelineRef().Type);
 			binding.ReceivePipelineData.Should().BeEmpty();
+
 			binding.SendPipeline.Name.Should().Be(typeof(PassThruTransmit).FullName);
 			binding.SendPipeline.FullyQualifiedName.Should().Be(typeof(PassThruTransmit).AssemblyQualifiedName);
 			binding.SendPipeline.TrackingOption.Should().Be(PipelineTrackingTypes.None);
 			binding.SendPipeline.Type.Should().Be(PipelineRef.TransmitPipelineRef().Type);
 			binding.SendPipelineData.Should().NotBeNullOrEmpty();
-			binding.ServiceWindowEnabled.Should().BeFalse();
+
+			binding.ScheduleTimeZone.Should().BeNull();
+			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
 			binding.StartDate.Should().Be(Schedule.None.StartDate);
 			binding.StartDateEnabled.Should().BeFalse();
+			binding.EndDate.Should().Be(Schedule.None.StopDate);
+			binding.EndDateEnabled.Should().BeFalse();
+
+			binding.ServiceWindowEnabled.Should().BeFalse();
+			binding.FromTime.Should().Be(ServiceWindow.None.StartTime);
 			binding.ToTime.Should().Be(ServiceWindow.None.StopTime);
+
+			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.None);
+			binding.ScheduleRecurFrom.Should().Be(new DailyServiceWindow().From);
+			binding.ScheduleRecurInterval.Should().Be(1);
+			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.None);
+			binding.ScheduleMonths.Should().Be(Month.None);
+			binding.ScheduleMonthDays.Should().Be(MonthDay.None);
+			binding.ScheduleLastDayOfMonth.Should().BeFalse();
+			binding.ScheduleOrdinalDayOfWeek.Should().Be(BtsDayOfWeek.None);
+			binding.ScheduleOrdinalType.Should().Be(OrdinalType.None);
+			binding.ScheduleIsOrdinal.Should().BeFalse();
+		}
+
+		[Fact]
+		public void CreateReceiveLocationWithCalendricalMonthlyServiceWindow()
+		{
+			var receiveLocation = new ReceiveLocation(
+				rl => {
+					rl.Name = "Dummy Receive Location";
+					rl.Transport.Adapter = new DummyAdapter();
+					rl.Transport.Host = "Receive Host Name";
+					rl.Transport.Schedule = new Schedule {
+						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"),
+						AutomaticallyAdjustForDaylightSavingTime = false,
+						StartDate = new DateTime(2020, 1, 30),
+						StopDate = new DateTime(2020, 3, 13),
+						ServiceWindow = new CalendricalMonthlyServiceWindow {
+							StartTime = new Time(19, 19, 19),
+							StopTime = new Time(9, 9, 9),
+							Months = Month.January | Month.Feburary | Month.March,
+							Days = MonthDay.Day31 | MonthDay.Day14 | MonthDay.Day15,
+							OnLastDay = true
+						}
+					};
+					rl.ReceivePipeline = new ReceivePipeline<PassThruReceive>();
+				});
+			var visitor = new BindingInfoBuilderVisitor();
+
+			var binding = visitor.CreateReceiveLocation(receiveLocation);
+			binding.ScheduleTimeZone.Should().Be("Pacific Standard Time");
+			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
+			binding.StartDate.Should().Be(new DateTime(2020, 1, 30));
+			binding.StartDateEnabled.Should().BeTrue();
+			binding.EndDate.Should().Be(new DateTime(2020, 3, 13));
+			binding.EndDateEnabled.Should().BeTrue();
+
+			binding.ServiceWindowEnabled.Should().BeTrue();
+			binding.FromTime.TimeOfDay.Should().Be(((DateTime) new Time(19, 19, 19)).TimeOfDay);
+			binding.ToTime.TimeOfDay.Should().Be(((DateTime) new Time(9, 9, 9)).TimeOfDay);
+
+			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.Month);
+			binding.ScheduleRecurFrom.Should().Be(new DailyServiceWindow().From);
+			binding.ScheduleRecurInterval.Should().Be(1);
+
+			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.None);
+
+			binding.ScheduleMonths.Should().Be(Month.January | Month.Feburary | Month.March);
+			binding.ScheduleMonthDays.Should().Be(MonthDay.Day31 | MonthDay.Day14 | MonthDay.Day15);
+			binding.ScheduleLastDayOfMonth.Should().BeTrue();
+			binding.ScheduleOrdinalDayOfWeek.Should().Be(BtsDayOfWeek.None);
+			binding.ScheduleOrdinalType.Should().Be(OrdinalType.None);
+			binding.ScheduleIsOrdinal.Should().BeFalse();
+		}
+
+		[Fact]
+		public void CreateReceiveLocationWithDailyServiceWindow()
+		{
+			var receiveLocation = new ReceiveLocation(
+				rl => {
+					rl.Name = "Dummy Receive Location";
+					rl.Transport.Adapter = new DummyAdapter();
+					rl.Transport.Host = "Receive Host Name";
+					rl.Transport.Schedule = new Schedule {
+						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"),
+						AutomaticallyAdjustForDaylightSavingTime = false,
+						StartDate = new DateTime(2020, 1, 30),
+						StopDate = new DateTime(2020, 3, 13),
+						ServiceWindow = new DailyServiceWindow {
+							StartTime = new Time(19, 19, 19),
+							StopTime = new Time(9, 9, 9),
+							From = new DateTime(2020, 2, 14),
+							Interval = 10
+						}
+					};
+					rl.ReceivePipeline = new ReceivePipeline<PassThruReceive>();
+				});
+			var visitor = new BindingInfoBuilderVisitor();
+
+			var binding = visitor.CreateReceiveLocation(receiveLocation);
+			binding.ScheduleTimeZone.Should().Be("Atlantic Standard Time");
+			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
+			binding.StartDate.Should().Be(new DateTime(2020, 1, 30));
+			binding.StartDateEnabled.Should().BeTrue();
+			binding.EndDate.Should().Be(new DateTime(2020, 3, 13));
+			binding.EndDateEnabled.Should().BeTrue();
+
+			binding.ServiceWindowEnabled.Should().BeTrue();
+			binding.FromTime.TimeOfDay.Should().Be(((DateTime) new Time(19, 19, 19)).TimeOfDay);
+			binding.ToTime.TimeOfDay.Should().Be(((DateTime) new Time(9, 9, 9)).TimeOfDay);
+
+			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.Day);
+			binding.ScheduleRecurFrom.Should().Be(new DateTime(2020, 2, 14));
+			binding.ScheduleRecurInterval.Should().Be(10);
+
+			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.None);
+
+			binding.ScheduleMonths.Should().Be(Month.None);
+			binding.ScheduleMonthDays.Should().Be(MonthDay.None);
+			binding.ScheduleLastDayOfMonth.Should().BeFalse();
+			binding.ScheduleOrdinalDayOfWeek.Should().Be(BtsDayOfWeek.None);
+			binding.ScheduleOrdinalType.Should().Be(OrdinalType.None);
+			binding.ScheduleIsOrdinal.Should().BeFalse();
+		}
+
+		[Fact]
+		public void CreateReceiveLocationWithOrdinalMonthlyServiceWindow()
+		{
+			var receiveLocation = new ReceiveLocation(
+				rl => {
+					rl.Name = "Dummy Receive Location";
+					rl.Transport.Adapter = new DummyAdapter();
+					rl.Transport.Host = "Receive Host Name";
+					rl.Transport.Schedule = new Schedule {
+						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"),
+						AutomaticallyAdjustForDaylightSavingTime = false,
+						StartDate = new DateTime(2020, 1, 30),
+						StopDate = new DateTime(2020, 3, 13),
+						ServiceWindow = new OrdinalMonthlyServiceWindow {
+							StartTime = new Time(19, 19, 19),
+							StopTime = new Time(9, 9, 9),
+							Months = Month.January | Month.Feburary | Month.March,
+							WeekDays = BtsDayOfWeek.Friday | BtsDayOfWeek.Saturday,
+							Ordinality = OrdinalType.Second | OrdinalType.Last
+						}
+					};
+					rl.ReceivePipeline = new ReceivePipeline<PassThruReceive>();
+				});
+			var visitor = new BindingInfoBuilderVisitor();
+
+			var binding = visitor.CreateReceiveLocation(receiveLocation);
+			binding.ScheduleTimeZone.Should().Be("Pacific Standard Time");
+			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
+			binding.StartDate.Should().Be(new DateTime(2020, 1, 30));
+			binding.StartDateEnabled.Should().BeTrue();
+			binding.EndDate.Should().Be(new DateTime(2020, 3, 13));
+			binding.EndDateEnabled.Should().BeTrue();
+
+			binding.ServiceWindowEnabled.Should().BeTrue();
+			binding.FromTime.TimeOfDay.Should().Be(((DateTime) new Time(19, 19, 19)).TimeOfDay);
+			binding.ToTime.TimeOfDay.Should().Be(((DateTime) new Time(9, 9, 9)).TimeOfDay);
+
+			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.Month);
+			binding.ScheduleRecurFrom.Should().Be(new DailyServiceWindow().From);
+			binding.ScheduleRecurInterval.Should().Be(1);
+
+			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.None);
+
+			binding.ScheduleMonths.Should().Be(Month.January | Month.Feburary | Month.March);
+			binding.ScheduleMonthDays.Should().Be(MonthDay.None);
+			binding.ScheduleLastDayOfMonth.Should().BeFalse();
+			binding.ScheduleOrdinalDayOfWeek.Should().Be(BtsDayOfWeek.Friday | BtsDayOfWeek.Saturday);
+			binding.ScheduleOrdinalType.Should().Be(OrdinalType.Second | OrdinalType.Last);
+			binding.ScheduleIsOrdinal.Should().BeTrue();
+		}
+
+		[Fact]
+		public void CreateReceiveLocationWithoutSchedule()
+		{
+			var receiveLocation = new ReceiveLocation(
+				rl => {
+					rl.Name = "Dummy Receive Location";
+					rl.Transport.Adapter = new DummyAdapter();
+					rl.Transport.Host = "Receive Host Name";
+					rl.ReceivePipeline = new ReceivePipeline<PassThruReceive>();
+				});
+			var visitor = new BindingInfoBuilderVisitor();
+
+			var binding = visitor.CreateReceiveLocation(receiveLocation);
+
+			binding.ScheduleTimeZone.Should().BeNull();
+			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
+			binding.StartDate.Should().Be(Schedule.None.StartDate);
+			binding.StartDateEnabled.Should().BeFalse();
+			binding.EndDate.Should().Be(Schedule.None.StopDate);
+			binding.EndDateEnabled.Should().BeFalse();
+
+			binding.ServiceWindowEnabled.Should().BeFalse();
+			binding.FromTime.Should().Be(ServiceWindow.None.StartTime);
+			binding.ToTime.Should().Be(ServiceWindow.None.StopTime);
+
+			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.None);
+			binding.ScheduleRecurFrom.Should().Be(new DailyServiceWindow().From);
+			binding.ScheduleRecurInterval.Should().Be(1);
+
+			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.None);
+
+			binding.ScheduleMonths.Should().Be(Month.None);
+			binding.ScheduleMonthDays.Should().Be(MonthDay.None);
+			binding.ScheduleLastDayOfMonth.Should().BeFalse();
+			binding.ScheduleOrdinalDayOfWeek.Should().Be(BtsDayOfWeek.None);
+			binding.ScheduleOrdinalType.Should().Be(OrdinalType.None);
+			binding.ScheduleIsOrdinal.Should().BeFalse();
+		}
+
+		[Fact]
+		public void CreateReceiveLocationWithWeeklyServiceWindow()
+		{
+			var receiveLocation = new ReceiveLocation(
+				rl => {
+					rl.Name = "Dummy Receive Location";
+					rl.Transport.Adapter = new DummyAdapter();
+					rl.Transport.Host = "Receive Host Name";
+					rl.Transport.Schedule = new Schedule {
+						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"),
+						AutomaticallyAdjustForDaylightSavingTime = false,
+						StartDate = new DateTime(2020, 1, 30),
+						StopDate = new DateTime(2020, 3, 13),
+						ServiceWindow = new WeeklyServiceWindow {
+							StartTime = new Time(19, 19, 19),
+							StopTime = new Time(9, 9, 9),
+							From = new DateTime(2020, 2, 14),
+							Interval = 10,
+							WeekDays = BtsDayOfWeek.Friday | BtsDayOfWeek.Saturday
+						}
+					};
+					rl.ReceivePipeline = new ReceivePipeline<PassThruReceive>();
+				});
+			var visitor = new BindingInfoBuilderVisitor();
+
+			var binding = visitor.CreateReceiveLocation(receiveLocation);
+			binding.ScheduleTimeZone.Should().Be("Atlantic Standard Time");
+			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
+			binding.StartDate.Should().Be(new DateTime(2020, 1, 30));
+			binding.StartDateEnabled.Should().BeTrue();
+			binding.EndDate.Should().Be(new DateTime(2020, 3, 13));
+			binding.EndDateEnabled.Should().BeTrue();
+
+			binding.ServiceWindowEnabled.Should().BeTrue();
+			binding.FromTime.TimeOfDay.Should().Be(((DateTime) new Time(19, 19, 19)).TimeOfDay);
+			binding.ToTime.TimeOfDay.Should().Be(((DateTime) new Time(9, 9, 9)).TimeOfDay);
+
+			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.Week);
+			binding.ScheduleRecurFrom.Should().Be(new DateTime(2020, 2, 14));
+			binding.ScheduleRecurInterval.Should().Be(10);
+
+			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.Friday | BtsDayOfWeek.Saturday);
+
+			binding.ScheduleMonths.Should().Be(Month.None);
+			binding.ScheduleMonthDays.Should().Be(MonthDay.None);
+			binding.ScheduleLastDayOfMonth.Should().BeFalse();
+			binding.ScheduleOrdinalDayOfWeek.Should().Be(BtsDayOfWeek.None);
+			binding.ScheduleOrdinalType.Should().Be(OrdinalType.None);
+			binding.ScheduleIsOrdinal.Should().BeFalse();
 		}
 
 		[Fact]

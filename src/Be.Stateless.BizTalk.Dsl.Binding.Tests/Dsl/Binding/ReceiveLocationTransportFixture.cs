@@ -16,6 +16,7 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using FluentAssertions;
 using Moq;
 using Xunit;

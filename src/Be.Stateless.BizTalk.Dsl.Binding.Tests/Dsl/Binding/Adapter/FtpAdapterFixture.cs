@@ -25,7 +25,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	public class FtpAdapterFixture
 	{
 		[Fact]
-		public void ProtocolTypeSettingsAreReadFromRegistry()
+		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
 		{
 			var mock = new Mock<FtpAdapter> { CallBase = true };
 			var fa = mock.Object as IAdapter;

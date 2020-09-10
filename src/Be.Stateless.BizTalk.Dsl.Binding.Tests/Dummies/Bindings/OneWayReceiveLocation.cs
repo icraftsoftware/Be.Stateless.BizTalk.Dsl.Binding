@@ -19,6 +19,7 @@
 using System;
 using Be.Stateless.BizTalk.Component;
 using Be.Stateless.BizTalk.Dsl.Binding;
+using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
 
@@ -47,7 +48,7 @@ namespace Be.Stateless.BizTalk.Dummies.Bindings
 			Transport.Schedule = new Schedule {
 				StartDate = DateTime.Today,
 				StopDate = DateTime.Today.AddDays(12),
-				ServiceWindow = new ServiceWindow {
+				ServiceWindow = new DailyServiceWindow {
 					StartTime = new Time(13, 15),
 					StopTime = new Time(14, 15)
 				}

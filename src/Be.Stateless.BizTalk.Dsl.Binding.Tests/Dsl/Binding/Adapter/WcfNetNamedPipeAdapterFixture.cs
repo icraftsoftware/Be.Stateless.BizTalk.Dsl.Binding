@@ -26,7 +26,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	public class WcfNetNamedPipeAdapterFixture
 	{
 		[Fact]
-		public void ProtocolTypeSettingsAreReadFromRegistry()
+		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
 		{
 			var mock = new Mock<WcfNetNamedPipeAdapter<NetNamedPipeRLConfig>> { CallBase = true };
 			var wsa = mock.Object as IAdapter;

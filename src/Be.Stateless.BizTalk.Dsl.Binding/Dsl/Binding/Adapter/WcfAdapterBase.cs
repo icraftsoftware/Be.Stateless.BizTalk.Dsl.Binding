@@ -16,6 +16,7 @@
 
 #endregion
 
+extern alias ExplorerOM;
 using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
@@ -119,7 +120,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		protected override void Save(IPropertyBag propertyBag)
 		{
-			_adapterConfig.Save(propertyBag as Microsoft.BizTalk.ExplorerOM.IPropertyBag);
+			_adapterConfig.Save(propertyBag as ExplorerOM::Microsoft.BizTalk.ExplorerOM.IPropertyBag);
 		}
 
 		protected override void Validate()

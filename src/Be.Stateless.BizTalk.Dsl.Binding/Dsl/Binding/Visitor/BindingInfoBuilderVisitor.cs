@@ -16,20 +16,21 @@
 
 #endregion
 
+extern alias ExplorerOM;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Dsl.Pipeline;
 using Be.Stateless.Extensions;
+using ExplorerOM::Microsoft.BizTalk.ExplorerOM;
 using Microsoft.BizTalk.Deployment.Binding;
-using Microsoft.BizTalk.ExplorerOM;
 using BtsReceiveLocation = Microsoft.BizTalk.Deployment.Binding.ReceiveLocation;
 using BtsReceivePort = Microsoft.BizTalk.Deployment.Binding.ReceivePort;
 using BtsSendPort = Microsoft.BizTalk.Deployment.Binding.SendPort;
-using TransportInfo = Microsoft.BizTalk.Deployment.Binding.TransportInfo;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
@@ -217,7 +218,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				IsTwoWay = receivePort.IsTwoWay,
 				Name = ((ISupportNamingConvention) receivePort).Name,
 				// TODO OutboundTransforms =
-				ReceiveLocations = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocationCollection()
+				ReceiveLocations = new global::Microsoft.BizTalk.Deployment.Binding.ReceiveLocationCollection()
 				// TODO RouteFailedMessage =
 				// TODO SendPipelineData =
 				// TODO Tracking =
@@ -235,30 +236,66 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			((ISupportValidation) receiveLocation).Validate();
 
 			var location = new BtsReceiveLocation {
+				// General
 				Name = ((ISupportNamingConvention) receiveLocation).Name,
-				Address = receiveLocation.Transport.Adapter.Address,
-				Description = receiveLocation.Description,
 				Enable = false, // receiveLocation.Enabled is the responsibility of BizTalkServiceConfiguratorVisitor
-				EndDate = receiveLocation.Transport.Schedule.StopDate,
-				EndDateEnabled = receiveLocation.Transport.Schedule.StopDateEnabled,
-				// TODO EncryptionCert = 
-				FromTime = receiveLocation.Transport.Schedule.ServiceWindow.StartTime,
+				Address = receiveLocation.Transport.Adapter.Address,
 				// TODO Primary = 
 				PublicAddress = receiveLocation.Transport.Adapter.PublicAddress,
+				Description = receiveLocation.Description,
+
+				TransportType = receiveLocation.Transport.Adapter.ProtocolType,
+				TransportTypeData = receiveLocation.Transport.Adapter.GetAdapterBindingInfoSerializer().Serialize(),
 				ReceiveHandler = new ReceiveHandlerRef {
 					// TODO HostTrusted = ,
 					Name = receiveLocation.Transport.Host,
 					TransportType = receiveLocation.Transport.Adapter.ProtocolType
 				},
 				ReceivePipeline = CreateReceivePipelineRef(receiveLocation.ReceivePipeline),
-				ReceivePipelineData = receiveLocation.ReceivePipeline.GetPipelineBindingInfoSerializer().Serialize(),
-				ServiceWindowEnabled = receiveLocation.Transport.Schedule.ServiceWindow.Enabled,
-				StartDate = receiveLocation.Transport.Schedule.StartDate,
-				StartDateEnabled = receiveLocation.Transport.Schedule.StartDateEnabled,
-				ToTime = receiveLocation.Transport.Schedule.ServiceWindow.StopTime,
-				TransportType = receiveLocation.Transport.Adapter.ProtocolType,
-				TransportTypeData = receiveLocation.Transport.Adapter.GetAdapterBindingInfoSerializer().Serialize()
+				ReceivePipelineData = receiveLocation.ReceivePipeline.GetPipelineBindingInfoSerializer().Serialize()
+				// TODO EncryptionCert = 
 			};
+			if (receiveLocation.Transport.Schedule != Schedule.None)
+			{
+				var transportSchedule = receiveLocation.Transport.Schedule;
+				// Schedule
+				location.ScheduleTimeZone = transportSchedule.TimeZone.Id;
+				location.ScheduleAutoAdjustToDaylightSaving = transportSchedule.AutomaticallyAdjustForDaylightSavingTime;
+				location.StartDate = transportSchedule.StartDate;
+				location.StartDateEnabled = transportSchedule.StartDateEnabled;
+				location.EndDate = transportSchedule.StopDate;
+				location.EndDateEnabled = transportSchedule.StopDateEnabled;
+				// Schedule Service Window
+				location.ServiceWindowEnabled = transportSchedule.ServiceWindow.Enabled;
+				location.FromTime = transportSchedule.ServiceWindow.StartTime;
+				location.ToTime = transportSchedule.ServiceWindow.StopTime;
+				// Schedule Recurrence
+				location.ScheduleRecurrenceType = transportSchedule.RecurrenceType;
+				switch (transportSchedule.ServiceWindow)
+				{
+					case DailyServiceWindow dailyServiceWindow:
+						location.ScheduleRecurFrom = dailyServiceWindow.From;
+						location.ScheduleRecurInterval = dailyServiceWindow.Interval;
+						break;
+					case WeeklyServiceWindow weeklyServiceWindow:
+						location.ScheduleRecurFrom = weeklyServiceWindow.From;
+						location.ScheduleRecurInterval = weeklyServiceWindow.Interval;
+						location.ScheduleDaysOfWeek = weeklyServiceWindow.WeekDays;
+						break;
+					case CalendricalMonthlyServiceWindow calendricalMonthlyServiceWindow:
+						location.ScheduleMonths = calendricalMonthlyServiceWindow.Months;
+						location.ScheduleIsOrdinal = false;
+						location.ScheduleMonthDays = calendricalMonthlyServiceWindow.Days;
+						location.ScheduleLastDayOfMonth = calendricalMonthlyServiceWindow.OnLastDay;
+						break;
+					case OrdinalMonthlyServiceWindow ordinalMonthlyServiceWindow:
+						location.ScheduleMonths = ordinalMonthlyServiceWindow.Months;
+						location.ScheduleIsOrdinal = true;
+						location.ScheduleOrdinalDayOfWeek = ordinalMonthlyServiceWindow.WeekDays;
+						location.ScheduleOrdinalType = ordinalMonthlyServiceWindow.Ordinality;
+						break;
+				}
+			}
 			if (receiveLocation.SendPipeline != null)
 			{
 				location.SendPipeline = CreateSendPipelineRef(receiveLocation.SendPipeline);
@@ -307,10 +344,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			return port;
 		}
 
-		protected virtual TransportInfo CreateTransportInfo(SendPortTransport transport, bool primary, bool orderedDelivery)
+		protected virtual global::Microsoft.BizTalk.Deployment.Binding.TransportInfo CreateTransportInfo(SendPortTransport transport, bool primary, bool orderedDelivery)
 		{
 			if (transport == null) throw new ArgumentNullException(nameof(transport));
-			var transportInfo = new TransportInfo {
+			var transportInfo = new global::Microsoft.BizTalk.Deployment.Binding.TransportInfo {
 				Address = transport.Adapter.Address,
 				// TODO DeliveryNotification = 0,
 				FromTime = transport.ServiceWindow.StartTime,

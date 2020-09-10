@@ -16,31 +16,66 @@
 
 #endregion
 
+extern alias ExplorerOM;
 using System;
+using ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper;
 using FluentAssertions;
 using Xunit;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 {
 	public class ScheduleFixture
 	{
 		[Fact]
-		public void NoneEqualsBindingDefaultServiceWindow()
+		public void DefaultEqualsBindingDefaultSchedule()
 		{
 			var rl = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocation();
 
+			var sut = new Schedule();
+
+			sut.TimeZone.Should().Be(TimeZoneInfo.Utc);
+			sut.AutomaticallyAdjustForDaylightSavingTime.Should().BeTrue();
+			sut.StartDate.Should().Be(rl.StartDate);
+			sut.StartDateEnabled.Should().Be(rl.StartDateEnabled);
+			sut.StopDate.Should().Be(rl.EndDate);
+			sut.StopDateEnabled.Should().Be(rl.EndDateEnabled);
+			sut.RecurrenceType.Should().Be(rl.ScheduleRecurrenceType);
+		}
+
+		[Fact]
+		public void NoneEqualsBindingDefaultSchedule()
+		{
+			var rl = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocation();
+
+			Schedule.None.TimeZone.Should().Be(TimeZoneInfo.Utc);
+			Schedule.None.AutomaticallyAdjustForDaylightSavingTime.Should().BeTrue();
 			Schedule.None.StartDate.Should().Be(rl.StartDate);
 			Schedule.None.StartDateEnabled.Should().BeFalse();
 			Schedule.None.StopDate.Should().Be(rl.EndDate);
 			Schedule.None.StopDateEnabled.Should().BeFalse();
+			Schedule.None.RecurrenceType.Should().Be(rl.ScheduleRecurrenceType);
+		}
 
+		[Fact]
+		public void NoneEqualsServiceWindowNone()
+		{
 			Schedule.None.ServiceWindow.Enabled.Should().Be(ServiceWindow.None.Enabled);
 			Schedule.None.ServiceWindow.StartTime.Should().Be(ServiceWindow.None.StartTime);
 			Schedule.None.ServiceWindow.StopTime.Should().Be(ServiceWindow.None.StopTime);
 		}
 
 		[Fact]
-		public void StartAndStopDateEnabled()
+		public void RecurrenceTypeIsComputedAfterServiceWindow()
+		{
+			new Schedule().RecurrenceType.Should().Be(RecurrenceType.None);
+			new Schedule { ServiceWindow = new DailyServiceWindow() }.RecurrenceType.Should().Be(RecurrenceType.Day);
+			new Schedule { ServiceWindow = new WeeklyServiceWindow() }.RecurrenceType.Should().Be(RecurrenceType.Week);
+			new Schedule { ServiceWindow = new CalendricalMonthlyServiceWindow() }.RecurrenceType.Should().Be(RecurrenceType.Month);
+			new Schedule { ServiceWindow = new OrdinalMonthlyServiceWindow() }.RecurrenceType.Should().Be(RecurrenceType.Month);
+		}
+
+		[Fact]
+		public void StartAndStopDatesAreEnabled()
 		{
 			var s = new Schedule { StartDate = new DateTime(2015, 2, 13), StopDate = new DateTime(2015, 2, 20) };
 
@@ -53,7 +88,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[Fact]
-		public void StartDateEnabled()
+		public void StartDateIsEnabled()
 		{
 			var s = new Schedule { StartDate = new DateTime(2015, 2, 13) };
 
@@ -67,7 +102,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[Fact]
-		public void StopDateEnabled()
+		public void StopDateIsEnabled()
 		{
 			var s = new Schedule { StopDate = new DateTime(2015, 2, 20) };
 

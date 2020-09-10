@@ -67,6 +67,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.BizTalk.ExplorerOM">
+      <Aliases>ExplorerOM</Aliases>
+    </Reference>
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Transactions" />

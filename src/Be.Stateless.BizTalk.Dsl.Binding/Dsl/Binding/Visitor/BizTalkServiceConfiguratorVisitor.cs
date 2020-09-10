@@ -16,13 +16,14 @@
 
 #endregion
 
+extern alias ExplorerOM;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Explorer;
 using log4net;
-using OrchestrationStatus = Microsoft.BizTalk.ExplorerOM.OrchestrationStatus;
-using PortStatus = Microsoft.BizTalk.ExplorerOM.PortStatus;
+using OrchestrationStatus = ExplorerOM::Microsoft.BizTalk.ExplorerOM.OrchestrationStatus;
+using PortStatus = ExplorerOM::Microsoft.BizTalk.ExplorerOM.PortStatus;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {

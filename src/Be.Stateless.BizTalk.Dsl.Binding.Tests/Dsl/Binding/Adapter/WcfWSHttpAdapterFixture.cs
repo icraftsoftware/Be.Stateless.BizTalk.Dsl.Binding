@@ -27,7 +27,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	public class WcfWSHttpAdapterFixture
 	{
 		[Fact]
-		public void ProtocolTypeSettingsAreReadFromRegistry()
+		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
 		{
 			var mock = new Mock<WcfWSHttpAdapter<EndpointAddress, WSHttpRLConfig>> { CallBase = true };
 			var nta = mock.Object as IAdapter;

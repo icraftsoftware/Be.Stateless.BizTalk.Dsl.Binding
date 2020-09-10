@@ -19,7 +19,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 {
 	[SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types")]
 	public readonly struct Time

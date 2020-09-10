@@ -18,6 +18,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
+using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {

@@ -26,7 +26,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	public class WcfBasicHttpRelayAdapterFixture
 	{
 		[Fact]
-		public void ProtocolTypeSettingsAreReadFromRegistry()
+		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
 		{
 			var mock = new Mock<WcfBasicHttpRelayAdapter<BasicHttpRelayRLConfig>> { CallBase = true };
 			var nta = mock.Object as IAdapter;

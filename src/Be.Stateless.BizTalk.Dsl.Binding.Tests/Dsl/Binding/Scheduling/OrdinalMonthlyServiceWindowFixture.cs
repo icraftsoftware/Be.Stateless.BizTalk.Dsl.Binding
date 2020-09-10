@@ -16,24 +16,24 @@
 
 #endregion
 
-using System.ServiceModel.Configuration;
 using FluentAssertions;
-using Microsoft.BizTalk.Adapter.Wcf.Config;
-using Moq;
 using Xunit;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
+namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 {
-	public class WcfCustomIsolatedAdapterFixture
+	public class OrdinalMonthlyServiceWindowFixture
 	{
 		[Fact]
-		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
+		public void DefaultEqualsBindingDefaultServiceWindow()
 		{
-			var mock = new Mock<WcfCustomIsolatedAdapter<BasicHttpBindingElement, CustomRLConfig>> { CallBase = true };
-			var wsa = mock.Object as IAdapter;
-			wsa.ProtocolType.Name.Should().Be("WCF-CustomIsolated");
-			wsa.ProtocolType.Capabilities.Should().Be(641);
-			wsa.ProtocolType.ConfigurationClsid.Should().Be("16824334-968f-42db-b33b-6f8d62ed1ebc");
+			var rl = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocation();
+
+			var sut = new OrdinalMonthlyServiceWindow();
+
+			sut.IsOrdinal.Should().BeTrue();
+			sut.Months.Should().Be(rl.ScheduleMonths);
+			sut.Ordinality.Should().Be(rl.ScheduleOrdinalType);
+			sut.WeekDays.Should().Be(rl.ScheduleOrdinalDayOfWeek);
 		}
 	}
 }

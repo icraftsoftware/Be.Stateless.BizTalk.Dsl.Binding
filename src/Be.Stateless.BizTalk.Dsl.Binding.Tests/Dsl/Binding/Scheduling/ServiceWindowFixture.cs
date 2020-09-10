@@ -20,7 +20,7 @@ using System;
 using FluentAssertions;
 using Xunit;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 {
 	public class ServiceWindowFixture
 	{

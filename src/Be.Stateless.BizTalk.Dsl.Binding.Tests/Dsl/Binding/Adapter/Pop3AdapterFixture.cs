@@ -25,7 +25,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	public class Pop3AdapterFixture
 	{
 		[Fact]
-		public void ProtocolTypeSettingsAreReadFromRegistry()
+		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
 		{
 			var mock = new Mock<Pop3Adapter> { CallBase = true };
 			var fa = mock.Object as IAdapter;

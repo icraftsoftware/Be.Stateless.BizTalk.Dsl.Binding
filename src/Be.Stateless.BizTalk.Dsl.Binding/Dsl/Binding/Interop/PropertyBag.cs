@@ -16,6 +16,7 @@
 
 #endregion
 
+extern alias ExplorerOM;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -34,7 +35,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Interop
 	/// Provides an object with a property bag in which the object can save its properties persistently.
 	/// </summary>
 	/// <seealso href="Microsoft.BizTalk.Internal.BTMPropertyBag" />
-	public class PropertyBag : IPropertyBag, Microsoft.BizTalk.ExplorerOM.IPropertyBag, IXmlSerializable
+	public class PropertyBag : IPropertyBag, ExplorerOM::Microsoft.BizTalk.ExplorerOM.IPropertyBag, IXmlSerializable
 	{
 		internal PropertyBag()
 		{

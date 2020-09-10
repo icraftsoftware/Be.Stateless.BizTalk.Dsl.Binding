@@ -20,8 +20,12 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.BizTalk.Deployment.Binding;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 {
+	/// <summary>
+	/// Scheduling properties for a receive location.
+	/// </summary>
+	/// <seealso href="https://docs.microsoft.com/en-us/biztalk/core/how-to-configure-scheduling-for-a-receive-location#configure-scheduling-for-a-receive-location">Configure scheduling for a receive location</seealso>
 	public class ServiceWindow
 	{
 		static ServiceWindow()

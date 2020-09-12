@@ -539,7 +539,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.Host.Trusted.Should().BeFalse();
 			binding.Host.Type.Should().Be((int) HostType.Invalid);
 			binding.Name.Should().Be(typeof(Process).FullName);
-			binding.State.Should().Be(ServiceRef.ServiceRefState.Enlisted);
+			binding.State.Should().Be(ServiceRef.ServiceRefState.Default);
 			binding.TrackingOption.Should().Be(OrchestrationTrackingTypes.None);
 			binding.Ports.Count.Should().Be(4);
 

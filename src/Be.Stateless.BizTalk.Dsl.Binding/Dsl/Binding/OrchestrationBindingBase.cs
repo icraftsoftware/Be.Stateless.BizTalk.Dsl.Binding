@@ -70,7 +70,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public IApplicationBinding ApplicationBinding { get; set; }
 
-		// TODO ?? fetch <om:Property Name='AnalystComments' from <om:Element Type='ServiceDeclaration' ??
 		public string Description { get; set; }
 
 		public string Host { get; set; }
@@ -163,7 +162,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			get
 			{
-				// TODO ensure we get private types as well
 				// see also https://docs.microsoft.com/en-us/dotnet/api/system.web.services.description.operationflow
 				return ((PortInfo[]) Reflector.GetField(typeof(T), "_portInfo"))
 					// filter out direct ports

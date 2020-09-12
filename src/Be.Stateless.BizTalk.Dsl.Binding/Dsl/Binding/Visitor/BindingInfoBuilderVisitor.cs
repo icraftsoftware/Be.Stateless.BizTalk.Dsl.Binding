@@ -124,7 +124,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			bi.Description = applicationBinding.Description;
 			bi.ModuleRefCollection = new ModuleRefCollection {
 				new ModuleRef($"[Application:{ApplicationName}]", string.Empty, string.Empty, string.Empty)
-				// TODO ref schemas, transforms, and other artifacts
 			};
 			bi.Timestamp = applicationBinding.Timestamp;
 			return bi;
@@ -155,17 +154,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			// see https://docs.microsoft.com/en-us/dotnet/api/microsoft.biztalk.deployment.binding.serviceref
 			var serviceRef = new ServiceRef {
 				Description = orchestrationBinding.Description,
-				// TODO EndpointInfo = 
 				Host = new HostRef {
 					Name = orchestrationBinding.Host
-					// TODO NTGroupName = "",
-					// TODO Trusted = false,
-					// TODO Type = (int) HostType.InProcess
 				},
 				Name = orchestrationBinding.Type.FullName,
-				// TODO allow to change State
-				State = ServiceRef.ServiceRefState.Enlisted,
-				// TODO allow to change TackingOption
+				// Un/Enlisting/Starting/Stopping orchestrations is the responsibility of BizTalkServiceConfiguratorVisitor
+				State = orchestrationBinding.State switch {
+					ServiceState.Unenlisted => ServiceRef.ServiceRefState.Unenlisted,
+					ServiceState.Enlisted => ServiceRef.ServiceRefState.Enlisted,
+					ServiceState.Started => ServiceRef.ServiceRefState.Started,
+					_ => ServiceRef.ServiceRefState.Default
+				},
 				TrackingOption = OrchestrationTrackingTypes.None
 			};
 			// ensure service ref port collection is initialized even if there are only direct ports
@@ -174,7 +173,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			{
 				serviceRefPorts.Add(CreateServicePortRef(portBinding));
 			}
-			// TODO Roles = 
 			return serviceRef;
 		}
 
@@ -188,7 +186,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					// see Microsoft.BizTalk.OrchestrationDesigner.PortBinding, Microsoft.BizTalk.OrchestrationDesigner
 					// where 0=Physical, 1=Logical, 2=Direct, 3=Dynamic
 					// however it never seems to be set to an other value than 1 in binding exports
-					//	TODO support BindingOption other values
 					BindingOption = 1,
 					// see Microsoft.BizTalk.ExplorerOM.PortModifier (Import Indicates an Outbound port of an orchestration,
 					// Export Indicates an Inbound port of an orchestration)
@@ -212,18 +209,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 			var port = new BtsReceivePort {
 				ApplicationName = ApplicationName,
-				// TODO Authentication =
-				// TODO BindingOption =
 				Description = receivePort.Description,
 				IsTwoWay = receivePort.IsTwoWay,
 				Name = ((ISupportNamingConvention) receivePort).Name,
-				// TODO OutboundTransforms =
-				ReceiveLocations = new global::Microsoft.BizTalk.Deployment.Binding.ReceiveLocationCollection()
-				// TODO RouteFailedMessage =
-				// TODO SendPipelineData =
-				// TODO Tracking =
-				// TODO Transforms =
-				// TODO TransmitPipeline =
+				ReceiveLocations = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocationCollection()
 			};
 			return port;
 		}
@@ -238,22 +227,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var location = new BtsReceiveLocation {
 				// General
 				Name = ((ISupportNamingConvention) receiveLocation).Name,
-				Enable = false, // receiveLocation.Enabled is the responsibility of BizTalkServiceConfiguratorVisitor
+				Enable = false, // Enabling Receive Locations is actually the responsibility of BizTalkServiceConfiguratorVisitor
 				Address = receiveLocation.Transport.Adapter.Address,
-				// TODO Primary = 
 				PublicAddress = receiveLocation.Transport.Adapter.PublicAddress,
 				Description = receiveLocation.Description,
 
 				TransportType = receiveLocation.Transport.Adapter.ProtocolType,
 				TransportTypeData = receiveLocation.Transport.Adapter.GetAdapterBindingInfoSerializer().Serialize(),
 				ReceiveHandler = new ReceiveHandlerRef {
-					// TODO HostTrusted = ,
 					Name = receiveLocation.Transport.Host,
 					TransportType = receiveLocation.Transport.Adapter.ProtocolType
 				},
 				ReceivePipeline = CreateReceivePipelineRef(receiveLocation.ReceivePipeline),
 				ReceivePipelineData = receiveLocation.ReceivePipeline.GetPipelineBindingInfoSerializer().Serialize()
-				// TODO EncryptionCert = 
 			};
 			if (receiveLocation.Transport.Schedule != Schedule.None)
 			{
@@ -313,26 +299,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 			var port = new BtsSendPort {
 				ApplicationName = ApplicationName,
-				// TODO BindingOption =
 				Description = sendPort.Description,
-				// TODO EncryptionCert =
 				Filter = sendPort.Filter?.ToString(),
-				// TODO InboundTransforms =
-				// TODO IsDynamic =
 				IsDynamic = false,
 				Name = ((ISupportNamingConvention) sendPort).Name,
 				OrderedDelivery = sendPort.OrderedDelivery,
 				PrimaryTransport = CreateTransportInfo(sendPort.Transport, true, sendPort.OrderedDelivery),
 				Priority = (int) sendPort.Priority,
-				// TODO RouteFailedMessage =
 				SecondaryTransport = sendPort.BackupTransport.Adapter is SendPortTransport.UnknownOutboundAdapter
 					? null
 					: CreateTransportInfo(sendPort.BackupTransport, false, false),
 				SendPipelineData = sendPort.SendPipeline.GetPipelineBindingInfoSerializer().Serialize(),
 				// sendPort.Status is the responsibility of BizTalkServiceConfiguratorVisitor
 				StopSendingOnFailure = sendPort.StopSendingOnOrderedDeliveryFailure,
-				// TODO Tracking =
-				// TODO Transforms =
 				TransmitPipeline = CreateSendPipelineRef(sendPort.SendPipeline)
 			};
 			if (sendPort.IsTwoWay)
@@ -344,19 +323,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			return port;
 		}
 
-		protected virtual global::Microsoft.BizTalk.Deployment.Binding.TransportInfo CreateTransportInfo(SendPortTransport transport, bool primary, bool orderedDelivery)
+		protected virtual Microsoft.BizTalk.Deployment.Binding.TransportInfo CreateTransportInfo(SendPortTransport transport, bool primary, bool orderedDelivery)
 		{
 			if (transport == null) throw new ArgumentNullException(nameof(transport));
-			var transportInfo = new global::Microsoft.BizTalk.Deployment.Binding.TransportInfo {
+			var transportInfo = new Microsoft.BizTalk.Deployment.Binding.TransportInfo {
 				Address = transport.Adapter.Address,
-				// TODO DeliveryNotification = 0,
 				FromTime = transport.ServiceWindow.StartTime,
 				OrderedDelivery = orderedDelivery,
 				Primary = primary,
 				RetryCount = transport.RetryPolicy.Count,
 				RetryInterval = (int) transport.RetryPolicy.Interval.TotalMinutes,
 				SendHandler = new SendHandlerRef {
-					// TODO HostTrusted = ,
 					Name = transport.Host,
 					TransportType = transport.Adapter.ProtocolType
 				},
@@ -375,7 +352,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			receivePipeline.Description.IfNotNullOrEmpty(d => rp.Description = d);
 			rp.Name = ((ITypeDescriptor) receivePipeline).FullName;
 			rp.FullyQualifiedName = ((ITypeDescriptor) receivePipeline).AssemblyQualifiedName;
-			// TODO allow to change TackingOption
 			rp.TrackingOption = PipelineTrackingTypes.None;
 			return rp;
 		}
@@ -387,7 +363,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			sendPipeline.Description.IfNotNullOrEmpty(d => tp.Description = d);
 			tp.Name = ((ITypeDescriptor) sendPipeline).FullName;
 			tp.FullyQualifiedName = ((ITypeDescriptor) sendPipeline).AssemblyQualifiedName;
-			// TODO allow to change TackingOption
 			tp.TrackingOption = PipelineTrackingTypes.None;
 			return tp;
 		}

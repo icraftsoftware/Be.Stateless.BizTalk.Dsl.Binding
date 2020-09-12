@@ -125,13 +125,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		protected override void Validate()
 		{
-			// TODO identity
-			// TODO outbound & inbound msg config (body location, ...): outbound only for SP, inbound only for RL, both for 2-way
-			// TODO PropagateFaultMessage for two-way only
-			// TODO IsolationLevel iif EnableTransaction
-			// TODO Proxy Settings
-			// TODO see Microsoft.BizTalk.Adapter.Wcf.Metadata.BtsActionMapping and Microsoft.BizTalk.Adapter.Wcf.Metadata.BtsActionMappingHelper.CreateXml(BtsActionMapping btsActionMapping)
-			// TODO validate BtsActionMapping against orchestration ports' actions
+			// TODO validate BtsActionMapping against orchestration port's actions, see Microsoft.BizTalk.Adapter.Wcf.Metadata.BtsActionMapping and Microsoft.BizTalk.Adapter.Wcf.Metadata.BtsActionMappingHelper.CreateXml(BtsActionMapping btsActionMapping)
 			_adapterConfig.Address = GetAddress();
 			_adapterConfig.Validate();
 			_adapterConfig.Address = null;

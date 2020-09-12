@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <RootNamespace>Be.Stateless.BizTalk</RootNamespace>
+    <AssemblyTitle>Be.Stateless.BizTalk.Dsl.Binding.Conventions.Tests</AssemblyTitle>
+    <Description>Unit tests for BizTalk.Factory's binding DSL Port naming conventions for general purpose BizTalk Server application binding definition.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Detailed.Application.Bindings.xml" />
+    <None Remove="Resources\Detailed.Banking.Application.Bindings.xml" />
+    <None Remove="Resources\Simple.Application.Bindings.xml" />
+    <None Remove="Resources\Simple.Finance.Application.Bindings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Detailed.Banking.Application.Bindings.xml" />
+    <EmbeddedResource Include="Resources\Detailed.Application.Bindings.xml" />
+    <EmbeddedResource Include="Resources\Simple.Finance.Application.Bindings.xml" />
+    <EmbeddedResource Include="Resources\Simple.Application.Bindings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\.settings\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="BizTalk.Server.2020.Runtime.Adapters" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="xunit.core" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding.Conventions\Be.Stateless.BizTalk.Dsl.Binding.Conventions.csproj" />
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding.Tests\Be.Stateless.BizTalk.Dsl.Binding.Tests.csproj" />
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding\Be.Stateless.BizTalk.Dsl.Binding.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+
+</Project>

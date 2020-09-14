@@ -30,7 +30,7 @@ using Microsoft.BizTalk.B2B.PartnerManagement;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 {
-	internal static class FilterTranslator
+	public static class FilterTranslator
 	{
 		public static FilterPredicate Translate(Expression<Func<bool>> expression)
 		{

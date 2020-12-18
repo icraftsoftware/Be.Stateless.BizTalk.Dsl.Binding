@@ -39,7 +39,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 			var btxServiceType = Assembly.GetExecutingAssembly().GetReferencedAssemblies()
 				.Distinct((a1, a2) => a1.FullName == a2.FullName).Select(Assembly.Load)
 				.Where(a => a.IsBizTalkAssembly())
-				.SelectMany(a => a.GetOrchestrations())
+				.SelectMany(a => a.GetOrchestrationTypes())
 				.First();
 
 			var assembly = btxServiceType
@@ -55,7 +55,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 			var btxServiceType = Assembly.GetExecutingAssembly().GetReferencedAssemblies()
 				.Distinct((a1, a2) => a1.FullName == a2.FullName).Select(Assembly.Load)
 				.Where(a => a.IsBizTalkAssembly())
-				.SelectMany(a => a.GetOrchestrations())
+				.SelectMany(a => a.GetOrchestrationTypes())
 				.First();
 
 			var builder = new StringBuilder();

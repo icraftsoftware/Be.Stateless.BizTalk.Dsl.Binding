@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
@@ -49,6 +50,7 @@ namespace Be.Stateless.BizTalk.Dummies.Conventions
 
 		#endregion
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global")]
 		public new string ApplicationName
 		{
 			get => base.ApplicationName;
@@ -80,9 +82,9 @@ namespace Be.Stateless.BizTalk.Dummies.Conventions
 			return ComputeAdapterName(adapter);
 		}
 
-		public string ComputeAggregateSpy(Type type)
+		public string ComputeAggregateNameSpy(Type type)
 		{
-			return ComputeAggregate(type);
+			return ComputeAggregateName(type);
 		}
 	}
 }

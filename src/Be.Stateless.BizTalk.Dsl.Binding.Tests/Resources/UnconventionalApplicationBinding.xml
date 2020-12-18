@@ -10,7 +10,7 @@
   <SendPortCollection>
     <SendPort Name="Unconventional send port name" IsStatic="true" IsTwoWay="false" BindingOption="0" AnalyticsEnabled="false">
       <Description>Some useless test send port.</Description>
-      <TransmitPipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit, Be.Stateless.BizTalk.Pipelines, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="2" TrackingOption="None" Description="" />
+      <TransmitPipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit, Be.Stateless.BizTalk.Dsl.Binding.Tests, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="2" TrackingOption="None" Description="" />
       <SendPipelineData />
       <PrimaryTransport>
         <Address>c:\file\drops\%MessageID%.xml</Address>
@@ -39,7 +39,7 @@
     </SendPort>
     <SendPort Name="Get document send port name" IsStatic="true" IsTwoWay="false" BindingOption="0" AnalyticsEnabled="false">
       <Description xsi:nil="true" />
-      <TransmitPipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit, Be.Stateless.BizTalk.Pipelines, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="2" TrackingOption="None" Description="" />
+      <TransmitPipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit, Be.Stateless.BizTalk.Dsl.Binding.Tests, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="2" TrackingOption="None" Description="" />
       <SendPipelineData />
       <PrimaryTransport>
         <Address>http://localhost:8000/stubservice</Address>
@@ -86,7 +86,7 @@
           <ReceiveLocationEndDate>2000-01-01T23:59:59</ReceiveLocationEndDate>
           <ReceiveLocationTransportType Name="FILE" Capabilities="11" ConfigurationClsid="5e49e3a6-b4fc-4077-b44c-22f34a242fdb" />
           <ReceiveLocationTransportTypeData>&lt;CustomProps&gt;&lt;BatchSize vt="19"&gt;20&lt;/BatchSize&gt;&lt;BatchSizeInBytes vt="19"&gt;102400&lt;/BatchSizeInBytes&gt;&lt;FileMask vt="8"&gt;*.xml&lt;/FileMask&gt;&lt;FileNetFailRetryCount vt="19"&gt;5&lt;/FileNetFailRetryCount&gt;&lt;FileNetFailRetryInt vt="19"&gt;5&lt;/FileNetFailRetryInt&gt;&lt;PollingInterval vt="19"&gt;60000&lt;/PollingInterval&gt;&lt;RemoveReceivedFileDelay vt="19"&gt;10&lt;/RemoveReceivedFileDelay&gt;&lt;RemoveReceivedFileMaxInterval vt="19"&gt;300000&lt;/RemoveReceivedFileMaxInterval&gt;&lt;RemoveReceivedFileRetryCount vt="19"&gt;5&lt;/RemoveReceivedFileRetryCount&gt;&lt;RenameReceivedFiles vt="11"&gt;-1&lt;/RenameReceivedFiles&gt;&lt;/CustomProps&gt;</ReceiveLocationTransportTypeData>
-          <ReceivePipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruReceive" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruReceive, Be.Stateless.BizTalk.Pipelines, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="1" TrackingOption="None" Description="" />
+          <ReceivePipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruReceive" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruReceive, Be.Stateless.BizTalk.Dsl.Binding.Tests, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="1" TrackingOption="None" Description="" />
           <ReceivePipelineData />
           <SendPipeline xsi:nil="true" />
           <SendPipelineData xsi:nil="true" />
@@ -130,7 +130,7 @@
           <ReceiveLocationEndDate>2000-01-01T23:59:59</ReceiveLocationEndDate>
           <ReceiveLocationTransportType Name="HTTP" Capabilities="387" ConfigurationClsid="1c56d157-0553-4345-8a1f-55d2d1a3ffb6" />
           <ReceiveLocationTransportTypeData>&lt;CustomProps&gt;&lt;LoopBack vt="11"&gt;0&lt;/LoopBack&gt;&lt;ResponseContentType vt="8"&gt;text/xml&lt;/ResponseContentType&gt;&lt;ReturnCorrelationHandle vt="11"&gt;0&lt;/ReturnCorrelationHandle&gt;&lt;SuspendFailedRequests vt="11"&gt;-1&lt;/SuspendFailedRequests&gt;&lt;UseSSO vt="11"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;</ReceiveLocationTransportTypeData>
-          <ReceivePipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruReceive" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruReceive, Be.Stateless.BizTalk.Pipelines, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="1" TrackingOption="None" Description="" />
+          <ReceivePipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruReceive" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruReceive, Be.Stateless.BizTalk.Dsl.Binding.Tests, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="1" TrackingOption="None" Description="" />
           <ReceivePipelineData />
           <SendPipeline xsi:nil="true" />
           <SendPipelineData xsi:nil="true" />

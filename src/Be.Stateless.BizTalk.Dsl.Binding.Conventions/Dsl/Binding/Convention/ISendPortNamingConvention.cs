@@ -16,10 +16,13 @@
 
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
 	public interface ISendPortNamingConvention<TNamingConvention>
 	{
+		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Convention Public API.")]
 		ILocationMessageName<TNamingConvention> Towards<T>(T party);
 	}
 }

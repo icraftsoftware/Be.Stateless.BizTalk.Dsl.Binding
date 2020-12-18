@@ -20,7 +20,7 @@ using Microsoft.XLANGs.BaseTypes;
 
 namespace Be.Stateless.BizTalk.Dummies.Transforms
 {
-	[SchemaReference("Be.Stateless.BizTalk.Schemas.Xml.Any", typeof(Schemas.Xml.Any))]
+	[SchemaReference("Microsoft.XLANGs.BaseTypes.Any", typeof(Any))]
 	public class IdentityTransform : TransformBase
 	{
 		static IdentityTransform()
@@ -38,9 +38,9 @@ namespace Be.Stateless.BizTalk.Dummies.Transforms
 
 		#region Base Class Member Overrides
 
-		public override string[] SourceSchemas => new[] { typeof(Schemas.Xml.Any).FullName };
+		public override string[] SourceSchemas => new[] { typeof(Any).FullName };
 
-		public override string[] TargetSchemas => new[] { typeof(Schemas.Xml.Any).FullName };
+		public override string[] TargetSchemas => new[] { typeof(Any).FullName };
 
 		public override string XmlContent => _xmlContent;
 

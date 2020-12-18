@@ -28,6 +28,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 
 		[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 		[SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations")]
+		[SuppressMessage("ReSharper", "UnusedParameter.Global")]
 		public static implicit operator string(NamingConvention<TParty, TMessageName> _)
 		{
 			throw new NotSupportedException($"In order to support {typeof(Subscription.FilterTranslator).FullName}.");

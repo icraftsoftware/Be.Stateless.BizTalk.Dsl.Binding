@@ -17,12 +17,23 @@
 #endregion
 
 using System;
+using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
-// ReSharper disable once CheckNamespace
-namespace Be.Stateless
+namespace Be.Stateless.BizTalk.Install.Command
 {
-	public static class DelegateFactory
+	public class BizTalkServiceInitializationCommand : ApplicationBindingBasedCommand
 	{
-		public static Action Action(Action action) => action;
+		#region Base Class Member Overrides
+
+		protected override void ExecuteCore(Action<string> logAppender)
+		{
+			using (var bizTalkServiceConfiguratorVisitor = BizTalkServiceConfiguratorVisitor.Create())
+			{
+				ApplicationBinding.Accept(CurrentApplicationBindingVisitor.Create(bizTalkServiceConfiguratorVisitor));
+				bizTalkServiceConfiguratorVisitor.Commit();
+			}
+		}
+
+		#endregion
 	}
 }

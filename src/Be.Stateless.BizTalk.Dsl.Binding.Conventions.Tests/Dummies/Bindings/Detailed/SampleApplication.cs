@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Component;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
@@ -27,8 +28,9 @@ using Be.Stateless.BizTalk.Dummies.Bindings.Detailed;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
 using Be.Stateless.BizTalk.Schema.Annotation;
-using Be.Stateless.BizTalk.Schemas.Xml;
 using Microsoft.Adapters.Sql;
+using Microsoft.XLANGs.BaseTypes;
+using Party = Be.Stateless.BizTalk.Dummies.Bindings.Detailed.Party;
 
 // ReSharper disable CheckNamespace
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
@@ -141,8 +143,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 
 		internal TaxAgencyReceivePort TaxAgencyOneWayReceivePort { get; }
 
+		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 		private BankSendPort BankOneWaySendPort { get; }
 
+		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 		private IReceivePort<NamingConvention<Party, MessageName>> CustomerTwoWayReceivePort { get; }
 	}
 

@@ -21,6 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Constants
 {
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 	public static class TargetEnvironment
 	{
 		public static bool IsAcceptance(this string environment)

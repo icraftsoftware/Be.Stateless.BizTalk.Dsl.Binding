@@ -74,6 +74,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
 		public static Binding.RetryPolicy RealTime { get; }
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 		public static Binding.RetryPolicy ShortRunning => new EnvironmentSensitiveRetryPolicy(
 			environment => environment.IsPreProductionOrProduction()
 				? _shortRunning

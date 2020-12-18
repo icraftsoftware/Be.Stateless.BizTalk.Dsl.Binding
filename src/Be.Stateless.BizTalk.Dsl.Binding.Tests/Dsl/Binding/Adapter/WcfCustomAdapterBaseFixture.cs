@@ -26,7 +26,7 @@ using Microsoft.BizTalk.Deployment.Binding;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -36,21 +36,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		public void BasicHttpBindingElementIsSupported()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Action(
-					() => {
-						var _ = adapterMock.Object;
-					})
-				.Should().NotThrow();
+			Function(() => adapterMock.Object).Should().NotThrow();
 		}
 
 		[Fact]
 		public void BasicHttpsBindingElementIsNotSupported()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpsBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Action(
-					() => {
-						var _ = adapterMock.Object;
-					})
+			Function(() => adapterMock.Object)
 				.Should().Throw<TypeInitializationException>()
 				.WithInnerException<BindingException>()
 				.WithMessage("BasicHttpBindingElement has to be used for https addresses as well.");

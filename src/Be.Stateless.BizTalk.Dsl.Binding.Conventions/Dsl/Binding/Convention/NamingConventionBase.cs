@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel.Channels;
@@ -71,7 +72,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 				throw new NamingConventionException($"'{receivePort.GetType().Name}' ReceivePort is not bound to application's receive port collection.");
 			if (Equals(Party, default(TParty))) throw new NamingConventionException($"'{receivePort.GetType().Name}' ReceivePort's Party is required.");
 
-			var aggregate = ComputeAggregate(receivePort.GetType());
+			var aggregate = ComputeAggregateName(receivePort.GetType());
 			return string.Format(
 				CultureInfo.InvariantCulture,
 				"{0}{1}.RP{2}.{3}",
@@ -93,8 +94,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			if (Equals(MessageName, default(TMessageName))) throw new NamingConventionException($"'{receiveLocation.GetType().Name}' ReceiveLocation's MessageName is required.");
 			if (MessageFormat == null) throw new NamingConventionException("A non null MessageFormat is required.");
 
-			var aggregate = ComputeAggregate(receiveLocation.GetType());
-			var receivePortAggregate = ComputeAggregate(receiveLocation.ReceivePort.GetType());
+			var aggregate = ComputeAggregateName(receiveLocation.GetType());
+			var receivePortAggregate = ComputeAggregateName(receiveLocation.ReceivePort.GetType());
 			if (aggregate.IsNullOrEmpty() && !receivePortAggregate.IsNullOrEmpty()) aggregate = receivePortAggregate;
 			if (!receivePortAggregate.IsNullOrEmpty() && receivePortAggregate != aggregate)
 				throw new NamingConventionException(
@@ -121,7 +122,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			if (Equals(MessageName, default(TMessageName))) throw new NamingConventionException($"'{sendPort.GetType().Name}' SendPort's MessageName is required.");
 			if (MessageFormat == null) throw new NamingConventionException("A non null MessageFormat is required.");
 
-			var aggregate = ComputeAggregate(sendPort.GetType());
+			var aggregate = ComputeAggregateName(sendPort.GetType());
 			return string.Format(
 				CultureInfo.InvariantCulture,
 				"{0}{1}.SP{2}.{3}.{4}.{5}{6}",
@@ -134,6 +135,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 				MessageFormat.IsNullOrEmpty() ? string.Empty : $".{MessageFormat}");
 		}
 
+		[SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global", Justification = "Convention Public API.")]
 		protected virtual string ComputeAdapterName(IAdapter adapter)
 		{
 			if (adapter == null) throw new ArgumentNullException(nameof(adapter));
@@ -164,7 +166,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			return name + bindingName;
 		}
 
-		protected virtual string ComputeAggregate(Type type)
+		[SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global", Justification = "Convention Public API.")]
+		protected virtual string ComputeAggregateName(Type type)
 		{
 			if (type == null) throw new ArgumentNullException(nameof(type));
 			if (type.IsGenericType) type = type.GetGenericTypeDefinition();

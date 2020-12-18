@@ -16,10 +16,13 @@
 
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
 	internal interface IPartyMemento<T>
 	{
+		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global")]
 		T Party { get; set; }
 	}
 }

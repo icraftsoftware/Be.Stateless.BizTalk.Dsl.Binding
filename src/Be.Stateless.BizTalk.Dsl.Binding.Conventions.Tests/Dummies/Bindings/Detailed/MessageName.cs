@@ -16,8 +16,11 @@
 
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global")]
 	public enum MessageName
 	{
 		Unknown = 0,

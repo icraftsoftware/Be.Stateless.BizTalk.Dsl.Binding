@@ -20,7 +20,7 @@ using System;
 using FluentAssertions;
 using Moq;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {

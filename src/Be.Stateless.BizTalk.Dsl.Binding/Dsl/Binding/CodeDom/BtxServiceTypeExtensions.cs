@@ -32,7 +32,7 @@ using Microsoft.XLANGs.Core;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 {
-	internal static class BtxServiceTypeExtensions
+	public static class BtxServiceTypeExtensions
 	{
 		[SuppressMessage("ReSharper", "CommentTypo")]
 		public static CodeCompileUnit ConvertToOrchestrationBindingCodeCompileUnit(this Type type)

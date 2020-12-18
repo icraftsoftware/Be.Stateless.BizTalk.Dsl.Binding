@@ -93,6 +93,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
 		public static ServiceModel.Configuration.NetMsmqRetryPolicy RealTime { get; }
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 		public static ServiceModel.Configuration.NetMsmqRetryPolicy ShortRunning => new EnvironmentSensitiveNetMsmqRetryPolicy(
 			environment => environment.IsPreProductionOrProduction()
 				? _shortRunning

@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
@@ -28,6 +29,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			Name = new TNamingConvention();
 		}
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 		protected internal ApplicationBinding(Action<IApplicationBinding<TNamingConvention>> applicationBindingConfigurator) : base(applicationBindingConfigurator)
 		{
 			// do not override NamingConvention set by applicationBindingConfigurator

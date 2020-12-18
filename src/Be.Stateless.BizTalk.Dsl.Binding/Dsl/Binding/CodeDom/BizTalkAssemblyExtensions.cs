@@ -17,7 +17,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.BizTalk.XLANGs.BTXEngine;
@@ -25,7 +24,7 @@ using Microsoft.XLANGs.BaseTypes;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 {
-	internal static class BizTalkAssemblyExtensions
+	public static class BizTalkAssemblyExtensions
 	{
 		/// <summary>
 		/// Checks whether <paramref name="assembly"/> is a BizTalk Server assembly.
@@ -50,14 +49,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 		/// The assembly to introspect for <see cref="BTXService"/>-derived types.
 		/// </param>
 		/// <returns>
-		/// The <see cref="IEnumerable{T}"/> of <see cref="BTXService"/>-derived types defined in the <paramref
-		/// name="assembly"/>.
+		/// The <see cref="Array"/> of <see cref="BTXService"/>-derived types defined in the <paramref name="assembly"/>.
 		/// </returns>
-		public static IEnumerable<Type> GetOrchestrations(this Assembly assembly)
+		public static Type[] GetOrchestrationTypes(this Assembly assembly)
 		{
 			return !assembly.IsBizTalkAssembly()
-				? Enumerable.Empty<Type>()
-				: assembly.GetTypes().Where(t => typeof(BTXService).IsAssignableFrom(t) && !t.IsAbstract);
+				? Array.Empty<Type>()
+				: assembly.GetTypes().Where(t => typeof(BTXService).IsAssignableFrom(t) && !t.IsAbstract).ToArray();
 		}
 	}
 }

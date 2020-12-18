@@ -16,9 +16,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <!-- https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml#system-variables -->
-    <ContinuousIntegrationBuild Condition="'$(TF_BUILD)' == 'true'">true</ContinuousIntegrationBuild>
-    <Deterministic>true</Deterministic>
     <GeneratePackageOnBuild Condition=" '$(GeneratePackageOnBuild)' == '' ">false</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
     <PackageId>$(AssemblyTitle)</PackageId>
@@ -42,28 +39,30 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.20224.35195" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.20224.34460" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.20234.30205" />
-    <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.20251.21129" />
-    <PackageReference Include="Be.Stateless.BizTalk.Messaging" Version="2.0.20224.39655" />
-    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.20234.29558" />
-    <PackageReference Include="Be.Stateless.BizTalk.Pipelines" Version="2.0.20227.45091" />
-    <PackageReference Include="Be.Stateless.Extensions" Version="2.0.20224.33378" />
-    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.3">
+    <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.20338.28883" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.20345.39507" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.20345.39753" />
+    <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.20338.28901" />
+    <PackageReference Include="Be.Stateless.BizTalk.Messaging" Version="2.0.20338.38034" />
+    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.20338.38346" />
+    <PackageReference Include="Be.Stateless.Common" Version="2.0.20338.28706" />
+    <PackageReference Include="Be.Stateless.Extensions" Version="2.0.20338.1409" />
+    <PackageReference Include="Be.Stateless.Stream" Version="2.0.20338.28746" />
+    <PackageReference Include="Be.Stateless.Xml" Version="2.0.20338.28820" />
+    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BizTalk.Server.2020.Runtime.Adapters" Version="1.0.0">
+    <PackageReference Include="BizTalk.Server.2020.Runtime.Adapters" Version="1.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="System.Management" Version="4.7.0" />
+    <PackageReference Include="System.Management" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,30 +8,29 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\UnconventionalApplicationBinding.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\.settings\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.20224.35195" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.20224.34460" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.20234.30205" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dummies" Version="2.0.20247.45024" />
-    <PackageReference Include="Be.Stateless.BizTalk.Messaging" Version="2.0.20224.39655" />
-    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.20234.29558" />
-    <PackageReference Include="Be.Stateless.BizTalk.Pipelines" Version="2.0.20227.45091" />
-    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.3">
+    <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.20338.28883" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.20345.39507" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.20345.39753" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dummies" Version="2.0.20338.28863" />
+    <PackageReference Include="Be.Stateless.BizTalk.Messaging" Version="2.0.20338.38034" />
+    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.20338.38346" />
+    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.MicroComponents" Version="2.0.20338.38298" />
+    <PackageReference Include="Be.Stateless.Common" Version="2.0.20338.28706" />
+    <PackageReference Include="Be.Stateless.Common.Unit" Version="2.0.20338.28706" />
+    <PackageReference Include="Be.Stateless.Extensions" Version="2.0.20338.1409" />
+    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BizTalk.Server.2020.Runtime.Adapters" Version="1.0.0">
+    <PackageReference Include="BizTalk.Server.2020.Runtime.Adapters" Version="1.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -40,8 +39,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="Moq" Version="4.15.2" />
     <PackageReference Include="xunit.core" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>

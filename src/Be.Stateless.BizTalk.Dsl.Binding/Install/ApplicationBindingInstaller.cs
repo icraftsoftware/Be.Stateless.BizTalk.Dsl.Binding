@@ -16,48 +16,50 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Configuration.Install;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
-using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
-using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Install.Command;
 using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install
 {
+	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public DSL API.")]
 	public abstract class ApplicationBindingInstaller<T> : Installer
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		#region Base Class Member Overrides
 
+		[SuppressMessage("ReSharper", "InvertIf")]
 		public override void Install(IDictionary stateSaver)
 		{
 			base.Install(stateSaver);
-			SetupBindingGenerationContext();
-			try
+
+			if (Context.Parameters.ContainsKey("BindingFilePath"))
 			{
-				BizTalkAssemblyResolver.Register(msg => Context.LogMessage(msg), Context.Parameters["AssemblyProbingPaths"]);
-				if (Context.Parameters.ContainsKey("BindingFilePath"))
-				{
-					var bindingFilePath = Context.Parameters["BindingFilePath"];
-					GenerateBindingFile(bindingFilePath);
-				}
-				if (Context.Parameters.ContainsKey("SetupFileAdapterPaths"))
-				{
-					var users = Context.Parameters["Users"].IfNotNullOrEmpty(u => u.Split(';', ','));
-					SetupFileAdapterPaths(users);
-				}
-				if (Context.Parameters.ContainsKey("InitializeServices"))
-				{
-					InitializeServices();
-				}
+				var cmd = new ApplicationBindingGenerationCommand {
+					OutputFilePath = Context.Parameters["BindingFilePath"]
+				};
+				SetCommandCommonArguments(cmd);
+				cmd.Execute(msg => Context.LogMessage(msg));
 			}
-			finally
+
+			if (Context.Parameters.ContainsKey("SetupFileAdapterPaths"))
 			{
-				BizTalkAssemblyResolver.Unregister();
+				var cmd = new FileAdapterPathSetupCommand {
+					Users = Context.Parameters["Users"].IfNotNullOrEmpty(u => u.Split(';', ','))
+				};
+				SetCommandCommonArguments(cmd);
+				cmd.Execute(msg => Context.LogMessage(msg));
+			}
+
+			if (Context.Parameters.ContainsKey("InitializeServices"))
+			{
+				var cmd = new BizTalkServiceInitializationCommand();
+				SetCommandCommonArguments(cmd);
+				cmd.Execute(msg => Context.LogMessage(msg));
 			}
 		}
 
@@ -65,64 +67,25 @@ namespace Be.Stateless.BizTalk.Install
 		public override void Uninstall(IDictionary savedState)
 		{
 			base.Uninstall(savedState);
-			SetupBindingGenerationContext();
-			try
+
+			if (Context.Parameters.ContainsKey("TeardownFileAdapterPaths"))
 			{
-				BizTalkAssemblyResolver.Register(msg => Context.LogMessage(msg));
-				if (Context.Parameters.ContainsKey("TeardownFileAdapterPaths"))
-				{
-					var recurse = Context.Parameters.ContainsKey("Recurse");
-					TeardownFileAdapterPaths(recurse);
-				}
-			}
-			finally
-			{
-				BizTalkAssemblyResolver.Unregister();
+				var cmd = new FileAdapterPathTeardownCommand {
+					Recurse = Context.Parameters.ContainsKey("Recurse")
+				};
+				SetCommandCommonArguments(cmd);
+				cmd.Execute(msg => Context.LogMessage(msg));
 			}
 		}
 
 		#endregion
 
-		private T ApplicationBinding => _applicationBinding ??= new T();
-
-		private void SetupBindingGenerationContext()
+		private void SetCommandCommonArguments(ApplicationBindingBasedCommand cmd)
 		{
-			var targetEnvironment = Context.Parameters["TargetEnvironment"];
-			if (targetEnvironment.IsNullOrEmpty()) throw new InvalidOperationException("TargetEnvironment has no defined value.");
-			BindingGenerationContext.TargetEnvironment = targetEnvironment;
-
-			var environmentSettingRootPath = Context.Parameters["EnvironmentSettingOverridesRootPath"];
-			if (!environmentSettingRootPath.IsNullOrEmpty()) BindingGenerationContext.EnvironmentSettingRootPath = environmentSettingRootPath;
+			cmd.ApplicationBinding = new T();
+			cmd.AssemblyProbingPaths = Context.Parameters["AssemblyProbingPaths"].IfNotNullOrEmpty(p => p.Split(';'));
+			cmd.EnvironmentSettingRootPath = Context.Parameters["EnvironmentSettingOverridesRootPath"];
+			cmd.TargetEnvironment = Context.Parameters["TargetEnvironment"];
 		}
-
-		private void GenerateBindingFile(string bindingFilePath)
-		{
-			if (bindingFilePath.IsNullOrEmpty()) throw new ArgumentNullException(nameof(bindingFilePath));
-			var applicationBindingSerializer = ApplicationBinding.GetApplicationBindingInfoSerializer();
-			applicationBindingSerializer.Save(bindingFilePath);
-		}
-
-		private void SetupFileAdapterPaths(string[] users)
-		{
-			if (users == null) throw new ArgumentNullException(nameof(users));
-			var visitor = CurrentApplicationBindingVisitor.Create(FileAdapterFolderSetUpVisitor.Create(users));
-			ApplicationBinding.Accept(visitor);
-		}
-
-		private void InitializeServices()
-		{
-			var bizTalkServiceConfiguratorVisitor = BizTalkServiceConfiguratorVisitor.Create();
-			var visitor = CurrentApplicationBindingVisitor.Create(bizTalkServiceConfiguratorVisitor);
-			ApplicationBinding.Accept(visitor);
-			bizTalkServiceConfiguratorVisitor.Commit();
-		}
-
-		private void TeardownFileAdapterPaths(bool recurse)
-		{
-			var visitor = CurrentApplicationBindingVisitor.Create(FileAdapterFolderTearDownVisitor.Create(recurse));
-			ApplicationBinding.Accept(visitor);
-		}
-
-		private T _applicationBinding;
 	}
 }

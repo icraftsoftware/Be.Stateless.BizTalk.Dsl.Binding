@@ -29,7 +29,7 @@ using Microsoft.BizTalk.BtsScheduleHelper;
 using Microsoft.BizTalk.Deployment.Binding;
 using Moq;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 using BtsDayOfWeek = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.BtsDayOfWeek;
 using Month = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.Month;
 using MonthDay = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.MonthDay;

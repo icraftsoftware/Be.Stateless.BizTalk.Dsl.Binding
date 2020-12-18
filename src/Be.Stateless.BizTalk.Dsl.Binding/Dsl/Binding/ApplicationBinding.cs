@@ -17,9 +17,11 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 	public class ApplicationBinding : ApplicationBindingBase<string>
 	{
 		protected ApplicationBinding() { }

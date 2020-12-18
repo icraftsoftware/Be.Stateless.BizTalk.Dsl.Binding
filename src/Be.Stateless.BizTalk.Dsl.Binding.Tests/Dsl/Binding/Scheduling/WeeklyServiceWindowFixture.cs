@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Xunit;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 {
@@ -41,14 +42,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void IntervalMustBeGreaterThan0()
 		{
-			DelegateFactory.Action(() => new WeeklyServiceWindow { Interval = 0 }).Should().Throw<ArgumentOutOfRangeException>();
+			Action(() => new WeeklyServiceWindow { Interval = 0 }).Should().Throw<ArgumentOutOfRangeException>();
 		}
 
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void IntervalMustBeLessThan999()
 		{
-			DelegateFactory.Action(() => new WeeklyServiceWindow { Interval = 1000 }).Should().Throw<ArgumentOutOfRangeException>();
+			Action(() => new WeeklyServiceWindow { Interval = 1000 }).Should().Throw<ArgumentOutOfRangeException>();
 		}
 	}
 }

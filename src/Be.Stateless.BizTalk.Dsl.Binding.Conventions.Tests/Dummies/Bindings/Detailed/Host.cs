@@ -16,8 +16,11 @@
 
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global")]
 	public struct Host
 	{
 		public const string ISOLATED_HOST = "LxHost";

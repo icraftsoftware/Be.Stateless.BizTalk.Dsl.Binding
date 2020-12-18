@@ -25,6 +25,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
+using BTS;
 
 namespace Be.Stateless.BizTalk.Dummies.Bindings
 {
@@ -34,7 +35,7 @@ namespace Be.Stateless.BizTalk.Dummies.Bindings
 		{
 			Name = nameof(OneWaySendPort);
 			Description = "Some Useless One-Way Test Send Port";
-			Filter = new Filter(() => BtsProperties.MessageType == Schema<Schemas.Xml.Envelope>.MessageType);
+			Filter = new Filter(() => BtsProperties.MessageType == Schema<soap_envelope_1__2.Envelope>.MessageType);
 			Priority = Priority.Highest;
 			OrderedDelivery = true;
 			StopSendingOnOrderedDeliveryFailure = true;

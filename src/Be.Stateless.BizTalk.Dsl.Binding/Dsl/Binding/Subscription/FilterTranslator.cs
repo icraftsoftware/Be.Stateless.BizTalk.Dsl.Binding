@@ -34,6 +34,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 	{
 		public static FilterPredicate Translate(Expression<Func<bool>> expression)
 		{
+			if (expression == null) throw new ArgumentNullException(nameof(expression));
 			try
 			{
 				return TranslateFilterPredicate(FilterNormalizer.Normalize(expression.Body));

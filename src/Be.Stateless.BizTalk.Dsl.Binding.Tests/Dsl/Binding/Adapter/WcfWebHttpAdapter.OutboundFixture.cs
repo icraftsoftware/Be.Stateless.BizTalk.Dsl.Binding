@@ -25,7 +25,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 using WebHttpSecurityMode = Microsoft.BizTalk.Adapter.Wcf.Config.WebHttpSecurityMode;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
@@ -86,7 +86,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</HttpMethodAndUrl>" +
 				"<VariablePropertyMapping vt=\"8\">" + (
 					"&lt;BtsVariablePropertyMapping&gt;" +
-					$"&lt;Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.ReceiverName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.ReceiverName.Namespace}\" /&gt;" +
+					$"&lt;Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.ReceiverName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.ReceiverName.Namespace}\" /&gt;"
+					+
 					"&lt;/BtsVariablePropertyMapping&gt;") +
 				"</VariablePropertyMapping>" +
 				"<EndpointBehaviorConfiguration vt=\"8\">" + (

@@ -21,6 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 	public class MessageFormat<TNamingConvention>
 	{
 		internal MessageFormat(TNamingConvention convention)

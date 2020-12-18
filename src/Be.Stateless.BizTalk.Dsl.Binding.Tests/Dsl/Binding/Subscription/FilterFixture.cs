@@ -26,7 +26,7 @@ using FluentAssertions;
 using Microsoft.BizTalk.B2B.PartnerManagement;
 using Microsoft.XLANGs.BaseTypes;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 {

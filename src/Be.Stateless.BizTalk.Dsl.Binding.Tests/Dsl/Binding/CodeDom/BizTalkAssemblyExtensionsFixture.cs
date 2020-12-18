@@ -27,13 +27,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 	public class BizTalkAssemblyExtensionsFixture
 	{
 		[Fact]
-		public void GetOrchestrations()
+		public void GetOrchestrationTypes()
 		{
 			var orchestrationTypes = Assembly.GetExecutingAssembly().GetReferencedAssemblies()
 				.Distinct((a1, a2) => a1.FullName == a2.FullName).Select(Assembly.Load)
 				.Where(a => a.IsBizTalkAssembly())
-				.SelectMany(a => a.GetOrchestrations())
-				.ToArray();
+				.SelectMany(a => a.GetOrchestrationTypes());
 
 			orchestrationTypes.Should().BeEquivalentTo(typeof(Orchestrations.Bound.Process), typeof(Orchestrations.Direct.Process));
 		}

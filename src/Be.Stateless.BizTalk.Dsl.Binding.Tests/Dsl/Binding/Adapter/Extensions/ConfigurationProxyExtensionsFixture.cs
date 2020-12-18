@@ -18,7 +18,7 @@
 
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions
 {

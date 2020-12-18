@@ -55,7 +55,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 		[Fact]
 		public void ConventionalApplicationBindingWithAggregateSupportsBindingGeneration()
 		{
-			var applicationBinding = new BankingSampleApplication() {
+			var applicationBinding = new BankingSampleApplication {
 				Timestamp = XmlConvert.ToDateTime("2015-02-17T22:51:04+01:00", XmlDateTimeSerializationMode.Local)
 			};
 			var applicationBindingSerializer = applicationBinding.GetApplicationBindingInfoSerializer();

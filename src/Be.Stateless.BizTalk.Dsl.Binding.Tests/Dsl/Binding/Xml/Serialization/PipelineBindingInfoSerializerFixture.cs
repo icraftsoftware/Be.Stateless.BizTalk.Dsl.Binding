@@ -22,11 +22,11 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Dummies.Transforms;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
-using Be.Stateless.BizTalk.Schemas.Xml;
 using BTS;
 using FluentAssertions;
 using Microsoft.BizTalk.Component;
 using Microsoft.BizTalk.Component.Utilities;
+using Microsoft.XLANGs.BaseTypes;
 using Xunit;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization

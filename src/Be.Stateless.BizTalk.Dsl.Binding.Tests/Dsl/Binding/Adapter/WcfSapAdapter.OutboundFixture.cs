@@ -22,7 +22,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using FluentAssertions;
 using Microsoft.Adapters.SAP;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -54,7 +54,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"<CustomProps>" +
 				"<BindingType vt=\"8\">sapBinding</BindingType>" +
 				"<BindingConfiguration vt=\"8\">" + (
-					"&lt;binding name=\"sapBinding\" sendTimeout=\"00:02:00\" enableBizTalkCompatibilityMode=\"true\" maxConnectionsPerSystem=\"30\" autoConfirmSentIdocs=\"true\" /&gt;") +
+					"&lt;binding name=\"sapBinding\" sendTimeout=\"00:02:00\" enableBizTalkCompatibilityMode=\"true\" maxConnectionsPerSystem=\"30\" autoConfirmSentIdocs=\"true\" /&gt;"
+				) +
 				"</BindingConfiguration>" +
 				"<EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration>" +
 				"<UseSSO vt=\"11\">0</UseSSO>" +

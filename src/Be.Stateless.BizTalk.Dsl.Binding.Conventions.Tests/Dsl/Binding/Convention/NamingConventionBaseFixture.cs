@@ -18,14 +18,14 @@
 
 using System;
 using System.ServiceModel.Configuration;
-using Be.Stateless.Finance;
-using Be.Stateless.Finance.Income;
-using Be.Stateless.Finance.Invoice;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dummies.Adapter;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Dummies.Bindings.Simple;
 using Be.Stateless.BizTalk.Dummies.Conventions;
+using Be.Stateless.Finance;
+using Be.Stateless.Finance.Income;
+using Be.Stateless.Finance.Invoice;
 using FluentAssertions;
 using Microsoft.Adapters.OracleDB;
 using Microsoft.Adapters.SAP;
@@ -34,7 +34,7 @@ using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 using CustomBindingElement = Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration.CustomBindingElement;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
@@ -97,7 +97,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		}
 
 		[Fact]
-		public void ComputeAggregateIsCalledForReceiveLocation()
+		public void ComputeAggregateNameIsCalledForReceiveLocation()
 		{
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
@@ -118,12 +118,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			namingConventionMock.Object.ComputeReceiveLocationNameSpy(receiveLocationMock.Object);
 
-			namingConventionMock.Protected().Verify("ComputeAggregate", Times.Once(), receivePortMock.Object.GetType());
-			namingConventionMock.Protected().Verify("ComputeAggregate", Times.Once(), receiveLocationMock.Object.GetType());
+			namingConventionMock.Protected().Verify("ComputeAggregateName", Times.Once(), receivePortMock.Object.GetType());
+			namingConventionMock.Protected().Verify("ComputeAggregateName", Times.Once(), receiveLocationMock.Object.GetType());
 		}
 
 		[Fact]
-		public void ComputeAggregateIsCalledForReceivePort()
+		public void ComputeAggregateNameIsCalledForReceivePort()
 		{
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
@@ -137,11 +137,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			namingConventionMock.Object.ComputeReceivePortNameSpy(receivePortMock.Object);
 
-			namingConventionMock.Protected().Verify("ComputeAggregate", Times.Once(), receivePortMock.Object.GetType());
+			namingConventionMock.Protected().Verify("ComputeAggregateName", Times.Once(), receivePortMock.Object.GetType());
 		}
 
 		[Fact]
-		public void ComputeAggregateIsCalledForSendPort()
+		public void ComputeAggregateNameIsCalledForSendPort()
 		{
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
@@ -158,11 +158,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			namingConventionMock.Object.ComputeSendPortNameSpy(sendPortMock.Object);
 
-			namingConventionMock.Protected().Verify("ComputeAggregate", Times.Once(), sendPortMock.Object.GetType());
+			namingConventionMock.Protected().Verify("ComputeAggregateName", Times.Once(), sendPortMock.Object.GetType());
 		}
 
 		[Fact]
-		public void ComputeAggregateIsNotCalledForApplication()
+		public void ComputeAggregateNameIsNotCalledForApplication()
 		{
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.Setup(ab => ab.GetType()).Returns(typeof(SampleApplication));
@@ -170,23 +170,23 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var namingConventionMock = new Mock<NamingConventionSpy>();
 			namingConventionMock.Object.ComputeApplicationNameSpy(applicationBindingMock.Object);
 
-			namingConventionMock.Protected().Verify("ComputeAggregate", Times.Never(), applicationBindingMock.Object.GetType());
+			namingConventionMock.Protected().Verify("ComputeAggregateName", Times.Never(), applicationBindingMock.Object.GetType());
 		}
 
 		[Fact]
-		public void ComputeAggregateReturnsFourthTokenOfTypeQualifiedNameMadeOfExactlyFiveTokens()
+		public void ComputeAggregateNameReturnsFourthTokenOfTypeQualifiedNameMadeOfExactlyFiveTokens()
 		{
 			var sut = new NamingConventionSpy();
-			sut.ComputeAggregateSpy(typeof(TaxAgencyReceivePort)).Should().Be("Invoice");
+			sut.ComputeAggregateNameSpy(typeof(TaxAgencyReceivePort)).Should().Be("Invoice");
 		}
 
 		[Fact]
-		public void ComputeAggregateReturnsNullWhenTypeQualifiedNameIsNotMadeOfExactlyFiveTokens()
+		public void ComputeAggregateNameReturnsNullWhenTypeQualifiedNameIsNotMadeOfExactlyFiveTokens()
 		{
 			var sut = new NamingConventionSpy();
-			sut.ComputeAggregateSpy(typeof(SampleApplication)).Should().BeNull();
-			sut.ComputeAggregateSpy(typeof(FinanceSampleApplication)).Should().BeNull();
-			sut.ComputeAggregateSpy(typeof(StandaloneReceivePort)).Should().BeNull();
+			sut.ComputeAggregateNameSpy(typeof(SampleApplication)).Should().BeNull();
+			sut.ComputeAggregateNameSpy(typeof(FinanceSampleApplication)).Should().BeNull();
+			sut.ComputeAggregateNameSpy(typeof(StandaloneReceivePort)).Should().BeNull();
 		}
 
 		[Fact]

@@ -52,7 +52,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 						new HttpUrlMappingOperation("DeleteCustomer", "DELETE", "/Customer/{id}")
 					};
 					a.VariableMapping = new VariableMapping {
-						new VariablePropertyMapping("id", BizTalkFactoryProperties.ReceiverName)
+						new VariablePropertyMapping("id", BizTalkFactoryProperties.MapTypeName)
 					};
 
 					a.MaxConcurrentCalls = 400;
@@ -77,7 +77,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</HttpMethodAndUrl>" +
 				"<VariablePropertyMapping vt=\"8\">" + (
 					"&lt;BtsVariablePropertyMapping&gt;" +
-					$"&lt;Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.ReceiverName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.ReceiverName.Namespace}\" /&gt;"
+					$"&lt;Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.MapTypeName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.MapTypeName.Namespace}\" /&gt;"
 					+
 					"&lt;/BtsVariablePropertyMapping&gt;") +
 				"</VariablePropertyMapping>" +
@@ -129,7 +129,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 						new HttpUrlMappingOperation("DeleteCustomer", "DELETE", "/Customer/{id}")
 					};
 					a.VariableMapping = new VariableMapping {
-						new VariablePropertyMapping("id", BizTalkFactoryProperties.ReceiverName)
+						new VariablePropertyMapping("id", BizTalkFactoryProperties.MapTypeName)
 					};
 
 					a.MaxConcurrentCalls = 400;

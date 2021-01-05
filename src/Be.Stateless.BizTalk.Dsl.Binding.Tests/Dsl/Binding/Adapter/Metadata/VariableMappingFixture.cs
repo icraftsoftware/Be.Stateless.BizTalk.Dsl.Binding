@@ -40,12 +40,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		public void SerializeToXmlString()
 		{
 			var variableMapping = new VariableMapping {
-				new VariablePropertyMapping("id", BizTalkFactoryProperties.ReceiverName)
+				new VariablePropertyMapping("id", BizTalkFactoryProperties.MapTypeName)
 			};
 
 			((string) variableMapping).Should().Be(
 				"<BtsVariablePropertyMapping>"
-				+ $"<Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.ReceiverName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.ReceiverName.Namespace}\" />"
+				+ $"<Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.MapTypeName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.MapTypeName.Namespace}\" />"
 				+ "</BtsVariablePropertyMapping>");
 		}
 

@@ -97,7 +97,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 														new FailedMessageRoutingEnabler { EnableFailedMessageRouting = true, SuppressRoutingFailureReport = false },
 														new ContextPropertyExtractor {
 															Extractors = new PropertyExtractorCollection(
-																new ConstantExtractor(BizTalkFactoryProperties.EnvironmentTag, TargetEnvironment.ACCEPTANCE))
+																new ConstantExtractor(BizTalkFactoryProperties.OutboundTransportLocation, TargetEnvironment.ACCEPTANCE))
 														}
 													};
 												});

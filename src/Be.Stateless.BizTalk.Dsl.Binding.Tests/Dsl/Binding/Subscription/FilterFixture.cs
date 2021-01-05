@@ -105,7 +105,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			const string senderNameToken = "BizTalkFactory.Batching";
 			const int retryCountToken = 3;
 			var filter = new Filter(
-				() => (BizTalkFactoryProperties.SenderName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken)
+				() => (BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken)
 					&& BtsProperties.MessageType == Schema<Any>.MessageType);
 
 			filter.ToString().Should().Be(
@@ -114,7 +114,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					+ "<Group><Statement Property=\"{0}\" Operator=\"{1}\" Value=\"{2}\" /><Statement Property=\"{3}\" Operator=\"{4}\" Value=\"{5}\" /></Group>"
 					+ "<Group><Statement Property=\"{6}\" Operator=\"{7}\" Value=\"{8}\" /><Statement Property=\"{3}\" Operator=\"{4}\" Value=\"{5}\" /></Group>"
 					+ "</Filter>",
-					BizTalkFactoryProperties.SenderName.Type.FullName,
+					BizTalkFactoryProperties.MapTypeName.Type.FullName,
 					(int) FilterOperator.Equals,
 					senderNameToken,
 					BtsProperties.MessageType.Type.FullName,
@@ -132,7 +132,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			const int retryCountToken = 3;
 			var filter = new Filter(
 				() => BtsProperties.MessageType == Schema<Any>.MessageType
-					&& (BizTalkFactoryProperties.SenderName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken));
+					&& (BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken));
 
 			filter.ToString().Should().Be(
 				string.Format(
@@ -143,7 +143,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					BtsProperties.MessageType.Type.FullName,
 					(int) FilterOperator.Equals,
 					Schema<Any>.MessageType,
-					BizTalkFactoryProperties.SenderName.Type.FullName,
+					BizTalkFactoryProperties.MapTypeName.Type.FullName,
 					(int) FilterOperator.Equals,
 					senderNameToken,
 					BtsProperties.ActualRetryCount.Type.FullName,
@@ -156,11 +156,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			const string senderNameToken = "BizTalkFactory.Batching";
 			const int retryCountToken = 3;
-			var filter = new Filter(() => BizTalkFactoryProperties.SenderName == senderNameToken && BtsProperties.ActualRetryCount > retryCountToken);
+			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName == senderNameToken && BtsProperties.ActualRetryCount > retryCountToken);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"
-				+ $"<Statement Property=\"{BizTalkFactoryProperties.SenderName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" />"
+				+ $"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" />"
 				+ $"<Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{retryCountToken}\" />"
 				+ "</Group></Filter>");
 		}
@@ -183,11 +183,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			const int token2 = 3;
 
 			var filter = new Filter(
-				() => BizTalkFactoryProperties.SenderName == token1 || BtsProperties.ActualRetryCount > token2 && BtsProperties.MessageType == Schema<Any>.MessageType);
+				() => BizTalkFactoryProperties.MapTypeName == token1 || BtsProperties.ActualRetryCount > token2 && BtsProperties.MessageType == Schema<Any>.MessageType);
 
 			filter.ToString().Should().Be(
 				"<Filter>"
-				+ $"<Group><Statement Property=\"{BizTalkFactoryProperties.SenderName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{token1}\" /></Group>"
+				+ $"<Group><Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{token1}\" /></Group>"
 				+ $"<Group><Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{token2}\" />"
 				+ $"<Statement Property=\"{BtsProperties.MessageType.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{Schema<Any>.MessageType}\" /></Group>"
 				+ "</Filter>");
@@ -198,11 +198,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			const string senderNameToken = "BizTalkFactory.Batching";
 			const int retryCountToken = 3;
-			var filter = new Filter(() => BizTalkFactoryProperties.SenderName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken);
+			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken);
 
 			filter.ToString().Should().Be(
 				"<Filter>"
-				+ $"<Group><Statement Property=\"{BizTalkFactoryProperties.SenderName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" /></Group>"
+				+ $"<Group><Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" /></Group>"
 				+ $"<Group><Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{retryCountToken}\" /></Group>"
 				+ "</Filter>");
 		}
@@ -211,11 +211,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		public void EqualsBasedFilter()
 		{
 			const string senderNameToken = "BizTalkFactory.Batching";
-			var filter = new Filter(() => BizTalkFactoryProperties.SenderName == senderNameToken);
+			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName == senderNameToken);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"
-				+ $"<Statement Property=\"{BizTalkFactoryProperties.SenderName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" />"
+				+ $"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" />"
 				+ "</Group></Filter>");
 		}
 
@@ -223,12 +223,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		[SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
 		public void EqualsNullBasedFilterIsNotSupported()
 		{
-			var filter = new Filter(() => BizTalkFactoryProperties.SenderName == null);
+			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName == null);
 
 			Action(() => filter.ToString())
 				.Should().Throw<NotSupportedException>()
 				.WithMessage(
-					"Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.SenderName == null)\" because filter value can be null only if the operator is exists.")
+					"Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.MapTypeName == null)\" because filter value can be null only if the operator is exists.")
 				.WithInnerException<TpmException>();
 		}
 
@@ -261,22 +261,22 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			var environmentTag = new ImplicitlyStringUnderlainEnvironmentTag("ACC");
 
-			var filter = new Filter(() => BizTalkFactoryProperties.EnvironmentTag == environmentTag.Value);
+			var filter = new Filter(() => BizTalkFactoryProperties.OutboundTransportLocation == environmentTag.Value);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"
-				+ $"<Statement Property=\"{BizTalkFactoryProperties.EnvironmentTag.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{environmentTag.Value}\" />"
+				+ $"<Statement Property=\"{BizTalkFactoryProperties.OutboundTransportLocation.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{environmentTag.Value}\" />"
 				+ "</Group></Filter>");
 		}
 
 		[Fact]
 		public void FilterOnEnumLabel()
 		{
-			var filter = new Filter(() => BizTalkFactoryProperties.SenderName == Priority.Highest);
+			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName == Priority.Highest);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"
-				+ $"<Statement Property=\"{BizTalkFactoryProperties.SenderName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{Priority.Highest}\" />"
+				+ $"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{Priority.Highest}\" />"
 				+ "</Group></Filter>");
 		}
 
@@ -295,11 +295,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		public void FilterOnTypeWithImplicitStringCastOperator()
 		{
 			var environmentTag = new ImplicitlyStringUnderlainEnvironmentTag("TAG");
-			var filter = new Filter(() => BizTalkFactoryProperties.EnvironmentTag == environmentTag);
+			var filter = new Filter(() => BizTalkFactoryProperties.OutboundTransportLocation == environmentTag);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"
-				+ $"<Statement Property=\"{BizTalkFactoryProperties.EnvironmentTag.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{(string) environmentTag}\" />"
+				+ $"<Statement Property=\"{BizTalkFactoryProperties.OutboundTransportLocation.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{(string) environmentTag}\" />"
 				+ "</Group></Filter>");
 		}
 
@@ -319,12 +319,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		[SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
 		public void GreaterThanNullBasedFilterIsNotSupported()
 		{
-			var filter = new Filter(() => BizTalkFactoryProperties.SenderName > null);
+			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName > null);
 
 			Action(() => filter.ToString())
 				.Should().Throw<NotSupportedException>()
 				.WithMessage(
-					"Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.SenderName > null)\" because filter value can be null only if the operator is exists.")
+					"Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.MapTypeName > null)\" because filter value can be null only if the operator is exists.")
 				.WithInnerException<TpmException>();
 		}
 
@@ -392,7 +392,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		public void NAryDisjunction()
 		{
 			var filter = new Filter(
-				() => BizTalkFactoryProperties.SenderName == "BizTalkFactory.Batching"
+				() => BizTalkFactoryProperties.MapTypeName == "BizTalkFactory.Batching"
 					|| BtsProperties.ActualRetryCount > 3
 					|| BtsProperties.AckRequired != true
 					|| BtsProperties.InboundTransportLocation == "inbound-transport-location");
@@ -415,22 +415,22 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		public void NotEqualsBasedFilter()
 		{
 			const string senderNameToken = "BizTalkFactory.Batching";
-			var filter = new Filter(() => BizTalkFactoryProperties.SenderName != senderNameToken);
+			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName != senderNameToken);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"
-				+ $"<Statement Property=\"{BizTalkFactoryProperties.SenderName.Type.FullName}\" Operator=\"{(int) FilterOperator.NotEqual}\" Value=\"{senderNameToken}\" />"
+				+ $"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.NotEqual}\" Value=\"{senderNameToken}\" />"
 				+ "</Group></Filter>");
 		}
 
 		[Fact]
 		public void NotEqualsNullBasedFilterIsRewrittenAsExistsOperator()
 		{
-			var filter = new Filter(() => BizTalkFactoryProperties.SenderName != null);
+			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName != null);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"
-				+ $"<Statement Property=\"{BizTalkFactoryProperties.SenderName.Type.FullName}\" Operator=\"{(int) FilterOperator.Exists}\" />"
+				+ $"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Exists}\" />"
 				+ "</Group></Filter>");
 		}
 
@@ -444,39 +444,39 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 
 				// Scalar
 				yield return new[] {
-					new Filter(() => BizTalkFactoryProperties.SenderName == senderName),
-					new Filter(() => BizTalkFactoryProperties.SenderName == senderName)
+					new Filter(() => BizTalkFactoryProperties.MapTypeName == senderName),
+					new Filter(() => BizTalkFactoryProperties.MapTypeName == senderName)
 				};
 
 				// Conjunction
 				yield return new[] {
-					new Filter(() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.MessageType == messageType),
-					new Filter(() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.MessageType == messageType)
+					new Filter(() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.MessageType == messageType),
+					new Filter(() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.MessageType == messageType)
 				};
 
 				// Disjunction
 				yield return new[] {
-					new Filter(() => BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3),
-					new Filter(() => BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3)
+					new Filter(() => BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3),
+					new Filter(() => BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3)
 				};
 
 				// ConjunctionAndBinaryDisjunction
 				yield return new[] {
 					new Filter(
-						() => (BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3)
+						() => (BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3)
 							&& BtsProperties.MessageType == messageType),
 					new Filter(
-						() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.MessageType == messageType
+						() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.MessageType == messageType)
 				};
 
 				// ConjunctionAndTernaryDisjunction
 				yield return new[] {
 					new Filter(
-						() => (BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3 || BtsProperties.Operation > operation)
+						() => (BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3 || BtsProperties.Operation > operation)
 							&& BtsProperties.MessageType == messageType),
 					new Filter(
-						() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.MessageType == messageType
+						() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.MessageType == messageType
 							|| BtsProperties.Operation > operation && BtsProperties.MessageType == messageType)
 				};
@@ -484,11 +484,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				// ConjunctionOfBinaryDisjunctions
 				yield return new[] {
 					new Filter(
-						() => (BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3)
+						() => (BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3)
 							&& (BtsProperties.MessageType == messageType || BtsProperties.Operation == operation)),
 					new Filter(
-						() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.MessageType == messageType
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.Operation == operation
+						() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.MessageType == messageType
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.Operation == operation
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.Operation == operation)
 				};
@@ -496,11 +496,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				// ConjunctionOfBinaryDisjunctionsWhoseOneWithNestedConjunction
 				yield return new[] {
 					new Filter(
-						() => (BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3)
+						() => (BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3)
 							&& (BtsProperties.MessageType == messageType || SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "op2")),
 					new Filter(
-						() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.MessageType == messageType
-							|| BizTalkFactoryProperties.SenderName == senderName && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "op2"
+						() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.MessageType == messageType
+							|| BizTalkFactoryProperties.MapTypeName == senderName && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "op2"
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "op2")
 				};
@@ -508,14 +508,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				// ConjunctionOfBinaryDisjunctionsWhoseOneWithNestedConjunctionAndDisjunction
 				yield return new[] {
 					new Filter(
-						() => (BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3)
+						() => (BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3)
 							&& (
 								BtsProperties.MessageType == messageType || SBMessagingProperties.Label == "v1"
 								&& (BtsProperties.Operation == "v2" || EdiProperties.BGM1_1 == "v3"))),
 					new Filter(
-						() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.MessageType == messageType
-							|| BizTalkFactoryProperties.SenderName == senderName && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
-							|| BizTalkFactoryProperties.SenderName == senderName && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
+						() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.MessageType == messageType
+							|| BizTalkFactoryProperties.MapTypeName == senderName && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
 							|| BtsProperties.ActualRetryCount > 3 && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3")
@@ -525,15 +525,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				yield return new[] {
 					new Filter(
 						() => (
-							BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3
+							BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3
 							&& (BtsProperties.AckRequired == true || BtsProperties.SendPortName == "SP")
 						) && (
 							BtsProperties.MessageType == messageType || SBMessagingProperties.Label == "v1"
 							&& (BtsProperties.Operation == "v2" || EdiProperties.BGM1_1 == "v3"))),
 					new Filter(
-						() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.MessageType == messageType
-							|| BizTalkFactoryProperties.SenderName == senderName && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
-							|| BizTalkFactoryProperties.SenderName == senderName && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
+						() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.MessageType == messageType
+							|| BizTalkFactoryProperties.MapTypeName == senderName && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.AckRequired == true && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.AckRequired == true && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.AckRequired == true && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
@@ -545,14 +545,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				// ConjunctionMixingLeft
 				yield return new[] {
 					new Filter(
-						() => (BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3)
+						() => (BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3)
 							&& (
 								BtsProperties.AckRequired == true
 								|| BtsProperties.SendPortName == "SP" && (BtsProperties.MessageDestination == "M.D" || BtsProperties.Operation == operation))),
 					new Filter(
-						() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.AckRequired == true
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D"
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation
+						() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.AckRequired == true
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.AckRequired == true
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D"
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation)
@@ -573,23 +573,23 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				// ConjunctionMixingLeftAndRight
 				yield return new[] {
 					new Filter(
-						() => (BizTalkFactoryProperties.SenderName == senderName || BtsProperties.ActualRetryCount > 3)
+						() => (BizTalkFactoryProperties.MapTypeName == senderName || BtsProperties.ActualRetryCount > 3)
 							&& (BtsProperties.AckRequired == true || BtsProperties.SendPortName == "SP" && (BtsProperties.MessageDestination == "M.D" || BtsProperties.Operation == operation))
 							&& (BtsProperties.MessageType == messageType || SBMessagingProperties.Label == "v1" && (BtsProperties.Operation == "v2" || EdiProperties.BGM1_1 == "v3"))
 					),
 					new Filter(
-						() => BizTalkFactoryProperties.SenderName == senderName && BtsProperties.AckRequired == true && BtsProperties.MessageType == messageType
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D" && BtsProperties.MessageType == messageType
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation && BtsProperties.MessageType == messageType
+						() => BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.AckRequired == true && BtsProperties.MessageType == messageType
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D" && BtsProperties.MessageType == messageType
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.AckRequired == true && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D" && BtsProperties.MessageType == messageType
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation && BtsProperties.MessageType == messageType
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.AckRequired == true && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.AckRequired == true && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D" && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D" && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
-							|| BizTalkFactoryProperties.SenderName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.AckRequired == true && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.AckRequired == true && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D" && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D" && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
+							|| BizTalkFactoryProperties.MapTypeName == senderName && BtsProperties.SendPortName == "SP" && BtsProperties.Operation == operation && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.AckRequired == true && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.AckRequired == true && SBMessagingProperties.Label == "v1" && EdiProperties.BGM1_1 == "v3"
 							|| BtsProperties.ActualRetryCount > 3 && BtsProperties.SendPortName == "SP" && BtsProperties.MessageDestination == "M.D" && SBMessagingProperties.Label == "v1" && BtsProperties.Operation == "v2"

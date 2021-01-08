@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,28 +45,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 	/// </para>
 	/// </remarks>
 	[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = "Public DSL API.")]
-	public class BindingInfoBuilderVisitor : IApplicationBindingVisitor
+	public class BindingInfoBuilderVisitor : MainApplicationBindingVisitor
 	{
-		internal BindingInfoBuilderVisitor() { }
+		#region Base Class Member Overrides
 
-		#region IApplicationBindingVisitor Members
-
-		public void VisitReferencedApplicationBinding(IVisitable<IApplicationBindingVisitor> applicationBinding)
-		{
-			// do not generate BindingInfo for referenced applications
-		}
-
-		public void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
+		protected internal override void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
 			where TNamingConvention : class
 		{
-			if (applicationBinding == null) throw new ArgumentNullException(nameof(applicationBinding));
-			// ensure application bindings are settled for target environment before visit
-			((IVisitable<IApplicationBindingVisitor>) applicationBinding).Accept(ApplicationBindingEnvironmentSettlerVisitor.Create());
 			ApplicationName = ((ISupportNamingConvention) applicationBinding).Name;
 			BindingInfo = CreateBindingInfo(applicationBinding);
 		}
 
-		public void VisitOrchestration(IOrchestrationBinding orchestrationBinding)
+		protected internal override void VisitOrchestration(IOrchestrationBinding orchestrationBinding)
 		{
 			var moduleRef = CreateOrFindModuleRef(orchestrationBinding);
 			// a ModuleRef just created has no ServiceRef in its Services collection yet
@@ -75,16 +65,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			moduleRef.Services.Add(serviceRef);
 		}
 
-		public void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
-			where TNamingConvention : class
-		{
-			_lastVisitedReceivePort = CreateReceivePort(receivePort);
-			if (BindingInfo.ReceivePortCollection.Find(_lastVisitedReceivePort.Name) != null)
-				throw new InvalidOperationException($"Duplicate receive port name: '{_lastVisitedReceivePort.Name}'.");
-			BindingInfo.ReceivePortCollection.Add(_lastVisitedReceivePort);
-		}
-
-		public void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
+		protected internal override void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
 			where TNamingConvention : class
 		{
 			var visitedReceiveLocation = CreateReceiveLocation(receiveLocation);
@@ -93,7 +74,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			_lastVisitedReceivePort.ReceiveLocations.Add(visitedReceiveLocation);
 		}
 
-		public void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
+		protected internal override void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
+			where TNamingConvention : class
+		{
+			_lastVisitedReceivePort = CreateReceivePort(receivePort);
+			if (BindingInfo.ReceivePortCollection.Find(_lastVisitedReceivePort.Name) != null)
+				throw new InvalidOperationException($"Duplicate receive port name: '{_lastVisitedReceivePort.Name}'.");
+			BindingInfo.ReceivePortCollection.Add(_lastVisitedReceivePort);
+		}
+
+		protected internal override void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
 			where TNamingConvention : class
 		{
 			var visitedSendPort = CreateSendPort(sendPort);
@@ -103,17 +93,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		#endregion
 
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public DSL API.")]
-		public string ApplicationName { get; private set; }
-
 		public BindingInfo BindingInfo { get; private set; }
+
+		private string ApplicationName { get; set; }
 
 		protected virtual BindingInfo CreateBindingInfo<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
 			where TNamingConvention : class
 		{
-			if (applicationBinding == null) throw new ArgumentNullException(nameof(applicationBinding));
-			((ISupportValidation) applicationBinding).Validate();
-
 			var bi = new BindingInfo();
 			bi.BindingParameters = new BindingParameters(new Version(bi.Version)) {
 				BindingActions = BindingParameters.BindingActionTypes.Bind,
@@ -131,7 +117,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		protected internal virtual ModuleRef CreateOrFindModuleRef(IOrchestrationBinding orchestrationBinding)
 		{
-			if (orchestrationBinding == null) throw new ArgumentNullException(nameof(orchestrationBinding));
 			var serviceAssemblyName = orchestrationBinding.Type.Assembly.GetName();
 			var name = serviceAssemblyName.Name;
 			var version = serviceAssemblyName.Version.ToString();
@@ -150,7 +135,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		protected internal virtual ServiceRef CreateServiceRef(IOrchestrationBinding orchestrationBinding)
 		{
-			if (orchestrationBinding == null) throw new ArgumentNullException(nameof(orchestrationBinding));
 			// see https://docs.microsoft.com/en-us/dotnet/api/microsoft.biztalk.deployment.binding.serviceref
 			var serviceRef = new ServiceRef {
 				Description = orchestrationBinding.Description,
@@ -178,7 +162,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		protected virtual ServicePortRef CreateServicePortRef(IOrchestrationPortBinding portBinding)
 		{
-			if (portBinding == null) throw new ArgumentNullException(nameof(portBinding));
 			// see https://docs.microsoft.com/en-us/dotnet/api/microsoft.biztalk.deployment.binding.serviceref
 			if (portBinding.IsInbound)
 				return new ServicePortRef {
@@ -204,9 +187,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		protected internal virtual BtsReceivePort CreateReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
 			where TNamingConvention : class
 		{
-			if (receivePort == null) throw new ArgumentNullException(nameof(receivePort));
-			((ISupportValidation) receivePort).Validate();
-
 			var port = new BtsReceivePort {
 				ApplicationName = ApplicationName,
 				Description = receivePort.Description,
@@ -221,9 +201,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		protected internal virtual BtsReceiveLocation CreateReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
 			where TNamingConvention : class
 		{
-			if (receiveLocation == null) throw new ArgumentNullException(nameof(receiveLocation));
-			((ISupportValidation) receiveLocation).Validate();
-
 			var location = new BtsReceiveLocation {
 				// General
 				Name = ((ISupportNamingConvention) receiveLocation).Name,
@@ -294,9 +271,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		protected internal virtual BtsSendPort CreateSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
 			where TNamingConvention : class
 		{
-			if (sendPort == null) throw new ArgumentNullException(nameof(sendPort));
-			((ISupportValidation) sendPort).Validate();
-
 			var port = new BtsSendPort {
 				ApplicationName = ApplicationName,
 				Description = sendPort.Description,
@@ -325,7 +299,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		protected virtual Microsoft.BizTalk.Deployment.Binding.TransportInfo CreateTransportInfo(SendPortTransport transport, bool primary, bool orderedDelivery)
 		{
-			if (transport == null) throw new ArgumentNullException(nameof(transport));
 			var transportInfo = new Microsoft.BizTalk.Deployment.Binding.TransportInfo {
 				Address = transport.Adapter.Address,
 				FromTime = transport.ServiceWindow.StartTime,
@@ -347,7 +320,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		protected virtual PipelineRef CreateReceivePipelineRef(ReceivePipeline receivePipeline)
 		{
-			if (receivePipeline == null) throw new ArgumentNullException(nameof(receivePipeline));
 			var rp = PipelineRef.ReceivePipelineRef();
 			receivePipeline.Description.IfNotNullOrEmpty(d => rp.Description = d);
 			rp.Name = ((ITypeDescriptor) receivePipeline).FullName;
@@ -358,7 +330,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		protected virtual PipelineRef CreateSendPipelineRef(SendPipeline sendPipeline)
 		{
-			if (sendPipeline == null) throw new ArgumentNullException(nameof(sendPipeline));
 			var tp = PipelineRef.TransmitPipelineRef();
 			sendPipeline.Description.IfNotNullOrEmpty(d => tp.Description = d);
 			tp.Name = ((ITypeDescriptor) sendPipeline).FullName;

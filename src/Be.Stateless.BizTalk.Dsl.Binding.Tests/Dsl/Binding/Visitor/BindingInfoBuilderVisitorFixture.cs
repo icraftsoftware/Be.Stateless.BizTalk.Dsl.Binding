@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ using ExplorerOM::Microsoft.BizTalk.ExplorerOM;
 using FluentAssertions;
 using Microsoft.BizTalk.BtsScheduleHelper;
 using Microsoft.BizTalk.Deployment.Binding;
-using Moq;
 using Xunit;
 using static Be.Stateless.Unit.DelegateFactory;
 using BtsDayOfWeek = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.BtsDayOfWeek;
@@ -44,7 +43,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		public void CreateBindingInfo()
 		{
 			var visitor = new BindingInfoBuilderVisitor();
-			visitor.VisitApplicationBinding(new TestApplication());
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
 
 			var binding = visitor.BindingInfo;
 
@@ -63,7 +62,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfo
-			visitor.VisitApplicationBinding(new TestApplication());
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
 
 			var binding = visitor.CreateOrFindModuleRef(new ProcessOrchestrationBinding());
 
@@ -417,7 +416,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfoBuilderVisitor.ApplicationName
-			visitor.VisitApplicationBinding(new TestApplication());
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
 			var binding = visitor.CreateReceivePort(new OneWayReceivePort());
 
 			binding.ApplicationName.Should().Be(nameof(TestApplication));
@@ -432,7 +431,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfoBuilderVisitor.ApplicationName
-			visitor.VisitApplicationBinding(new TestApplication());
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
 			var binding = visitor.CreateReceivePort(new TwoWayReceivePort());
 
 			binding.ApplicationName.Should().Be(nameof(TestApplication));
@@ -449,7 +448,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfoBuilderVisitor.ApplicationName
-			visitor.VisitApplicationBinding(new TestApplication());
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
 			var binding = visitor.CreateSendPort(dsl);
 
 			binding.ApplicationName.Should().Be("TestApplication");
@@ -487,7 +486,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfoBuilderVisitor.ApplicationName
-			visitor.VisitApplicationBinding(new TestApplication());
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
 			var binding = visitor.CreateSendPort(new TwoWaySendPort());
 
 			binding.ApplicationName.Should().Be("TestApplication");
@@ -565,28 +564,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		}
 
 		[Fact]
-		public void VisitApplicationBindingSettlesTargetEnvironmentOverrides()
-		{
-			var applicationBindingMock = new Mock<IApplicationBinding<string>>();
-			applicationBindingMock.As<ISupportNamingConvention>();
-			applicationBindingMock.As<ISupportValidation>();
-			var visitableApplicationBindingMock = applicationBindingMock.As<IVisitable<IApplicationBindingVisitor>>();
-
-			var visitor = new BindingInfoBuilderVisitor();
-			visitor.VisitApplicationBinding(applicationBindingMock.Object);
-
-			visitableApplicationBindingMock.Verify(a => a.Accept(It.IsAny<ApplicationBindingEnvironmentSettlerVisitor>()), Times.Once);
-		}
-
-		[Fact]
 		public void VisitedReceiveLocationNameMustBeUnique()
 		{
-			var visitor = new BindingInfoBuilderVisitor();
-			visitor.VisitApplicationBinding(new TestApplication());
-			visitor.VisitReceivePort(new OneWayReceivePort());
-			visitor.VisitReceiveLocation(new OneWayReceiveLocation());
+			var applicationBinding = new TestApplication();
+			var receivePort = applicationBinding.ReceivePorts.Find<OneWayReceivePort>();
+			var receiveLocation = receivePort.ReceiveLocations.Find<OneWayReceiveLocation>();
 
-			Action(() => visitor.VisitReceiveLocation(new OneWayReceiveLocation()))
+			var visitor = new BindingInfoBuilderVisitor();
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(applicationBinding);
+			((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort);
+			((IApplicationBindingVisitor) visitor).VisitReceiveLocation(receiveLocation);
+
+			Action(() => ((IApplicationBindingVisitor) visitor).VisitReceiveLocation(receiveLocation))
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("Duplicate receive location name: 'OneWayReceiveLocation'.");
 		}
@@ -594,11 +583,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		[Fact]
 		public void VisitedReceivePortNameMustBeUnique()
 		{
-			var visitor = new BindingInfoBuilderVisitor();
-			visitor.VisitApplicationBinding(new TestApplication());
-			visitor.VisitReceivePort(new OneWayReceivePort());
+			var applicationBinding = new TestApplication();
+			var receivePort = applicationBinding.ReceivePorts.Find<OneWayReceivePort>();
 
-			Action(() => visitor.VisitReceivePort(new OneWayReceivePort()))
+			var visitor = new BindingInfoBuilderVisitor();
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(applicationBinding);
+			((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort);
+
+			Action(() => ((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort))
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("Duplicate receive port name: 'OneWayReceivePort'.");
 		}
@@ -606,11 +598,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		[Fact]
 		public void VisitedSendPortNameMustBeUnique()
 		{
-			var visitor = new BindingInfoBuilderVisitor();
-			visitor.VisitApplicationBinding(new TestApplication());
-			visitor.VisitSendPort(new OneWaySendPort());
+			var applicationBinding = new TestApplication();
+			var sendPort = applicationBinding.SendPorts.Find<OneWaySendPort>();
 
-			Action(() => visitor.VisitSendPort(new OneWaySendPort()))
+			var visitor = new BindingInfoBuilderVisitor();
+			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(applicationBinding);
+			((IApplicationBindingVisitor) visitor).VisitSendPort(sendPort);
+
+			Action(() => ((IApplicationBindingVisitor) visitor).VisitSendPort(sendPort))
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("Duplicate send port name: 'OneWaySendPort'.");
 		}

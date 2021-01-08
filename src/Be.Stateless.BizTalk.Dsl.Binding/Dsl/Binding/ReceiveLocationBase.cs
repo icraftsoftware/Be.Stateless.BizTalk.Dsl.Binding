@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -87,7 +87,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region ISupportValidation Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Receive Location's Name is not defined.");
@@ -99,7 +98,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
 		{
 			visitor.VisitReceiveLocation(this);

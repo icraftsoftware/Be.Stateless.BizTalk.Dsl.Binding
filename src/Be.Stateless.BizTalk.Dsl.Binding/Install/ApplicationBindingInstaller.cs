@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ namespace Be.Stateless.BizTalk.Install
 
 			if (Context.Parameters.ContainsKey("BindingFilePath"))
 			{
-				var cmd = new ApplicationBindingGenerationCommand {
+				var cmd = new ApplicationBindingGenerationCommand<T> {
 					OutputFilePath = Context.Parameters["BindingFilePath"]
 				};
 				SetCommandCommonArguments(cmd);
@@ -48,7 +48,7 @@ namespace Be.Stateless.BizTalk.Install
 
 			if (Context.Parameters.ContainsKey("SetupFileAdapterPaths"))
 			{
-				var cmd = new FileAdapterPathSetupCommand {
+				var cmd = new FileAdapterPathSetupCommand<T> {
 					Users = Context.Parameters["Users"].IfNotNullOrEmpty(u => u.Split(';', ','))
 				};
 				SetCommandCommonArguments(cmd);
@@ -57,7 +57,7 @@ namespace Be.Stateless.BizTalk.Install
 
 			if (Context.Parameters.ContainsKey("InitializeServices"))
 			{
-				var cmd = new BizTalkServiceInitializationCommand();
+				var cmd = new BizTalkServiceInitializationCommand<T>();
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
 			}
@@ -70,7 +70,7 @@ namespace Be.Stateless.BizTalk.Install
 
 			if (Context.Parameters.ContainsKey("TeardownFileAdapterPaths"))
 			{
-				var cmd = new FileAdapterPathTeardownCommand {
+				var cmd = new FileAdapterPathTeardownCommand<T> {
 					Recurse = Context.Parameters.ContainsKey("Recurse")
 				};
 				SetCommandCommonArguments(cmd);
@@ -82,7 +82,6 @@ namespace Be.Stateless.BizTalk.Install
 
 		private void SetCommandCommonArguments(ApplicationBindingBasedCommand cmd)
 		{
-			cmd.ApplicationBinding = new T();
 			cmd.AssemblyProbingPaths = Context.Parameters["AssemblyProbingPaths"].IfNotNullOrEmpty(p => p.Split(';'));
 			cmd.EnvironmentSettingRootPath = Context.Parameters["EnvironmentSettingOverridesRootPath"];
 			cmd.TargetEnvironment = Context.Parameters["TargetEnvironment"];

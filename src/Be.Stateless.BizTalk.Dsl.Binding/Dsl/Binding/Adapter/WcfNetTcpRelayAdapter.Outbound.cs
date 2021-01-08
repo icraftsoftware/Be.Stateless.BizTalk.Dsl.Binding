@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -71,8 +71,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string ClientCertificate
 			{
-				get => _adapterConfig.ClientCertificate;
-				set => _adapterConfig.ClientCertificate = value;
+				get => AdapterConfig.ClientCertificate;
+				set => AdapterConfig.ClientCertificate = value;
 			}
 
 			#endregion
@@ -81,8 +81,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public string StaticAction
 			{
-				get => _adapterConfig.StaticAction;
-				set => _adapterConfig.StaticAction = value;
+				get => AdapterConfig.StaticAction;
+				set => AdapterConfig.StaticAction = value;
 			}
 
 			#endregion
@@ -91,8 +91,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool PropagateFaultMessage
 			{
-				get => _adapterConfig.PropagateFaultMessage;
-				set => _adapterConfig.PropagateFaultMessage = value;
+				get => AdapterConfig.PropagateFaultMessage;
+				set => AdapterConfig.PropagateFaultMessage = value;
 			}
 
 			#endregion

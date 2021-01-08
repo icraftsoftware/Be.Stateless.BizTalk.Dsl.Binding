@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		protected abstract string SettingsFileName { get; }
 
-		[SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
 		protected abstract string[] TargetEnvironments { get; }
 
 		[SuppressMessage("ReSharper", "InvertIf")]
@@ -75,7 +74,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			}
 		}
 
-		protected internal T ValueForTargetEnvironment<T>(T?[] values, [CallerMemberName] string propertyName = null) where T : struct
+		protected T ValueForTargetEnvironment<T>(T?[] values, [CallerMemberName] string propertyName = null) where T : struct
 		{
 			values = SettingsOverrides.ValuesForProperty(propertyName, values);
 			return values[TargetEnvironmentIndex]
@@ -84,7 +83,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 					$"'{propertyName}' does not have a defined value neither for '{BindingGenerationContext.TargetEnvironment}' or default target environment.");
 		}
 
-		protected internal T ValueForTargetEnvironment<T>(T[] values, [CallerMemberName] string propertyName = null) where T : class
+		protected T ValueForTargetEnvironment<T>(T[] values, [CallerMemberName] string propertyName = null) where T : class
 		{
 			values = SettingsOverrides.ValuesForProperty(propertyName, values);
 			return values[TargetEnvironmentIndex]

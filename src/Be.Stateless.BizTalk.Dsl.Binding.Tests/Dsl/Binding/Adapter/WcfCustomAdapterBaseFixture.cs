@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var environmentSensitiveBindingMock = bindingMock.As<ISupportEnvironmentOverride>();
 
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Reflector.SetField(adapterMock.Object, "_bindingConfigurationElement", bindingMock.Object);
+			Reflector.SetProperty((WcfAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>) adapterMock.Object, "BindingElement", bindingMock.Object);
 
 			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides("ACC");
 

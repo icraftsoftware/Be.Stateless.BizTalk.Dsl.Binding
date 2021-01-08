@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 #endregion
 
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Microsoft.BizTalk.Adapter.Wcf.Metadata;
@@ -31,7 +30,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 	{
 		#region Operators
 
-		[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 		public static implicit operator string(VariableMapping mapping)
 		{
 			var btsVariablePropertyMapping = new BtsVariablePropertyMapping {

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
 // limitations under the License.
 
 #endregion
-
-using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
@@ -33,14 +31,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		#region ILocationMessageFormat<TNamingConvention> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		MessageFormat<TNamingConvention> ILocationMessageFormat<TNamingConvention>.FormattedAs => new MessageFormat<TNamingConvention>(_convention);
 
 		#endregion
 
 		#region ILocationMessageName<TNamingConvention> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		ILocationMessageFormat<TNamingConvention> ILocationMessageName<TNamingConvention>.About<T>(T messageName)
 		{
 			((IMessageNameMemento<T>) _convention).MessageName = messageName;

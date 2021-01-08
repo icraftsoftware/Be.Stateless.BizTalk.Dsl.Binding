@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Security.AccessControl;
+using Be.Stateless.Extensions;
 using log4net;
 using Path = Be.Stateless.IO.Path;
 
@@ -28,19 +28,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 	/// <summary>
 	/// <see cref="IApplicationBindingVisitor"/> implementation that sets up file adapters' physical paths.
 	/// </summary>
-	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public DSL API.")]
 	public class FileAdapterFolderSetUpVisitor : FileAdapterFolderVisitorBase
 	{
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
-		public static IApplicationBindingVisitor Create(string[] users)
+		public FileAdapterFolderSetUpVisitor(string[] users)
 		{
-			if (users == null) throw new ArgumentNullException(nameof(users));
-			return new FileAdapterFolderSetUpVisitor(users);
-		}
-
-		private FileAdapterFolderSetUpVisitor(string[] users)
-		{
-			_users = users;
+			_users = users ?? throw new ArgumentNullException(nameof(users));
 		}
 
 		#region Base Class Member Overrides
@@ -54,7 +46,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		#endregion
 
-		[SuppressMessage("Design", "CA1031:Do not catch general exception types")]
 		private void CreateDirectory(string path)
 		{
 			if (Directory.Exists(path))
@@ -70,11 +61,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			}
 			catch (Exception exception)
 			{
+				if (exception.IsFatal()) throw;
 				_logger.WarnFormat($"Could not create directory '{path}'.", exception);
 			}
 		}
 
-		[SuppressMessage("Design", "CA1031:Do not catch general exception types")]
 		private void SecureDirectory(string path)
 		{
 			if (!Directory.Exists(path))
@@ -106,6 +97,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				}
 				catch (Exception exception)
 				{
+					if (exception.IsFatal()) throw;
 					_logger.WarnFormat($"Could not grant Full Control permission to '{user}' on directory '{path}'.", exception);
 				}
 			}

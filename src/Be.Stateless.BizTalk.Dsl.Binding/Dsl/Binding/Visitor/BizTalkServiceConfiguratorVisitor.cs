@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 extern alias ExplorerOM;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Explorer;
 using log4net;
@@ -44,81 +43,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 	/// </item>
 	/// </list>
 	/// </remarks>
-	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public DSL API.")]
-	public sealed class BizTalkServiceConfiguratorVisitor : IApplicationBindingVisitor, IDisposable
+	public sealed class BizTalkServiceConfiguratorVisitor : MainApplicationBindingVisitor, IDisposable
 	{
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
-		public static BizTalkServiceConfiguratorVisitor Create()
-		{
-			return new BizTalkServiceConfiguratorVisitor();
-		}
-
-		private BizTalkServiceConfiguratorVisitor() { }
-
-		#region IApplicationBindingVisitor Members
-
-		public void VisitReferencedApplicationBinding(IVisitable<IApplicationBindingVisitor> applicationBinding) { }
-
-		public void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
-			where TNamingConvention : class
-		{
-			if (applicationBinding == null) throw new ArgumentNullException(nameof(applicationBinding));
-			var name = ((ISupportNamingConvention) applicationBinding).Name;
-			_application = BizTalkServerGroup.Applications[name];
-		}
-
-		[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
-		public void VisitOrchestration(IOrchestrationBinding orchestrationBinding)
-		{
-			if (orchestrationBinding == null) throw new ArgumentNullException(nameof(orchestrationBinding));
-			var name = orchestrationBinding.Type.FullName;
-			var orchestration = _application.Orchestrations[name];
-			if (_logger.IsDebugEnabled)
-			{
-				if (orchestrationBinding.State == ServiceState.Unenlisted) _logger.Debug($"Unenlisting orchestration '{name}'.");
-				else if (orchestrationBinding.State == ServiceState.Enlisted) _logger.Debug($"Enlisting or stopping orchestration '{name}'.");
-				else _logger.Debug($"Starting orchestration '{name}'.");
-			}
-			orchestration.Status = (OrchestrationStatus) orchestrationBinding.State;
-		}
-
-		public void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
-			where TNamingConvention : class
-		{
-			if (receivePort == null) throw new ArgumentNullException(nameof(receivePort));
-			var name = ((ISupportNamingConvention) receivePort).Name;
-			_receivePort = _application.ReceivePorts[name];
-		}
-
-		public void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
-			where TNamingConvention : class
-		{
-			if (receiveLocation == null) throw new ArgumentNullException(nameof(receiveLocation));
-			var name = ((ISupportNamingConvention) receiveLocation).Name;
-			var rl = _receivePort.ReceiveLocations[name];
-			if (_logger.IsDebugEnabled) _logger.Debug($"{(receiveLocation.Enabled ? "Enabling" : "Disabling")} receive location '{name}'.");
-			rl.Enabled = receiveLocation.Enabled;
-		}
-
-		[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
-		public void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
-			where TNamingConvention : class
-		{
-			if (sendPort == null) throw new ArgumentNullException(nameof(sendPort));
-			var name = ((ISupportNamingConvention) sendPort).Name;
-			var sp = _application.SendPorts[name];
-			if (_logger.IsDebugEnabled)
-			{
-				if (sendPort.State == ServiceState.Indefinite) _logger.Debug($"Leaving send port '{name}''s state as it is.");
-				else if (sendPort.State == ServiceState.Unenlisted) _logger.Debug($"Unenlisting send port '{name}'.");
-				else if (sendPort.State == ServiceState.Enlisted) _logger.Debug($"Enlisting or stopping send port '{name}'.");
-				else _logger.Debug($"Starting send port '{name}'.");
-			}
-			if (sendPort.State != ServiceState.Indefinite) sp.Status = (PortStatus) sendPort.State;
-		}
-
-		#endregion
-
 		#region IDisposable Members
 
 		public void Dispose()
@@ -128,7 +54,68 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		#endregion
 
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
+		#region Base Class Member Overrides
+
+		protected internal override void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
+			where TNamingConvention : class
+		{
+			if (applicationBinding == null) throw new ArgumentNullException(nameof(applicationBinding));
+			var name = ((ISupportNamingConvention) applicationBinding).Name;
+			_application = BizTalkServerGroup.Applications[name];
+		}
+
+		protected internal override void VisitOrchestration(IOrchestrationBinding orchestrationBinding)
+		{
+			if (orchestrationBinding == null) throw new ArgumentNullException(nameof(orchestrationBinding));
+			var name = orchestrationBinding.Type.FullName;
+			var orchestration = _application.Orchestrations[name];
+			if (_logger.IsDebugEnabled)
+				_logger.Debug(
+					orchestrationBinding.State switch {
+						ServiceState.Unenlisted => $"Unenlisting orchestration '{name}'.",
+						ServiceState.Enlisted => $"Enlisting or stopping orchestration '{name}'.",
+						_ => $"Starting orchestration '{name}'."
+					});
+			orchestration.Status = (OrchestrationStatus) orchestrationBinding.State;
+		}
+
+		protected internal override void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
+			where TNamingConvention : class
+		{
+			if (receiveLocation == null) throw new ArgumentNullException(nameof(receiveLocation));
+			var name = ((ISupportNamingConvention) receiveLocation).Name;
+			var rl = _receivePort.ReceiveLocations[name];
+			if (_logger.IsDebugEnabled) _logger.Debug($"{(receiveLocation.Enabled ? "Enabling" : "Disabling")} receive location '{name}'.");
+			rl.Enabled = receiveLocation.Enabled;
+		}
+
+		protected internal override void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
+			where TNamingConvention : class
+		{
+			if (receivePort == null) throw new ArgumentNullException(nameof(receivePort));
+			var name = ((ISupportNamingConvention) receivePort).Name;
+			_receivePort = _application.ReceivePorts[name];
+		}
+
+		protected internal override void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
+			where TNamingConvention : class
+		{
+			if (sendPort == null) throw new ArgumentNullException(nameof(sendPort));
+			var name = ((ISupportNamingConvention) sendPort).Name;
+			var sp = _application.SendPorts[name];
+			if (_logger.IsDebugEnabled)
+				_logger.Debug(
+					sendPort.State switch {
+						ServiceState.Indefinite => $"Leaving send port '{name}''s state as it is.",
+						ServiceState.Unenlisted => $"Unenlisting send port '{name}'.",
+						ServiceState.Enlisted => $"Enlisting or stopping send port '{name}'.",
+						_ => $"Starting send port '{name}'."
+					});
+			if (sendPort.State != ServiceState.Indefinite) sp.Status = (PortStatus) sendPort.State;
+		}
+
+		#endregion
+
 		public void Commit()
 		{
 			_application.ApplyChanges();

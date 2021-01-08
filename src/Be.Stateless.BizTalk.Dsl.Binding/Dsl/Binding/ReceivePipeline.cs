@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	public class ReceivePipeline<T> : ReceivePipeline, ISupportEnvironmentOverride, ITypeDescriptor
 		where T : Microsoft.BizTalk.PipelineOM.ReceivePipeline, new()
 	{
-		[SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Public DSL API.")]
 		public static ReceivePipeline<T> Configure(Action<ReceivePipeline<T>> receivePipelineConfigurator)
 		{
 			return new ReceivePipeline<T>(receivePipelineConfigurator);
@@ -54,10 +53,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region ITypeDescriptor Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		string ITypeDescriptor.FullName => typeof(T).FullName;
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		string ITypeDescriptor.AssemblyQualifiedName => typeof(T).AssemblyQualifiedName;
 
 		#endregion

@@ -1,13 +1,13 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
-//
+// Copyright © 2012 - 2021 François Chabot
+// 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+// 
 // http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,21 +29,25 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	public class ApplicationBindingBaseFixture
 	{
-		[Fact(Skip = "Broken by Moq.")]
+		[Fact]
 		public void AcceptsAndPropagatesVisitor()
 		{
 			var applicationBindingMock = new Mock<ApplicationBindingBase<string>> { CallBase = true };
 
 			var referencedApplicationBindingCollectionMock = new Mock<ReferencedApplicationBindingCollection> { CallBase = false };
+			referencedApplicationBindingCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
 			Reflector.SetField(applicationBindingMock.Object, "_referencedApplications", referencedApplicationBindingCollectionMock.Object);
 
 			var orchestrationBindingCollectionMock = new Mock<OrchestrationBindingCollection<string>>(applicationBindingMock.Object) { CallBase = false };
+			orchestrationBindingCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
 			Reflector.SetField(applicationBindingMock.Object, "_orchestrations", orchestrationBindingCollectionMock.Object);
 
 			var receivePortCollectionMock = new Mock<ReceivePortCollection<string>>(applicationBindingMock.Object) { CallBase = false };
+			receivePortCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
 			Reflector.SetField(applicationBindingMock.Object, "_receivePorts", receivePortCollectionMock.Object);
 
 			var sendPortCollectionMock = new Mock<SendPortCollection<string>>(applicationBindingMock.Object) { CallBase = false };
+			sendPortCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
 			Reflector.SetField(applicationBindingMock.Object, "_sendPorts", sendPortCollectionMock.Object);
 
 			var visitorMock = new Mock<IApplicationBindingVisitor>();

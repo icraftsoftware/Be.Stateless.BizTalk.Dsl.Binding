@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		protected WcfBindingCentricAdapterBase(ProtocolType protocolType) : base(protocolType)
 		{
-			_adapterConfig.BindingType = _bindingConfigurationElement.Name = WcfBindingRegistry.GetBindingName(_bindingConfigurationElement);
+			AdapterConfig.BindingType = BindingElement.Name = WcfBindingRegistry.GetBindingName(BindingElement);
 			EndpointBehaviors = Enumerable.Empty<BehaviorExtensionElement>();
 		}
 
@@ -92,8 +92,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public InboundMessageBodySelection InboundBodyLocation
 		{
-			get => _adapterConfig.InboundBodyLocation;
-			set => _adapterConfig.InboundBodyLocation = value;
+			get => AdapterConfig.InboundBodyLocation;
+			set => AdapterConfig.InboundBodyLocation = value;
 		}
 
 		/// <summary>
@@ -119,8 +119,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public string InboundBodyPathExpression
 		{
-			get => _adapterConfig.InboundBodyPathExpression;
-			set => _adapterConfig.InboundBodyPathExpression = value;
+			get => AdapterConfig.InboundBodyPathExpression;
+			set => AdapterConfig.InboundBodyPathExpression = value;
 		}
 
 		/// <summary>
@@ -155,8 +155,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MessageBodyFormat InboundNodeEncoding
 		{
-			get => _adapterConfig.InboundNodeEncoding;
-			set => _adapterConfig.InboundNodeEncoding = value;
+			get => AdapterConfig.InboundNodeEncoding;
+			set => AdapterConfig.InboundNodeEncoding = value;
 		}
 
 		#endregion
@@ -193,8 +193,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public OutboundMessageBodySelection OutboundBodyLocation
 		{
-			get => _adapterConfig.OutboundBodyLocation;
-			set => _adapterConfig.OutboundBodyLocation = value;
+			get => AdapterConfig.OutboundBodyLocation;
+			set => AdapterConfig.OutboundBodyLocation = value;
 		}
 
 		/// <summary>
@@ -217,8 +217,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public string OutboundXmlTemplate
 		{
-			get => _adapterConfig.OutboundXmlTemplate;
-			set => _adapterConfig.OutboundXmlTemplate = value;
+			get => AdapterConfig.OutboundXmlTemplate;
+			set => AdapterConfig.OutboundXmlTemplate = value;
 		}
 
 		#endregion
@@ -240,8 +240,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </exception>
 		public TimeSpan CloseTimeout
 		{
-			get => _bindingConfigurationElement.CloseTimeout;
-			set => _bindingConfigurationElement.CloseTimeout = value;
+			get => BindingElement.CloseTimeout;
+			set => BindingElement.CloseTimeout = value;
 		}
 
 		/// <summary>
@@ -259,8 +259,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </exception>
 		public TimeSpan OpenTimeout
 		{
-			get => _bindingConfigurationElement.OpenTimeout;
-			set => _bindingConfigurationElement.OpenTimeout = value;
+			get => BindingElement.OpenTimeout;
+			set => BindingElement.OpenTimeout = value;
 		}
 
 		/// <summary>
@@ -278,8 +278,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </exception>
 		public TimeSpan SendTimeout
 		{
-			get => _bindingConfigurationElement.SendTimeout;
-			set => _bindingConfigurationElement.SendTimeout = value;
+			get => BindingElement.SendTimeout;
+			set => BindingElement.SendTimeout = value;
 		}
 
 		#endregion
@@ -288,8 +288,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		protected override void Save(IPropertyBag propertyBag)
 		{
-			_adapterConfig.BindingConfiguration = _bindingConfigurationElement.GetBindingElementXml(_bindingConfigurationElement.Name);
-			_adapterConfig.EndpointBehaviorConfiguration = EndpointBehaviors.GetEndpointBehaviorElementXml();
+			AdapterConfig.BindingConfiguration = BindingElement.GetBindingElementXml(BindingElement.Name);
+			AdapterConfig.EndpointBehaviorConfiguration = EndpointBehaviors.GetEndpointBehaviorElementXml();
 			base.Save(propertyBag);
 		}
 

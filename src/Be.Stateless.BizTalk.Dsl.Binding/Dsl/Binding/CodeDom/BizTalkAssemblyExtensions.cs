@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Microsoft.BizTalk.XLANGs.BTXEngine;
@@ -51,6 +52,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 		/// <returns>
 		/// The <see cref="Array"/> of <see cref="BTXService"/>-derived types defined in the <paramref name="assembly"/>.
 		/// </returns>
+		[SuppressMessage("ReSharper", "ReturnTypeCanBeEnumerable.Global")]
 		public static Type[] GetOrchestrationTypes(this Assembly assembly)
 		{
 			return !assembly.IsBizTalkAssembly()

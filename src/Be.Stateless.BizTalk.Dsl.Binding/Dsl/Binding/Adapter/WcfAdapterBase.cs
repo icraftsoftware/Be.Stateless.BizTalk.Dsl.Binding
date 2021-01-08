@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -57,21 +57,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		protected WcfAdapterBase(ProtocolType protocolType) : base(protocolType)
 		{
-			_adapterConfig = new TConfig();
-			_bindingConfigurationElement = new TBinding();
+			AdapterConfig = new TConfig();
+			BindingElement = new TBinding();
 		}
 
 		#region IAdapterConfigAddress<TAddress> Members
 
-		[SuppressMessage("Naming", "CA1721:Property names should not match get methods")]
 		public TAddress Address { get; set; }
 
 		#endregion
 
 		#region IAdapterConfigBinding<TBinding> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		TBinding IAdapterConfigBinding<TBinding>.Binding => _bindingConfigurationElement;
+		TBinding IAdapterConfigBinding<TBinding>.Binding => BindingElement;
 
 		#endregion
 
@@ -103,7 +101,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			get => _identity;
 			set
 			{
-				_adapterConfig.Identity = new IdentityElementSurrogate(value).ConfigXml;
+				AdapterConfig.Identity = new IdentityElementSurrogate(value).ConfigXml;
 				_identity = value;
 			}
 		}
@@ -120,24 +118,23 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		protected override void Save(IPropertyBag propertyBag)
 		{
-			_adapterConfig.Save(propertyBag as ExplorerOM::Microsoft.BizTalk.ExplorerOM.IPropertyBag);
+			AdapterConfig.Save(propertyBag as ExplorerOM::Microsoft.BizTalk.ExplorerOM.IPropertyBag);
 		}
 
 		protected override void Validate()
 		{
 			// TODO validate BtsActionMapping against orchestration port's actions, see Microsoft.BizTalk.Adapter.Wcf.Metadata.BtsActionMapping and Microsoft.BizTalk.Adapter.Wcf.Metadata.BtsActionMappingHelper.CreateXml(BtsActionMapping btsActionMapping)
-			_adapterConfig.Address = GetAddress();
-			_adapterConfig.Validate();
-			_adapterConfig.Address = null;
+			AdapterConfig.Address = GetAddress();
+			AdapterConfig.Validate();
+			AdapterConfig.Address = null;
 		}
 
 		#endregion
 
-		[SuppressMessage("Design", "CA1051:Do not declare visible instance fields")]
-		protected readonly TConfig _adapterConfig;
+		protected TConfig AdapterConfig { get; }
 
-		[SuppressMessage("Design", "CA1051:Do not declare visible instance fields")]
-		protected readonly TBinding _bindingConfigurationElement;
+		[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Local", Justification = "Unit test relies on reflection to call setter.")]
+		protected TBinding BindingElement { get; private set; }
 
 		private IdentityElement _identity;
 	}

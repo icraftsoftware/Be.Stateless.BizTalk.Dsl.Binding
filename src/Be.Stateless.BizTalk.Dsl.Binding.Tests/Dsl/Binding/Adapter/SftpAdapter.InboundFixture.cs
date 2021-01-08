@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,30 +54,31 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				});
 			var xml = isa.GetAdapterBindingInfoSerializer().Serialize();
 			xml.Should().Be(
-				"<CustomProps>" +
-				"<ServerAddress vt=\"8\">sftp.server.com</ServerAddress>" +
-				"<Port vt=\"3\">23</Port>" +
-				"<FolderPath vt=\"8\">/out/to_bts/</FolderPath>" +
-				"<FileMask vt=\"8\">*.xml</FileMask>" +
-				"<AccessAnySSHServerHostKey vt=\"11\">0</AccessAnySSHServerHostKey>" +
-				"<SSHServerHostKey vt=\"8\">fingerprint</SSHServerHostKey>" +
-				"<ClientAuthenticationMode vt=\"8\">MultiFactorAuthentication</ClientAuthenticationMode>" +
-				"<PrivateKey vt=\"8\">c:\\file\\key.ppk</PrivateKey>" +
-				"<PrivateKeyPassword vt=\"8\">p@ssw0rd</PrivateKeyPassword>" +
-				"<UserName vt=\"8\">user</UserName>" +
-				"<Password vt=\"8\">p@ssw0rd</Password>" +
-				"<PollingInterval vt=\"3\">5</PollingInterval>" +
-				"<PollingIntervalUnit vt=\"8\">Seconds</PollingIntervalUnit>" +
-				"<RetainAfterDownload vt=\"11\">0</RetainAfterDownload>" +
-				"<EnableTimeComparison vt=\"11\">0</EnableTimeComparison>" +
-				"<RedownloadInterval vt=\"3\">0</RedownloadInterval>" +
-				"<ConnectionLimit vt=\"3\">6</ConnectionLimit>" +
-				"<ProxyPassword vt=\"8\">p@ssw0rd</ProxyPassword>" +
-				"<ProxyUserName vt=\"8\">proxy-user</ProxyUserName>" +
-				"<ProxyType vt=\"8\">SOCKS4</ProxyType>" +
-				"<ProxyAddress vt=\"8\">proxy.server.com</ProxyAddress>" +
-				"<ProxyPort vt=\"3\">1082</ProxyPort>" +
-				"<EncryptionCipher vt=\"8\">AES</EncryptionCipher>" +
+				"<CustomProps>" + (
+					"<ServerAddress vt=\"8\">sftp.server.com</ServerAddress>" +
+					"<Port vt=\"3\">23</Port>" +
+					"<FolderPath vt=\"8\">/out/to_bts/</FolderPath>" +
+					"<FileMask vt=\"8\">*.xml</FileMask>" +
+					"<AccessAnySSHServerHostKey vt=\"11\">0</AccessAnySSHServerHostKey>" +
+					"<SSHServerHostKey vt=\"8\">fingerprint</SSHServerHostKey>" +
+					"<ClientAuthenticationMode vt=\"8\">MultiFactorAuthentication</ClientAuthenticationMode>" +
+					"<PrivateKey vt=\"8\">c:\\file\\key.ppk</PrivateKey>" +
+					"<PrivateKeyPassword vt=\"8\">p@ssw0rd</PrivateKeyPassword>" +
+					"<UserName vt=\"8\">user</UserName>" +
+					"<Password vt=\"8\">p@ssw0rd</Password>" +
+					"<PollingInterval vt=\"3\">5</PollingInterval>" +
+					"<PollingIntervalUnit vt=\"8\">Seconds</PollingIntervalUnit>" +
+					"<RetainAfterDownload vt=\"11\">0</RetainAfterDownload>" +
+					"<EnableTimeComparison vt=\"11\">0</EnableTimeComparison>" +
+					"<RedownloadInterval vt=\"3\">0</RedownloadInterval>" +
+					"<ConnectionLimit vt=\"3\">6</ConnectionLimit>" +
+					"<MaxConnectionReuseTimeInSeconds vt=\"3\">0</MaxConnectionReuseTimeInSeconds>" +
+					"<ProxyPassword vt=\"8\">p@ssw0rd</ProxyPassword>" +
+					"<ProxyUserName vt=\"8\">proxy-user</ProxyUserName>" +
+					"<ProxyType vt=\"8\">SOCKS4</ProxyType>" +
+					"<ProxyAddress vt=\"8\">proxy.server.com</ProxyAddress>" +
+					"<ProxyPort vt=\"3\">1082</ProxyPort>" +
+					"<EncryptionCipher vt=\"8\">AES</EncryptionCipher>") +
 				"</CustomProps>");
 		}
 

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -82,8 +82,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int MaxReceivedMessageSize
 		{
-			get => _adapterConfig.MaxReceivedMessageSize;
-			set => _adapterConfig.MaxReceivedMessageSize = value;
+			get => AdapterConfig.MaxReceivedMessageSize;
+			set => AdapterConfig.MaxReceivedMessageSize = value;
 		}
 
 		#endregion
@@ -142,8 +142,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MessageCredentialType MessageClientCredentialType
 		{
-			get => _adapterConfig.MessageClientCredentialType;
-			set => _adapterConfig.MessageClientCredentialType = value;
+			get => AdapterConfig.MessageClientCredentialType;
+			set => AdapterConfig.MessageClientCredentialType = value;
 		}
 
 		/// <summary>
@@ -165,8 +165,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public SecurityAlgorithmSuiteValue AlgorithmSuite
 		{
-			get => _adapterConfig.AlgorithmSuite;
-			set => _adapterConfig.AlgorithmSuite = value;
+			get => AdapterConfig.AlgorithmSuite;
+			set => AdapterConfig.AlgorithmSuite = value;
 		}
 
 		#endregion
@@ -179,8 +179,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public bool UseAcsAuthentication
 		{
-			get => _adapterConfig.UseAcsAuthentication;
-			set => _adapterConfig.UseAcsAuthentication = value;
+			get => AdapterConfig.UseAcsAuthentication;
+			set => AdapterConfig.UseAcsAuthentication = value;
 		}
 
 		/// <summary>
@@ -188,8 +188,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public Uri StsUri
 		{
-			get => new Uri(_adapterConfig.StsUri);
-			set => _adapterConfig.StsUri = (value ?? throw new ArgumentNullException(nameof(value))).ToString();
+			get => new Uri(AdapterConfig.StsUri);
+			set => AdapterConfig.StsUri = (value ?? throw new ArgumentNullException(nameof(value))).ToString();
 		}
 
 		/// <summary>
@@ -200,8 +200,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public string IssuerName
 		{
-			get => _adapterConfig.IssuerName;
-			set => _adapterConfig.IssuerName = value;
+			get => AdapterConfig.IssuerName;
+			set => AdapterConfig.IssuerName = value;
 		}
 
 		/// <summary>
@@ -209,8 +209,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string IssuerSecret
 		{
-			get => _adapterConfig.IssuerSecret;
-			set => _adapterConfig.IssuerSecret = value;
+			get => AdapterConfig.IssuerSecret;
+			set => AdapterConfig.IssuerSecret = value;
 		}
 
 		#endregion
@@ -219,20 +219,20 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool UseSasAuthentication
 		{
-			get => _adapterConfig.UseSasAuthentication;
-			set => _adapterConfig.UseSasAuthentication = value;
+			get => AdapterConfig.UseSasAuthentication;
+			set => AdapterConfig.UseSasAuthentication = value;
 		}
 
 		public string SharedAccessKeyName
 		{
-			get => _adapterConfig.SharedAccessKeyName;
-			set => _adapterConfig.SharedAccessKeyName = value;
+			get => AdapterConfig.SharedAccessKeyName;
+			set => AdapterConfig.SharedAccessKeyName = value;
 		}
 
 		public string SharedAccessKey
 		{
-			get => _adapterConfig.SharedAccessKey;
-			set => _adapterConfig.SharedAccessKey = value;
+			get => AdapterConfig.SharedAccessKey;
+			set => AdapterConfig.SharedAccessKey = value;
 		}
 
 		#endregion
@@ -292,8 +292,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public EndToEndSecurityMode SecurityMode
 		{
-			get => _adapterConfig.SecurityMode;
-			set => _adapterConfig.SecurityMode = value;
+			get => AdapterConfig.SecurityMode;
+			set => AdapterConfig.SecurityMode = value;
 		}
 
 		#endregion
@@ -337,8 +337,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public ProtectionLevel TransportProtectionLevel
 		{
-			get => _adapterConfig.TransportProtectionLevel;
-			set => _adapterConfig.TransportProtectionLevel = value;
+			get => AdapterConfig.TransportProtectionLevel;
+			set => AdapterConfig.TransportProtectionLevel = value;
 		}
 
 		#endregion

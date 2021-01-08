@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -84,8 +84,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool EnableBizTalkCompatibilityMode
 		{
-			get => _bindingConfigurationElement.EnableBizTalkCompatibilityMode;
-			set => _bindingConfigurationElement.EnableBizTalkCompatibilityMode = value;
+			get => BindingElement.EnableBizTalkCompatibilityMode;
+			set => BindingElement.EnableBizTalkCompatibilityMode = value;
 		}
 
 		#endregion
@@ -94,8 +94,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool EnablePerformanceCounters
 		{
-			get => _bindingConfigurationElement.EnablePerformanceCounters;
-			set => _bindingConfigurationElement.EnablePerformanceCounters = value;
+			get => BindingElement.EnablePerformanceCounters;
+			set => BindingElement.EnablePerformanceCounters = value;
 		}
 
 		#endregion
@@ -142,8 +142,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "CommentTypo")]
 		public bool SkipNilNodes
 		{
-			get => _bindingConfigurationElement.SkipNilNodes;
-			set => _bindingConfigurationElement.SkipNilNodes = value;
+			get => BindingElement.SkipNilNodes;
+			set => BindingElement.SkipNilNodes = value;
 		}
 
 		#endregion
@@ -186,8 +186,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool UseAmbientTransaction
 		{
-			get => _bindingConfigurationElement.UseAmbientTransaction;
-			set => _bindingConfigurationElement.UseAmbientTransaction = value;
+			get => BindingElement.UseAmbientTransaction;
+			set => BindingElement.UseAmbientTransaction = value;
 		}
 
 		#endregion
@@ -215,8 +215,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "CommentTypo")]
 		public string UserAssembliesLoadPath
 		{
-			get => _bindingConfigurationElement.UserAssembliesLoadPath;
-			set => _bindingConfigurationElement.UserAssembliesLoadPath = value;
+			get => BindingElement.UserAssembliesLoadPath;
+			set => BindingElement.UserAssembliesLoadPath = value;
 		}
 
 		#endregion
@@ -239,8 +239,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public long DataFetchSize
 		{
-			get => _bindingConfigurationElement.DataFetchSize;
-			set => _bindingConfigurationElement.DataFetchSize = value;
+			get => BindingElement.DataFetchSize;
+			set => BindingElement.DataFetchSize = value;
 		}
 
 		/// <summary>
@@ -264,8 +264,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int InsertBatchSize
 		{
-			get => _bindingConfigurationElement.InsertBatchSize;
-			set => _bindingConfigurationElement.InsertBatchSize = value;
+			get => BindingElement.InsertBatchSize;
+			set => BindingElement.InsertBatchSize = value;
 		}
 
 		/// <summary>
@@ -289,8 +289,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		public long LongDataTypeColumnSize
 		{
 #pragma warning disable 618
-			get => _bindingConfigurationElement.LongDatatypeColumnSize;
-			set => _bindingConfigurationElement.LongDatatypeColumnSize = value;
+			get => BindingElement.LongDatatypeColumnSize;
+			set => BindingElement.LongDatatypeColumnSize = value;
 #pragma warning restore 618
 		}
 
@@ -309,8 +309,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int MaxOutputAssociativeArrayElements
 		{
-			get => _bindingConfigurationElement.MaxOutputAssociativeArrayElements;
-			set => _bindingConfigurationElement.MaxOutputAssociativeArrayElements = value;
+			get => BindingElement.MaxOutputAssociativeArrayElements;
+			set => BindingElement.MaxOutputAssociativeArrayElements = value;
 		}
 
 		/// <summary>
@@ -328,8 +328,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool MetadataPooling
 		{
-			get => _bindingConfigurationElement.MetadataPooling;
-			set => _bindingConfigurationElement.MetadataPooling = value;
+			get => BindingElement.MetadataPooling;
+			set => BindingElement.MetadataPooling = value;
 		}
 
 		/// <summary>
@@ -346,8 +346,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool StatementCachePurge
 		{
-			get => _bindingConfigurationElement.StatementCachePurge;
-			set => _bindingConfigurationElement.StatementCachePurge = value;
+			get => BindingElement.StatementCachePurge;
+			set => BindingElement.StatementCachePurge = value;
 		}
 
 		/// <summary>
@@ -363,8 +363,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int StatementCacheSize
 		{
-			get => _bindingConfigurationElement.StatementCacheSize;
-			set => _bindingConfigurationElement.StatementCacheSize = value;
+			get => BindingElement.StatementCacheSize;
+			set => BindingElement.StatementCacheSize = value;
 		}
 
 		#endregion
@@ -385,8 +385,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool EnableSafeTyping
 		{
-			get => _bindingConfigurationElement.EnableSafeTyping;
-			set => _bindingConfigurationElement.EnableSafeTyping = value;
+			get => BindingElement.EnableSafeTyping;
+			set => BindingElement.EnableSafeTyping = value;
 		}
 
 		/// <summary>
@@ -422,8 +422,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool UseSchemaInNameSpace
 		{
-			get => _bindingConfigurationElement.UseSchemaInNameSpace;
-			set => _bindingConfigurationElement.UseSchemaInNameSpace = value;
+			get => BindingElement.UseSchemaInNameSpace;
+			set => BindingElement.UseSchemaInNameSpace = value;
 		}
 
 		#endregion
@@ -443,8 +443,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int ConnectionLifetime
 		{
-			get => _bindingConfigurationElement.ConnectionLifetime;
-			set => _bindingConfigurationElement.ConnectionLifetime = value;
+			get => BindingElement.ConnectionLifetime;
+			set => BindingElement.ConnectionLifetime = value;
 		}
 
 		/// <summary>
@@ -462,8 +462,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "IdentifierTypo")]
 		public int DecrPoolSize
 		{
-			get => _bindingConfigurationElement.DecrPoolSize;
-			set => _bindingConfigurationElement.DecrPoolSize = value;
+			get => BindingElement.DecrPoolSize;
+			set => BindingElement.DecrPoolSize = value;
 		}
 
 		/// <summary>
@@ -480,8 +480,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int IncrPoolSize
 		{
-			get => _bindingConfigurationElement.IncrPoolSize;
-			set => _bindingConfigurationElement.IncrPoolSize = value;
+			get => BindingElement.IncrPoolSize;
+			set => BindingElement.IncrPoolSize = value;
 		}
 
 		/// <summary>
@@ -498,8 +498,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int MaxPoolSize
 		{
-			get => _bindingConfigurationElement.MaxPoolSize;
-			set => _bindingConfigurationElement.MaxPoolSize = value;
+			get => BindingElement.MaxPoolSize;
+			set => BindingElement.MaxPoolSize = value;
 		}
 
 		/// <summary>
@@ -515,8 +515,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int MinPoolSize
 		{
-			get => _bindingConfigurationElement.MinPoolSize;
-			set => _bindingConfigurationElement.MinPoolSize = value;
+			get => BindingElement.MinPoolSize;
+			set => BindingElement.MinPoolSize = value;
 		}
 
 		/// <summary>
@@ -528,8 +528,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool UseOracleConnectionPool
 		{
-			get => _bindingConfigurationElement.UseOracleConnectionPool;
-			set => _bindingConfigurationElement.UseOracleConnectionPool = value;
+			get => BindingElement.UseOracleConnectionPool;
+			set => BindingElement.UseOracleConnectionPool = value;
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,8 +52,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </exception>
 		public TimeSpan CloseTimeout
 		{
-			get => _adapterConfig.CloseTimeout;
-			set => _adapterConfig.CloseTimeout = value;
+			get => AdapterConfig.CloseTimeout;
+			set => AdapterConfig.CloseTimeout = value;
 		}
 
 		/// <summary>
@@ -71,8 +71,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </exception>
 		public TimeSpan OpenTimeout
 		{
-			get => _adapterConfig.OpenTimeout;
-			set => _adapterConfig.OpenTimeout = value;
+			get => AdapterConfig.OpenTimeout;
+			set => AdapterConfig.OpenTimeout = value;
 		}
 
 		/// <summary>
@@ -90,8 +90,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </exception>
 		public TimeSpan SendTimeout
 		{
-			get => _adapterConfig.SendTimeout;
-			set => _adapterConfig.SendTimeout = value;
+			get => AdapterConfig.SendTimeout;
+			set => AdapterConfig.SendTimeout = value;
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -81,26 +81,26 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public CredentialSelection CredentialType
 			{
-				get => _adapterConfig.CredentialType;
-				set => _adapterConfig.CredentialType = value;
+				get => AdapterConfig.CredentialType;
+				set => AdapterConfig.CredentialType = value;
 			}
 
 			public string UserName
 			{
-				get => _adapterConfig.UserName;
-				set => _adapterConfig.UserName = value;
+				get => AdapterConfig.UserName;
+				set => AdapterConfig.UserName = value;
 			}
 
 			public string Password
 			{
-				get => _adapterConfig.Password;
-				set => _adapterConfig.Password = value;
+				get => AdapterConfig.Password;
+				set => AdapterConfig.Password = value;
 			}
 
 			public string AffiliateApplicationName
 			{
-				get => _adapterConfig.AffiliateApplicationName;
-				set => _adapterConfig.AffiliateApplicationName = value;
+				get => AdapterConfig.AffiliateApplicationName;
+				set => AdapterConfig.AffiliateApplicationName = value;
 			}
 
 			#endregion
@@ -109,8 +109,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool DisableLocationOnFailure
 			{
-				get => _adapterConfig.DisableLocationOnFailure;
-				set => _adapterConfig.DisableLocationOnFailure = value;
+				get => AdapterConfig.DisableLocationOnFailure;
+				set => AdapterConfig.DisableLocationOnFailure = value;
 			}
 
 			#endregion
@@ -119,8 +119,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool IncludeExceptionDetailInFaults
 			{
-				get => _adapterConfig.IncludeExceptionDetailInFaults;
-				set => _adapterConfig.IncludeExceptionDetailInFaults = value;
+				get => AdapterConfig.IncludeExceptionDetailInFaults;
+				set => AdapterConfig.IncludeExceptionDetailInFaults = value;
 			}
 
 			#endregion
@@ -129,8 +129,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool SuspendRequestMessageOnFailure
 			{
-				get => _adapterConfig.SuspendMessageOnFailure;
-				set => _adapterConfig.SuspendMessageOnFailure = value;
+				get => AdapterConfig.SuspendMessageOnFailure;
+				set => AdapterConfig.SuspendMessageOnFailure = value;
 			}
 
 			#endregion
@@ -145,8 +145,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public bool OrderedProcessing
 			{
-				get => _adapterConfig.OrderedProcessing;
-				set => _adapterConfig.OrderedProcessing = value;
+				get => AdapterConfig.OrderedProcessing;
+				set => AdapterConfig.OrderedProcessing = value;
 			}
 
 			#endregion
@@ -161,7 +161,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			protected override void Save(IPropertyBag propertyBag)
 			{
-				_adapterConfig.ServiceBehaviorConfiguration = ServiceBehaviors.GetServiceBehaviorElementXml();
+				AdapterConfig.ServiceBehaviorConfiguration = ServiceBehaviors.GetServiceBehaviorElementXml();
 				base.Save(propertyBag);
 			}
 

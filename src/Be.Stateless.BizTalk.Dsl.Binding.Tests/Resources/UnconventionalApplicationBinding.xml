@@ -42,7 +42,7 @@
       <TransmitPipeline Name="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit" FullyQualifiedName="Be.Stateless.BizTalk.MicroPipelines.PassThruTransmit, Be.Stateless.BizTalk.Dsl.Binding.Tests, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14" Type="2" TrackingOption="None" Description="" />
       <SendPipelineData />
       <PrimaryTransport>
-        <Address>http://localhost:8000/stubservice</Address>
+        <Address>http://localhost:8000/soap-stub</Address>
         <TransportType Name="HTTP" Capabilities="387" ConfigurationClsid="1c56d157-0553-4345-8a1f-55d2d1a3ffb6" />
         <TransportTypeData>&lt;CustomProps&gt;&lt;EnableChunkedEncoding vt="11"&gt;0&lt;/EnableChunkedEncoding&gt;&lt;RequestTimeout vt="3"&gt;60&lt;/RequestTimeout&gt;&lt;MaxRedirects vt="3"&gt;0&lt;/MaxRedirects&gt;&lt;ContentType vt="8"&gt;text/xml&lt;/ContentType&gt;&lt;UseHandlerProxySettings vt="11"&gt;-1&lt;/UseHandlerProxySettings&gt;&lt;AuthenticationScheme vt="8"&gt;Anonymous&lt;/AuthenticationScheme&gt;&lt;UseSSO vt="11"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;</TransportTypeData>
         <RetryCount>3</RetryCount>

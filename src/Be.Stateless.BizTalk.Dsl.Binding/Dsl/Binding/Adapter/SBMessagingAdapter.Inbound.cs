@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,8 +53,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public TimeSpan ReceiveTimeout
 			{
-				get => _adapterConfig.ReceiveTimeout;
-				set => _adapterConfig.ReceiveTimeout = value;
+				get => AdapterConfig.ReceiveTimeout;
+				set => AdapterConfig.ReceiveTimeout = value;
 			}
 
 			/// <summary>
@@ -65,8 +65,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public TimeSpan SessionIdleTimeout
 			{
-				get => _adapterConfig.SessionIdleTimeout;
-				set => _adapterConfig.SessionIdleTimeout = value;
+				get => AdapterConfig.SessionIdleTimeout;
+				set => AdapterConfig.SessionIdleTimeout = value;
 			}
 
 			/// <summary>
@@ -77,8 +77,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public int MaxReceivedMessageSize
 			{
-				get => _adapterConfig.MaxReceivedMessageSize;
-				set => _adapterConfig.MaxReceivedMessageSize = value;
+				get => AdapterConfig.MaxReceivedMessageSize;
+				set => AdapterConfig.MaxReceivedMessageSize = value;
 			}
 
 			/// <summary>
@@ -101,8 +101,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public int PrefetchCount
 			{
-				get => _adapterConfig.PrefetchCount;
-				set => _adapterConfig.PrefetchCount = value;
+				get => AdapterConfig.PrefetchCount;
+				set => AdapterConfig.PrefetchCount = value;
 			}
 
 			/// <summary>
@@ -110,8 +110,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public bool IsSessionful
 			{
-				get => _adapterConfig.IsSessionful;
-				set => _adapterConfig.IsSessionful = value;
+				get => AdapterConfig.IsSessionful;
+				set => AdapterConfig.IsSessionful = value;
 			}
 
 			#endregion
@@ -124,8 +124,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string CustomBrokeredPropertyNamespace
 			{
-				get => _adapterConfig.CustomBrokeredPropertyNamespace;
-				set => _adapterConfig.CustomBrokeredPropertyNamespace = value;
+				get => AdapterConfig.CustomBrokeredPropertyNamespace;
+				set => AdapterConfig.CustomBrokeredPropertyNamespace = value;
 			}
 
 			/// <summary>
@@ -133,8 +133,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public bool PromoteCustomProperties
 			{
-				get => _adapterConfig.PromoteCustomProperties;
-				set => _adapterConfig.PromoteCustomProperties = value;
+				get => AdapterConfig.PromoteCustomProperties;
+				set => AdapterConfig.PromoteCustomProperties = value;
 			}
 
 			#endregion

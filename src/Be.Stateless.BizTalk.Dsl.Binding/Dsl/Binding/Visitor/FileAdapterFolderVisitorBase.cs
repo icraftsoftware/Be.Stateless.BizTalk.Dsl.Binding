@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,36 +16,31 @@
 
 #endregion
 
-using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
-	public abstract class FileAdapterFolderVisitorBase : IApplicationBindingVisitor
+	public abstract class FileAdapterFolderVisitorBase : MainApplicationBindingVisitor
 	{
-		#region IApplicationBindingVisitor Members
+		#region Base Class Member Overrides
 
-		public void VisitReferencedApplicationBinding(IVisitable<IApplicationBindingVisitor> applicationBinding) { }
-
-		public void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
+		protected internal override void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
 			where TNamingConvention : class { }
 
-		public void VisitOrchestration(IOrchestrationBinding orchestrationBinding) { }
+		protected internal override void VisitOrchestration(IOrchestrationBinding orchestrationBinding) { }
 
-		public void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
-			where TNamingConvention : class { }
-
-		public void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
+		protected internal override void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
 			where TNamingConvention : class
 		{
-			if (receiveLocation == null) throw new ArgumentNullException(nameof(receiveLocation));
 			if (receiveLocation.Transport.Adapter is FileAdapter.Inbound fileAdapter) VisitDirectory(fileAdapter.ReceiveFolder);
 		}
 
-		public void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
+		protected internal override void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
+			where TNamingConvention : class { }
+
+		protected internal override void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
 			where TNamingConvention : class
 		{
-			if (sendPort == null) throw new ArgumentNullException(nameof(sendPort));
 			if (sendPort.Transport.Adapter is FileAdapter.Outbound fileAdapter) VisitDirectory(fileAdapter.DestinationFolder);
 		}
 

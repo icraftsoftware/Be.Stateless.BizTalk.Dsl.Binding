@@ -110,7 +110,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple
 
 		public NamingConventionFixture()
 		{
-			BindingGenerationContext.TargetEnvironment = "ANYTHING";
+			BindingGenerationContext.TargetEnvironment = "ANYWHERE";
 		}
 
 		public void Dispose()

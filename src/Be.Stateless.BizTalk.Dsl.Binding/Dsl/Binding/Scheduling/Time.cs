@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,22 +17,18 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 {
-	[SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types")]
 	public readonly struct Time
 	{
 		#region Operators
 
-		[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 		public static implicit operator Time(DateTime dateTime)
 		{
 			return new Time(dateTime);
 		}
 
-		[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 		public static implicit operator DateTime(Time time)
 		{
 			return time._time;

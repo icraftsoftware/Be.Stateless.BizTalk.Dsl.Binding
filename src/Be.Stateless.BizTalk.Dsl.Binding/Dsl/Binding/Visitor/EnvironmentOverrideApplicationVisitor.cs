@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,38 +17,29 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Install;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
 	/// <summary>
-	/// Base <see cref="IApplicationBindingVisitor"/> implementation that ensures that environment overrides are applied and
-	/// validated before visit.
+	/// <see cref="IApplicationBindingVisitor"/> implementation that ensures that environment overrides are applied and
+	/// validated.
 	/// </summary>
-	public class ApplicationBindingEnvironmentSettlerVisitor : IApplicationBindingVisitor
+	internal class EnvironmentOverrideApplicationVisitor : IApplicationBindingVisitor
 	{
-		public static IApplicationBindingVisitor Create()
-		{
-			return new ApplicationBindingEnvironmentSettlerVisitor();
-		}
-
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "ApplicationBindingEnvironmentSettlerVisitorFixture needs to instantiate a mock.")]
-		internal ApplicationBindingEnvironmentSettlerVisitor() { }
-
 		#region IApplicationBindingVisitor Members
-
-		public void VisitReferencedApplicationBinding(IVisitable<IApplicationBindingVisitor> applicationBinding)
-		{
-			if (applicationBinding == null) throw new ArgumentNullException(nameof(applicationBinding));
-			applicationBinding.Accept(this);
-		}
 
 		public void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding) where TNamingConvention : class
 		{
 			if (applicationBinding == null) throw new ArgumentNullException(nameof(applicationBinding));
 			((ISupportEnvironmentOverride) applicationBinding).ApplyEnvironmentOverrides(Environment);
 			((ISupportValidation) applicationBinding).Validate();
+		}
+
+		public void VisitReferencedApplicationBinding(IVisitable<IApplicationBindingVisitor> referencedApplicationBinding)
+		{
+			if (referencedApplicationBinding == null) throw new ArgumentNullException(nameof(referencedApplicationBinding));
+			referencedApplicationBinding.Accept(this);
 		}
 
 		public void VisitOrchestration(IOrchestrationBinding orchestrationBinding)

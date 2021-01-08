@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,19 +17,24 @@
 #endregion
 
 using System;
+using Be.Stateless.BizTalk.Dsl;
+using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class BizTalkServiceInitializationCommand : ApplicationBindingBasedCommand
+	public class BizTalkServiceInitializationCommand<T> : ApplicationBindingBasedCommand
+		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
+		public BizTalkServiceInitializationCommand() : base(() => new T()) { }
+
 		#region Base Class Member Overrides
 
 		protected override void ExecuteCore(Action<string> logAppender)
 		{
-			using (var bizTalkServiceConfiguratorVisitor = BizTalkServiceConfiguratorVisitor.Create())
+			using (var bizTalkServiceConfiguratorVisitor = new BizTalkServiceConfiguratorVisitor())
 			{
-				ApplicationBinding.Accept(CurrentApplicationBindingVisitor.Create(bizTalkServiceConfiguratorVisitor));
+				ApplicationBinding.Accept(bizTalkServiceConfiguratorVisitor);
 				bizTalkServiceConfiguratorVisitor.Commit();
 			}
 		}

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,25 +17,28 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Be.Stateless.BizTalk.Dsl;
+using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class FileAdapterPathSetupCommand : ApplicationBindingBasedCommand
+	public class FileAdapterPathSetupCommand<T> : ApplicationBindingBasedCommand
+		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
+		public FileAdapterPathSetupCommand() : base(() => new T()) { }
+
 		#region Base Class Member Overrides
 
 		protected override void ExecuteCore(Action<string> logAppender)
 		{
 			if (Users == null || !Users.Any()) throw new InvalidOperationException($"{nameof(Users)} has not been set.");
-			ApplicationBinding.Accept(CurrentApplicationBindingVisitor.Create(FileAdapterFolderSetUpVisitor.Create(Users)));
+			ApplicationBinding.Accept(new FileAdapterFolderSetUpVisitor(Users));
 		}
 
 		#endregion
 
-		[SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
 		public string[] Users { get; set; }
 	}
 }

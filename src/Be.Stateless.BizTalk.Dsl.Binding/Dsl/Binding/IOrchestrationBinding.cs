@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		string Host { get; set; }
 
-		[SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Public DSL API.")]
 		[SuppressMessage("ReSharper", "ReturnTypeCanBeEnumerable.Global", Justification = "Public DSL API.")]
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		IOrchestrationPortBinding[] PortBindings { get; }

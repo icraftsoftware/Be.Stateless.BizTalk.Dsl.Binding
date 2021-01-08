@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ namespace Be.Stateless.BizTalk.Dsl
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 	public static class Transform<T> where T : TransformBase
 	{
-		[SuppressMessage("Design", "CA1000:Do not declare static members on generic types")]
 		public static string MapTypeName => typeof(T).AssemblyQualifiedName;
 	}
 }

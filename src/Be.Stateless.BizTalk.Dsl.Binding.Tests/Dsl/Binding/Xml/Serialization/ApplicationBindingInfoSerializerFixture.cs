@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 								p.SendPipeline = new SendPipeline<PassThruTransmit>();
 								p.Transport.Adapter = new HttpAdapter.Outbound(
 									ha => {
-										ha.Url = new Uri("http://localhost:8000/stubservice");
+										ha.Url = new Uri("http://localhost:8000/soap-stub");
 										ha.EnableChunkedEncoding = false;
 										ha.MaxRedirects = 0;
 										ha.RequestTimeout = TimeSpan.FromMinutes(1);

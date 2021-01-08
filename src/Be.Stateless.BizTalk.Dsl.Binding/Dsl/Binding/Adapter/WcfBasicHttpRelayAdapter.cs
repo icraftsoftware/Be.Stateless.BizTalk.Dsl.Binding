@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -84,8 +84,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int MaxReceivedMessageSize
 		{
-			get => _adapterConfig.MaxReceivedMessageSize;
-			set => _adapterConfig.MaxReceivedMessageSize = value;
+			get => AdapterConfig.MaxReceivedMessageSize;
+			set => AdapterConfig.MaxReceivedMessageSize = value;
 		}
 
 		#endregion
@@ -94,8 +94,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public WSMessageEncoding MessageEncoding
 		{
-			get => _adapterConfig.MessageEncoding;
-			set => _adapterConfig.MessageEncoding = value;
+			get => AdapterConfig.MessageEncoding;
+			set => AdapterConfig.MessageEncoding = value;
 		}
 
 		/// <summary>
@@ -123,8 +123,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public Encoding TextEncoding
 		{
-			get => Encoding.GetEncoding(_adapterConfig.TextEncoding);
-			set => _adapterConfig.TextEncoding = (value ?? throw new ArgumentNullException(nameof(value))).BodyName;
+			get => Encoding.GetEncoding(AdapterConfig.TextEncoding);
+			set => AdapterConfig.TextEncoding = (value ?? throw new ArgumentNullException(nameof(value))).BodyName;
 		}
 
 		#endregion
@@ -163,8 +163,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public BasicHttpMessageCredentialType MessageClientCredentialType
 		{
-			get => _adapterConfig.MessageClientCredentialType;
-			set => _adapterConfig.MessageClientCredentialType = value;
+			get => AdapterConfig.MessageClientCredentialType;
+			set => AdapterConfig.MessageClientCredentialType = value;
 		}
 
 		/// <summary>
@@ -186,8 +186,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public SecurityAlgorithmSuiteValue AlgorithmSuite
 		{
-			get => _adapterConfig.AlgorithmSuite;
-			set => _adapterConfig.AlgorithmSuite = value;
+			get => AdapterConfig.AlgorithmSuite;
+			set => AdapterConfig.AlgorithmSuite = value;
 		}
 
 		#endregion
@@ -196,26 +196,26 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool UseAcsAuthentication
 		{
-			get => _adapterConfig.UseAcsAuthentication;
-			set => _adapterConfig.UseAcsAuthentication = value;
+			get => AdapterConfig.UseAcsAuthentication;
+			set => AdapterConfig.UseAcsAuthentication = value;
 		}
 
 		public Uri StsUri
 		{
-			get => new Uri(_adapterConfig.StsUri);
-			set => _adapterConfig.StsUri = (value ?? throw new ArgumentNullException(nameof(value))).ToString();
+			get => new Uri(AdapterConfig.StsUri);
+			set => AdapterConfig.StsUri = (value ?? throw new ArgumentNullException(nameof(value))).ToString();
 		}
 
 		public string IssuerName
 		{
-			get => _adapterConfig.IssuerName;
-			set => _adapterConfig.IssuerName = value;
+			get => AdapterConfig.IssuerName;
+			set => AdapterConfig.IssuerName = value;
 		}
 
 		public string IssuerSecret
 		{
-			get => _adapterConfig.IssuerSecret;
-			set => _adapterConfig.IssuerSecret = value;
+			get => AdapterConfig.IssuerSecret;
+			set => AdapterConfig.IssuerSecret = value;
 		}
 
 		#endregion
@@ -224,20 +224,20 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool UseSasAuthentication
 		{
-			get => _adapterConfig.UseSasAuthentication;
-			set => _adapterConfig.UseSasAuthentication = value;
+			get => AdapterConfig.UseSasAuthentication;
+			set => AdapterConfig.UseSasAuthentication = value;
 		}
 
 		public string SharedAccessKeyName
 		{
-			get => _adapterConfig.SharedAccessKeyName;
-			set => _adapterConfig.SharedAccessKeyName = value;
+			get => AdapterConfig.SharedAccessKeyName;
+			set => AdapterConfig.SharedAccessKeyName = value;
 		}
 
 		public string SharedAccessKey
 		{
-			get => _adapterConfig.SharedAccessKey;
-			set => _adapterConfig.SharedAccessKey = value;
+			get => AdapterConfig.SharedAccessKey;
+			set => AdapterConfig.SharedAccessKey = value;
 		}
 
 		#endregion
@@ -288,8 +288,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public EndToEndBasicHttpSecurityMode SecurityMode
 		{
-			get => _adapterConfig.SecurityMode;
-			set => _adapterConfig.SecurityMode = value;
+			get => AdapterConfig.SecurityMode;
+			set => AdapterConfig.SecurityMode = value;
 		}
 
 		#endregion
@@ -298,8 +298,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public string ServiceCertificate
 		{
-			get => _adapterConfig.ServiceCertificate;
-			set => _adapterConfig.ServiceCertificate = value;
+			get => AdapterConfig.ServiceCertificate;
+			set => AdapterConfig.ServiceCertificate = value;
 		}
 
 		#endregion
@@ -330,8 +330,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "Public DSL API.")]
 		public RelayClientAuthenticationType RelayClientAuthenticationType
 		{
-			get => _adapterConfig.RelayClientAuthenticationType;
-			set => _adapterConfig.RelayClientAuthenticationType = value;
+			get => AdapterConfig.RelayClientAuthenticationType;
+			set => AdapterConfig.RelayClientAuthenticationType = value;
 		}
 
 		#endregion

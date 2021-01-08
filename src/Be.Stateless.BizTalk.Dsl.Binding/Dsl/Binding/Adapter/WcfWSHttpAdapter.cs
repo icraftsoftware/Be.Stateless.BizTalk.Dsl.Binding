@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -82,8 +82,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public int MaxReceivedMessageSize
 		{
-			get => _adapterConfig.MaxReceivedMessageSize;
-			set => _adapterConfig.MaxReceivedMessageSize = value;
+			get => AdapterConfig.MaxReceivedMessageSize;
+			set => AdapterConfig.MaxReceivedMessageSize = value;
 		}
 
 		#endregion
@@ -92,14 +92,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public WSMessageEncoding MessageEncoding
 		{
-			get => _adapterConfig.MessageEncoding;
-			set => _adapterConfig.MessageEncoding = value;
+			get => AdapterConfig.MessageEncoding;
+			set => AdapterConfig.MessageEncoding = value;
 		}
 
 		public Encoding TextEncoding
 		{
-			get => Encoding.GetEncoding(_adapterConfig.TextEncoding);
-			set => _adapterConfig.TextEncoding = (value ?? throw new ArgumentNullException(nameof(value))).WebName;
+			get => Encoding.GetEncoding(AdapterConfig.TextEncoding);
+			set => AdapterConfig.TextEncoding = (value ?? throw new ArgumentNullException(nameof(value))).WebName;
 		}
 
 		#endregion
@@ -124,8 +124,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MessageCredentialType MessageClientCredentialType
 		{
-			get => _adapterConfig.MessageClientCredentialType;
-			set => _adapterConfig.MessageClientCredentialType = value;
+			get => AdapterConfig.MessageClientCredentialType;
+			set => AdapterConfig.MessageClientCredentialType = value;
 		}
 
 		/// <summary>
@@ -147,8 +147,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public SecurityAlgorithmSuiteValue AlgorithmSuite
 		{
-			get => _adapterConfig.AlgorithmSuite;
-			set => _adapterConfig.AlgorithmSuite = value;
+			get => AdapterConfig.AlgorithmSuite;
+			set => AdapterConfig.AlgorithmSuite = value;
 		}
 
 		#endregion
@@ -173,8 +173,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public SecurityMode SecurityMode
 		{
-			get => _adapterConfig.SecurityMode;
-			set => _adapterConfig.SecurityMode = value;
+			get => AdapterConfig.SecurityMode;
+			set => AdapterConfig.SecurityMode = value;
 		}
 
 		#endregion
@@ -183,8 +183,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public string ServiceCertificate
 		{
-			get => _adapterConfig.ServiceCertificate;
-			set => _adapterConfig.ServiceCertificate = value;
+			get => AdapterConfig.ServiceCertificate;
+			set => AdapterConfig.ServiceCertificate = value;
 		}
 
 		#endregion
@@ -211,8 +211,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool EnableTransaction
 		{
-			get => _adapterConfig.EnableTransaction;
-			set => _adapterConfig.EnableTransaction = value;
+			get => AdapterConfig.EnableTransaction;
+			set => AdapterConfig.EnableTransaction = value;
 		}
 
 		#endregion
@@ -237,8 +237,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public HttpClientCredentialType TransportClientCredentialType
 		{
-			get => _adapterConfig.TransportClientCredentialType;
-			set => _adapterConfig.TransportClientCredentialType = value;
+			get => AdapterConfig.TransportClientCredentialType;
+			set => AdapterConfig.TransportClientCredentialType = value;
 		}
 
 		#endregion
@@ -276,8 +276,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public DSL API.")]
 		public bool NegotiateServiceCredential
 		{
-			get => _adapterConfig.NegotiateServiceCredential;
-			set => _adapterConfig.NegotiateServiceCredential = value;
+			get => AdapterConfig.NegotiateServiceCredential;
+			set => AdapterConfig.NegotiateServiceCredential = value;
 		}
 
 		/// <summary>
@@ -290,8 +290,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public DSL API.")]
 		public bool EstablishSecurityContext
 		{
-			get => _adapterConfig.EstablishSecurityContext;
-			set => _adapterConfig.EstablishSecurityContext = value;
+			get => AdapterConfig.EstablishSecurityContext;
+			set => AdapterConfig.EstablishSecurityContext = value;
 		}
 
 		#endregion

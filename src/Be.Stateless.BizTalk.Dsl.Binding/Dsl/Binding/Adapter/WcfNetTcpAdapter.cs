@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -90,8 +90,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int MaxReceivedMessageSize
 		{
-			get => _adapterConfig.MaxReceivedMessageSize;
-			set => _adapterConfig.MaxReceivedMessageSize = value;
+			get => AdapterConfig.MaxReceivedMessageSize;
+			set => AdapterConfig.MaxReceivedMessageSize = value;
 		}
 
 		#endregion
@@ -114,8 +114,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MessageCredentialType MessageClientCredentialType
 		{
-			get => _adapterConfig.MessageClientCredentialType;
-			set => _adapterConfig.MessageClientCredentialType = value;
+			get => AdapterConfig.MessageClientCredentialType;
+			set => AdapterConfig.MessageClientCredentialType = value;
 		}
 
 		/// <summary>
@@ -135,8 +135,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public SecurityAlgorithmSuiteValue AlgorithmSuite
 		{
-			get => _adapterConfig.AlgorithmSuite;
-			set => _adapterConfig.AlgorithmSuite = value;
+			get => AdapterConfig.AlgorithmSuite;
+			set => AdapterConfig.AlgorithmSuite = value;
 		}
 
 		#endregion
@@ -159,8 +159,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public SecurityMode SecurityMode
 		{
-			get => _adapterConfig.SecurityMode;
-			set => _adapterConfig.SecurityMode = value;
+			get => AdapterConfig.SecurityMode;
+			set => AdapterConfig.SecurityMode = value;
 		}
 
 		#endregion
@@ -194,8 +194,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool EnableTransaction
 		{
-			get => _adapterConfig.EnableTransaction;
-			set => _adapterConfig.EnableTransaction = value;
+			get => AdapterConfig.EnableTransaction;
+			set => AdapterConfig.EnableTransaction = value;
 		}
 
 		#endregion
@@ -218,8 +218,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public TcpClientCredentialType TransportClientCredentialType
 		{
-			get => _adapterConfig.TransportClientCredentialType;
-			set => _adapterConfig.TransportClientCredentialType = value;
+			get => AdapterConfig.TransportClientCredentialType;
+			set => AdapterConfig.TransportClientCredentialType = value;
 		}
 
 		#endregion
@@ -235,8 +235,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public DSL API.")]
 		public TransactionProtocolValue TransactionProtocol
 		{
-			get => _adapterConfig.TransactionProtocol;
-			set => _adapterConfig.TransactionProtocol = value;
+			get => AdapterConfig.TransactionProtocol;
+			set => AdapterConfig.TransactionProtocol = value;
 		}
 
 		#endregion
@@ -253,8 +253,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public DSL API.")]
 		public ProtectionLevel TransportProtectionLevel
 		{
-			get => _adapterConfig.TransportProtectionLevel;
-			set => _adapterConfig.TransportProtectionLevel = value;
+			get => AdapterConfig.TransportProtectionLevel;
+			set => AdapterConfig.TransportProtectionLevel = value;
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,7 +77,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public Type Type => typeof(T);
 
-		[SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public IOrchestrationPortBinding[] PortBindings => LogicalPorts.Select(lp => new PortBindingInfo(this, lp)).Cast<IOrchestrationPortBinding>().ToArray();
 
@@ -99,15 +98,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region ISupportNamingConvention Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		string ISupportNamingConvention.Name => typeof(T).FullName;
 
 		#endregion
 
 		#region ISupportValidation Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		[SuppressMessage("ReSharper", "CommentTypo")]
+		[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
 		void ISupportValidation.Validate()
 		{
 			if (Host.IsNullOrEmpty()) throw new BindingException("Orchestration's Host is not defined.");
@@ -150,7 +148,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
 		{
 			visitor.VisitOrchestration(this);

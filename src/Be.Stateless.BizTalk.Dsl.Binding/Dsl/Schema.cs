@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,8 +29,6 @@ namespace Be.Stateless.BizTalk.Dsl
 	/// This class is just syntactic sugar to support the fluent rule DSL. It is only used at install time when populating the
 	/// rule store (i.e. when translating a DSL rule into a BRE rule).
 	/// </remarks>
-	[SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Public DSL API.")]
-	[SuppressMessage("Usage", "CA1724:Type names should not match namespaces", Justification = "Public DSL API.")]
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 	public static class Schema<T> where T : Microsoft.XLANGs.BaseTypes.SchemaBase
 	{

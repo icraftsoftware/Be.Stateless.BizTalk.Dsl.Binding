@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -76,8 +76,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool EnableBizTalkCompatibilityMode
 		{
-			get => _bindingConfigurationElement.EnableBizTalkCompatibilityMode;
-			set => _bindingConfigurationElement.EnableBizTalkCompatibilityMode = value;
+			get => BindingElement.EnableBizTalkCompatibilityMode;
+			set => BindingElement.EnableBizTalkCompatibilityMode = value;
 		}
 
 		#endregion
@@ -86,8 +86,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool EnablePerformanceCounters
 		{
-			get => _bindingConfigurationElement.EnablePerformanceCounters;
-			set => _bindingConfigurationElement.EnablePerformanceCounters = value;
+			get => BindingElement.EnablePerformanceCounters;
+			set => BindingElement.EnablePerformanceCounters = value;
 		}
 
 		#endregion
@@ -401,8 +401,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public SapDataTypesBehavior DataTypesBehavior
 		{
-			get => _bindingConfigurationElement.DataTypesBehavior;
-			set => _bindingConfigurationElement.DataTypesBehavior = value;
+			get => BindingElement.DataTypesBehavior;
+			set => BindingElement.DataTypesBehavior = value;
 		}
 
 		#endregion
@@ -424,8 +424,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool EnableSafeTyping
 		{
-			get => _bindingConfigurationElement.EnableSafeTyping;
-			set => _bindingConfigurationElement.EnableSafeTyping = value;
+			get => BindingElement.EnableSafeTyping;
+			set => BindingElement.EnableSafeTyping = value;
 		}
 
 		#endregion
@@ -444,8 +444,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public DSL API.")]
 		public bool EnableConnectionPooling
 		{
-			get => _bindingConfigurationElement.EnableConnectionPooling;
-			set => _bindingConfigurationElement.EnableConnectionPooling = value;
+			get => BindingElement.EnableConnectionPooling;
+			set => BindingElement.EnableConnectionPooling = value;
 		}
 
 		/// <summary>
@@ -463,8 +463,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public DSL API.")]
 		public TimeSpan IdleConnectionTimeout
 		{
-			get => _bindingConfigurationElement.IdleConnectionTimeout;
-			set => _bindingConfigurationElement.IdleConnectionTimeout = value;
+			get => BindingElement.IdleConnectionTimeout;
+			set => BindingElement.IdleConnectionTimeout = value;
 		}
 
 		/// <summary>
@@ -490,8 +490,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int MaxConnectionsPerSystem
 		{
-			get => _bindingConfigurationElement.MaxConnectionsPerSystem;
-			set => _bindingConfigurationElement.MaxConnectionsPerSystem = value;
+			get => BindingElement.MaxConnectionsPerSystem;
+			set => BindingElement.MaxConnectionsPerSystem = value;
 		}
 
 		/// <summary>
@@ -523,8 +523,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public string RfcAllowStartProgram
 		{
-			get => _bindingConfigurationElement.RfcAllowStartProgram;
-			set => _bindingConfigurationElement.RfcAllowStartProgram = value;
+			get => BindingElement.RfcAllowStartProgram;
+			set => BindingElement.RfcAllowStartProgram = value;
 		}
 
 		#endregion
@@ -536,8 +536,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string LogOnTicketPassword
 		{
-			get => _bindingConfigurationElement.LogOnTicketPassword;
-			set => _bindingConfigurationElement.LogOnTicketPassword = value;
+			get => BindingElement.LogOnTicketPassword;
+			set => BindingElement.LogOnTicketPassword = value;
 		}
 
 		/// <summary>
@@ -546,8 +546,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public LogOnTicketType LogOnTicketType
 		{
-			get => _bindingConfigurationElement.LogOnTicketType;
-			set => _bindingConfigurationElement.LogOnTicketType = value;
+			get => BindingElement.LogOnTicketType;
+			set => BindingElement.LogOnTicketType = value;
 		}
 
 		#endregion
@@ -559,8 +559,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string ExternalIdentificationData
 		{
-			get => _bindingConfigurationElement.ExternalIdentificationData;
-			set => _bindingConfigurationElement.ExternalIdentificationData = value;
+			get => BindingElement.ExternalIdentificationData;
+			set => BindingElement.ExternalIdentificationData = value;
 		}
 
 		/// <summary>
@@ -568,8 +568,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string ExternalIdentificationType
 		{
-			get => _bindingConfigurationElement.ExternalIdentificationType;
-			set => _bindingConfigurationElement.ExternalIdentificationType = value;
+			get => BindingElement.ExternalIdentificationType;
+			set => BindingElement.ExternalIdentificationType = value;
 		}
 
 		/// <summary>
@@ -586,8 +586,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public string SncLibrary
 		{
-			get => _bindingConfigurationElement.SncLibrary;
-			set => _bindingConfigurationElement.SncLibrary = value;
+			get => BindingElement.SncLibrary;
+			set => BindingElement.SncLibrary = value;
 		}
 
 		/// <summary>
@@ -602,8 +602,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public string SncPartnerName
 		{
-			get => _bindingConfigurationElement.SncPartnerName;
-			set => _bindingConfigurationElement.SncPartnerName = value;
+			get => BindingElement.SncPartnerName;
+			set => BindingElement.SncPartnerName = value;
 		}
 
 		#endregion

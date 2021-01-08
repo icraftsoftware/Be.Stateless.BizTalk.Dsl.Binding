@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,15 +16,12 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public abstract partial class FileAdapter
 	{
 		#region CopyMode Enum
 
-		[SuppressMessage("Design", "CA1028:Enum Storage should be Int32", Justification = "Necessary to comply with BizTalk COM expectation.")]
 		public enum CopyMode : uint
 		{
 			Append = 0,

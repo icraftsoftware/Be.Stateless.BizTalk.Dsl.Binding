@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Be.Stateless.Extensions;
 
@@ -32,7 +31,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Extensions
 			return @string;
 		}
 
-		[SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase")]
 		internal static string Capitalize(this string @string)
 		{
 			// try to detect acronyms (i.e. uppercase string) that are longer than 2 characters

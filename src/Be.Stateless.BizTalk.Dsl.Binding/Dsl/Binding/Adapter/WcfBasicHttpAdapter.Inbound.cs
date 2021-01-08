@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -62,8 +62,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool IncludeExceptionDetailInFaults
 			{
-				get => _adapterConfig.IncludeExceptionDetailInFaults;
-				set => _adapterConfig.IncludeExceptionDetailInFaults = value;
+				get => AdapterConfig.IncludeExceptionDetailInFaults;
+				set => AdapterConfig.IncludeExceptionDetailInFaults = value;
 			}
 
 			#endregion
@@ -72,8 +72,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool SuspendRequestMessageOnFailure
 			{
-				get => _adapterConfig.SuspendMessageOnFailure;
-				set => _adapterConfig.SuspendMessageOnFailure = value;
+				get => AdapterConfig.SuspendMessageOnFailure;
+				set => AdapterConfig.SuspendMessageOnFailure = value;
 			}
 
 			#endregion
@@ -82,8 +82,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public int MaxConcurrentCalls
 			{
-				get => _adapterConfig.MaxConcurrentCalls;
-				set => _adapterConfig.MaxConcurrentCalls = value;
+				get => AdapterConfig.MaxConcurrentCalls;
+				set => AdapterConfig.MaxConcurrentCalls = value;
 			}
 
 			#endregion
@@ -106,8 +106,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public bool UseSSO
 			{
-				get => _adapterConfig.UseSSO;
-				set => _adapterConfig.UseSSO = value;
+				get => AdapterConfig.UseSSO;
+				set => AdapterConfig.UseSSO = value;
 			}
 
 			#endregion

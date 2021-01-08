@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -55,13 +55,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		#region IAdapter Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		string IAdapter.Address => GetAddress();
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		ProtocolType IAdapter.ProtocolType => _protocolType;
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		string IAdapter.PublicAddress => GetPublicAddress();
 
 		void IAdapter.Save(IPropertyBag propertyBag)

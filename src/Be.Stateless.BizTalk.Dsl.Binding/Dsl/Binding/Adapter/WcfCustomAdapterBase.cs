@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		IAdapterConfigOutboundMessageMarshalling,
 		new()
 	{
-		[SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations")]
 		static WcfCustomAdapterBase()
 		{
 			// BizTalk Server does only depend on BasicHttpBinding even for https
@@ -46,7 +45,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		#region IAdapterConfigBinding<TBinding> Members
 
-		public TBinding Binding => _bindingConfigurationElement;
+		public TBinding Binding => BindingElement;
 
 		#endregion
 
@@ -55,7 +54,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		protected override void Validate()
 		{
 			// ensure binding is configured before validation
-			_adapterConfig.BindingConfiguration = _bindingConfigurationElement.GetBindingElementXml(_bindingConfigurationElement.Name);
+			AdapterConfig.BindingConfiguration = BindingElement.GetBindingElementXml(BindingElement.Name);
 			base.Validate();
 		}
 

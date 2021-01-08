@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,8 +77,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string ClientCertificate
 			{
-				get => _adapterConfig.ClientCertificate;
-				set => _adapterConfig.ClientCertificate = value;
+				get => AdapterConfig.ClientCertificate;
+				set => AdapterConfig.ClientCertificate = value;
 			}
 
 			#endregion
@@ -93,26 +93,26 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public bool UseAcsAuthentication
 			{
-				get => _adapterConfig.UseAcsAuthentication;
-				set => _adapterConfig.UseAcsAuthentication = value;
+				get => AdapterConfig.UseAcsAuthentication;
+				set => AdapterConfig.UseAcsAuthentication = value;
 			}
 
 			public Uri StsUri
 			{
-				get => new Uri(_adapterConfig.StsUri);
-				set => _adapterConfig.StsUri = (value ?? throw new ArgumentNullException(nameof(value))).ToString();
+				get => new Uri(AdapterConfig.StsUri);
+				set => AdapterConfig.StsUri = (value ?? throw new ArgumentNullException(nameof(value))).ToString();
 			}
 
 			public string IssuerName
 			{
-				get => _adapterConfig.IssuerName;
-				set => _adapterConfig.IssuerName = value;
+				get => AdapterConfig.IssuerName;
+				set => AdapterConfig.IssuerName = value;
 			}
 
 			public string IssuerSecret
 			{
-				get => _adapterConfig.IssuerSecret;
-				set => _adapterConfig.IssuerSecret = value;
+				get => AdapterConfig.IssuerSecret;
+				set => AdapterConfig.IssuerSecret = value;
 			}
 
 			#endregion
@@ -121,20 +121,20 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool UseSasAuthentication
 			{
-				get => _adapterConfig.UseSasAuthentication;
-				set => _adapterConfig.UseSasAuthentication = value;
+				get => AdapterConfig.UseSasAuthentication;
+				set => AdapterConfig.UseSasAuthentication = value;
 			}
 
 			public string SharedAccessKeyName
 			{
-				get => _adapterConfig.SharedAccessKeyName;
-				set => _adapterConfig.SharedAccessKeyName = value;
+				get => AdapterConfig.SharedAccessKeyName;
+				set => AdapterConfig.SharedAccessKeyName = value;
 			}
 
 			public string SharedAccessKey
 			{
-				get => _adapterConfig.SharedAccessKey;
-				set => _adapterConfig.SharedAccessKey = value;
+				get => AdapterConfig.SharedAccessKey;
+				set => AdapterConfig.SharedAccessKey = value;
 			}
 
 			#endregion
@@ -157,8 +157,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string AffiliateApplicationName
 			{
-				get => _adapterConfig.AffiliateApplicationName;
-				set => _adapterConfig.AffiliateApplicationName = value;
+				get => AdapterConfig.AffiliateApplicationName;
+				set => AdapterConfig.AffiliateApplicationName = value;
 			}
 
 			/// <summary>
@@ -178,8 +178,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string Password
 			{
-				get => _adapterConfig.Password;
-				set => _adapterConfig.Password = value;
+				get => AdapterConfig.Password;
+				set => AdapterConfig.Password = value;
 			}
 
 			/// <summary>
@@ -202,8 +202,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string UserName
 			{
-				get => _adapterConfig.UserName;
-				set => _adapterConfig.UserName = value;
+				get => AdapterConfig.UserName;
+				set => AdapterConfig.UserName = value;
 			}
 
 			/// <summary>
@@ -222,8 +222,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public bool UseSSO
 			{
-				get => _adapterConfig.UseSSO;
-				set => _adapterConfig.UseSSO = value;
+				get => AdapterConfig.UseSSO;
+				set => AdapterConfig.UseSSO = value;
 			}
 
 			#endregion
@@ -244,8 +244,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string ProxyAddress
 			{
-				get => _adapterConfig.ProxyAddress;
-				set => _adapterConfig.ProxyAddress = value;
+				get => AdapterConfig.ProxyAddress;
+				set => AdapterConfig.ProxyAddress = value;
 			}
 
 			/// <summary>
@@ -271,8 +271,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string ProxyUserName
 			{
-				get => _adapterConfig.ProxyUserName;
-				set => _adapterConfig.ProxyUserName = value;
+				get => AdapterConfig.ProxyUserName;
+				set => AdapterConfig.ProxyUserName = value;
 			}
 
 			/// <summary>
@@ -283,8 +283,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string ProxyPassword
 			{
-				get => _adapterConfig.ProxyPassword;
-				set => _adapterConfig.ProxyPassword = value;
+				get => AdapterConfig.ProxyPassword;
+				set => AdapterConfig.ProxyPassword = value;
 			}
 
 			#endregion
@@ -311,8 +311,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public ProxySelection ProxyToUse
 			{
-				get => _adapterConfig.ProxyToUse;
-				set => _adapterConfig.ProxyToUse = value;
+				get => AdapterConfig.ProxyToUse;
+				set => AdapterConfig.ProxyToUse = value;
 			}
 
 			#endregion
@@ -337,8 +337,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string SuppressMessageBodyForHttpVerbs
 			{
-				get => _adapterConfig.SuppressMessageBodyForHttpVerbs;
-				set => _adapterConfig.SuppressMessageBodyForHttpVerbs = value;
+				get => AdapterConfig.SuppressMessageBodyForHttpVerbs;
+				set => AdapterConfig.SuppressMessageBodyForHttpVerbs = value;
 			}
 
 			#endregion

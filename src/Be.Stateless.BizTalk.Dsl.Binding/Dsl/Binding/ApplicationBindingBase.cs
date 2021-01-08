@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -68,25 +68,21 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region IApplicationBindingArtifactLookup Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		IApplicationBindingArtifactLookup IApplicationBindingArtifactLookup.ReferencedApplication<T>()
 		{
 			return ReferencedApplications.OfType<T>().Single();
 		}
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		ISupportNamingConvention IApplicationBindingArtifactLookup.ReceiveLocation<T>()
 		{
 			return ReceivePorts.Select(rp => rp.ReceiveLocations).SelectMany(rl => rl).OfType<T>().Single();
 		}
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		ISupportNamingConvention IApplicationBindingArtifactLookup.ReceivePort<T>()
 		{
 			return ReceivePorts.OfType<T>().Single();
 		}
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		ISupportNamingConvention IApplicationBindingArtifactLookup.SendPort<T>()
 		{
 			return SendPorts.OfType<T>().Single();
@@ -107,7 +103,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region ISupportValidation Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Application's Name is not defined.");
@@ -117,7 +112,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
 		{
 			((IVisitable<IApplicationBindingVisitor>) _referencedApplications).Accept(visitor);

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <RootNamespace>Be.Stateless.BizTalk</RootNamespace>
-    <AssemblyTitle>Be.Stateless.BizTalk.Dsl.Binding.Unit.Tests</AssemblyTitle>
+    <AssemblyName>Be.Stateless.BizTalk.Dsl.Binding.Unit.Tests</AssemblyName>
     <Description>Unit tests for BizTalk.Factory's binding definition DSL unit test library for general purpose BizTalk Server application binding definition.</Description>
   </PropertyGroup>
 
@@ -16,12 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.21005.35154" />
+    <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21008.23152" />
     <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+    <PackageReference Include="coverlet.msbuild" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -33,10 +33,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding.Conventions.Tests\Be.Stateless.BizTalk.Dsl.Binding.Conventions.Tests.csproj" />
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding.Dummies\Be.Stateless.BizTalk.Dsl.Binding.Dummies.csproj" />
     <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding\Be.Stateless.BizTalk.Dsl.Binding.csproj" />
     <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding.Unit\Be.Stateless.BizTalk.Dsl.Binding.Unit.csproj" />
   </ItemGroup>

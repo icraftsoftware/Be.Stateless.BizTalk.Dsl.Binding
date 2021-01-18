@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #endregion
 
 using Be.Stateless.BizTalk.Dummies.Bindings;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
 
@@ -24,70 +25,95 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	public class ApplicationBindingArtifactLookupFactoryFixture
 	{
-		[Fact]
+		[SkippableFact]
+		public void ApplicationBindingInstanceIsCached()
+		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV")
+				.Should().BeSameAs(ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV"));
+		}
+
+		[SkippableFact]
 		public void ApplicationName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
-			ab.Name.Should().Be("MyTestApplication");
+			ab.Name.Should().Be("TestApplication");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceiveLocationName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
-			var rl = ab.ReceiveLocation<TestReceiveLocation>();
-			rl.Name.Should().Be("MyTestReceiveLocation");
+			var rl = ab.ReceiveLocation<OneWayReceiveLocation>();
+			rl.Name.Should().Be("OneWayReceiveLocation");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePortName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
-			var rp = ab.ReceivePort<TestReceivePort>();
-			rp.Name.Should().Be("MyTestReceivePort");
+			var rp = ab.ReceivePort<OneWayReceivePort>();
+			rp.Name.Should().Be("OneWayReceivePort");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReferencedApplicationName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
 			var rab = ab.ReferencedApplication<TestReferencedApplication>();
 			rab.Name.Should().Be("MyTestReferencedApplication");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReferencedApplicationReceiveLocationName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
 			var rab = ab.ReferencedApplication<TestReferencedApplication>();
 			var rl = rab.ReceiveLocation<TestReferencedReceiveLocation>();
 			rl.Name.Should().Be("MyTestReferencedReceiveLocation");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReferencedApplicationReceivePortName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
 			var rab = ab.ReferencedApplication<TestReferencedApplication>();
 			var rp = rab.ReceivePort<TestReferencedReceivePort>();
 			rp.Name.Should().Be("MyTestReferencedReceivePort");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReferencedApplicationSendPortName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
 			var rab = ab.ReferencedApplication<TestReferencedApplication>();
 			var sp = rab.SendPort<TestReferencedSendPort>();
 			sp.Name.Should().Be("MyTestReferencedSendPort");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPortName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
-			var sp = ab.SendPort<TestSendPort>();
-			sp.Name.Should().Be("MyTestSendPort");
+			var sp = ab.SendPort<OneWaySendPort>();
+			sp.Name.Should().Be("OneWaySendPort");
 		}
 	}
 }

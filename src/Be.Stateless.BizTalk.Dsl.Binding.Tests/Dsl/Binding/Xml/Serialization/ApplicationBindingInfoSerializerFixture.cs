@@ -22,6 +22,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.MicroPipelines;
 using Be.Stateless.Resources;
 using FluentAssertions;
@@ -31,9 +32,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 {
 	public class ApplicationBindingInfoSerializerFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void GenerateBindingsWithoutConventions()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBinding = new ApplicationBinding(
 				a => {
 					a.Name = "Unconventional application name";
@@ -104,7 +107,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			XDocument.Parse(applicationBindingSerializer.Serialize()).Should().BeEquivalentTo(
 				ResourceManager.Load(
 					Assembly.GetExecutingAssembly(),
-					"Be.Stateless.BizTalk.Resources.UnconventionalApplicationBinding.xml",
+					"Be.Stateless.BizTalk.Resources.Bindings.UnconventionalApplicationBinding.xml",
 					XDocument.Load));
 		}
 	}

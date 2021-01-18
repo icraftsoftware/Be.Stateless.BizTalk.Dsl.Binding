@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ using Be.Stateless.BizTalk.Dummies.Adapter;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Dummies.Bindings.Simple;
 using Be.Stateless.BizTalk.Dummies.Conventions;
+using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.Finance;
 using Be.Stateless.Finance.Income;
 using Be.Stateless.Finance.Invoice;
@@ -41,9 +42,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
 	public class NamingConventionBaseFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void ComputeAdapterNameResolvesActualProtocolTypeNameForWcfCustomAdapter()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sut = new NamingConventionSpy();
 
 			IAdapter adapter = new CustomAdapterDummy<NetTcpBindingElement, CustomRLConfig>();
@@ -81,9 +84,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeAdapterNameSpy(adapter).Should().Be("WCF-CustomOracleDB");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeAdapterNameResolvesActualProtocolTypeNameForWcfCustomIsolatedAdapter()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sut = new NamingConventionSpy();
 
 			IAdapter adapter = new CustomIsolatedAdapterDummy<NetTcpBindingElement, CustomRLConfig>();
@@ -96,9 +101,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeAdapterNameSpy(adapter).Should().Be("WCF-CustomIsolatedBasicHttp");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeAggregateNameIsCalledForReceiveLocation()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -140,9 +147,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			namingConventionMock.Protected().Verify("ComputeAggregateName", Times.Once(), receivePortMock.Object.GetType());
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeAggregateNameIsCalledForSendPort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -210,9 +219,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeApplicationNameSpy(applicationBindingMock.Object).Should().Be(nameof(UnnamedApplication));
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeReceiveLocationNameDoesNotRequireAggregateToMatchItsReceivePortOneIfItHasNone()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -231,9 +242,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			Action(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object)).Should().NotThrow();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeReceiveLocationNameEmbedsAggregate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -252,9 +265,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object).Should().Be("SomeApplication.Invoice.RL1.ReceivePortParty.SomeMessage.FILE.SomeFormat");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeReceiveLocationNameEmbedsApplicationNameAndPartyAndMessageNameAndTransportAndMessageFormat()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -273,9 +288,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object).Should().Be("SomeApplication.RL1.SomeParty.SomeMessage.FILE.SomeFormat");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeReceiveLocationNameEmbedsEmptyMessageFormat()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -294,9 +311,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object).Should().Be("SomeApplication.RL1.ReceivePortParty.SomeMessage.FILE");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeReceiveLocationNameRequiredPartyDefaultsToItsReceivePortOne()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -317,9 +336,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.Party.Should().Be("ReceivePortParty");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeReceiveLocationNameRequiresAggregateToMatchItsReceivePortOneIfItHasOne()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -407,9 +428,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 				.WithMessage($"'{nameof(BankReceiveLocation)}' ReceiveLocation's Party, 'ReceiveLocationParty', does not match its ReceivePort's one, 'ReceivePortParty'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeReceiveLocationNameTwoWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -488,9 +511,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 				.WithMessage($"'{nameof(StandaloneReceivePort)}' ReceivePort's Party is required.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeReceivePortNameTwoWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -504,9 +529,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeReceivePortNameSpy(receivePortMock.Object).Should().Be("SomeApplication.RP2.SomeParty");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeSendPortNameEmbedsAggregate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -520,9 +547,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeSendPortNameSpy(sendPortMock.Object).Should().Be("SomeApplication.Income.SP1.SomeParty.SomeMessage.FILE.SomeFormat");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeSendPortNameEmbedsApplicationNameAndPartyAndMessageNameAndTransportAndMessageFormat()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -536,9 +565,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeSendPortNameSpy(sendPortMock.Object).Should().Be("SomeApplication.SP1.SomeParty.SomeMessage.FILE.SomeFormat");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeSendPortNameEmbedsEmptyMessageFormat()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 
@@ -615,9 +646,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 				.WithMessage($"'{nameof(StandaloneSendPort)}' SendPort's Party is required.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ComputeSendPortNameTwoWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<IApplicationBinding<NamingConventionSpy>>();
 			applicationBindingMock.As<ISupportNamingConvention>().Setup(snc => snc.Name).Returns("SomeApplication");
 

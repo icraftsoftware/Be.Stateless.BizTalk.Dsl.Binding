@@ -25,6 +25,20 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
 	public class EnvironmentOverrideApplicationVisitorFixture : IDisposable
 	{
+		#region Setup/Teardown
+
+		public EnvironmentOverrideApplicationVisitorFixture()
+		{
+			DeploymentContext.TargetEnvironment = "ANYWHERE";
+		}
+
+		public void Dispose()
+		{
+			DeploymentContext.TargetEnvironment = null;
+		}
+
+		#endregion
+
 		[Fact]
 		public void VisitApplicationBindingAppliesEnvironmentOverrides()
 		{
@@ -185,16 +199,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 			validatingSendPortMock.Verify(m => m.Validate(), Times.Once);
 			visitorMock.Verify(m => m.VisitSendPort(It.IsAny<ISendPort<string>>()), Times.Once);
-		}
-
-		public EnvironmentOverrideApplicationVisitorFixture()
-		{
-			BindingGenerationContext.TargetEnvironment = "ANYWHERE";
-		}
-
-		public void Dispose()
-		{
-			BindingGenerationContext.TargetEnvironment = null;
 		}
 	}
 }

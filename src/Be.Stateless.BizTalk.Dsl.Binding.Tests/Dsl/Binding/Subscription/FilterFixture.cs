@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Bindings;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.BizTalk.B2B.PartnerManagement;
 using Microsoft.XLANGs.BaseTypes;
@@ -232,9 +233,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				.WithInnerException<TpmException>();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void EqualsToReceivePortName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receivePort = new TestApplication().ReceivePorts.Find<OneWayReceivePort>();
 			var filter = new Filter(() => BtsProperties.ReceivePortName == receivePort.Name);
 
@@ -244,9 +247,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				+ "</Group></Filter>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void EqualsToSendPortName()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sendPort = new TestApplication().SendPorts.Find<TwoWaySendPort>();
 			var filter = new Filter(() => BtsProperties.SendPortName == sendPort.Name);
 

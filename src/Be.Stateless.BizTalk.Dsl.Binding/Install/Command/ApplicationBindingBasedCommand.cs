@@ -34,9 +34,11 @@ namespace Be.Stateless.BizTalk.Install.Command
 
 		public IVisitable<IApplicationBindingVisitor> ApplicationBinding => _lazyApplicationBindingFactory.Value ?? throw new ArgumentNullException(nameof(ApplicationBinding));
 
-		public string[] AssemblyProbingPaths { get; set; }
+		public string[] AssemblyProbingFolderPaths { get; set; }
 
-		public string EnvironmentSettingRootPath { get; set; }
+		public Type EnvironmentSettingOverridesType { get; set; }
+
+		public string ExcelSettingOverridesFolderPath { get; set; }
 
 		public string TargetEnvironment { get; set; }
 
@@ -45,7 +47,7 @@ namespace Be.Stateless.BizTalk.Install.Command
 			if (TargetEnvironment.IsNullOrEmpty()) throw new InvalidOperationException($"{nameof(TargetEnvironment)} has not been set.");
 			try
 			{
-				BizTalkAssemblyResolver.Register(logAppender, AssemblyProbingPaths);
+				BizTalkAssemblyResolver.Register(logAppender, AssemblyProbingFolderPaths);
 				SetupBindingGenerationContext();
 				ExecuteCore(logAppender);
 			}
@@ -60,8 +62,9 @@ namespace Be.Stateless.BizTalk.Install.Command
 
 		private void SetupBindingGenerationContext()
 		{
-			BindingGenerationContext.TargetEnvironment = TargetEnvironment;
-			if (!EnvironmentSettingRootPath.IsNullOrEmpty()) BindingGenerationContext.EnvironmentSettingRootPath = EnvironmentSettingRootPath;
+			DeploymentContext.TargetEnvironment = TargetEnvironment;
+			if (EnvironmentSettingOverridesType != null) DeploymentContext.EnvironmentSettingOverridesType = EnvironmentSettingOverridesType;
+			if (!ExcelSettingOverridesFolderPath.IsNullOrEmpty()) DeploymentContext.ExcelSettingOverridesFolderPath = ExcelSettingOverridesFolderPath;
 		}
 
 		private readonly Lazy<IVisitable<IApplicationBindingVisitor>> _lazyApplicationBindingFactory;

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
 using static Be.Stateless.Unit.DelegateFactory;
@@ -32,10 +33,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfWebHttpAdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wha = new WcfWebHttpAdapter.Inbound(
 				a => {
 					a.Address = new Uri("/dummy.svc", UriKind.Relative);
@@ -110,9 +113,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wha = new WcfWebHttpAdapter.Inbound(
 				a => {
 					a.Address = new Uri("/dummy.svc", UriKind.Relative);

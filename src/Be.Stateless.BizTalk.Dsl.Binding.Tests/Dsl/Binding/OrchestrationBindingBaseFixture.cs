@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ using System;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.CodeDom;
 using Be.Stateless.BizTalk.Dummies.Bindings;
+using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Orchestrations.Bound;
 using FluentAssertions;
 using Moq;
@@ -94,9 +95,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Orchestration's Host is not defined.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void LogicalOneWayReceivePortMustBeBoundToOneWayReceivePort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			IProcessOrchestrationBinding orchestrationBinding = new ProcessOrchestrationBinding { Host = "Host" };
 			orchestrationBinding.ReceivePort = new TwoWayReceivePort();
 			orchestrationBinding.SendPort = new OneWaySendPort();
@@ -108,9 +111,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Orchestration's one-way logical port 'ReceivePort' is bound to two-way port 'TwoWayReceivePort'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void LogicalOneWaySendPortMustBeBoundToOneWaySendPort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			IProcessOrchestrationBinding orchestrationBinding = new ProcessOrchestrationBinding { Host = "Host" };
 			orchestrationBinding.ReceivePort = new OneWayReceivePort();
 			orchestrationBinding.SendPort = new TwoWaySendPort();
@@ -134,9 +139,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage($"The '{typeof(Process).FullName}' orchestration has unbound logical ports: 'RequestResponsePort', 'SolicitResponsePort'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void LogicalRequestResponsePortMustBeBoundToTwoWayReceivePort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			IProcessOrchestrationBinding orchestrationBinding = new ProcessOrchestrationBinding { Host = "Host" };
 			orchestrationBinding.ReceivePort = new OneWayReceivePort();
 			orchestrationBinding.SendPort = new OneWaySendPort();
@@ -148,9 +155,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Orchestration's two-way logical port 'RequestResponsePort' is bound to one-way port 'OneWayReceivePort'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void LogicalSolicitResponsePortMustBeBoundToTwoWaySendPort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			IProcessOrchestrationBinding orchestrationBinding = new ProcessOrchestrationBinding { Host = "Host" };
 			orchestrationBinding.ReceivePort = new OneWayReceivePort();
 			orchestrationBinding.SendPort = new OneWaySendPort();

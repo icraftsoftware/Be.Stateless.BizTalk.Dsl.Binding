@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
 using static Be.Stateless.Unit.DelegateFactory;
@@ -26,9 +27,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class SBMessagingAdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Inbound(
 				a => {
 					a.Address = new Uri("sb://biztalkfactory.servicebus.windows.net/");
@@ -63,27 +66,33 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</CustomProps>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void Validate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Inbound();
 			Action(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"Required property Address (URI) not specified.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateAddress()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Inbound(a => { a.Address = new Uri("file://biztalf.factory.servicebus.windows.net/batching/"); });
 			Action(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"The specified address is invalid.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Inbound(
 				a => {
 					a.Address = new Uri("sb://biztalkfactory.servicebus.windows.net/");

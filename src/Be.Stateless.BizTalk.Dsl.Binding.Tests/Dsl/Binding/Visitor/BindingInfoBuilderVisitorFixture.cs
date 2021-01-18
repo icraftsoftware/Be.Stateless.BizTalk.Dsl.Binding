@@ -21,6 +21,7 @@ using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.Dummies.Bindings;
+using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.MicroPipelines;
 using Be.Stateless.BizTalk.Orchestrations.Bound;
 using ExplorerOM::Microsoft.BizTalk.ExplorerOM;
@@ -39,9 +40,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
 	public class BindingInfoBuilderVisitorFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void CreateBindingInfo()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var visitor = new BindingInfoBuilderVisitor();
 			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
 
@@ -57,9 +60,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ModuleRefCollection[0].Name.Should().Be($"[Application:{nameof(TestApplication)}]");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateModuleRef()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfo
 			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
@@ -69,9 +74,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.FullName.Should().Be(typeof(Process).Assembly.FullName);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceiveLocationOneWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var dsl = new OneWayReceiveLocation();
 			var visitor = new BindingInfoBuilderVisitor();
 			var binding = visitor.CreateReceiveLocation(dsl);
@@ -118,9 +125,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ScheduleIsOrdinal.Should().BeFalse();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceiveLocationTwoWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var visitor = new BindingInfoBuilderVisitor();
 			var binding = visitor.CreateReceiveLocation(new TwoWayReceiveLocation());
 
@@ -169,9 +178,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ScheduleIsOrdinal.Should().BeFalse();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceiveLocationWithCalendricalMonthlyServiceWindow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receiveLocation = new ReceiveLocation(
 				rl => {
 					rl.Name = "Dummy Receive Location";
@@ -220,9 +231,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ScheduleIsOrdinal.Should().BeFalse();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceiveLocationWithDailyServiceWindow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receiveLocation = new ReceiveLocation(
 				rl => {
 					rl.Name = "Dummy Receive Location";
@@ -270,9 +283,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ScheduleIsOrdinal.Should().BeFalse();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceiveLocationWithOrdinalMonthlyServiceWindow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receiveLocation = new ReceiveLocation(
 				rl => {
 					rl.Name = "Dummy Receive Location";
@@ -321,9 +336,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ScheduleIsOrdinal.Should().BeTrue();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceiveLocationWithoutSchedule()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receiveLocation = new ReceiveLocation(
 				rl => {
 					rl.Name = "Dummy Receive Location";
@@ -360,9 +377,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ScheduleIsOrdinal.Should().BeFalse();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceiveLocationWithWeeklyServiceWindow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receiveLocation = new ReceiveLocation(
 				rl => {
 					rl.Name = "Dummy Receive Location";
@@ -411,9 +430,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ScheduleIsOrdinal.Should().BeFalse();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceivePortOneWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfoBuilderVisitor.ApplicationName
 			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
@@ -426,9 +447,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ReceiveLocations.Count.Should().Be(0);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateReceivePortTwoWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfoBuilderVisitor.ApplicationName
 			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
@@ -441,9 +464,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ReceiveLocations.Count.Should().Be(0);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateSendPortOneWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var dsl = new OneWaySendPort();
 
 			var visitor = new BindingInfoBuilderVisitor();
@@ -481,9 +506,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.TransmitPipeline.Type.Should().Be(PipelineRef.TransmitPipelineRef().Type);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateSendPortTwoWay()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var visitor = new BindingInfoBuilderVisitor();
 			// initialize BindingInfoBuilderVisitor.ApplicationName
 			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(new TestApplication());
@@ -517,9 +544,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.TransmitPipeline.Type.Should().Be(PipelineRef.TransmitPipelineRef().Type);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CreateServiceRef()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var visitor = new BindingInfoBuilderVisitor();
 
 			var orchestrationBinding = new ProcessOrchestrationBinding(
@@ -563,9 +592,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.Ports[3].SendPortRef.Name.Should().Be(((ISupportNamingConvention) new TwoWaySendPort()).Name);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void VisitedReceiveLocationNameMustBeUnique()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBinding = new TestApplication();
 			var receivePort = applicationBinding.ReceivePorts.Find<OneWayReceivePort>();
 			var receiveLocation = receivePort.ReceiveLocations.Find<OneWayReceiveLocation>();
@@ -580,9 +611,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				.WithMessage("Duplicate receive location name: 'OneWayReceiveLocation'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void VisitedReceivePortNameMustBeUnique()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBinding = new TestApplication();
 			var receivePort = applicationBinding.ReceivePorts.Find<OneWayReceivePort>();
 
@@ -595,9 +628,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				.WithMessage("Duplicate receive port name: 'OneWayReceivePort'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void VisitedSendPortNameMustBeUnique()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBinding = new TestApplication();
 			var sendPort = applicationBinding.SendPorts.Find<OneWaySendPort>();
 

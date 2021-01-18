@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ using System.Linq.Expressions;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.BizTalk.DefaultPipelines;
 using Moq;
@@ -50,9 +51,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			visitorMock.Verify(m => m.VisitSendPort(sendPortMock.Object), Times.Once);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void AutomaticallyValidatesOnConfiguratorAction()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sendPortMock = new Mock<SendPortBase<string>>(
 				(Action<ISendPort<string>>) (sp => {
 					sp.Name = "Send Port Name";
@@ -101,9 +104,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			environmentSensitiveFilterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToReceivePipeline()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receivePipelineMock = new Mock<ReceivePipeline<XMLReceive>> { CallBase = true };
 
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
@@ -114,9 +119,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToSendPipeline()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sendPipelineMock = new Mock<SendPipeline<XMLTransmit>> { CallBase = true };
 
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
@@ -199,9 +206,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((ISupportNamingConvention) sendPortMock.Object).Name.Should().Be(name);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void TransportIsValidated()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapterMock = new Mock<IOutboundAdapter>();
 			var validatingAdapterMock = adapterMock.As<ISupportValidation>();
 

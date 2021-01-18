@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Transactions;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.Adapters.Sql;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
@@ -30,10 +31,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfSqlAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 			var osa = new WcfSqlAdapter.Outbound(
 				a => {
 					a.Address = new SqlAdapterConnectionUri { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
@@ -69,9 +71,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var osa = new WcfSqlAdapter.Outbound(
 				a => {
 					a.Address = new SqlAdapterConnectionUri { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };

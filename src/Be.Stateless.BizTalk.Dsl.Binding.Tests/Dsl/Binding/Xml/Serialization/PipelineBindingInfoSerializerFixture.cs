@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Component;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Dummies.Transforms;
+using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
 using BTS;
@@ -33,9 +34,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 {
 	public class PipelineBindingInfoSerializerFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant1()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -66,9 +69,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding1.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant2()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -98,9 +103,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding2.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant3()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -130,9 +137,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding3.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant4()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -168,9 +177,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding4.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant5()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -206,9 +217,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding5.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant6()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -241,9 +254,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding6.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineSerializationIsEmptyWhenDefaultPipelineConfigIsNotOverridden()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var pipeline = new ReceivePipeline<Microsoft.BizTalk.DefaultPipelines.XMLReceive>();
 			var pipelineBindingSerializer = pipeline.GetPipelineBindingInfoSerializer();
 
@@ -252,9 +267,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding.Should().BeEmpty();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineSerializationKeepsOnlyStagesWhoseComponentsDefaultConfigHasBeenOverridden()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var pipeline = new ReceivePipeline<Microsoft.BizTalk.DefaultPipelines.XMLReceive>(
 				pl => pl.Disassembler<XmlDasmComp>(c => { c.RecoverableInterchangeProcessing = true; }));
 			var pipelineBindingSerializer = pipeline.GetPipelineBindingInfoSerializer();
@@ -273,10 +290,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 				"</Stages></Root>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void ReceivePipelineSerializationKeepsOnlyStagesWhoseComponentsDefaultConfigHasBeenOverridden2()
+
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var pipeline = ReceivePipeline<XmlReceive>.Configure(
 				pl => pl
 					.FirstDecoder<FailedMessageRoutingEnablerComponent>(
@@ -320,9 +340,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant1()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -353,9 +375,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding1.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant2()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -386,9 +410,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding2.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant3()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -419,9 +445,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding3.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant4()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -457,9 +485,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding4.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant5()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -495,9 +525,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding5.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant6()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
@@ -530,10 +562,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding6.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SendPipelineSerializationKeepsOnlyStagesWhoseComponentsDefaultConfigHasBeenOverridden2()
+
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var pipeline = SendPipeline<XmlTransmit>.Configure(
 				pl => pl
 					.FirstPreAssembler<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; })

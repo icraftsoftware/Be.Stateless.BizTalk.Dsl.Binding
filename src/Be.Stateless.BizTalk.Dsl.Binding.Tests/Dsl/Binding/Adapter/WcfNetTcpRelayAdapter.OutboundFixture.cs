@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ using System.Net.Security;
 using System.ServiceModel;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Microsoft.ServiceBus;
@@ -32,10 +33,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfNetTcpRelayAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wnt = new WcfNetTcpRelayAdapter.Outbound(
 				a => {
 					a.Address = new EndpointAddress("sb://biztalk.factory.servicebus.windows.net/batch-queue");
@@ -85,9 +88,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				;
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void Validate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wnt = new WcfNetTcpRelayAdapter.Outbound(
 				a => { a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue"); });
 			Action(() => ((ISupportValidation) wnt).Validate())
@@ -96,9 +101,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				.WithMessage("Invalid address scheme; expecting \"sb\" scheme.*");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wnt = new WcfNetTcpRelayAdapter.Outbound(
 				a => {
 					a.Address = new EndpointAddress("sb://biztalk.factory.servicebus.windows.net/batch-queue");

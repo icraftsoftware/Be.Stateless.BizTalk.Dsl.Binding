@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Dummies.Bindings.Simple;
+using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Install;
 using Be.Stateless.Finance;
 using Be.Stateless.Resources;
@@ -35,9 +36,25 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple
 {
 	public class NamingConventionFixture : IDisposable
 	{
-		[Fact]
+		#region Setup/Teardown
+
+		public NamingConventionFixture()
+		{
+			DeploymentContext.TargetEnvironment = "ANYWHERE";
+		}
+
+		public void Dispose()
+		{
+			DeploymentContext.TargetEnvironment = null;
+		}
+
+		#endregion
+
+		[SkippableFact]
 		public void ConventionalApplicationBindingSupportsBindingGeneration()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingSerializer = new SampleApplication().GetApplicationBindingInfoSerializer();
 
 			var binding = applicationBindingSerializer.Serialize();
@@ -49,9 +66,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple
 					XDocument.Load));
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ConventionalApplicationBindingWithAggregateSupportsBindingGeneration()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingSerializer = new FinanceSampleApplication().GetApplicationBindingInfoSerializer();
 
 			var binding = applicationBindingSerializer.Serialize();
@@ -63,9 +82,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple
 					XDocument.Load));
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ConventionalReceivePortNameCanBeReferencedInSubscriptionFilter()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receivePort = new SampleApplication().BatchReceivePort;
 			var filter = new Filter(() => BtsProperties.ReceivePortName == receivePort.Name);
 
@@ -78,9 +99,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple
 					((ISupportNamingConvention) receivePort).Name));
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ConventionalSendPortNameCanBeReferencedInSubscriptionFilter()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sendPort = new SampleApplication().UnitTestSendPort;
 			var filter = new Filter(() => BtsProperties.SendPortName == sendPort.Name);
 
@@ -93,9 +116,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple
 					((ISupportNamingConvention) sendPort).Name));
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ConventionalStandaloneReceivePortNameCanBeReferencedInSubscriptionFilter()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receivePort = new SampleApplication().ReceivePorts.Find<StandaloneReceivePort>();
 			var filter = new Filter(() => BtsProperties.ReceivePortName == receivePort.Name);
 
@@ -106,16 +131,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple
 					BtsProperties.ReceivePortName.Type.FullName,
 					(int) FilterOperator.Equals,
 					((ISupportNamingConvention) receivePort).Name));
-		}
-
-		public NamingConventionFixture()
-		{
-			BindingGenerationContext.TargetEnvironment = "ANYWHERE";
-		}
-
-		public void Dispose()
-		{
-			BindingGenerationContext.TargetEnvironment = null;
 		}
 	}
 }

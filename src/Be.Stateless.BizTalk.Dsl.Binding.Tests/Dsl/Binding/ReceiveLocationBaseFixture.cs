@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.BizTalk.DefaultPipelines;
 using Moq;
@@ -42,9 +43,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			visitorMock.Verify(m => m.VisitReceiveLocation(receiveLocationMock.Object), Times.Once);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void AutomaticallyValidatesOnConfiguratorAction()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>>(
 				(Action<IReceiveLocation<string>>) (rl => {
 					rl.Name = "Receive Location Name";
@@ -79,9 +82,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receiveLocationMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Never(), ItExpr.IsAny<string>());
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToReceivePipeline()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receivePipelineMock = new Mock<ReceivePipeline<XMLReceive>> { CallBase = true };
 
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
@@ -92,9 +97,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToSendPipeline()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sendPipelineMock = new Mock<SendPipeline<XMLTransmit>> { CallBase = true };
 
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
@@ -169,9 +176,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((ISupportNamingConvention) receiveLocationMock.Object).Name.Should().Be(name);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void TransportIsValidated()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapterMock = new Mock<IInboundAdapter>();
 			var validatingAdapterMock = adapterMock.As<ISupportValidation>();
 

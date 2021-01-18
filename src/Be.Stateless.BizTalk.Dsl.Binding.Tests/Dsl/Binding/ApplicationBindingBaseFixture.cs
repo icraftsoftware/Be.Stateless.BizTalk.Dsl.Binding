@@ -18,6 +18,7 @@
 
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.Reflection;
 using FluentAssertions;
 using Moq;
@@ -61,9 +62,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortCollectionMock.As<IVisitable<IApplicationBindingVisitor>>().Verify(m => m.Accept(visitorMock.Object), Times.Once);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void AutomaticallyValidatesOnConfiguratorAction()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var applicationBindingMock = new Mock<ApplicationBindingBase<string>>((Action<IApplicationBinding<string>>) (ab => { ab.Name = "name"; })) { CallBase = true };
 			var validatingApplicationBindingMock = applicationBindingMock.As<ISupportValidation>();
 

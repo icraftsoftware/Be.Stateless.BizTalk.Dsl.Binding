@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,8 +33,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Utils
 				using (var baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default))
 				using (var odpKey = baseKey.OpenSubKey(@"SOFTWARE\Oracle\ODP.NET"))
 				{
-					return odpKey
-						.IfNotNull(k => k.GetSubKeyNames())
+					return (odpKey.IfNotNull(k => k.GetSubKeyNames()) ?? Array.Empty<string>())
 						.Any(n => Version.TryParse(n, out var actualVersion) && actualVersion >= minVersion);
 				}
 			}

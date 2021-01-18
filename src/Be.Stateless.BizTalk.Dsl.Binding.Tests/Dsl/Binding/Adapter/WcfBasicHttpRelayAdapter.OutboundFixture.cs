@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ using System.ServiceModel;
 using System.Text;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
 using static Be.Stateless.Unit.DelegateFactory;
@@ -30,10 +31,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfBasicHttpRelayAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wba = new WcfBasicHttpRelayAdapter.Outbound(
 				a => {
 					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
@@ -79,9 +82,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				;
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void Validate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wba = new WcfBasicHttpRelayAdapter.Outbound(
 				a => {
 					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
@@ -93,9 +98,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				.WithMessage("The text encoding 'us-ascii' used in the text message format is not supported.*");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wba = new WcfBasicHttpRelayAdapter.Outbound(
 				a => {
 					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");

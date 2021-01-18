@@ -72,6 +72,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		#endregion
 
-		private string Environment => BindingGenerationContext.TargetEnvironment;
+		private string Environment => DeploymentContext.TargetEnvironment;
 	}
 }

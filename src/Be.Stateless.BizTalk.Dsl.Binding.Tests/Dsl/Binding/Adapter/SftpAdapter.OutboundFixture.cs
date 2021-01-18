@@ -16,7 +16,9 @@
 
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.BizTalk.Adapter.Sftp;
 using Xunit;
@@ -26,9 +28,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class SftpAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
+		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var osa = new SftpAdapter.Outbound(
 				a => {
 					a.ServerAddress = "sftp.server.com";
@@ -82,9 +87,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var osa = new SftpAdapter.Outbound(
 				a => {
 					a.ServerAddress = "sftp.server.com";

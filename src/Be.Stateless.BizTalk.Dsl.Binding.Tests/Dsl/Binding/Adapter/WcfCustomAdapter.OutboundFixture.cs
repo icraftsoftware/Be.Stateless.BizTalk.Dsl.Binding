@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
 using static Be.Stateless.Unit.DelegateFactory;
@@ -34,10 +35,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfCustomAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeCustomBindingToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<CustomBindingElement>(
 				a => {
 					a.OpenTimeout = TimeSpan.FromMinutes(33);
@@ -78,9 +81,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</CustomProps>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<NetTcpBindingElement>(
 				a => {
 					const int tenMegaBytes = 1024 * 1024 * 10;
@@ -122,9 +127,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateCustomBasicHttpBindingWithTransportSecurity()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<BasicHttpBindingElement>(
 				a => {
 					a.Address = new EndpointAddress("https://services.stateless.be/soap/default");
@@ -149,9 +156,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Action(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateCustomBinding()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<CustomBindingElement>(
 				a => {
 					a.Address = new EndpointAddress("https://localhost/biztalk.factory/service.svc");
@@ -162,9 +171,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Action(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<NetTcpBindingElement>(
 				a => {
 					const int tenMegaBytes = 1024 * 1024 * 10;

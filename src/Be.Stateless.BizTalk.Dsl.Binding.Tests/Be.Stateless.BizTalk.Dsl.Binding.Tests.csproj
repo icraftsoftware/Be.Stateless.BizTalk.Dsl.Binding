@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <RootNamespace>Be.Stateless.BizTalk</RootNamespace>
-    <AssemblyTitle>Be.Stateless.BizTalk.Dsl.Binding.Tests</AssemblyTitle>
+    <AssemblyName>Be.Stateless.BizTalk.Dsl.Binding.Tests</AssemblyName>
     <Description>Unit tests for BizTalk.Factory's binding definition DSL for general purpose BizTalk Server application binding definition.</Description>
   </PropertyGroup>
 
@@ -12,17 +12,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\Bindings\Dummy.ProcessOrchestrationBinding.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\.settings\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.21007.39752" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.20345.39507" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.21005.35154" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.21012.21174" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.21012.60359" />
     <PackageReference Include="Be.Stateless.BizTalk.Dummies" Version="2.0.20338.28863" />
-    <PackageReference Include="Be.Stateless.BizTalk.Messaging" Version="2.0.20359.36483" />
-    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.20359.38065" />
-    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.MicroComponents" Version="2.0.20359.37900" />
+    <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21008.23152" />
+    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.21012.20459" />
+    <PackageReference Include="Be.Stateless.BizTalk.Pipeline.MicroComponents" Version="2.0.21012.19670" />
     <PackageReference Include="Be.Stateless.Common" Version="2.0.21005.39505" />
     <PackageReference Include="Be.Stateless.Common.Unit" Version="2.0.21005.39505" />
     <PackageReference Include="Be.Stateless.Extensions" Version="2.0.21005.38790" />
@@ -38,7 +42,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+    <PackageReference Include="coverlet.msbuild" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -54,11 +58,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Dummies\Bindings\Dummy.ProcessOrchestrationBinding.Designer.cs" Link="Resources\Dummy.ProcessOrchestrationBinding.Designer.cs" />
-    <EmbeddedResource Include="Resources\UnconventionalApplicationBinding.xml" />
+    <EmbeddedResource Include="Resources\Bindings\Dummy.ProcessOrchestrationBinding.Designer.cs" />
+    <EmbeddedResource Include="Resources\Bindings\UnconventionalApplicationBinding.xml" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding.Dummies\Be.Stateless.BizTalk.Dsl.Binding.Dummies.csproj" />
     <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding\Be.Stateless.BizTalk.Dsl.Binding.csproj" />
   </ItemGroup>
 

@@ -16,6 +16,7 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using System.Configuration.Install;
 using System.Diagnostics.CodeAnalysis;
@@ -37,19 +38,19 @@ namespace Be.Stateless.BizTalk.Install
 		{
 			base.Install(stateSaver);
 
-			if (Context.Parameters.ContainsKey("BindingFilePath"))
+			if (Context.Parameters.ContainsKey(nameof(ApplicationBindingGenerationCommand<T>.OutputFilePath)))
 			{
 				var cmd = new ApplicationBindingGenerationCommand<T> {
-					OutputFilePath = Context.Parameters["BindingFilePath"]
+					OutputFilePath = Context.Parameters[nameof(ApplicationBindingGenerationCommand<T>.OutputFilePath)]
 				};
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
 			}
 
-			if (Context.Parameters.ContainsKey("SetupFileAdapterPaths"))
+			if (Context.Parameters.ContainsKey("SetupFileAdapterFolders"))
 			{
-				var cmd = new FileAdapterPathSetupCommand<T> {
-					Users = Context.Parameters["Users"].IfNotNullOrEmpty(u => u.Split(';', ','))
+				var cmd = new FileAdapterFolderSetupCommand<T> {
+					Users = Context.Parameters[nameof(FileAdapterFolderSetupCommand<T>.Users)].IfNotNullOrEmpty(u => u.Split(';', ','))
 				};
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
@@ -68,10 +69,10 @@ namespace Be.Stateless.BizTalk.Install
 		{
 			base.Uninstall(savedState);
 
-			if (Context.Parameters.ContainsKey("TeardownFileAdapterPaths"))
+			if (Context.Parameters.ContainsKey("TeardownFileAdapterFolders"))
 			{
-				var cmd = new FileAdapterPathTeardownCommand<T> {
-					Recurse = Context.Parameters.ContainsKey("Recurse")
+				var cmd = new FileAdapterFolderTeardownCommand<T> {
+					Recurse = Context.Parameters.ContainsKey(nameof(FileAdapterFolderTeardownCommand<T>.Recurse))
 				};
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
@@ -82,9 +83,12 @@ namespace Be.Stateless.BizTalk.Install
 
 		private void SetCommandCommonArguments(ApplicationBindingBasedCommand cmd)
 		{
-			cmd.AssemblyProbingPaths = Context.Parameters["AssemblyProbingPaths"].IfNotNullOrEmpty(p => p.Split(';'));
-			cmd.EnvironmentSettingRootPath = Context.Parameters["EnvironmentSettingOverridesRootPath"];
-			cmd.TargetEnvironment = Context.Parameters["TargetEnvironment"];
+			cmd.EnvironmentSettingOverridesType = Context.Parameters[nameof(ApplicationBindingBasedCommand.EnvironmentSettingOverridesType)]
+				.IfNotNullOrEmpty(t => Type.GetType(t, true));
+			cmd.AssemblyProbingFolderPaths = Context.Parameters[nameof(ApplicationBindingBasedCommand.AssemblyProbingFolderPaths)]
+				.IfNotNullOrEmpty(p => p.Split(';'));
+			cmd.ExcelSettingOverridesFolderPath = Context.Parameters[nameof(ApplicationBindingBasedCommand.ExcelSettingOverridesFolderPath)];
+			cmd.TargetEnvironment = Context.Parameters[nameof(ApplicationBindingBasedCommand.TargetEnvironment)];
 		}
 	}
 }

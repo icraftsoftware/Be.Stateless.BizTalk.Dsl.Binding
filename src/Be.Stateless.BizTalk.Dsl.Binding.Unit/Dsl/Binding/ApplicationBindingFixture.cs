@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,14 +31,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 		protected string AssemblyPath => Path.GetDirectoryName(new Uri(GetType().Assembly.CodeBase).AbsolutePath);
 
-		protected virtual string EnvironmentSettingOverridesRootPath => null;
+		protected virtual Type EnvironmentSettingOverridesType => null;
+
+		protected virtual string ExcelSettingOverridesFolderPath => null;
 
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 		protected string GenerateApplicationBindingForTargetEnvironment(string targetEnvironment)
 		{
 			if (targetEnvironment.IsNullOrEmpty()) throw new ArgumentNullException(nameof(targetEnvironment));
-			BindingGenerationContext.TargetEnvironment = targetEnvironment;
-			if (!EnvironmentSettingOverridesRootPath.IsNullOrEmpty()) BindingGenerationContext.EnvironmentSettingRootPath = EnvironmentSettingOverridesRootPath;
+			DeploymentContext.TargetEnvironment = targetEnvironment;
+			if (EnvironmentSettingOverridesType != null) DeploymentContext.EnvironmentSettingOverridesType = EnvironmentSettingOverridesType;
+			if (!ExcelSettingOverridesFolderPath.IsNullOrEmpty()) DeploymentContext.ExcelSettingOverridesFolderPath = ExcelSettingOverridesFolderPath;
 			return new T().GetApplicationBindingInfoSerializer().Serialize();
 		}
 	}

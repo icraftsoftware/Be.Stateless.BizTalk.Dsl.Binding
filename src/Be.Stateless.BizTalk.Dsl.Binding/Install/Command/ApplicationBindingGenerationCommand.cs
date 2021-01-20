@@ -24,11 +24,9 @@ using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationBindingGenerationCommand<T> : ApplicationBindingBasedCommand
+	public class ApplicationBindingGenerationCommand<T> : ApplicationBindingBasedCommand<T>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		public ApplicationBindingGenerationCommand() : base(() => new T()) { }
-
 		#region Base Class Member Overrides
 
 		protected override void ExecuteCore(Action<string> logAppender)

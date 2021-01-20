@@ -18,29 +18,37 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public abstract class ApplicationBindingBasedCommand
+	public abstract class ApplicationBindingBasedCommand<T>
+		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		protected ApplicationBindingBasedCommand(Func<IVisitable<IApplicationBindingVisitor>> applicationBindingFactory)
+		protected ApplicationBindingBasedCommand()
 		{
-			if (applicationBindingFactory == null) throw new ArgumentNullException(nameof(applicationBindingFactory));
-			_lazyApplicationBindingFactory = new Lazy<IVisitable<IApplicationBindingVisitor>>(applicationBindingFactory);
+			_lazyApplicationBindingFactory = new Lazy<IVisitable<IApplicationBindingVisitor>>(() => new T());
 		}
 
 		public IVisitable<IApplicationBindingVisitor> ApplicationBinding => _lazyApplicationBindingFactory.Value ?? throw new ArgumentNullException(nameof(ApplicationBinding));
 
-		public string[] AssemblyProbingFolderPaths { get; set; }
+		public string[] AssemblyProbingFolderPaths
+		{
+			get => _assemblyProbingFolderPaths ?? new[] { BindingAssemblyFolderPath };
+			set => _assemblyProbingFolderPaths = value.IfNotNull(v => v.Append(BindingAssemblyFolderPath).ToArray()) ?? new[] { BindingAssemblyFolderPath };
+		}
 
 		public Type EnvironmentSettingOverridesType { get; set; }
 
 		public string ExcelSettingOverridesFolderPath { get; set; }
 
 		public string TargetEnvironment { get; set; }
+
+		private string BindingAssemblyFolderPath => Path.GetDirectoryName(typeof(T).Assembly.Location);
 
 		public void Execute(Action<string> logAppender)
 		{
@@ -68,5 +76,6 @@ namespace Be.Stateless.BizTalk.Install.Command
 		}
 
 		private readonly Lazy<IVisitable<IApplicationBindingVisitor>> _lazyApplicationBindingFactory;
+		private string[] _assemblyProbingFolderPaths;
 	}
 }

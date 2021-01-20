@@ -23,11 +23,9 @@ using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class FileAdapterFolderTeardownCommand<T> : ApplicationBindingBasedCommand
+	public class FileAdapterFolderTeardownCommand<T> : ApplicationBindingBasedCommand<T>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		public FileAdapterFolderTeardownCommand() : base(() => new T()) { }
-
 		#region Base Class Member Overrides
 
 		protected override void ExecuteCore(Action<string> logAppender)

@@ -81,14 +81,14 @@ namespace Be.Stateless.BizTalk.Install
 
 		#endregion
 
-		private void SetCommandCommonArguments(ApplicationBindingBasedCommand cmd)
+		private void SetCommandCommonArguments(ApplicationBindingBasedCommand<T> cmd)
 		{
-			cmd.EnvironmentSettingOverridesType = Context.Parameters[nameof(ApplicationBindingBasedCommand.EnvironmentSettingOverridesType)]
+			cmd.EnvironmentSettingOverridesType = Context.Parameters[nameof(ApplicationBindingBasedCommand<T>.EnvironmentSettingOverridesType)]
 				.IfNotNullOrEmpty(t => Type.GetType(t, true));
-			cmd.AssemblyProbingFolderPaths = Context.Parameters[nameof(ApplicationBindingBasedCommand.AssemblyProbingFolderPaths)]
+			cmd.AssemblyProbingFolderPaths = Context.Parameters[nameof(ApplicationBindingBasedCommand<T>.AssemblyProbingFolderPaths)]
 				.IfNotNullOrEmpty(p => p.Split(';'));
-			cmd.ExcelSettingOverridesFolderPath = Context.Parameters[nameof(ApplicationBindingBasedCommand.ExcelSettingOverridesFolderPath)];
-			cmd.TargetEnvironment = Context.Parameters[nameof(ApplicationBindingBasedCommand.TargetEnvironment)];
+			cmd.ExcelSettingOverridesFolderPath = Context.Parameters[nameof(ApplicationBindingBasedCommand<T>.ExcelSettingOverridesFolderPath)];
+			cmd.TargetEnvironment = Context.Parameters[nameof(ApplicationBindingBasedCommand<T>.TargetEnvironment)];
 		}
 	}
 }

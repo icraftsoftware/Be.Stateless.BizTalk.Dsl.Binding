@@ -17,8 +17,8 @@
 
   <ItemGroup>
     <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.21007.39752" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.21012.21174" />
-    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.21012.60359" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.21021.26561" />
+    <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.21021.29064" />
     <PackageReference Include="Be.Stateless.BizTalk.Dummies" Version="2.0.20338.28863" />
     <PackageReference Include="Be.Stateless.BizTalk.Messaging" Version="2.0.21008.36224" />
     <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.21012.20459" />

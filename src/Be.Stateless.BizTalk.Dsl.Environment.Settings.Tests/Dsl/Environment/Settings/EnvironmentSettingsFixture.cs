@@ -19,11 +19,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Xunit;
 using static Be.Stateless.Unit.DelegateFactory;
 
-namespace Be.Stateless.BizTalk.Install.Settings
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	public static class EnvironmentSettingsFixture
 	{
@@ -69,9 +70,9 @@ namespace Be.Stateless.BizTalk.Install.Settings
 			[Fact]
 			public void SsoSettings()
 			{
-				FooApp.Settings.RuntimeSsoSettings
+				FooApp.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\default" } });
-				FooAppOverride.Settings.RuntimeSsoSettings
+				FooAppOverride.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\default" } });
 			}
 
@@ -157,9 +158,9 @@ namespace Be.Stateless.BizTalk.Install.Settings
 			{
 				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverride);
 
-				FooApp.Settings.RuntimeSsoSettings
+				FooApp.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\overridden" } });
-				FooAppOverride.Settings.RuntimeSsoSettings
+				FooAppOverride.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\overridden" } });
 			}
 
@@ -220,7 +221,7 @@ namespace Be.Stateless.BizTalk.Install.Settings
 			{
 				DeploymentContext.EnvironmentSettingOverridesType = typeof(BarApp);
 
-				Function(() => FooApp.Settings).Should().Throw<TypeInitializationException>().WithInnerException<InvalidCastException>();
+				Function(() => FooApp.Settings).Should().Throw<InvalidCastException>();
 			}
 
 			private class BarApp : EnvironmentSettings<BarApp>, IEnvironmentSettings

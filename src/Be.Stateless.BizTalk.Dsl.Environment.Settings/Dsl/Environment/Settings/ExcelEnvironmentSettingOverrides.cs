@@ -26,7 +26,7 @@ using System.Xml;
 using Be.Stateless.Extensions;
 using Be.Stateless.Xml.Extensions;
 
-namespace Be.Stateless.BizTalk.Install.Settings
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	internal class ExcelEnvironmentSettingOverrides : IExcelEnvironmentSettingOverrides
 	{

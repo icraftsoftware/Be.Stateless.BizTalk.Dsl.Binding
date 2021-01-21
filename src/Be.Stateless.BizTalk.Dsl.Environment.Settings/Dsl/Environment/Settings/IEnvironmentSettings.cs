@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Be.Stateless.BizTalk.Install.Settings
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	public interface IEnvironmentSettings
 	{
@@ -27,6 +27,6 @@ namespace Be.Stateless.BizTalk.Install.Settings
 		public string ApplicationName { get; }
 
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
-		public Dictionary<string, string> RuntimeSsoSettings { get; }
+		public Dictionary<string, string> SsoSettings { get; }
 	}
 }

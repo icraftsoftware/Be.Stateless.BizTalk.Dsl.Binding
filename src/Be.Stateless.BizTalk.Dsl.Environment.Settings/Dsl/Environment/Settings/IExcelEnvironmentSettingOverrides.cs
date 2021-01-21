@@ -16,7 +16,7 @@
 
 #endregion
 
-namespace Be.Stateless.BizTalk.Install.Settings
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	internal interface IExcelEnvironmentSettingOverrides
 	{

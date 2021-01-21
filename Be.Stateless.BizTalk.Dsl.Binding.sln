@@ -22,6 +22,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Be.Stateless.BizTalk.Dsl.Bi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Be.Stateless.BizTalk.Dsl.Binding.Dummies", "src\Be.Stateless.BizTalk.Dsl.Binding.Dummies\Be.Stateless.BizTalk.Dsl.Binding.Dummies.csproj", "{846158D1-6136-4D37-8335-2031C5ACF6BC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Be.Stateless.BizTalk.Dsl.Environment.Settings", "src\Be.Stateless.BizTalk.Dsl.Environment.Settings\Be.Stateless.BizTalk.Dsl.Environment.Settings.csproj", "{D60DDE4B-7110-4FE6-8723-64AEFD34EF1D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Be.Stateless.BizTalk.Dsl.Environment.Settings.Tests", "src\Be.Stateless.BizTalk.Dsl.Environment.Settings.Tests\Be.Stateless.BizTalk.Dsl.Environment.Settings.Tests.csproj", "{33E9294B-9569-4DD3-89FC-14CB740C2E50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +60,14 @@ Global
 		{846158D1-6136-4D37-8335-2031C5ACF6BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{846158D1-6136-4D37-8335-2031C5ACF6BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{846158D1-6136-4D37-8335-2031C5ACF6BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D60DDE4B-7110-4FE6-8723-64AEFD34EF1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D60DDE4B-7110-4FE6-8723-64AEFD34EF1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D60DDE4B-7110-4FE6-8723-64AEFD34EF1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D60DDE4B-7110-4FE6-8723-64AEFD34EF1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E9294B-9569-4DD3-89FC-14CB740C2E50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E9294B-9569-4DD3-89FC-14CB740C2E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E9294B-9569-4DD3-89FC-14CB740C2E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E9294B-9569-4DD3-89FC-14CB740C2E50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

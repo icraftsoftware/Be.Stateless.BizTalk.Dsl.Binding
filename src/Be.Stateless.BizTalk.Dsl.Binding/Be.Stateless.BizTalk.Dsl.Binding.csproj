@@ -71,6 +71,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Environment.Settings\Be.Stateless.BizTalk.Dsl.Environment.Settings.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Microsoft.BizTalk.ExplorerOM">
       <Aliases>ExplorerOM</Aliases>
     </Reference>

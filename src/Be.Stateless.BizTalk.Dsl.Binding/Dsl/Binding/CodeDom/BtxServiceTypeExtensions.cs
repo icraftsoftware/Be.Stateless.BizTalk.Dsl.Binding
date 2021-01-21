@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 				// Microsoft.XLANGs.Engine.dll
 				parameters.ReferencedAssemblies.Add(typeof(Service).Assembly.Location);
 				// Be.Stateless.BizTalk.Dsl.Abstractions.dll
-				parameters.ReferencedAssemblies.Add(typeof(IFluentInterface).Assembly.Location);
+				parameters.ReferencedAssemblies.Add(typeof(IDslSerializer).Assembly.Location);
 				// Be.Stateless.BizTalk.Dsl.Binding.dll
 				parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
 				// orchestration's assembly

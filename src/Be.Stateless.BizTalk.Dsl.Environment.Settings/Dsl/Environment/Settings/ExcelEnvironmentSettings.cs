@@ -21,8 +21,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Be.Stateless.BizTalk.Install;
 
-namespace Be.Stateless.BizTalk.Install.Settings
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	public abstract class ExcelEnvironmentSettings : IExcelEnvironmentSettingOverrides
 	{

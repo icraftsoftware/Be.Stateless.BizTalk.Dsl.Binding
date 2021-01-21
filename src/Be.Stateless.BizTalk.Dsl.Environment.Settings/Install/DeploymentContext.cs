@@ -17,17 +17,15 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Install
 {
-	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public DSL API.")]
-	public interface IDeploymentContext
+	public static class DeploymentContext
 	{
-		Type EnvironmentSettingOverridesType { get; }
+		public static Type EnvironmentSettingOverridesType { get; internal set; }
 
-		string ExcelSettingOverridesFolderPath { get; }
+		public static string ExcelSettingOverridesFolderPath { get; internal set; }
 
-		string TargetEnvironment { get; }
+		public static string TargetEnvironment { get; internal set; }
 	}
 }

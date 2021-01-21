@@ -19,12 +19,13 @@
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Be.Stateless.BizTalk.Dummies.Install.Settings;
+using Be.Stateless.BizTalk.Dummies.Environment.Settings;
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Xunit;
 using static Be.Stateless.Unit.DelegateFactory;
 
-namespace Be.Stateless.BizTalk.Install.Settings
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	public class ExcelEnvironmentSettingsFixture : IDisposable
 	{
@@ -147,7 +148,7 @@ namespace Be.Stateless.BizTalk.Install.Settings
 
 		private static string ComputeExcelSettingOverridesFolderPath([CallerFilePath] string filepath = "")
 		{
-			return Path.Combine(Path.GetDirectoryName(filepath)!, @"..\..\Resources\Settings");
+			return Path.Combine(Path.GetDirectoryName(filepath)!, @"..\..\..\Resources\Settings");
 		}
 	}
 }

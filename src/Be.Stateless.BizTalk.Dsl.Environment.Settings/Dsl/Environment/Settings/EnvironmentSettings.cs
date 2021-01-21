@@ -18,53 +18,38 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using Be.Stateless.BizTalk.Install;
 
-namespace Be.Stateless.BizTalk.Install.Settings
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	public abstract class EnvironmentSettings<T>
 		where T : IEnvironmentSettings, new()
 	{
-		#region Nested Type: LazySingletonFactory
-
-		[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
-		[SuppressMessage("ReSharper", "CommentTypo")]
-		private class LazySingletonFactory
+		private static T CreateSingletonInstance()
 		{
-			// Explicit static constructor to tell C# compiler not to mark type as .beforefieldinit
-			// see https://csharpindepth.com/Articles/Singleton and https://csharpindepth.com/articles/BeforeFieldInit
-			static LazySingletonFactory() { }
-
-			private static T CreateSingletonInstance()
-			{
-				var resolvedEnvironmentSettingType = DeploymentContext.EnvironmentSettingOverridesType ?? typeof(T);
-				if (!typeof(T).IsAssignableFrom(resolvedEnvironmentSettingType))
-					throw new InvalidCastException($"Unable to cast object of type '{resolvedEnvironmentSettingType.Name}' to type '{typeof(T).Name}'.");
-				return (T) Activator.CreateInstance(resolvedEnvironmentSettingType);
-			}
-
-			[SuppressMessage("ReSharper", "MemberHidesStaticFromOuterClass")]
-			internal static readonly T Instance = CreateSingletonInstance();
+			var resolvedEnvironmentSettingType = DeploymentContext.EnvironmentSettingOverridesType ?? typeof(T);
+			if (!typeof(T).IsAssignableFrom(resolvedEnvironmentSettingType))
+				throw new InvalidCastException($"Unable to cast object of type '{resolvedEnvironmentSettingType.Name}' to type '{typeof(T).Name}'.");
+			return (T) Activator.CreateInstance(resolvedEnvironmentSettingType);
 		}
 
-		#endregion
-
-		// see https://csharpindepth.com/Articles/Singleton
-		public static T Settings => LazySingletonFactory.Instance;
+		public static T Settings => _lazy.Value;
 
 		protected EnvironmentSettings()
 		{
-			if (LazySingletonFactory.Instance != null)
+			if (_lazy.IsValueCreated)
 				throw new InvalidOperationException(
 					$"EnvironmentSettings<T>-derived {GetType().Name} class cannot be instantiated explicitly and is accessible only through its static {nameof(Settings)} property.");
 		}
 
-		public Dictionary<string, string> RuntimeSsoSettings => _runtimeSsoSettings ??= GetType().GetTypeInfo()
+		public Dictionary<string, string> SsoSettings => _runtimeSsoSettings ??= GetType().GetTypeInfo()
 			.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public)
 			.Where(pi => pi.GetCustomAttribute(typeof(SsoSettingAttribute), true) != null)
 			.ToDictionary(pi => pi.Name, pi => pi.GetValue(this).ToString());
+
+		private static readonly Lazy<T> _lazy = new Lazy<T>(CreateSingletonInstance);
 
 		private Dictionary<string, string> _runtimeSsoSettings;
 	}

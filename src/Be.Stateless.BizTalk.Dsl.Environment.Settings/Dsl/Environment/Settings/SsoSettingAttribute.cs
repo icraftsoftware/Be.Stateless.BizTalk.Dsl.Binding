@@ -18,7 +18,7 @@
 
 using System;
 
-namespace Be.Stateless.BizTalk.Install.Settings
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	/// <summary>
 	/// Attribute identifying individual <see cref="EnvironmentSettings{T}"/> properties that need to be deployed in an SSO

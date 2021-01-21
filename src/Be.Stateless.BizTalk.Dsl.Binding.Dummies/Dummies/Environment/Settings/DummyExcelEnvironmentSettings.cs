@@ -16,9 +16,9 @@
 
 #endregion
 
-using Be.Stateless.BizTalk.Install.Settings;
+using Be.Stateless.BizTalk.Dsl.Environment.Settings;
 
-namespace Be.Stateless.BizTalk.Dummies.Install.Settings
+namespace Be.Stateless.BizTalk.Dummies.Environment.Settings
 {
 	public class DummyExcelEnvironmentSettings : ExcelEnvironmentSettings
 	{

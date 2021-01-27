@@ -19,7 +19,6 @@
 using System;
 using System.IO;
 using Be.Stateless.Extensions;
-using log4net;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
@@ -28,31 +27,32 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 	/// </summary>
 	public class FileAdapterFolderTearDownVisitor : FileAdapterFolderVisitorBase
 	{
-		public FileAdapterFolderTearDownVisitor(bool recurse)
+		public FileAdapterFolderTearDownVisitor(bool recurse, Action<string> logAppender)
 		{
 			_recurse = recurse;
+			_logAppender = logAppender;
 		}
 
 		#region Base Class Member Overrides
 
 		protected override void VisitDirectory(string path)
 		{
-			_logger.InfoFormat("Deleting directory '{0}'.", path);
+			_logAppender?.Invoke($"Deleting directory '{path}'.");
 			try
 			{
 				Directory.Delete(path, _recurse);
-				_logger.InfoFormat("Deleted directory '{0}'.", path);
+				_logAppender?.Invoke($"Deleted directory '{path}'.");
 			}
 			catch (Exception exception)
 			{
 				if (exception.IsFatal()) throw;
-				_logger.WarnFormat($"Could not delete directory '{path}'.", exception);
+				_logAppender?.Invoke($"Could not delete directory '{path}'.\r\n${exception}");
 			}
 		}
 
 		#endregion
 
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(FileAdapterFolderTearDownVisitor));
+		private readonly Action<string> _logAppender;
 		private readonly bool _recurse;
 	}
 }

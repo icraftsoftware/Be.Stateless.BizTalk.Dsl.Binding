@@ -16,16 +16,24 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Dummies.Bindings;
+using FluentAssertions;
+using Xunit;
 
-namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
+namespace Be.Stateless.BizTalk.Dsl.Binding.Extensions
 {
-	[SuppressMessage("ReSharper", "UnusedMember.Global")]
-	internal struct Host
+	public class TypeExtensionsFixture
 	{
-		public const string ISOLATED_HOST = "LxHost";
-		public const string PROCESSING_HOST = "PxHost";
-		public const string RECEIVING_HOST = "RxHost";
-		public const string SENDING_HOST = "TxHost";
+		[Fact]
+		public void IsApplicationBindingType()
+		{
+			typeof(UnnamedApplication).IsApplicationBindingType().Should().BeTrue();
+		}
+
+		[Fact]
+		public void IsNotApplicationBindingType()
+		{
+			typeof(int).IsApplicationBindingType().Should().BeFalse();
+		}
 	}
 }

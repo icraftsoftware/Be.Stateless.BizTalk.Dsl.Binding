@@ -20,7 +20,7 @@ using Be.Stateless.BizTalk.Dsl.Environment.Settings;
 
 namespace Be.Stateless.BizTalk.Dummies.Environment.Settings
 {
-	public class DummyExcelEnvironmentSettings : ExcelEnvironmentSettings
+	internal class DummyExcelEnvironmentSettings : ExcelEnvironmentSettings
 	{
 		#region Base Class Member Overrides
 

@@ -36,7 +36,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			// rely on BizTalk.Factory SSO store, which has to be deployed to run process tests anyway, to determine the target
 			// environment to generate the binding artifacts' names for
 			var targetEnvironment = BizTalkFactorySettings.TargetEnvironment;
-			var assemblyPath = Path.GetDirectoryName(new Uri(typeof(T).Assembly.CodeBase).AbsolutePath);
+			var assemblyPath = typeof(T).Assembly.Location;
 			// rely on ApplicationBinding's assembly to compute an ExcelSettingOverridesFolderPath by convention
 			var excelSettingOverridesFolderPath = Path.Combine(assemblyPath!, "EnvironmentSettings");
 			return Create(targetEnvironment, excelSettingOverridesFolderPath);

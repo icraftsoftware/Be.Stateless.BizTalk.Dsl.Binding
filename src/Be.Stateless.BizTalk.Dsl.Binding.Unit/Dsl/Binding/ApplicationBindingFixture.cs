@@ -18,7 +18,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Install;
 using Be.Stateless.Extensions;
@@ -29,7 +28,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	public abstract class ApplicationBindingFixture<T> where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
-		protected string AssemblyPath => Path.GetDirectoryName(new Uri(GetType().Assembly.CodeBase).AbsolutePath);
+		protected string ApplicationBindingAssemblyFilePath => GetType().Assembly.Location;
 
 		protected virtual Type EnvironmentSettingOverridesType => null;
 

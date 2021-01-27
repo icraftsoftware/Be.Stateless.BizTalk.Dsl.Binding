@@ -17,24 +17,30 @@
 #endregion
 
 using System;
+using System.Linq;
 using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class FileAdapterFolderTeardownCommand<T> : ApplicationBindingBasedCommand<T>
+	public class ApplicationFileAdapterFolderSetupCommand<T> : ApplicationBindingCommand<T>, IApplicationFileAdapterFolderSetupCommand
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
+		#region IApplicationFileAdapterFolderSetupCommand Members
+
+		public string[] Users { get; set; }
+
+		#endregion
+
 		#region Base Class Member Overrides
 
 		protected override void ExecuteCore(Action<string> logAppender)
 		{
-			ApplicationBinding.Accept(new FileAdapterFolderTearDownVisitor(Recurse));
+			if (Users == null || !Users.Any()) throw new InvalidOperationException($"{nameof(Users)} has not been set.");
+			ApplicationBinding.Accept(new FileAdapterFolderSetUpVisitor(Users, logAppender));
 		}
 
 		#endregion
-
-		public bool Recurse { get; set; }
 	}
 }

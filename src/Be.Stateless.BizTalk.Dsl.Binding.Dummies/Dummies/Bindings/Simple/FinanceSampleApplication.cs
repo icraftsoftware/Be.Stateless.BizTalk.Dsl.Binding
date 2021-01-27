@@ -27,7 +27,7 @@ using Microsoft.BizTalk.DefaultPipelines;
 // ReSharper disable CheckNamespace
 namespace Be.Stateless.Finance
 {
-	public class FinanceSampleApplication : ApplicationBinding<NamingConvention>
+	internal class FinanceSampleApplication : ApplicationBinding<NamingConvention>
 	{
 		public FinanceSampleApplication()
 		{

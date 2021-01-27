@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Pipeline;
+using Be.Stateless.Reflection;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
@@ -36,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			var receiveLocationCollectionMock = new Mock<ReceiveLocationCollection<string>>(receivePortMock.Object) { CallBase = false };
 			var visitableReceiveLocationCollectionMock = receiveLocationCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
-			Reflection.Reflector.SetField(receivePortMock.Object, "_receiveLocations", receiveLocationCollectionMock.Object);
+			Reflector.SetField(receivePortMock.Object, "_receiveLocations", receiveLocationCollectionMock.Object);
 
 			var visitorMock = new Mock<IApplicationBindingVisitor>();
 

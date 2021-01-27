@@ -16,16 +16,10 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
-
-namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
+namespace Be.Stateless.BizTalk.Install.Command
 {
-	[SuppressMessage("ReSharper", "UnusedMember.Global")]
-	internal struct Host
+	public interface IApplicationBindingGenerationCommand : IApplicationBindingCommand
 	{
-		public const string ISOLATED_HOST = "LxHost";
-		public const string PROCESSING_HOST = "PxHost";
-		public const string RECEIVING_HOST = "RxHost";
-		public const string SENDING_HOST = "TxHost";
+		public string OutputFilePath { get; set; }
 	}
 }

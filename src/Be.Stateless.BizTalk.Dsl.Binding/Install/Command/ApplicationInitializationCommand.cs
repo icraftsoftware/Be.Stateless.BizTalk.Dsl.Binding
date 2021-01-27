@@ -19,26 +19,22 @@
 using System;
 using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
-using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
-using Be.Stateless.Extensions;
+using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationBindingGenerationCommand<T> : ApplicationBindingCommand<T>, IApplicationBindingGenerationCommand
+	public class ApplicationInitializationCommand<T> : ApplicationBindingCommand<T>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		#region IApplicationBindingGenerationCommand Members
-
-		public string OutputFilePath { get; set; }
-
-		#endregion
-
 		#region Base Class Member Overrides
 
 		protected override void ExecuteCore(Action<string> logAppender)
 		{
-			if (OutputFilePath.IsNullOrEmpty()) throw new InvalidOperationException($"{nameof(OutputFilePath)} has not been set.");
-			ApplicationBinding.GetApplicationBindingInfoSerializer().Save(OutputFilePath);
+			using (var bizTalkServiceConfiguratorVisitor = new BizTalkServiceConfiguratorVisitor(logAppender))
+			{
+				ApplicationBinding.Accept(bizTalkServiceConfiguratorVisitor);
+				bizTalkServiceConfiguratorVisitor.Commit();
+			}
 		}
 
 		#endregion

@@ -21,7 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
 {
 	[SuppressMessage("ReSharper", "UnusedMember.Global")]
-	public enum Party
+	internal enum Party
 	{
 		Unknown = 0,
 		Bank = 1,

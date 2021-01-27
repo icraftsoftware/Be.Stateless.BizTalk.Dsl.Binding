@@ -51,7 +51,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			}
 
 			[Fact]
-			public void EnvironmentSettingOverridesAreUselessWhenNotProvidedViaBindingGenerationContext()
+			public void EnvironmentSettingOverridesAreUselessWhenNotProvidedViaDeploymentContext()
 			{
 				FooApp.Settings.Should().BeOfType<FooApp>();
 				FooApp.Settings.Should().NotBeOfType<FooAppOverride>();

@@ -38,10 +38,10 @@ namespace Be.Stateless.BizTalk.Install
 		{
 			base.Install(stateSaver);
 
-			if (Context.Parameters.ContainsKey(nameof(ApplicationBindingGenerationCommand<T>.OutputFilePath)))
+			if (Context.Parameters.ContainsKey(nameof(IApplicationBindingGenerationCommand.OutputFilePath)))
 			{
 				var cmd = new ApplicationBindingGenerationCommand<T> {
-					OutputFilePath = Context.Parameters[nameof(ApplicationBindingGenerationCommand<T>.OutputFilePath)]
+					OutputFilePath = Context.Parameters[nameof(IApplicationBindingGenerationCommand.OutputFilePath)]
 				};
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
@@ -49,8 +49,8 @@ namespace Be.Stateless.BizTalk.Install
 
 			if (Context.Parameters.ContainsKey("SetupFileAdapterFolders"))
 			{
-				var cmd = new FileAdapterFolderSetupCommand<T> {
-					Users = Context.Parameters[nameof(FileAdapterFolderSetupCommand<T>.Users)].IfNotNullOrEmpty(u => u.Split(';', ','))
+				var cmd = new ApplicationFileAdapterFolderSetupCommand<T> {
+					Users = Context.Parameters[nameof(IApplicationFileAdapterFolderSetupCommand.Users)].IfNotNullOrEmpty(u => u.Split(';', ','))
 				};
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
@@ -58,7 +58,7 @@ namespace Be.Stateless.BizTalk.Install
 
 			if (Context.Parameters.ContainsKey("InitializeServices"))
 			{
-				var cmd = new BizTalkServiceInitializationCommand<T>();
+				var cmd = new ApplicationInitializationCommand<T>();
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
 			}
@@ -71,8 +71,8 @@ namespace Be.Stateless.BizTalk.Install
 
 			if (Context.Parameters.ContainsKey("TeardownFileAdapterFolders"))
 			{
-				var cmd = new FileAdapterFolderTeardownCommand<T> {
-					Recurse = Context.Parameters.ContainsKey(nameof(FileAdapterFolderTeardownCommand<T>.Recurse))
+				var cmd = new ApplicationFileAdapterFolderTeardownCommand<T> {
+					Recurse = Context.Parameters.ContainsKey(nameof(ApplicationFileAdapterFolderTeardownCommand<T>.Recurse))
 				};
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
@@ -81,14 +81,14 @@ namespace Be.Stateless.BizTalk.Install
 
 		#endregion
 
-		private void SetCommandCommonArguments(ApplicationBindingBasedCommand<T> cmd)
+		private void SetCommandCommonArguments(IApplicationBindingCommand cmd)
 		{
-			cmd.EnvironmentSettingOverridesType = Context.Parameters[nameof(ApplicationBindingBasedCommand<T>.EnvironmentSettingOverridesType)]
+			cmd.EnvironmentSettingOverridesType = Context.Parameters[nameof(IApplicationBindingCommand.EnvironmentSettingOverridesType)]
 				.IfNotNullOrEmpty(t => Type.GetType(t, true));
-			cmd.AssemblyProbingFolderPaths = Context.Parameters[nameof(ApplicationBindingBasedCommand<T>.AssemblyProbingFolderPaths)]
+			cmd.AssemblyProbingFolderPaths = Context.Parameters[nameof(IApplicationBindingCommand.AssemblyProbingFolderPaths)]
 				.IfNotNullOrEmpty(p => p.Split(';'));
-			cmd.ExcelSettingOverridesFolderPath = Context.Parameters[nameof(ApplicationBindingBasedCommand<T>.ExcelSettingOverridesFolderPath)];
-			cmd.TargetEnvironment = Context.Parameters[nameof(ApplicationBindingBasedCommand<T>.TargetEnvironment)];
+			cmd.ExcelSettingOverridesFolderPath = Context.Parameters[nameof(IApplicationBindingCommand.ExcelSettingOverridesFolderPath)];
+			cmd.TargetEnvironment = Context.Parameters[nameof(IApplicationBindingCommand.TargetEnvironment)];
 		}
 	}
 }

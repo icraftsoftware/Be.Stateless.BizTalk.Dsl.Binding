@@ -20,7 +20,6 @@ extern alias ExplorerOM;
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Explorer;
-using log4net;
 using OrchestrationStatus = ExplorerOM::Microsoft.BizTalk.ExplorerOM.OrchestrationStatus;
 using PortStatus = ExplorerOM::Microsoft.BizTalk.ExplorerOM.PortStatus;
 
@@ -45,6 +44,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 	/// </remarks>
 	public sealed class BizTalkServiceConfiguratorVisitor : MainApplicationBindingVisitor, IDisposable
 	{
+		public BizTalkServiceConfiguratorVisitor(Action<string> logAppender)
+		{
+			_logAppender = logAppender;
+		}
+
 		#region IDisposable Members
 
 		public void Dispose()
@@ -69,13 +73,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			if (orchestrationBinding == null) throw new ArgumentNullException(nameof(orchestrationBinding));
 			var name = orchestrationBinding.Type.FullName;
 			var orchestration = _application.Orchestrations[name];
-			if (_logger.IsDebugEnabled)
-				_logger.Debug(
-					orchestrationBinding.State switch {
-						ServiceState.Unenlisted => $"Unenlisting orchestration '{name}'.",
-						ServiceState.Enlisted => $"Enlisting or stopping orchestration '{name}'.",
-						_ => $"Starting orchestration '{name}'."
-					});
+			_logAppender?.Invoke(
+				orchestrationBinding.State switch {
+					ServiceState.Unenlisted => $"Unenlisting orchestration '{name}'.",
+					ServiceState.Enlisted => $"Enlisting or stopping orchestration '{name}'.",
+					_ => $"Starting orchestration '{name}'."
+				});
 			orchestration.Status = (OrchestrationStatus) orchestrationBinding.State;
 		}
 
@@ -85,7 +88,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			if (receiveLocation == null) throw new ArgumentNullException(nameof(receiveLocation));
 			var name = ((ISupportNamingConvention) receiveLocation).Name;
 			var rl = _receivePort.ReceiveLocations[name];
-			if (_logger.IsDebugEnabled) _logger.Debug($"{(receiveLocation.Enabled ? "Enabling" : "Disabling")} receive location '{name}'.");
+			_logAppender?.Invoke($"{(receiveLocation.Enabled ? "Enabling" : "Disabling")} receive location '{name}'.");
 			rl.Enabled = receiveLocation.Enabled;
 		}
 
@@ -103,14 +106,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			if (sendPort == null) throw new ArgumentNullException(nameof(sendPort));
 			var name = ((ISupportNamingConvention) sendPort).Name;
 			var sp = _application.SendPorts[name];
-			if (_logger.IsDebugEnabled)
-				_logger.Debug(
-					sendPort.State switch {
-						ServiceState.Indefinite => $"Leaving send port '{name}''s state as it is.",
-						ServiceState.Unenlisted => $"Unenlisting send port '{name}'.",
-						ServiceState.Enlisted => $"Enlisting or stopping send port '{name}'.",
-						_ => $"Starting send port '{name}'."
-					});
+			_logAppender?.Invoke(
+				sendPort.State switch {
+					ServiceState.Indefinite => $"Leaving send port '{name}''s state as it is.",
+					ServiceState.Unenlisted => $"Unenlisting send port '{name}'.",
+					ServiceState.Enlisted => $"Enlisting or stopping send port '{name}'.",
+					_ => $"Starting send port '{name}'."
+				});
 			if (sendPort.State != ServiceState.Indefinite) sp.Status = (PortStatus) sendPort.State;
 		}
 
@@ -121,7 +123,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			_application.ApplyChanges();
 		}
 
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(BizTalkServiceConfiguratorVisitor));
+		private readonly Action<string> _logAppender;
 		private Application _application;
 		private Explorer.ReceivePort _receivePort;
 	}

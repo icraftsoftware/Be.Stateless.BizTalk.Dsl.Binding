@@ -21,7 +21,7 @@ using Microsoft.XLANGs.BaseTypes;
 namespace Be.Stateless.BizTalk.Dummies.Transforms
 {
 	[SchemaReference("Microsoft.XLANGs.BaseTypes.Any", typeof(Any))]
-	public class IdentityTransform : TransformBase
+	internal class IdentityTransform : TransformBase
 	{
 		static IdentityTransform()
 		{

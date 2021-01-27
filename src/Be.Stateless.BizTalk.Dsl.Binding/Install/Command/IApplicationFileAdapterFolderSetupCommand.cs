@@ -16,27 +16,10 @@
 
 #endregion
 
-using System;
-using Be.Stateless.BizTalk.Dsl;
-using Be.Stateless.BizTalk.Dsl.Binding;
-using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
-
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class BizTalkServiceInitializationCommand<T> : ApplicationBindingBasedCommand<T>
-		where T : class, IVisitable<IApplicationBindingVisitor>, new()
+	public interface IApplicationFileAdapterFolderSetupCommand : IApplicationBindingCommand
 	{
-		#region Base Class Member Overrides
-
-		protected override void ExecuteCore(Action<string> logAppender)
-		{
-			using (var bizTalkServiceConfiguratorVisitor = new BizTalkServiceConfiguratorVisitor())
-			{
-				ApplicationBinding.Accept(bizTalkServiceConfiguratorVisitor);
-				bizTalkServiceConfiguratorVisitor.Commit();
-			}
-		}
-
-		#endregion
+		string[] Users { get; set; }
 	}
 }

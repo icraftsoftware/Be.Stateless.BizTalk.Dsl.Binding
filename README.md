@@ -12,3 +12,5 @@ BizTalk.Factory's binding definition DSL for general purpose BizTalk Server appl
 [![NuGet Version](https://img.shields.io/nuget/v/Be.Stateless.BizTalk.Dsl.Binding.Conventions.svg?label=Be.Stateless.BizTalk.Dsl.Binding.Conventions&style=flat)](https://www.nuget.org/packages/Be.Stateless.BizTalk.Dsl.Binding.Conventions/)
 
 [![NuGet Version](https://img.shields.io/nuget/v/Be.Stateless.BizTalk.Dsl.Binding.Unit.svg?label=Be.Stateless.BizTalk.Dsl.Binding.Unit&style=flat)](https://www.nuget.org/packages/Be.Stateless.BizTalk.Dsl.Binding.Unit/)
+
+[![NuGet Version](https://img.shields.io/nuget/v/Be.Stateless.BizTalk.Dsl.Environment.Settings.svg?label=Be.Stateless.BizTalk.Dsl.Environment.Settings&style=flat)](https://www.nuget.org/packages/Be.Stateless.BizTalk.Dsl.Environment.Settings/)

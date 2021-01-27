@@ -29,7 +29,7 @@ namespace Be.Stateless.BizTalk.Install.Command
 		[Fact]
 		public void DefaultAssemblyProbingFolderPaths()
 		{
-			var commandMock = new Mock<ApplicationBindingBasedCommand<TestApplication>> { CallBase = true };
+			var commandMock = new Mock<ApplicationBindingCommand<TestApplication>> { CallBase = true };
 
 			commandMock.Object.AssemblyProbingFolderPaths.Should().BeEquivalentTo(TestApplicationBindingAssemblyFolderPath);
 		}
@@ -37,7 +37,7 @@ namespace Be.Stateless.BizTalk.Install.Command
 		[Fact]
 		public void DefinedAssemblyProbingFolderPaths()
 		{
-			var commandMock = new Mock<ApplicationBindingBasedCommand<TestApplication>> { CallBase = true };
+			var commandMock = new Mock<ApplicationBindingCommand<TestApplication>> { CallBase = true };
 
 			commandMock.Object.AssemblyProbingFolderPaths = new[] { "folder1", "folder2" };
 			commandMock.Object.AssemblyProbingFolderPaths.Should().BeEquivalentTo("folder1", "folder2", TestApplicationBindingAssemblyFolderPath);

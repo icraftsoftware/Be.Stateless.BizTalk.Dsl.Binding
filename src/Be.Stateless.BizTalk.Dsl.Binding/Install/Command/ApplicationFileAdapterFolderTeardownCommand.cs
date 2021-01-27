@@ -16,16 +16,25 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
+using System;
+using Be.Stateless.BizTalk.Dsl;
+using Be.Stateless.BizTalk.Dsl.Binding;
+using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
-namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
+namespace Be.Stateless.BizTalk.Install.Command
 {
-	[SuppressMessage("ReSharper", "UnusedMember.Global")]
-	internal struct Host
+	public class ApplicationFileAdapterFolderTeardownCommand<T> : ApplicationBindingCommand<T>
+		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		public const string ISOLATED_HOST = "LxHost";
-		public const string PROCESSING_HOST = "PxHost";
-		public const string RECEIVING_HOST = "RxHost";
-		public const string SENDING_HOST = "TxHost";
+		#region Base Class Member Overrides
+
+		protected override void ExecuteCore(Action<string> logAppender)
+		{
+			ApplicationBinding.Accept(new FileAdapterFolderTearDownVisitor(Recurse, logAppender));
+		}
+
+		#endregion
+
+		public bool Recurse { get; set; }
 	}
 }

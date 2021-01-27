@@ -16,16 +16,18 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
+using System;
 
-namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
+namespace Be.Stateless.BizTalk.Install.Command
 {
-	[SuppressMessage("ReSharper", "UnusedMember.Global")]
-	internal struct Host
+	public interface IApplicationBindingCommand
 	{
-		public const string ISOLATED_HOST = "LxHost";
-		public const string PROCESSING_HOST = "PxHost";
-		public const string RECEIVING_HOST = "RxHost";
-		public const string SENDING_HOST = "TxHost";
+		string[] AssemblyProbingFolderPaths { get; set; }
+
+		Type EnvironmentSettingOverridesType { get; set; }
+
+		string ExcelSettingOverridesFolderPath { get; set; }
+
+		string TargetEnvironment { get; set; }
 	}
 }

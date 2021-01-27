@@ -20,7 +20,6 @@ using System;
 using System.IO;
 using System.Security.AccessControl;
 using Be.Stateless.Extensions;
-using log4net;
 using Path = Be.Stateless.IO.Path;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
@@ -30,16 +29,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 	/// </summary>
 	public class FileAdapterFolderSetUpVisitor : FileAdapterFolderVisitorBase
 	{
-		public FileAdapterFolderSetUpVisitor(string[] users)
+		public FileAdapterFolderSetUpVisitor(string[] users, Action<string> logAppender)
 		{
 			_users = users ?? throw new ArgumentNullException(nameof(users));
+			_logAppender = logAppender;
 		}
 
 		#region Base Class Member Overrides
 
 		protected override void VisitDirectory(string path)
 		{
-			_logger.InfoFormat("Setting up directory '{0}'.", path);
+			_logAppender?.Invoke($"Setting up directory '{path}'.");
 			CreateDirectory(path);
 			SecureDirectory(path);
 		}
@@ -50,19 +50,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			if (Directory.Exists(path))
 			{
-				_logger.InfoFormat("Directory '{0}' already exists.", path);
+				_logAppender?.Invoke($"Directory '{path}' already exists.");
 				return;
 			}
 
 			try
 			{
 				Directory.CreateDirectory(path);
-				_logger.InfoFormat("Created directory '{0}'.", path);
+				_logAppender?.Invoke($"Created directory '{path}'.");
 			}
 			catch (Exception exception)
 			{
 				if (exception.IsFatal()) throw;
-				_logger.WarnFormat($"Could not create directory '{path}'.", exception);
+				_logAppender?.Invoke($"Could not create directory '{path}'.\r\n{exception}");
 			}
 		}
 
@@ -70,13 +70,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			if (!Directory.Exists(path))
 			{
-				_logger.InfoFormat("Cannot grant permissions because directory '{0}' does not exist.", path);
+				_logAppender?.Invoke($"Cannot grant permissions because directory '{path}' does not exist.");
 				return;
 			}
 
 			if (Path.IsNetworkPath(path))
 			{
-				_logger.InfoFormat("Cannot grant permissions because directory '{0}' is a network path.", path);
+				_logAppender?.Invoke($"Cannot grant permissions because directory '{path}' is a network path.");
 				return;
 			}
 
@@ -93,17 +93,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 							PropagationFlags.None,
 							AccessControlType.Allow));
 					Directory.SetAccessControl(path, acl);
-					_logger.InfoFormat("Granted Full Control permission to '{0}' on directory '{1}'.", user, path);
+					_logAppender?.Invoke($"Granted Full Control permission to '{user}' on directory '{path}'.");
 				}
 				catch (Exception exception)
 				{
 					if (exception.IsFatal()) throw;
-					_logger.WarnFormat($"Could not grant Full Control permission to '{user}' on directory '{path}'.", exception);
+					_logAppender?.Invoke($"Could not grant Full Control permission to '{user}' on directory '{path}'.\r\n{exception}");
 				}
 			}
 		}
 
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(FileAdapterFolderSetUpVisitor));
+		private readonly Action<string> _logAppender;
 		private readonly string[] _users;
 	}
 }

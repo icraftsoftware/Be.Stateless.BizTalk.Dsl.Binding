@@ -26,15 +26,15 @@ using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public abstract class ApplicationBindingBasedCommand<T>
+	public abstract class ApplicationBindingCommand<T> : IApplicationBindingCommand, ICommand
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		protected ApplicationBindingBasedCommand()
+		protected ApplicationBindingCommand()
 		{
 			_lazyApplicationBindingFactory = new Lazy<IVisitable<IApplicationBindingVisitor>>(() => new T());
 		}
 
-		public IVisitable<IApplicationBindingVisitor> ApplicationBinding => _lazyApplicationBindingFactory.Value ?? throw new ArgumentNullException(nameof(ApplicationBinding));
+		#region IApplicationBindingCommand Members
 
 		public string[] AssemblyProbingFolderPaths
 		{
@@ -48,7 +48,9 @@ namespace Be.Stateless.BizTalk.Install.Command
 
 		public string TargetEnvironment { get; set; }
 
-		private string BindingAssemblyFolderPath => Path.GetDirectoryName(typeof(T).Assembly.Location);
+		#endregion
+
+		#region ICommand Members
 
 		public void Execute(Action<string> logAppender)
 		{
@@ -56,7 +58,7 @@ namespace Be.Stateless.BizTalk.Install.Command
 			try
 			{
 				BizTalkAssemblyResolver.Register(logAppender, AssemblyProbingFolderPaths);
-				SetupBindingGenerationContext();
+				SetupDeploymentContext();
 				ExecuteCore(logAppender);
 			}
 			finally
@@ -65,14 +67,20 @@ namespace Be.Stateless.BizTalk.Install.Command
 			}
 		}
 
+		#endregion
+
+		protected IVisitable<IApplicationBindingVisitor> ApplicationBinding => _lazyApplicationBindingFactory.Value;
+
+		private string BindingAssemblyFolderPath => Path.GetDirectoryName(typeof(T).Assembly.Location);
+
 		[SuppressMessage("ReSharper", "UnusedParameter.Global")]
 		protected abstract void ExecuteCore(Action<string> logAppender);
 
-		private void SetupBindingGenerationContext()
+		private void SetupDeploymentContext()
 		{
 			DeploymentContext.TargetEnvironment = TargetEnvironment;
 			if (EnvironmentSettingOverridesType != null) DeploymentContext.EnvironmentSettingOverridesType = EnvironmentSettingOverridesType;
-			if (!ExcelSettingOverridesFolderPath.IsNullOrEmpty()) DeploymentContext.ExcelSettingOverridesFolderPath = ExcelSettingOverridesFolderPath;
+			if (!ExcelSettingOverridesFolderPath.IsNullOrWhiteSpace()) DeploymentContext.ExcelSettingOverridesFolderPath = ExcelSettingOverridesFolderPath;
 		}
 
 		private readonly Lazy<IVisitable<IApplicationBindingVisitor>> _lazyApplicationBindingFactory;

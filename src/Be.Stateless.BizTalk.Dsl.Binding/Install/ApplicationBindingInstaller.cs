@@ -58,7 +58,7 @@ namespace Be.Stateless.BizTalk.Install
 
 			if (Context.Parameters.ContainsKey("InitializeServices"))
 			{
-				var cmd = new ApplicationInitializationCommand<T>();
+				var cmd = new ApplicationStateInitializationCommand<T>();
 				SetCommandCommonArguments(cmd);
 				cmd.Execute(msg => Context.LogMessage(msg));
 			}

@@ -55,15 +55,10 @@ namespace Be.Stateless.BizTalk.Install.Command
 		public void Execute(Action<string> logAppender)
 		{
 			if (TargetEnvironment.IsNullOrEmpty()) throw new InvalidOperationException($"{nameof(TargetEnvironment)} has not been set.");
-			try
+			using (new BizTalkAssemblyResolver(logAppender, true, AssemblyProbingFolderPaths))
 			{
-				BizTalkAssemblyResolver.Register(logAppender, AssemblyProbingFolderPaths);
 				SetupDeploymentContext();
 				ExecuteCore(logAppender);
-			}
-			finally
-			{
-				BizTalkAssemblyResolver.Unregister();
 			}
 		}
 

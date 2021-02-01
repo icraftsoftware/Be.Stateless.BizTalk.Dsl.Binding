@@ -142,7 +142,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					Name = orchestrationBinding.Host
 				},
 				Name = orchestrationBinding.Type.FullName,
-				// Un/Enlisting/Starting/Stopping orchestrations is the responsibility of BizTalkServiceConfiguratorVisitor
+				// Un/Enlisting/Starting/Stopping orchestrations is the responsibility of BizTalkServiceStateInitializerVisitor
 				State = orchestrationBinding.State switch {
 					ServiceState.Unenlisted => ServiceRef.ServiceRefState.Unenlisted,
 					ServiceState.Enlisted => ServiceRef.ServiceRefState.Enlisted,
@@ -204,7 +204,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var location = new BtsReceiveLocation {
 				// General
 				Name = ((ISupportNamingConvention) receiveLocation).Name,
-				Enable = false, // Enabling Receive Locations is actually the responsibility of BizTalkServiceConfiguratorVisitor
+				Enable = false, // Enabling Receive Locations is actually the responsibility of BizTalkServiceStateInitializerVisitor
 				Address = receiveLocation.Transport.Adapter.Address,
 				PublicAddress = receiveLocation.Transport.Adapter.PublicAddress,
 				Description = receiveLocation.Description,
@@ -284,7 +284,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					? null
 					: CreateTransportInfo(sendPort.BackupTransport, false, false),
 				SendPipelineData = sendPort.SendPipeline.GetPipelineBindingInfoSerializer().Serialize(),
-				// sendPort.Status is the responsibility of BizTalkServiceConfiguratorVisitor
+				// sendPort.Status is the responsibility of BizTalkServiceStateInitializerVisitor
 				StopSendingOnFailure = sendPort.StopSendingOnOrderedDeliveryFailure,
 				TransmitPipeline = CreateSendPipelineRef(sendPort.SendPipeline)
 			};

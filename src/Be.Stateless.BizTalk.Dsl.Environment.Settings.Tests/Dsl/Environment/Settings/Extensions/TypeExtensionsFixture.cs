@@ -16,14 +16,23 @@
 
 #endregion
 
-using System;
-using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
+using Xunit;
 
-namespace Be.Stateless.BizTalk.Install.Command
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 {
-	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Scaffolding interface for a.o. cmdlets.")]
-	public interface ICommand
+	public class TypeExtensionsFixture
 	{
-		void Execute(Action<string> logAppender);
+		[Fact]
+		public void IsEnvironmentSettingsType()
+		{
+			typeof(EnvironmentSettingsFixture.WithoutEnvironmentSettingOverrides.BarApp).IsEnvironmentSettingsType().Should().BeTrue();
+		}
+
+		[Fact]
+		public void IsNotEnvironmentSettingsType()
+		{
+			typeof(int).IsEnvironmentSettingsType().Should().BeFalse();
+		}
 	}
 }

@@ -26,13 +26,13 @@ using PortStatus = ExplorerOM::Microsoft.BizTalk.ExplorerOM.PortStatus;
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
 	/// <summary>
-	/// <see cref="IApplicationBindingVisitor"/> implementation that manages BizTalk Server services' state.
+	/// <see cref="IApplicationBindingVisitor"/> implementation that validates BizTalk Server services' state.
 	/// </summary>
 	/// <remarks>
-	/// <see cref="IApplicationBindingVisitor"/> implementation that either
+	/// <see cref="IApplicationBindingVisitor"/> implementation that validates either
 	/// <list type="bullet">
 	/// <item>
-	/// Enable or disable a receive location according to its DSL-based binding;
+	/// Receive locations' state according to its DSL-based binding;
 	/// </item>
 	/// <item>
 	/// Start, stop, enlist or unenlist a send port according to its DSL-based binding;
@@ -42,13 +42,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 	/// </item>
 	/// </list>
 	/// </remarks>
-	public sealed class BizTalkServiceConfiguratorVisitor : MainApplicationBindingVisitor, IDisposable
+	public sealed class BizTalkServiceStateValidatorVisitor : MainApplicationBindingVisitor, IDisposable
 	{
-		public BizTalkServiceConfiguratorVisitor(Action<string> logAppender)
-		{
-			_logAppender = logAppender;
-		}
-
 		#region IDisposable Members
 
 		public void Dispose()
@@ -73,13 +68,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			if (orchestrationBinding == null) throw new ArgumentNullException(nameof(orchestrationBinding));
 			var name = orchestrationBinding.Type.FullName;
 			var orchestration = _application.Orchestrations[name];
-			_logAppender?.Invoke(
-				orchestrationBinding.State switch {
-					ServiceState.Unenlisted => $"Unenlisting orchestration '{name}'.",
-					ServiceState.Enlisted => $"Enlisting or stopping orchestration '{name}'.",
-					_ => $"Starting orchestration '{name}'."
-				});
-			orchestration.Status = (OrchestrationStatus) orchestrationBinding.State;
+			if (orchestration.Status != (OrchestrationStatus) orchestrationBinding.State)
+				throw new InvalidOperationException($"Orchestration '{name}' is not in the expected {orchestrationBinding.State} state, but in the {orchestration.Status} state.");
 		}
 
 		protected internal override void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
@@ -88,8 +78,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			if (receiveLocation == null) throw new ArgumentNullException(nameof(receiveLocation));
 			var name = ((ISupportNamingConvention) receiveLocation).Name;
 			var rl = _receivePort.ReceiveLocations[name];
-			_logAppender?.Invoke($"{(receiveLocation.Enabled ? "Enabling" : "Disabling")} receive location '{name}'.");
-			rl.Enabled = receiveLocation.Enabled;
+			if (rl.Enabled != receiveLocation.Enabled)
+				throw new InvalidOperationException($"Receive location '{name}' is not {(receiveLocation.Enabled ? "enabled" : "disabled")} as expected.");
 		}
 
 		protected internal override void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
@@ -106,24 +96,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			if (sendPort == null) throw new ArgumentNullException(nameof(sendPort));
 			var name = ((ISupportNamingConvention) sendPort).Name;
 			var sp = _application.SendPorts[name];
-			_logAppender?.Invoke(
-				sendPort.State switch {
-					ServiceState.Indefinite => $"Leaving send port '{name}''s state as it is.",
-					ServiceState.Unenlisted => $"Unenlisting send port '{name}'.",
-					ServiceState.Enlisted => $"Enlisting or stopping send port '{name}'.",
-					_ => $"Starting send port '{name}'."
-				});
-			if (sendPort.State != ServiceState.Indefinite) sp.Status = (PortStatus) sendPort.State;
+			if (sp.Status != (PortStatus) sendPort.State)
+				throw new InvalidOperationException($"Send port '{name}' is not in the expected {sendPort.State} state, but in the {sp.Status} state.");
 		}
 
 		#endregion
 
-		public void Commit()
-		{
-			_application.ApplyChanges();
-		}
-
-		private readonly Action<string> _logAppender;
 		private Application _application;
 		private Explorer.ReceivePort _receivePort;
 	}

@@ -17,13 +17,14 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Be.Stateless.BizTalk.Install.Command
+namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 {
-	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Scaffolding interface for a.o. cmdlets.")]
-	public interface ICommand
+	public static class TypeExtensions
 	{
-		void Execute(Action<string> logAppender);
+		public static bool IsEnvironmentSettingsType(this Type type)
+		{
+			return type != null && typeof(IEnvironmentSettings).IsAssignableFrom(type);
+		}
 	}
 }

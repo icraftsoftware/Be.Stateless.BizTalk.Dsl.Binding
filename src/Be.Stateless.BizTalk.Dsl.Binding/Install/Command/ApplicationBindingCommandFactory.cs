@@ -40,15 +40,7 @@ namespace Be.Stateless.BizTalk.Install.Command
 			return cmd;
 		}
 
-		public static IApplicationBindingCommand CreateBizTalkApplicationInitializationCommand(Type applicationBindingType)
-		{
-			applicationBindingType.ValidateApplicationBindingType();
-			var cmdType = typeof(ApplicationInitializationCommand<>).MakeGenericType(applicationBindingType);
-			var cmd = (IApplicationBindingCommand) Activator.CreateInstance(cmdType);
-			return cmd;
-		}
-
-		public static IApplicationFileAdapterFolderSetupCommand CreateFileAdapterFolderSetupCommand(Type applicationBindingType)
+		public static IApplicationFileAdapterFolderSetupCommand CreateApplicationFileAdapterFolderSetupCommand(Type applicationBindingType)
 		{
 			applicationBindingType.ValidateApplicationBindingType();
 			var cmdType = typeof(ApplicationFileAdapterFolderSetupCommand<>).MakeGenericType(applicationBindingType);
@@ -56,10 +48,26 @@ namespace Be.Stateless.BizTalk.Install.Command
 			return cmd;
 		}
 
-		public static IApplicationBindingCommand CreateFileAdapterFolderTeardownCommand(Type applicationBindingType)
+		public static IApplicationBindingCommand CreateApplicationFileAdapterFolderTeardownCommand(Type applicationBindingType)
 		{
 			applicationBindingType.ValidateApplicationBindingType();
 			var cmdType = typeof(ApplicationFileAdapterFolderTeardownCommand<>).MakeGenericType(applicationBindingType);
+			var cmd = (IApplicationBindingCommand) Activator.CreateInstance(cmdType);
+			return cmd;
+		}
+
+		public static IApplicationBindingCommand CreateApplicationStateInitializationCommand(Type applicationBindingType)
+		{
+			applicationBindingType.ValidateApplicationBindingType();
+			var cmdType = typeof(ApplicationStateInitializationCommand<>).MakeGenericType(applicationBindingType);
+			var cmd = (IApplicationBindingCommand) Activator.CreateInstance(cmdType);
+			return cmd;
+		}
+
+		public static IApplicationBindingCommand CreateApplicationStateValidationCommand(Type applicationBindingType)
+		{
+			applicationBindingType.ValidateApplicationBindingType();
+			var cmdType = typeof(ApplicationStateValidationCommand<>).MakeGenericType(applicationBindingType);
 			var cmd = (IApplicationBindingCommand) Activator.CreateInstance(cmdType);
 			return cmd;
 		}

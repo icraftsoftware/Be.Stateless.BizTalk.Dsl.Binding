@@ -17,13 +17,25 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Dsl;
+using Be.Stateless.BizTalk.Dsl.Binding;
+using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Scaffolding interface for a.o. cmdlets.")]
-	public interface ICommand
+	public class ApplicationStateValidationCommand<T> : ApplicationBindingCommand<T>
+		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		void Execute(Action<string> logAppender);
+		#region Base Class Member Overrides
+
+		protected override void ExecuteCore(Action<string> logAppender)
+		{
+			using (var bizTalkServiceStateValidatorVisitor = new BizTalkServiceStateValidatorVisitor())
+			{
+				ApplicationBinding.Accept(bizTalkServiceStateValidatorVisitor);
+			}
+		}
+
+		#endregion
 	}
 }

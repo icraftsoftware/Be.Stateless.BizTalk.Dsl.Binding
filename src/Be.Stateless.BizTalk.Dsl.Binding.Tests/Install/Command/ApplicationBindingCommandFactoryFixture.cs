@@ -41,25 +41,33 @@ namespace Be.Stateless.BizTalk.Install.Command
 		}
 
 		[Fact]
-		public void CreateBizTalkApplicationInitializationCommand()
+		public void CreateApplicationFileAdapterFolderSetupCommand()
 		{
-			ApplicationBindingCommandFactory.CreateBizTalkApplicationInitializationCommand(typeof(UnnamedApplication))
+			ApplicationBindingCommandFactory.CreateApplicationFileAdapterFolderSetupCommand(typeof(UnnamedApplication))
 				.Should().NotBeNull()
 				.And.BeAssignableTo<ApplicationBindingCommand<UnnamedApplication>>();
 		}
 
 		[Fact]
-		public void CreateFileAdapterFolderSetupCommand()
+		public void CreateApplicationFileAdapterFolderTeardownCommand()
 		{
-			ApplicationBindingCommandFactory.CreateFileAdapterFolderSetupCommand(typeof(UnnamedApplication))
+			ApplicationBindingCommandFactory.CreateApplicationFileAdapterFolderTeardownCommand(typeof(UnnamedApplication))
 				.Should().NotBeNull()
 				.And.BeAssignableTo<ApplicationBindingCommand<UnnamedApplication>>();
 		}
 
 		[Fact]
-		public void CreateFileAdapterFolderTeardownCommand()
+		public void CreateApplicationStateInitializationCommand()
 		{
-			ApplicationBindingCommandFactory.CreateFileAdapterFolderTeardownCommand(typeof(UnnamedApplication))
+			ApplicationBindingCommandFactory.CreateApplicationStateInitializationCommand(typeof(UnnamedApplication))
+				.Should().NotBeNull()
+				.And.BeAssignableTo<ApplicationBindingCommand<UnnamedApplication>>();
+		}
+
+		[Fact]
+		public void CreateApplicationStateValidationCommand()
+		{
+			ApplicationBindingCommandFactory.CreateApplicationStateValidationCommand(typeof(UnnamedApplication))
 				.Should().NotBeNull()
 				.And.BeAssignableTo<ApplicationBindingCommand<UnnamedApplication>>();
 		}

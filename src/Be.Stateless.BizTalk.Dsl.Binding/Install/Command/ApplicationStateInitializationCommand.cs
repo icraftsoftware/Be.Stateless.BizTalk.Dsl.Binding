@@ -23,17 +23,17 @@ using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationInitializationCommand<T> : ApplicationBindingCommand<T>
+	public class ApplicationStateInitializationCommand<T> : ApplicationBindingCommand<T>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		#region Base Class Member Overrides
 
 		protected override void ExecuteCore(Action<string> logAppender)
 		{
-			using (var bizTalkServiceConfiguratorVisitor = new BizTalkServiceConfiguratorVisitor(logAppender))
+			using (var bizTalkServiceStateInitializerVisitor = new BizTalkServiceStateInitializerVisitor(logAppender))
 			{
-				ApplicationBinding.Accept(bizTalkServiceConfiguratorVisitor);
-				bizTalkServiceConfiguratorVisitor.Commit();
+				ApplicationBinding.Accept(bizTalkServiceStateInitializerVisitor);
+				bizTalkServiceStateInitializerVisitor.Commit();
 			}
 		}
 

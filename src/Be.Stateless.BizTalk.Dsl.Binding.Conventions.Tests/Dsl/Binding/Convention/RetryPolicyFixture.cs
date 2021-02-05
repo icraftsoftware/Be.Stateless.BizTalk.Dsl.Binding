@@ -16,34 +16,22 @@
 
 #endregion
 
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
-using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using FluentAssertions;
 using Xunit;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
-	public class NetMsmqRetryPolicyFixture
+	public class RetryPolicyFixture
 	{
-		[Fact]
-		public void CanSerializeToXml()
-		{
-			var binding = new NetMsmqBindingElement { RetryPolicy = NetMsmqRetryPolicy.LongRunning };
-			binding.ApplyEnvironmentOverrides("ACC");
-
-			binding.GetBindingElementXml("netMsmqBinding")
-				.Should().Be("<binding name=\"netMsmqBinding\" maxRetryCycles=\"3\" receiveRetryCount=\"3\" retryCycleDelay=\"00:09:00\" timeToLive=\"00:30:00\" />");
-		}
-
 		[Theory]
 		[InlineData(TargetEnvironment.PREPRODUCTION)]
 		[InlineData(TargetEnvironment.PRODUCTION)]
 		[InlineData("ANYWHERE")]
 		public void LongRunningIsLongRunningForPreProductionOrProductionOrAnyOtherTargetEnvironments(string targetEnvironment)
 		{
-			var sut = NetMsmqRetryPolicy.LongRunning;
+			var sut = RetryPolicy.LongRunning;
 			((ISupportEnvironmentOverride) sut).ApplyEnvironmentOverrides(targetEnvironment);
-			sut.Should().BeEquivalentTo(NetMsmqRetryPolicy.ActualLongRunning);
+			sut.Should().BeEquivalentTo(RetryPolicy.ActualLongRunning);
 		}
 
 		[Theory]
@@ -51,24 +39,24 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		[InlineData(TargetEnvironment.BUILD)]
 		public void LongRunningIsRealTimeForDevelopmentOrBuildTargetEnvironments(string targetEnvironment)
 		{
-			var sut = NetMsmqRetryPolicy.LongRunning;
+			var sut = RetryPolicy.LongRunning;
 			((ISupportEnvironmentOverride) sut).ApplyEnvironmentOverrides(targetEnvironment);
-			sut.Should().BeEquivalentTo(NetMsmqRetryPolicy.RealTime);
+			sut.Should().BeEquivalentTo(RetryPolicy.RealTime);
 		}
 
 		[Theory]
 		[InlineData(TargetEnvironment.ACCEPTANCE)]
 		public void LongRunningIsShortRunningForAcceptanceTargetEnvironment(string targetEnvironment)
 		{
-			var sut = NetMsmqRetryPolicy.LongRunning;
+			var sut = RetryPolicy.LongRunning;
 			((ISupportEnvironmentOverride) sut).ApplyEnvironmentOverrides(targetEnvironment);
-			sut.Should().BeEquivalentTo(NetMsmqRetryPolicy.ActualShortRunning);
+			sut.Should().BeEquivalentTo(RetryPolicy.ActualShortRunning);
 		}
 
 		[Fact]
 		public void RealTimeIsTargetEnvironmentInsensitive()
 		{
-			(NetMsmqRetryPolicy.RealTime as ISupportEnvironmentOverride).Should().BeNull();
+			(RetryPolicy.RealTime as ISupportEnvironmentOverride).Should().BeNull();
 		}
 
 		[Theory]
@@ -77,9 +65,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		[InlineData(TargetEnvironment.ACCEPTANCE)]
 		public void ShortRunningIsRealTimeForDevelopmentOrBuildOrAcceptanceTargetEnvironments(string targetEnvironment)
 		{
-			var sut = NetMsmqRetryPolicy.ShortRunning;
+			var sut = RetryPolicy.ShortRunning;
 			((ISupportEnvironmentOverride) sut).ApplyEnvironmentOverrides(targetEnvironment);
-			sut.Should().BeEquivalentTo(NetMsmqRetryPolicy.RealTime);
+			sut.Should().BeEquivalentTo(RetryPolicy.RealTime);
 		}
 
 		[Theory]
@@ -88,9 +76,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		[InlineData("ANYWHERE")]
 		public void ShortRunningIsShortRunningForPreProductionOrProductionOrAnyOtherTargetEnvironments(string targetEnvironment)
 		{
-			var sut = NetMsmqRetryPolicy.ShortRunning;
+			var sut = RetryPolicy.ShortRunning;
 			((ISupportEnvironmentOverride) sut).ApplyEnvironmentOverrides(targetEnvironment);
-			sut.Should().BeEquivalentTo(NetMsmqRetryPolicy.ActualShortRunning);
+			sut.Should().BeEquivalentTo(RetryPolicy.ActualShortRunning);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Dsl.Binding.Convention.Constants;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
@@ -63,7 +62,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		static NetMsmqRetryPolicy()
 		{
-			_longRunning = new ServiceModel.Configuration.NetMsmqRetryPolicy {
+			ActualLongRunning = new ServiceModel.Configuration.NetMsmqRetryPolicy {
 				MaxRetryCycles = 71,
 				ReceiveRetryCount = 1,
 				RetryCycleDelay = TimeSpan.FromHours(1),
@@ -75,7 +74,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 				RetryCycleDelay = TimeSpan.Zero,
 				TimeToLive = TimeSpan.FromMinutes(1)
 			};
-			_shortRunning = new ServiceModel.Configuration.NetMsmqRetryPolicy {
+			ActualShortRunning = new ServiceModel.Configuration.NetMsmqRetryPolicy {
 				MaxRetryCycles = 3,
 				ReceiveRetryCount = 3,
 				RetryCycleDelay = TimeSpan.FromMinutes(9),
@@ -87,19 +86,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			environment => environment.IsDevelopmentOrBuild()
 				? RealTime
 				: environment.IsAcceptance()
-					? _shortRunning
-					: _longRunning);
+					? ActualShortRunning
+					: ActualLongRunning);
 
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
 		public static ServiceModel.Configuration.NetMsmqRetryPolicy RealTime { get; }
 
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 		public static ServiceModel.Configuration.NetMsmqRetryPolicy ShortRunning => new EnvironmentSensitiveNetMsmqRetryPolicy(
-			environment => environment.IsPreProductionOrProduction()
-				? _shortRunning
-				: RealTime);
+			environment => environment.IsDevelopmentOrBuild() || environment.IsAcceptance()
+				? RealTime
+				: ActualShortRunning);
 
-		private static readonly ServiceModel.Configuration.NetMsmqRetryPolicy _longRunning;
-		private static readonly ServiceModel.Configuration.NetMsmqRetryPolicy _shortRunning;
+		internal static readonly ServiceModel.Configuration.NetMsmqRetryPolicy ActualLongRunning;
+		internal static readonly ServiceModel.Configuration.NetMsmqRetryPolicy ActualShortRunning;
 	}
 }

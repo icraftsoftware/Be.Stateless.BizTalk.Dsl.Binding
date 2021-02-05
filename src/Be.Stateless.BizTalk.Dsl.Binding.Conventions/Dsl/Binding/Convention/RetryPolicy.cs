@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Dsl.Binding.Convention.Constants;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
@@ -59,28 +58,28 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		static RetryPolicy()
 		{
-			_longRunning = new Binding.RetryPolicy { Count = 300, Interval = TimeSpan.FromMinutes(15) };
+			ActualLongRunning = new Binding.RetryPolicy { Count = 72, Interval = TimeSpan.FromHours(1) };
 			RealTime = new Binding.RetryPolicy { Count = 0 };
-			_shortRunning = new Binding.RetryPolicy { Count = 15, Interval = TimeSpan.FromMinutes(2) };
+			ActualShortRunning = new Binding.RetryPolicy { Count = 6, Interval = TimeSpan.FromMinutes(5) };
 		}
 
 		public static Binding.RetryPolicy LongRunning => new EnvironmentSensitiveRetryPolicy(
 			environment => environment.IsDevelopmentOrBuild()
 				? RealTime
 				: environment.IsAcceptance()
-					? _shortRunning
-					: _longRunning);
+					? ActualShortRunning
+					: ActualLongRunning);
 
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
 		public static Binding.RetryPolicy RealTime { get; }
 
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 		public static Binding.RetryPolicy ShortRunning => new EnvironmentSensitiveRetryPolicy(
-			environment => environment.IsPreProductionOrProduction()
-				? _shortRunning
-				: RealTime);
+			environment => environment.IsDevelopmentOrBuild() || environment.IsAcceptance()
+				? RealTime
+				: ActualShortRunning);
 
-		private static readonly Binding.RetryPolicy _longRunning;
-		private static readonly Binding.RetryPolicy _shortRunning;
+		internal static readonly Binding.RetryPolicy ActualLongRunning;
+		internal static readonly Binding.RetryPolicy ActualShortRunning;
 	}
 }

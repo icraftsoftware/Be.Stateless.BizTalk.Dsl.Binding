@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Constants
+namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
@@ -27,6 +27,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Constants
 		public static bool IsAcceptance(this string environment)
 		{
 			return Equals(environment, ACCEPTANCE);
+		}
+
+		public static bool IsAcceptanceOrProduction(this string environment)
+		{
+			return environment.IsAcceptance() || environment.IsPreProduction() || environment.IsProduction();
 		}
 
 		public static bool IsBuild(this string environment)
@@ -39,29 +44,24 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Constants
 			return Equals(environment, DEVELOPMENT);
 		}
 
-		public static bool IsPreProduction(this string environment)
-		{
-			return Equals(environment, PREPRODUCTION);
-		}
-
-		public static bool IsProduction(this string environment)
-		{
-			return Equals(environment, PRODUCTION);
-		}
-
 		public static bool IsDevelopmentOrBuild(this string environment)
 		{
 			return environment.IsDevelopment() || environment.IsBuild();
 		}
 
-		public static bool IsAcceptanceOrProduction(this string environment)
+		public static bool IsPreProduction(this string environment)
 		{
-			return environment.IsAcceptance() || environment.IsPreProduction() || environment.IsProduction();
+			return Equals(environment, PREPRODUCTION);
 		}
 
 		public static bool IsPreProductionOrProduction(this string environment)
 		{
 			return environment.IsPreProduction() || environment.IsProduction();
+		}
+
+		public static bool IsProduction(this string environment)
+		{
+			return Equals(environment, PRODUCTION);
 		}
 
 		public const string ACCEPTANCE = "ACC";

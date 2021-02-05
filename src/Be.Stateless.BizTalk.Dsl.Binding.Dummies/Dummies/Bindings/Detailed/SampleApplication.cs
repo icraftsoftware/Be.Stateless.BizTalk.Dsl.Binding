@@ -21,7 +21,6 @@ using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Component;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
-using Be.Stateless.BizTalk.Dsl.Binding.Convention.Constants;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
 using Be.Stateless.BizTalk.Dummies.Bindings.Detailed;
@@ -114,7 +113,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 									l.Transport.Host = Host.RECEIVING_HOST;
 								}));
 					}),
-				TaxAgencyOneWayReceivePort = new TaxAgencyReceivePort());
+				TaxAgencyOneWayReceivePort = new TaxAgencyReceivePort()
+			);
 			SendPorts.Add(
 				BankOneWaySendPort = new BankSendPort(),
 				CustomerTwoWaySendPort = SendPort(
@@ -125,7 +125,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 						p.Transport.Adapter = new FileAdapter.Outbound(a => { a.DestinationFolder = @"c:\file\drops"; });
 						p.Transport.RetryPolicy = RetryPolicy.LongRunning;
 						p.Transport.Host = Host.SENDING_HOST;
-					}));
+					})
+			);
 			// TODO Orchestrations.Add(
 			//	new ProcessOrchestrationBinding(
 			//		o => {

@@ -46,7 +46,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 	/// &#8212;as one would typically do in C#&#8212; and not directly from this class.
 	/// </para>
 	/// </remarks>
-	public abstract class EnvironmentSettings<T>
+	public abstract class EnvironmentSettings<T> : IProvideSsoSettings
 		where T : EnvironmentSettings<T>, IEnvironmentSettings, new()
 	{
 		/// <summary>
@@ -76,6 +76,8 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 					$"EnvironmentSettings<T>-derived {GetType().Name} class cannot be instantiated explicitly and is accessible only through its static {nameof(Settings)} property.");
 		}
 
+		#region IProvideSsoSettings Members
+
 		/// <summary>
 		/// Dictionary of environment setting properties, together with their values, that must be deployed in an SSO affiliate
 		/// application store in order to be available at runtime to the BizTalk application.
@@ -90,6 +92,8 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			.Select(t => t.GetTypeInfo().GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public))
 			.SelectMany(p => p.Where(pi => pi.GetCustomAttribute(typeof(SsoSettingAttribute), true) != null))
 			.ToDictionary(pi => pi.Name, pi => pi.GetValue(this).ToString());
+
+		#endregion
 
 		protected static Lazy<T> _lazySingletonInstance = new Lazy<T>(CreateSingletonInstance);
 		private Dictionary<string, string> _runtimeSsoSettings;

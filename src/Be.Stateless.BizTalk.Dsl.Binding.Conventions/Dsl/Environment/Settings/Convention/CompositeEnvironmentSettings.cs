@@ -77,10 +77,10 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 		/// Returns either the default or overridden value for a given settings property named <paramref name="propertyName"/>.
 		/// </summary>
 		/// <typeparam name="TV">
-		/// The <see cref="Type"/> of the property <param name="propertyName"></param>.
+		/// The <see cref="Type"/> of the property <paramref name="propertyName"/>.
 		/// </typeparam>
 		/// <param name="value">
-		/// The default value of the property <param name="propertyName"></param>.
+		/// The default value of the property <paramref name="propertyName"/>.
 		/// </param>
 		/// <param name="propertyName">
 		/// The name of the property.

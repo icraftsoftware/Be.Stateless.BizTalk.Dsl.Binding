@@ -82,7 +82,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var adapter = new SBMessagingAdapter.Inbound(a => { a.Address = new Uri("file://biztalf.factory.servicebus.windows.net/batching/"); });
+			var adapter = new SBMessagingAdapter.Inbound(a => { a.Address = new Uri("file://biztalk.factory.servicebus.windows.net/batching/"); });
 			Action(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"The specified address is invalid.");

@@ -23,6 +23,7 @@ using Xunit;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
+	[Collection("DeploymentContext")]
 	public class EnvironmentOverrideApplicationVisitorFixture : IDisposable
 	{
 		#region Setup/Teardown

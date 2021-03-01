@@ -28,9 +28,67 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	public static class EnvironmentSettingsFixture
 	{
+		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
+
+		[Collection("DeploymentContext")]
+		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass : IDisposable
+		{
+			#region Setup/Teardown
+
+			public AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass()
+			{
+				DeploymentContext.TargetEnvironment = "ANYWHERE";
+			}
+
+			public void Dispose()
+			{
+				DeploymentContext.EnvironmentSettingOverridesType = null;
+				DeploymentContext.TargetEnvironment = null;
+			}
+
+			#endregion
+
+			[Fact]
+			public void SingletonCanBeConstructedAndCanBeAccessed()
+			{
+				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
+
+				// construction
+				Function(() => EnvironmentSettings<FooApp>.Settings).Should().NotThrow();
+
+				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
+				// access
+				EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
+				EnvironmentSettings<FooApp>.Settings.ApplicationName.Should().Be(nameof(FooApp));
+				EnvironmentSettings<FooApp>.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
+			}
+
+			private class FooApp : EnvironmentSettings<FooApp>, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+
+				public virtual string ReceivingHost => "Default Receive Host";
+			}
+
+			private class FooAppOverrides : FooApp
+			{
+				#region Base Class Member Overrides
+
+				public override string ReceivingHost => "Overridden Receive Host";
+
+				#endregion
+			}
+		}
+
+		#endregion
+
 		#region Nested Type: WithoutEnvironmentSettingOverrides
 
-		[Collection("Sequential")]
+		[Collection("DeploymentContext")]
 		public class WithoutEnvironmentSettingOverrides
 		{
 			[Fact]
@@ -38,14 +96,14 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			{
 				BarApp.Settings.ApplicationName.Should().Be(nameof(BarApp));
 				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
-				FooApp.Settings.ReceiveHost.Should().Be("Default Receive Host");
+				FooApp.Settings.ReceivingHost.Should().Be("Default Receive Host");
 			}
 
 			[Fact]
 			public void BaseStaticSettingsPropertyIsSingleton()
 			{
 				BarApp.Settings.Should().BeSameAs(BarApp.Settings);
-				FooAppOverride.Settings.Should().BeSameAs(FooApp.Settings);
+				FooAppOverrides.Settings.Should().BeSameAs(FooApp.Settings);
 				FooApp.Settings.Should().BeSameAs(FooApp.Settings);
 				BarApp.Settings.Should().NotBeSameAs(FooApp.Settings);
 			}
@@ -54,10 +112,10 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			public void EnvironmentSettingOverridesAreUselessWhenNotProvidedViaDeploymentContext()
 			{
 				FooApp.Settings.Should().BeOfType<FooApp>();
-				FooApp.Settings.Should().NotBeOfType<FooAppOverride>();
-				FooAppOverride.Settings.Should().BeSameAs(FooApp.Settings);
-				FooApp.Settings.ReceiveHost.Should().Be("Default Receive Host");
-				FooAppOverride.Settings.ReceiveHost.Should().Be("Default Receive Host");
+				FooApp.Settings.Should().NotBeOfType<FooAppOverrides>();
+				FooAppOverrides.Settings.Should().BeSameAs(FooApp.Settings);
+				FooApp.Settings.ReceivingHost.Should().Be("Default Receive Host");
+				FooAppOverrides.Settings.ReceivingHost.Should().Be("Default Receive Host");
 			}
 
 			[Fact]
@@ -72,7 +130,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			{
 				FooApp.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\default" } });
-				FooAppOverride.Settings.SsoSettings
+				FooAppOverrides.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\default" } });
 			}
 
@@ -99,18 +157,21 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 				[SuppressMessage("ReSharper", "UnusedMember.Global")]
 				public virtual string CheckInFolder => @"c:\claim\store\in\default";
 
-				public virtual string ReceiveHost => "Default Receive Host";
+				public virtual string ReceivingHost => "Default Receive Host";
 			}
 
 			[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
-			private class FooAppOverride : FooApp
+			private class FooAppOverrides : FooApp
 			{
 				#region Base Class Member Overrides
 
-				[SsoSetting]
 				public override string CheckInFolder => @"c:\claim\store\in\overridden";
 
-				public override string ReceiveHost => "Overridden Receive Host";
+				/// <summary>
+				/// This property will not be part of the properties being deployed to SSO.
+				/// </summary>
+				[SsoSetting]
+				public override string ReceivingHost => "Overridden Receive Host";
 
 				#endregion
 			}
@@ -120,7 +181,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 
 		#region Nested Type: WithRelatedEnvironmentSettingOverrides
 
-		[Collection("Sequential")]
+		[Collection("DeploymentContext")]
 		public class WithRelatedEnvironmentSettingOverrides : IDisposable
 		{
 			#region Setup/Teardown
@@ -144,23 +205,23 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			[Fact]
 			public void SettingsReturnsDerivedAppSettingInstanceAndValuesAreOverridden()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverride);
+				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
 
-				FooApp.Settings.Should().BeOfType<FooAppOverride>();
+				FooApp.Settings.Should().BeOfType<FooAppOverrides>();
 				FooApp.Settings.Should().NotBeOfType<FooApp>();
-				FooAppOverride.Settings.Should().BeSameAs(FooApp.Settings);
-				FooApp.Settings.ReceiveHost.Should().Be("Overridden Receive Host");
-				FooAppOverride.Settings.ReceiveHost.Should().Be("Overridden Receive Host");
+				FooAppOverrides.Settings.Should().BeSameAs(FooApp.Settings);
+				FooApp.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
+				FooAppOverrides.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
 			}
 
 			[Fact]
 			public void SsoSettings()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverride);
+				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
 
 				FooApp.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\overridden" } });
-				FooAppOverride.Settings.SsoSettings
+				FooAppOverrides.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\overridden" } });
 			}
 
@@ -185,18 +246,29 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 				[SuppressMessage("ReSharper", "UnusedMember.Global")]
 				public virtual string CheckInFolder => @"c:\claim\store\in\default";
 
-				public virtual string ReceiveHost => "Default Receive Host";
+				public virtual string ReceivingHost => "Default Receive Host";
 			}
 
-			private class FooAppOverride : FooApp
+			private class FooAppOverrides : FooApp
 			{
 				#region Base Class Member Overrides
 
 				public override string CheckInFolder => @"c:\claim\store\in\overridden";
 
-				public override string ReceiveHost => "Overridden Receive Host";
+				/// <summary>
+				/// This property will not be part of the properties being deployed to SSO.
+				/// </summary>
+				[SsoSetting]
+				public override string ReceivingHost => "Overridden Receive Host";
 
 				#endregion
+
+				/// <summary>
+				/// This property will not be part of the properties being deployed to SSO.
+				/// </summary>
+				[SsoSetting]
+				[SuppressMessage("ReSharper", "UnusedMember.Local")]
+				public string MySsoProperty => nameof(MySsoProperty);
 			}
 		}
 
@@ -204,7 +276,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 
 		#region Nested Type: WithUnrelatedEnvironmentSettingOverrides
 
-		[Collection("Sequential")]
+		[Collection("DeploymentContext")]
 		public class WithUnrelatedEnvironmentSettingOverrides : IDisposable
 		{
 			#region Setup/Teardown

@@ -34,6 +34,7 @@ using Xunit;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple
 {
+	[Collection("DeploymentContext")]
 	public class NamingConventionFixture : IDisposable
 	{
 		#region Setup/Teardown

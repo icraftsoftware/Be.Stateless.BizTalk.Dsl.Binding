@@ -16,7 +16,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
@@ -25,8 +24,5 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 	{
 		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
 		public string ApplicationName { get; }
-
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
-		public Dictionary<string, string> SsoSettings { get; }
 	}
 }

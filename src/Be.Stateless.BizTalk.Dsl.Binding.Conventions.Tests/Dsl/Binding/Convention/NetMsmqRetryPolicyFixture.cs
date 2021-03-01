@@ -23,6 +23,7 @@ using Xunit;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
+	[Collection("DeploymentContext")]
 	public class NetMsmqRetryPolicyFixture
 	{
 		[Fact]

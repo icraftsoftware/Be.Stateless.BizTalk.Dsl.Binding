@@ -27,8 +27,8 @@
     <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21008.23152" />
     <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.21012.20459" />
     <PackageReference Include="Be.Stateless.BizTalk.Pipeline.MicroComponents" Version="2.0.21012.19670" />
-    <PackageReference Include="Be.Stateless.Common" Version="2.0.21034.37240" />
-    <PackageReference Include="Be.Stateless.Common.Unit" Version="2.0.21034.37240" />
+    <PackageReference Include="Be.Stateless.Common" Version="2.0.21060.31482" />
+    <PackageReference Include="Be.Stateless.Common.Unit" Version="2.0.21060.31482" />
     <PackageReference Include="Be.Stateless.Extensions" Version="2.0.21005.38790" />
     <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>

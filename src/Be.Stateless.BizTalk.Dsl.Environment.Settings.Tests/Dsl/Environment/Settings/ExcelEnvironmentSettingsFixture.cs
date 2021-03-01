@@ -27,6 +27,7 @@ using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
+	[Collection("DeploymentContext")]
 	public class ExcelEnvironmentSettingsFixture : IDisposable
 	{
 		#region Setup/Teardown

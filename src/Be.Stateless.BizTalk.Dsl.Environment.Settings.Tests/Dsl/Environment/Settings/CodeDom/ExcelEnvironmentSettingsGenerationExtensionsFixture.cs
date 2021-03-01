@@ -92,8 +92,6 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.CodeDom
 					new CodeGeneratorOptions { BracingStyle = "C", IndentString = "\t", VerbatimOrder = true });
 			}
 
-			//// being resilient to runtime version in CodeDom heading comment
-			//Regex.Replace(builder.ToString(), @"(//\s+)Runtime Version:\d\.\d\.\d+\.\d+", @"$1Runtime Version:4.0.30319.42000", RegexOptions.Multiline)
 			builder.ToString()
 				.Should().Be(
 					ResourceManager.Load(

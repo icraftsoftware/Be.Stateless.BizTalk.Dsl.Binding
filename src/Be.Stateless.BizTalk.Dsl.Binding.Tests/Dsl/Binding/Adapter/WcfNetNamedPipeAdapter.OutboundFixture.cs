@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -78,7 +78,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.TransportProtectionLevel = ProtectionLevel.EncryptAndSign;
 				});
 
-			Action(() => ((ISupportValidation) npa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) npa).Validate()).Should().NotThrow();
 		}
 	}
 }

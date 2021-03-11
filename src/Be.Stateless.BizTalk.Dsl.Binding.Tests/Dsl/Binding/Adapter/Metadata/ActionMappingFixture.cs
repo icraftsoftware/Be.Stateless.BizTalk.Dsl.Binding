@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 {
@@ -30,14 +30,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationCanBeMappedToNoAction()
 		{
-			Action(() => new ActionMapping { new ActionMappingOperation("UpdateTicket") }).Should().NotThrow();
+			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket") }).Should().NotThrow();
 		}
 
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationCanBeMappedToSomeAction()
 		{
-			Action(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET") })
+			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET") })
 				.Should().NotThrow();
 		}
 
@@ -45,13 +45,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationHasToMapToNonEmptyAction()
 		{
-			Action(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", null) })
+			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("action");
-			Action(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "") })
+			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("action");
-			Action(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "  ") })
+			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "  ") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("action");
 		}
@@ -60,13 +60,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationNameCannotBeEmpty()
 		{
-			Action(() => new ActionMapping { new ActionMappingOperation(null) })
+			Invoking(() => new ActionMapping { new ActionMappingOperation(null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Action(() => new ActionMapping { new ActionMappingOperation("") })
+			Invoking(() => new ActionMapping { new ActionMappingOperation("") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Action(() => new ActionMapping { new ActionMappingOperation("  ") })
+			Invoking(() => new ActionMapping { new ActionMappingOperation("  ") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
 		}

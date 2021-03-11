@@ -22,7 +22,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -77,7 +77,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			var adapter = new SBMessagingAdapter.Outbound();
-			Action(() => ((ISupportValidation) adapter).Validate())
+			Invoking(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"Required property Address (URI) not specified.");
 		}
@@ -88,7 +88,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			var adapter = new SBMessagingAdapter.Outbound(a => { a.Address = new Uri("file://biztalk.factory.servicebus.windows.net/batching/"); });
-			Action(() => ((ISupportValidation) adapter).Validate())
+			Invoking(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"The specified address is invalid.");
 		}
@@ -112,7 +112,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 					a.CustomBrokeredPropertyNamespace = "urn:schemas.stateless.be:biztalk:service-bus:queue";
 				});
-			Action(() => ((ISupportValidation) adapter).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) adapter).Validate()).Should().NotThrow();
 		}
 	}
 }

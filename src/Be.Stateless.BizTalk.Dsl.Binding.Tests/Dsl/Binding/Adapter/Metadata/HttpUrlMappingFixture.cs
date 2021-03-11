@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 {
@@ -31,13 +31,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void MethodCannotBeEmpty()
 		{
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", null, null) })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("method");
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", "", null) })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", "", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("method");
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", "  ", null) })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", "  ", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("method");
 		}
@@ -46,13 +46,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationNameCannotBeEmpty()
 		{
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation(null, null, null) })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation(null, null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation("", null, null) })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("", null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation("  ", null, null) })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("  ", null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
 		}
@@ -76,13 +76,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void UrlCannotBeEmpty()
 		{
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, null) })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("url");
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, "") })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, "") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("url");
-			Action(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, "  ") })
+			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, "  ") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("url");
 		}

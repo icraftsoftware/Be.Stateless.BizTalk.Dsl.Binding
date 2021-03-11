@@ -27,7 +27,7 @@ using FluentAssertions;
 using Microsoft.BizTalk.B2B.PartnerManagement;
 using Microsoft.XLANGs.BaseTypes;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 {
@@ -172,7 +172,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			var filter = new Filter(() => false);
 
-			Action(() => filter.ToString())
+			Invoking(() => filter.ToString())
 				.Should().Throw<NotSupportedException>()
 				.WithMessage("Cannot translate FilterPredicate \"False\" because Constant node is not supported.");
 		}
@@ -226,7 +226,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName == null);
 
-			Action(() => filter.ToString())
+			Invoking(() => filter.ToString())
 				.Should().Throw<NotSupportedException>()
 				.WithMessage(
 					"Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.MapTypeName == null)\" because filter value can be null only if the operator is exists.")
@@ -326,7 +326,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName > null);
 
-			Action(() => filter.ToString())
+			Invoking(() => filter.ToString())
 				.Should().Throw<NotSupportedException>()
 				.WithMessage(
 					"Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.MapTypeName > null)\" because filter value can be null only if the operator is exists.")
@@ -389,7 +389,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					&& BtsProperties.MessageType == Schema<Any>.MessageType
 					&& BtsProperties.SendPortName == "Dummy port name"
 					&& BtsProperties.IsRequestResponse != true);
-			Action(() => filter.ToString()).Should().NotThrow();
+			Invoking(() => filter.ToString()).Should().NotThrow();
 		}
 
 		[Fact]
@@ -401,7 +401,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					|| BtsProperties.ActualRetryCount > 3
 					|| BtsProperties.AckRequired != true
 					|| BtsProperties.InboundTransportLocation == "inbound-transport-location");
-			Action(() => filter.ToString()).Should().NotThrow();
+			Invoking(() => filter.ToString()).Should().NotThrow();
 		}
 
 		[Fact]
@@ -410,7 +410,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			var filter = new Filter(() => GetType().Name == "any value");
 
-			Action(() => filter.ToString())
+			Invoking(() => filter.ToString())
 				.Should().Throw<NotSupportedException>()
 				.WithMessage(
 					"Cannot translate property Expression \"value(Be.Stateless.BizTalk.Dsl.Binding.Subscription.FilterFixture).GetType().Name\" because only MessageContextProperty<T, TR>-derived type's member access expressions are supported.");

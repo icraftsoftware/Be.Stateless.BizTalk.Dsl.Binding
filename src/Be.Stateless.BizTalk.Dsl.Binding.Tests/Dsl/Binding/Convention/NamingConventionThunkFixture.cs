@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ using System;
 using FluentAssertions;
 using Moq;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
@@ -131,7 +131,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var applicationBindingMock = new Mock<IApplicationBinding<object>>();
 			applicationBindingMock.Setup(m => m.Name).Returns(conventionMock.Object);
 
-			Action(() => NamingConventionThunk.ComputeApplicationName(applicationBindingMock.Object))
+			Invoking(() => NamingConventionThunk.ComputeApplicationName(applicationBindingMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithInnerException<NotSupportedException>();
 		}

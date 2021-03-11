@@ -20,7 +20,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -37,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.NetworkCredentials.UserName = "user";
 					a.NetworkCredentials.Password = "pwd";
 				});
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().NotThrow();
 		}
 
@@ -52,7 +52,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.NetworkCredentials.UserName = "user";
 					a.NetworkCredentials.Password = "pwd";
 				});
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Alternate credentials to access the file folder cannot be supplied while accessing local drive or a mapped network drive.");
 		}
@@ -67,7 +67,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ReceiveFolder = @"\\server";
 					a.FileMask = string.Empty;
 				});
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Inbound file adapter has no source file mask.");
 		}
@@ -78,7 +78,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			var ifa = new FileAdapter.Inbound(a => { });
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Inbound file adapter has no source folder.");
 		}

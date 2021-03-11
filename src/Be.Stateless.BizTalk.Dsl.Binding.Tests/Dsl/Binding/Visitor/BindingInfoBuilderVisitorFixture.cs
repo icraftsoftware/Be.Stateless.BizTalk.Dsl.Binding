@@ -29,7 +29,7 @@ using FluentAssertions;
 using Microsoft.BizTalk.BtsScheduleHelper;
 using Microsoft.BizTalk.Deployment.Binding;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 using BtsDayOfWeek = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.BtsDayOfWeek;
 using Month = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.Month;
 using MonthDay = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.MonthDay;
@@ -606,7 +606,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort);
 			((IApplicationBindingVisitor) visitor).VisitReceiveLocation(receiveLocation);
 
-			Action(() => ((IApplicationBindingVisitor) visitor).VisitReceiveLocation(receiveLocation))
+			Invoking(() => ((IApplicationBindingVisitor) visitor).VisitReceiveLocation(receiveLocation))
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("Duplicate receive location name: 'OneWayReceiveLocation'.");
 		}
@@ -623,7 +623,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(applicationBinding);
 			((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort);
 
-			Action(() => ((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort))
+			Invoking(() => ((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort))
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("Duplicate receive port name: 'OneWayReceivePort'.");
 		}
@@ -640,7 +640,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			((IApplicationBindingVisitor) visitor).VisitApplicationBinding(applicationBinding);
 			((IApplicationBindingVisitor) visitor).VisitSendPort(sendPort);
 
-			Action(() => ((IApplicationBindingVisitor) visitor).VisitSendPort(sendPort))
+			Invoking(() => ((IApplicationBindingVisitor) visitor).VisitSendPort(sendPort))
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("Duplicate send port name: 'OneWaySendPort'.");
 		}

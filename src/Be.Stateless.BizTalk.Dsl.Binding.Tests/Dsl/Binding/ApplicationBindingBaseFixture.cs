@@ -24,7 +24,7 @@ using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -63,7 +63,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[SkippableFact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
+		public void AutomaticallyValidatesOnConfiguratorInvoking()
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
@@ -101,7 +101,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var applicationBindingMock = new Mock<ApplicationBindingBase<string>> { CallBase = true };
 			applicationBindingMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) applicationBindingMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) applicationBindingMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Application's Name is not defined.");
 		}

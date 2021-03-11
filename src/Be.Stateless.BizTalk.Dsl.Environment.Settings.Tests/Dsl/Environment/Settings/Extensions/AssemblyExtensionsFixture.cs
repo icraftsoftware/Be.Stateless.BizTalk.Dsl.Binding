@@ -19,7 +19,7 @@
 using System;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 {
@@ -35,14 +35,14 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 		[Fact]
 		public void GetEnvironmentSettingsTypeDoesNotThrowWhenNotFound()
 		{
-			Function(() => typeof(int).Assembly.GetEnvironmentSettingsType()).Should().NotThrow();
+			Invoking(() => typeof(int).Assembly.GetEnvironmentSettingsType()).Should().NotThrow();
 		}
 
 		[Fact]
 		public void GetEnvironmentSettingsTypeThrowsWhenNotFound()
 		{
 			var assembly = typeof(int).Assembly;
-			Function(() => assembly.GetEnvironmentSettingsType(true))
+			Invoking(() => assembly.GetEnvironmentSettingsType(true))
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage($"No {nameof(IEnvironmentSettings)}-derived type was found in assembly '{assembly.FullName}' located at '{assembly.Location}'.");
 		}

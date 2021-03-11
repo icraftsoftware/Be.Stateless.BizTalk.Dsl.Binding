@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using FluentAssertions;
 using Moq;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -30,7 +30,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public void DefaultUnknownInboundAdapterFailsValidate()
 		{
 			var rlt = new ReceiveLocationTransport { Host = "Host" };
-			Action(() => ((ISupportValidation) rlt).Validate())
+			Invoking(() => ((ISupportValidation) rlt).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Adapter is not defined.");
 		}

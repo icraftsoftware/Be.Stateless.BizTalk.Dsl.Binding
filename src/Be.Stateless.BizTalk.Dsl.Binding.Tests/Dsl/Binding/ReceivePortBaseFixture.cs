@@ -24,7 +24,7 @@ using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -48,7 +48,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[Fact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
+		public void AutomaticallyValidatesOnConfiguratorInvoking()
 		{
 			var receivePortMock = new Mock<ReceivePortBase<string>>(
 				(Action<IReceivePort<string>>) (rp => {
@@ -89,7 +89,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			receivePortMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) receivePortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receivePortMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Receive Port's Name is not defined.");
 		}
@@ -101,7 +101,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			receivePortMock.Object.Name = "Receive Port Name";
 
-			Action(() => ((ISupportValidation) receivePortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receivePortMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Receive Port has no Receive Locations.");
 		}
@@ -120,7 +120,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePortMock.Object.Name = "Receive Port Name";
 			receivePortMock.Object.ReceiveLocations.Add(rl1.Object, rl2.Object);
 
-			Action(() => ((ISupportValidation) receivePortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receivePortMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Receive Port has a mix of one-way and two-way Receive Locations.");
 		}

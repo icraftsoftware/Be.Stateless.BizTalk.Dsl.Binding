@@ -22,7 +22,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration
 {
@@ -34,7 +34,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			Action(() => new WcfCustomAdapter.Inbound<NetMsmqBindingElement>(a => { a.Binding.ExactlyOnce = true; })).Should().NotThrow();
+			Invoking(() => new WcfCustomAdapter.Inbound<NetMsmqBindingElement>(a => { a.Binding.ExactlyOnce = true; })).Should().NotThrow();
 		}
 
 		[Fact]

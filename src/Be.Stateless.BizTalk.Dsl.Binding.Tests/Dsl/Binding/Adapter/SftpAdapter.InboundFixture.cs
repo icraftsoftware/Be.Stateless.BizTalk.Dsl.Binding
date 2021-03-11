@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.BizTalk.Adapter.Sftp;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -121,7 +121,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ProxyUserName = "proxy-user";
 					a.ProxyPassword = "p@ssw0rd";
 				});
-			Action(() => ((ISupportValidation) isa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) isa).Validate()).Should().NotThrow();
 		}
 	}
 }

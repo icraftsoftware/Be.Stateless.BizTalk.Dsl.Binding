@@ -22,7 +22,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -114,7 +114,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			var ifa = new FtpAdapter.Inbound();
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage(@"The Server Address is not defined");
 		}
@@ -156,7 +156,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ReceiveTimeout = TimeSpan.FromMinutes(1);
 					a.TemporaryFolder = "c:\\windows\\temp";
 				});
-			Action(() => ((ISupportValidation) ifa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) ifa).Validate()).Should().NotThrow();
 		}
 	}
 }

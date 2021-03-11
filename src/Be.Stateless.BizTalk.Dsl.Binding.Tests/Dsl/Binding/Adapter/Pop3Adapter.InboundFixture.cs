@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -85,7 +85,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ErrorThreshold = 50;
 					a.PollingInterval = TimeSpan.FromSeconds(15);
 				});
-			Action(() => ((ISupportValidation) ipa).Validate())
+			Invoking(() => ((ISupportValidation) ipa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage(
 					@"The format of the user name property is invalid for SPA authentication scheme. Make sure that the user name is specified as either <domain-name>\<user-name> or <machine-name>\<user-name>.");
@@ -108,7 +108,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ErrorThreshold = 50;
 					a.PollingInterval = TimeSpan.FromSeconds(15);
 				});
-			Action(() => ((ISupportValidation) ipa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) ipa).Validate()).Should().NotThrow();
 		}
 	}
 }

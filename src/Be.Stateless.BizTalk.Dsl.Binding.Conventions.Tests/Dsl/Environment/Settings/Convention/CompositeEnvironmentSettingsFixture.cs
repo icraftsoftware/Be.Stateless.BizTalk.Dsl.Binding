@@ -22,7 +22,7 @@ using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 {
@@ -54,7 +54,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
 
 				// construction
-				Function(() => CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings).Should().NotThrow();
+				Invoking(() => CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings).Should().NotThrow();
 
 				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
 				// access
@@ -154,7 +154,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
 
 				// construction
-				Function(() => EnvironmentSettings<FooApp>.Settings).Should().Throw<InvalidCastException>();
+				Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().Throw<InvalidCastException>();
 
 				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
 				// access
@@ -474,7 +474,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 			{
 				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
 
-				Function(() => FooApp.Settings.ApplicationName).Should().Throw<InvalidCastException>();
+				Invoking(() => FooApp.Settings.ApplicationName).Should().Throw<InvalidCastException>();
 			}
 
 			[SuppressMessage("ReSharper", "UnusedMember.Global")]

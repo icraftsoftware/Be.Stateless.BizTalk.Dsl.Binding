@@ -27,7 +27,7 @@ using Microsoft.BizTalk.DefaultPipelines;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -52,7 +52,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[SkippableFact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
+		public void AutomaticallyValidatesOnConfiguratorInvoking()
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
@@ -164,7 +164,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			sendPortMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) sendPortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) sendPortMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Send Port's Name is not defined.");
 		}
@@ -176,7 +176,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			sendPortMock.Object.Name = "Send Port Name";
 
-			Action(() => ((ISupportValidation) sendPortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) sendPortMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Send Port's Send Pipeline is not defined.");
 		}

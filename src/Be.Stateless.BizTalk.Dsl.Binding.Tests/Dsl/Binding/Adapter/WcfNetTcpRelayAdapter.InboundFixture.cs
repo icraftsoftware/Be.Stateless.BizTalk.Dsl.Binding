@@ -24,7 +24,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -98,7 +98,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wnt = new WcfNetTcpRelayAdapter.Inbound(
 				a => { a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue"); });
-			Action(() => ((ISupportValidation) wnt).Validate())
+			Invoking(() => ((ISupportValidation) wnt).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
 				.WithMessage("Invalid address scheme; expecting \"sb\" scheme.*");
@@ -127,7 +127,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ServiceDisplayName = "display_name";
 				});
 
-			Action(() => ((ISupportValidation) wnt).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wnt).Validate()).Should().NotThrow();
 		}
 	}
 }

@@ -25,7 +25,7 @@ using Microsoft.BizTalk.DefaultPipelines;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -44,7 +44,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[SkippableFact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
+		public void AutomaticallyValidatesOnConfiguratorInvoking()
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
@@ -135,7 +135,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 			receiveLocationMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Receive Location's Name is not defined.");
 		}
@@ -146,7 +146,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 			receiveLocationMock.Object.Name = "Receive Location Name";
 
-			Action(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Receive Location's Receive Pipeline is not defined.");
 		}

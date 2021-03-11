@@ -26,7 +26,7 @@ using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -44,7 +44,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[Fact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
+		public void AutomaticallyValidatesOnConfiguratorInvoking()
 		{
 			var orchestrationBindingMock = new Mock<ProcessOrchestrationBinding>((Action<IProcessOrchestrationBinding>) (o => { })) { CallBase = true };
 			var validatingOrchestrationBindingMock = orchestrationBindingMock.As<ISupportValidation>();
@@ -90,7 +90,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var orchestrationBindingMock = new Mock<OrchestrationBindingBase<Process>> { CallBase = true };
 			orchestrationBindingMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) orchestrationBindingMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBindingMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's Host is not defined.");
 		}
@@ -106,7 +106,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBinding.SolicitResponsePort = new TwoWaySendPort();
 			orchestrationBinding.RequestResponsePort = new TwoWayReceivePort();
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's one-way logical port 'ReceivePort' is bound to two-way port 'TwoWayReceivePort'.");
 		}
@@ -122,7 +122,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBinding.SolicitResponsePort = new TwoWaySendPort();
 			orchestrationBinding.RequestResponsePort = new TwoWayReceivePort();
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's one-way logical port 'SendPort' is bound to two-way port 'TwoWaySendPort'.");
 		}
@@ -134,7 +134,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBinding.ReceivePort = new Mock<ReceivePort>().Object;
 			orchestrationBinding.SendPort = new Mock<SendPort>().Object;
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage($"The '{typeof(Process).FullName}' orchestration has unbound logical ports: 'RequestResponsePort', 'SolicitResponsePort'.");
 		}
@@ -150,7 +150,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBinding.SolicitResponsePort = new TwoWaySendPort();
 			orchestrationBinding.RequestResponsePort = new OneWayReceivePort();
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's two-way logical port 'RequestResponsePort' is bound to one-way port 'OneWayReceivePort'.");
 		}
@@ -166,7 +166,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBinding.SolicitResponsePort = new OneWaySendPort();
 			orchestrationBinding.RequestResponsePort = new TwoWayReceivePort();
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's two-way logical port 'SolicitResponsePort' is bound to one-way port 'OneWaySendPort'.");
 		}

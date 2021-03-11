@@ -33,8 +33,6 @@
     <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.21007.39752" />
     <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.21033.24183" />
     <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21008.23152" />
-    <PackageReference Include="Be.Stateless.Common" Version="2.0.21060.31482" />
-    <PackageReference Include="Be.Stateless.Common.Unit" Version="2.0.21060.31482" />
     <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -48,8 +46,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-    <PackageReference Include="Moq" Version="4.15.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="xunit.core" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>

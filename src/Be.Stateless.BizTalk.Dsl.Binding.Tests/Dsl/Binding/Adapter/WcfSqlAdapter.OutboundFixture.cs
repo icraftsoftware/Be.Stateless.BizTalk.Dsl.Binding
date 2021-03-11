@@ -25,7 +25,7 @@ using FluentAssertions;
 using Microsoft.Adapters.Sql;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -85,7 +85,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.StaticAction = "TypedProcedure/dbo/usp_batch_AddPart";
 				});
 
-			Action(() => ((ISupportValidation) osa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) osa).Validate()).Should().NotThrow();
 		}
 	}
 }

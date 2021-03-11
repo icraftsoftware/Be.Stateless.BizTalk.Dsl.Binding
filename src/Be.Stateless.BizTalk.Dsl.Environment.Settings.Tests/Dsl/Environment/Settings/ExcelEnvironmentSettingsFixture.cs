@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Dummies.Environment.Settings;
 using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
@@ -50,7 +50,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		{
 			var sut = new DummyExcelEnvironmentSettings();
 			sut._targetEnvironments[0] = "DEV";
-			Function(() => sut.BamArchiveWindowTimeLength)
+			Invoking(() => sut.BamArchiveWindowTimeLength)
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("'DEV' target environment has been declared multiple times in the 'BizTalk.Factory.Settings' file.");
 		}
@@ -61,7 +61,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			DeploymentContext.ExcelSettingOverridesFolderPath = ExcelSettingOverridesFolderPath;
 
 			var sut = new DummyExcelEnvironmentSettings();
-			Function(() => sut.UninitializedReferenceTypeSetting)
+			Invoking(() => sut.UninitializedReferenceTypeSetting)
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("'UninitializedReferenceTypeSetting' does not have a defined value neither for 'DEV' or default target environment.");
 		}
@@ -106,7 +106,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			DeploymentContext.ExcelSettingOverridesFolderPath = ExcelSettingOverridesFolderPath;
 
 			var sut = new DummyExcelEnvironmentSettings();
-			Function(() => sut.UninitializedValueTypeSetting)
+			Invoking(() => sut.UninitializedValueTypeSetting)
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage("'UninitializedValueTypeSetting' does not have a defined value neither for 'DEV' or default target environment.");
 		}

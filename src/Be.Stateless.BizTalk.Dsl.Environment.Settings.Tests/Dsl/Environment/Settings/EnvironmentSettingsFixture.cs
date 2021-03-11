@@ -22,7 +22,7 @@ using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
@@ -54,7 +54,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
 
 				// construction
-				Function(() => EnvironmentSettings<FooApp>.Settings).Should().NotThrow();
+				Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().NotThrow();
 
 				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
 				// access
@@ -121,8 +121,8 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			[Fact]
 			public void EnvironmentSettingsThrowWhenInstantiatedExplicitly()
 			{
-				Function(() => new BarApp()).Should().Throw<InvalidOperationException>();
-				Function(() => new BarAppOverride()).Should().Throw<InvalidOperationException>();
+				Invoking(() => new BarApp()).Should().Throw<InvalidOperationException>();
+				Invoking(() => new BarAppOverride()).Should().Throw<InvalidOperationException>();
 			}
 
 			[Fact]
@@ -198,7 +198,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			{
 				DeploymentContext.EnvironmentSettingOverridesType = typeof(BarApp);
 
-				Function(() => BarApp.Settings).Should().NotThrow();
+				Invoking(() => BarApp.Settings).Should().NotThrow();
 				BarApp.Settings.ApplicationName.Should().Be(nameof(BarApp));
 			}
 
@@ -293,7 +293,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			{
 				DeploymentContext.EnvironmentSettingOverridesType = typeof(BarApp);
 
-				Function(() => FooApp.Settings).Should().Throw<InvalidCastException>();
+				Invoking(() => FooApp.Settings).Should().Throw<InvalidCastException>();
 			}
 
 			private class BarApp : EnvironmentSettings<BarApp>, IEnvironmentSettings

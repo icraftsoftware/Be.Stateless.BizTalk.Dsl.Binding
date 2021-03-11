@@ -22,7 +22,7 @@ using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -86,7 +86,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var transportMock = new Mock<TransportBase<IAdapter>> { CallBase = true };
 			transportMock.Object.Host = "Host";
 
-			Action(() => ((ISupportValidation) transportMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) transportMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Adapter is not defined.");
 		}
@@ -99,7 +99,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var transportMock = new Mock<TransportBase<IAdapter>> { CallBase = true };
 			transportMock.Object.Adapter = new FileAdapter.Outbound(a => { });
 
-			Action(() => ((ISupportValidation) transportMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) transportMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Host is not defined.");
 		}
@@ -113,7 +113,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var adapterMock = new Mock<TransportBase<IAdapter>.UnknownAdapter>();
 			transportMock.Object.Adapter = adapterMock.Object;
 
-			Action(() => ((ISupportValidation) transportMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) transportMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Adapter is not defined.");
 		}

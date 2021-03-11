@@ -26,7 +26,7 @@ using Microsoft.BizTalk.Deployment.Binding;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -36,14 +36,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		public void BasicHttpBindingElementIsSupported()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Function(() => adapterMock.Object).Should().NotThrow();
+			Invoking(() => adapterMock.Object).Should().NotThrow();
 		}
 
 		[Fact]
 		public void BasicHttpsBindingElementIsNotSupported()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpsBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Function(() => adapterMock.Object)
+			Invoking(() => adapterMock.Object)
 				.Should().Throw<TypeInitializationException>()
 				.WithInnerException<BindingException>()
 				.WithMessage("BasicHttpBindingElement has to be used for https addresses as well.");
@@ -89,7 +89,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomTLConfig>>(new ProtocolType()) { CallBase = true };
 			adapterMock.Object.Address = new EndpointAddress("https://services.stateless.be/soap/default");
 			adapterMock.Object.Binding.Security.Mode = BasicHttpSecurityMode.None;
-			Action(() => ((ISupportValidation) adapterMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) adapterMock.Object).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
 				.WithMessage("Invalid address scheme; expecting \"http\" scheme.");
@@ -101,7 +101,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomTLConfig>>(new ProtocolType()) { CallBase = true };
 			adapterMock.Object.Address = new EndpointAddress("https://services.stateless.be/soap/default");
 			adapterMock.Object.Binding.Security.Mode = BasicHttpSecurityMode.Transport;
-			Action(() => ((ISupportValidation) adapterMock.Object).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) adapterMock.Object).Validate()).Should().NotThrow();
 		}
 
 		[Fact]
@@ -110,7 +110,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomTLConfig>>(new ProtocolType()) { CallBase = true };
 			adapterMock.Object.Address = new EndpointAddress("http://services.stateless.be/soap/default");
 			adapterMock.Object.Binding.Security.Mode = BasicHttpSecurityMode.Transport;
-			Action(() => ((ISupportValidation) adapterMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) adapterMock.Object).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
 				.WithMessage("Invalid address scheme; expecting \"https\" scheme.");

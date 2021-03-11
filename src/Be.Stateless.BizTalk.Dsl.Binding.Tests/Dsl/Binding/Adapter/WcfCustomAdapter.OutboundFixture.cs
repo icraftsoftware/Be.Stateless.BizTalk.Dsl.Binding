@@ -28,7 +28,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 using CustomBindingElement = Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration.CustomBindingElement;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
@@ -153,7 +153,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 						X509FindType.FindBySubjectDistinguishedName,
 						"*.services.party.be");
 				});
-			Action(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
 		}
 
 		[SkippableFact]
@@ -168,7 +168,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 						new MtomMessageEncodingElement { MessageVersion = MessageVersion.Soap11 },
 						new HttpsTransportElement { RequireClientCertificate = true });
 				});
-			Action(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
 		}
 
 		[SkippableFact]
@@ -189,7 +189,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.StaticAction = "http://services.biztalk.net/mail/2011/11/IMailService/SendMessage";
 				});
 
-			Action(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
 		}
 	}
 }

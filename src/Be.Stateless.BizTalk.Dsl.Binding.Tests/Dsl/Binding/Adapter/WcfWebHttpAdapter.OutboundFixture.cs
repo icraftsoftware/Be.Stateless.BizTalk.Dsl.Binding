@@ -26,7 +26,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 using WebHttpSecurityMode = Microsoft.BizTalk.Adapter.Wcf.Config.WebHttpSecurityMode;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
@@ -152,7 +152,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.MaxReceivedMessageSize = 2048;
 				});
 
-			Action(() => ((ISupportValidation) wha).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wha).Validate()).Should().NotThrow();
 		}
 	}
 }

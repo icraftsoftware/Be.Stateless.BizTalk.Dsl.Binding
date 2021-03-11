@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.Adapters.SAP;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -102,7 +102,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.MaxConnectionsPerSystem = 30;
 				});
 
-			Action(() => ((ISupportValidation) osa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) osa).Validate()).Should().NotThrow();
 		}
 	}
 }

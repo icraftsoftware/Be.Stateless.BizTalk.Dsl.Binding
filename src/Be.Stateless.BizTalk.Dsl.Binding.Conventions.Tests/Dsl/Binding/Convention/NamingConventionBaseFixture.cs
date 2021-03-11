@@ -35,7 +35,7 @@ using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 using CustomBindingElement = Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration.CustomBindingElement;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
@@ -239,7 +239,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
-			Action(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object)).Should().NotThrow();
+			Invoking(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object)).Should().NotThrow();
 		}
 
 		[SkippableFact]
@@ -356,7 +356,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
-			Action(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
+			Invoking(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(BankReceiveLocation)}' ReceiveLocation's Aggregate, 'Income', does not match its ReceivePort's one, 'Invoice'.");
 		}
@@ -373,7 +373,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy();
 
-			Action(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
+			Invoking(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(BankReceiveLocation)}' ReceiveLocation's MessageName is required.");
 		}
@@ -389,7 +389,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage" };
 
-			Action(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
+			Invoking(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage("A non null MessageFormat is required.");
 		}
@@ -406,7 +406,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy();
 
-			Action(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
+			Invoking(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(BankReceiveLocation)}' ReceiveLocation's Party is required.");
 		}
@@ -423,7 +423,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy { Party = "ReceiveLocationParty", MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
-			Action(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
+			Invoking(() => sut.ComputeReceiveLocationNameSpy(receiveLocationMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(BankReceiveLocation)}' ReceiveLocation's Party, 'ReceiveLocationParty', does not match its ReceivePort's one, 'ReceivePortParty'.");
 		}
@@ -490,7 +490,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy();
 
-			Action(() => sut.ComputeReceivePortNameSpy(receivePortMock.Object))
+			Invoking(() => sut.ComputeReceivePortNameSpy(receivePortMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(StandaloneReceivePort)}' ReceivePort is not bound to application's receive port collection.");
 		}
@@ -506,7 +506,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy();
 
-			Action(() => sut.ComputeReceivePortNameSpy(receivePortMock.Object))
+			Invoking(() => sut.ComputeReceivePortNameSpy(receivePortMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(StandaloneReceivePort)}' ReceivePort's Party is required.");
 		}
@@ -591,7 +591,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy();
 
-			Action(() => sut.ComputeSendPortNameSpy(sendPortMock.Object))
+			Invoking(() => sut.ComputeSendPortNameSpy(sendPortMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(StandaloneSendPort)}' SendPort is not bound to application's send port collection.");
 		}
@@ -608,7 +608,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy { Party = "SomeParty" };
 
-			Action(() => sut.ComputeSendPortNameSpy(sendPortMock.Object))
+			Invoking(() => sut.ComputeSendPortNameSpy(sendPortMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(StandaloneSendPort)}' SendPort's MessageName is required.");
 		}
@@ -625,7 +625,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy { Party = "SomeParty", MessageName = "SomeMessage" };
 
-			Action(() => sut.ComputeSendPortNameSpy(sendPortMock.Object))
+			Invoking(() => sut.ComputeSendPortNameSpy(sendPortMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage("A non null MessageFormat is required.");
 		}
@@ -641,7 +641,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 			var sut = new NamingConventionSpy();
 
-			Action(() => sut.ComputeSendPortNameSpy(sendPortMock.Object))
+			Invoking(() => sut.ComputeSendPortNameSpy(sendPortMock.Object))
 				.Should().Throw<NamingConventionException>()
 				.WithMessage($"'{nameof(StandaloneSendPort)}' SendPort's Party is required.");
 		}

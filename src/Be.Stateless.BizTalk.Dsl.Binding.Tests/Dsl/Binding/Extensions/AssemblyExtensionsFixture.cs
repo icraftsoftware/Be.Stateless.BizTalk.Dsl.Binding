@@ -20,7 +20,7 @@ using System;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Extensions
 {
@@ -35,14 +35,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Extensions
 		[Fact]
 		public void GetApplicationBindingTypeDoesNotThrowWhenNotFound()
 		{
-			Function(() => typeof(int).Assembly.GetApplicationBindingType()).Should().NotThrow();
+			Invoking(() => typeof(int).Assembly.GetApplicationBindingType()).Should().NotThrow();
 		}
 
 		[Fact]
 		public void GetApplicationBindingTypeThrowsWhenNotFound()
 		{
 			var assembly = typeof(int).Assembly;
-			Function(() => assembly.GetApplicationBindingType(true))
+			Invoking(() => assembly.GetApplicationBindingType(true))
 				.Should().Throw<InvalidOperationException>()
 				.WithMessage($"No {nameof(IApplicationBinding)}-derived type was found in assembly '{assembly.FullName}' located at '{assembly.Location}'.");
 		}

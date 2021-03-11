@@ -25,7 +25,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -103,7 +103,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.TextEncoding = Encoding.ASCII;
 				});
-			Action(() => ((ISupportValidation) wba).Validate())
+			Invoking(() => ((ISupportValidation) wba).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
 				.WithMessage("The text encoding 'us-ascii' used in the text message format is not supported.*");
@@ -132,7 +132,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ServiceDisplayName = "display_name";
 				});
 
-			Action(() => ((ISupportValidation) wba).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wba).Validate()).Should().NotThrow();
 		}
 	}
 }

@@ -37,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 	/// support it too, <typeparamref name="TI"/> must be an interface which acts as an extension point for setting overrides.
 	/// </typeparam>
 	/// <seealso cref="EnvironmentSettings{T}"/>
-	public class CompositeEnvironmentSettings<T, TI> : EnvironmentSettings<T>
+	public abstract class CompositeEnvironmentSettings<T, TI> : EnvironmentSettings<T>
 		where T : CompositeEnvironmentSettings<T, TI>, TI, IEnvironmentSettings, new()
 	{
 		static CompositeEnvironmentSettings()

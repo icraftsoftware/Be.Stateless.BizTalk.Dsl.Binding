@@ -83,10 +83,10 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		/// application store in order to be available at runtime to the BizTalk application.
 		/// </summary>
 		/// <remarks>
-		/// Notice that the set of properties that need to be deployed in SSO is determined once and for all by the first
-		/// inheritance level of an <see cref="IEnvironmentSettings"/> inheritance chain, that is to say <typeparamref
-		/// name="T"/>, the class directly deriving from <see cref="EnvironmentSettings{T}"/>, and cannot be customized by any of
-		/// its setting overrides derivatives.
+		/// Notice that the set of properties that need to be deployed in SSO is determined by the actual concrete type that
+		/// inherits from <see cref="EnvironmentSettings{T}"/>, that is to say <typeparamref name="T"/>, and cannot be customized
+      /// by any override type provided through <see
+      /// cref="DeploymentContext.EnvironmentSettingOverridesType">DeploymentContext.EnvironmentSettingOverridesType</see>.
 		/// </remarks>
 		public Dictionary<string, string> SsoSettings => _runtimeSsoSettings ??= typeof(T).GetInterfaces().Append(typeof(T))
 			.Select(t => t.GetTypeInfo().GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public))

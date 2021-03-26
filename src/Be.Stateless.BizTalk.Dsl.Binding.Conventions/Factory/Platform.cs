@@ -57,7 +57,8 @@ namespace Be.Stateless.BizTalk.Factory
 
 		#endregion
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Property that needs to be deployed in SSO.")]
 		[SsoSetting]
-		private string TargetEnvironment => DeploymentContext.TargetEnvironment;
+		public string TargetEnvironment => DeploymentContext.TargetEnvironment;
 	}
 }

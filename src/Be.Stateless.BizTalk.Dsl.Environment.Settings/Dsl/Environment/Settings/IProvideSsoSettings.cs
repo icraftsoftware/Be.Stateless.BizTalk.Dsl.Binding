@@ -17,6 +17,8 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Install;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
@@ -27,11 +29,12 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		/// application store in order to be available at runtime to the BizTalk application.
 		/// </summary>
 		/// <remarks>
-		/// Notice that the set of properties that need to be deployed in SSO is determined once and for all by the first
-		/// inheritance level of an <see cref="IEnvironmentSettings"/> inheritance chain, that is to say <typeparamref
-		/// name="T"/>, the class directly deriving from <see cref="EnvironmentSettings{T}"/>, and cannot be customized by any of
-		/// its setting overrides derivatives.
+		/// Notice that the set of properties that need to be deployed in SSO is determined by the actual concrete type that
+		/// inherits from <see cref="EnvironmentSettings{T}"/>, that is to say <c>T</c>, and cannot be customized by any override
+		/// type provided through <see
+		/// cref="DeploymentContext.EnvironmentSettingOverridesType">DeploymentContext.EnvironmentSettingOverridesType</see>.
 		/// </remarks>
+		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
 		Dictionary<string, string> SsoSettings { get; }
 	}
 }

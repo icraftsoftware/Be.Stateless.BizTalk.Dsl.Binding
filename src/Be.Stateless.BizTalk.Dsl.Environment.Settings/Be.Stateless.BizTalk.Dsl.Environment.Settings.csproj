@@ -52,7 +52,7 @@
 
   <ItemGroup>
     <PackageReference Include="Be.Stateless.Extensions" Version="2.0.21005.38790" />
-    <PackageReference Include="Be.Stateless.Xml" Version="2.0.21071.49651" />
+    <PackageReference Include="Be.Stateless.Xml" Version="2.0.21104.42878" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -419,9 +419,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 						: (int) RedownloadInterval.TotalSeconds;
 				set
 				{
-					if (value < 0) RedownloadInterval = TimeSpan.MinValue;
-					if (value == 0) RedownloadInterval = TimeSpan.Zero;
-					RedownloadInterval = TimeSpan.FromSeconds(value);
+					RedownloadInterval = value switch {
+						< 0 => TimeSpan.MinValue,
+						0 => TimeSpan.Zero,
+						_ => TimeSpan.FromSeconds(value)
+					};
 				}
 			}
 

@@ -34,7 +34,7 @@ namespace Be.Stateless.BizTalk.Dsl
 	{
 		public static string AssemblyQualifiedName => typeof(T).AssemblyQualifiedName;
 
-		public static DocumentSpec DocumentSpec => new DocumentSpec(typeof(T).FullName, typeof(T).Assembly.FullName);
+		public static DocumentSpec DocumentSpec => new(typeof(T).FullName, typeof(T).Assembly.FullName);
 
 		public static string MessageType => SchemaMetadata.For<T>().MessageType;
 	}

@@ -31,7 +31,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		#region ILocationMessageFormat<TNamingConvention> Members
 
-		MessageFormat<TNamingConvention> ILocationMessageFormat<TNamingConvention>.FormattedAs => new MessageFormat<TNamingConvention>(_convention);
+		MessageFormat<TNamingConvention> ILocationMessageFormat<TNamingConvention>.FormattedAs => new(_convention);
 
 		#endregion
 

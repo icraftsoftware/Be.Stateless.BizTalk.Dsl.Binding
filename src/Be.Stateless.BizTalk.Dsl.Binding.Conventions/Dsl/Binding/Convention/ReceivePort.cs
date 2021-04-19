@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		protected internal ReceivePort(Action<IReceivePort<TNamingConvention>> receivePortConfigurator) : base(receivePortConfigurator) { }
 
-		protected ReceiveLocationNamingConvention<TNamingConvention> ReceiveLocationName => new ReceiveLocationNamingConvention<TNamingConvention>();
+		protected ReceiveLocationNamingConvention<TNamingConvention> ReceiveLocationName => new();
 
-		protected ReceivePortNamingConvention<TNamingConvention> ReceivePortName => new ReceivePortNamingConvention<TNamingConvention>();
+		protected ReceivePortNamingConvention<TNamingConvention> ReceivePortName => new();
 
 		protected IReceiveLocation<TNamingConvention> ReceiveLocation(Action<IReceiveLocation<TNamingConvention>> receiveLocationConfigurator)
 		{

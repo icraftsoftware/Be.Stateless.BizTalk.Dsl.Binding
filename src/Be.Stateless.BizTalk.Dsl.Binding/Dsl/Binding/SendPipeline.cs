@@ -28,7 +28,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	{
 		public static SendPipeline<T> Configure(Action<SendPipeline<T>> sendPipelineConfigurator)
 		{
-			return new SendPipeline<T>(sendPipelineConfigurator);
+			return new(sendPipelineConfigurator);
 		}
 
 		public SendPipeline()

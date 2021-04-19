@@ -62,7 +62,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ofa = new FileAdapter.Outbound(a => { });
+			var ofa = new FileAdapter.Outbound(_ => { });
 			Invoking(() => ((ISupportValidation) ofa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Outbound file adapter has no destination folder.");

@@ -30,14 +30,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationCanBeMappedToNoAction()
 		{
-			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket") }).Should().NotThrow();
+			Invoking(() => new ActionMapping { new("UpdateTicket") }).Should().NotThrow();
 		}
 
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationCanBeMappedToSomeAction()
 		{
-			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET") })
+			Invoking(() => new ActionMapping { new("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET") })
 				.Should().NotThrow();
 		}
 
@@ -45,13 +45,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationHasToMapToNonEmptyAction()
 		{
-			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", null) })
+			Invoking(() => new ActionMapping { new("UpdateTicket", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("action");
-			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "") })
+			Invoking(() => new ActionMapping { new("UpdateTicket", "") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("action");
-			Invoking(() => new ActionMapping { new ActionMappingOperation("UpdateTicket", "  ") })
+			Invoking(() => new ActionMapping { new("UpdateTicket", "  ") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("action");
 		}
@@ -60,13 +60,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationNameCannotBeEmpty()
 		{
-			Invoking(() => new ActionMapping { new ActionMappingOperation(null) })
+			Invoking(() => new ActionMapping { new(null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Invoking(() => new ActionMapping { new ActionMappingOperation("") })
+			Invoking(() => new ActionMapping { new("") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Invoking(() => new ActionMapping { new ActionMappingOperation("  ") })
+			Invoking(() => new ActionMapping { new("  ") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
 		}
@@ -75,8 +75,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		public void SerializeToXmlString()
 		{
 			var actionMapping = new ActionMapping {
-				new ActionMappingOperation("CreateTicket"),
-				new ActionMappingOperation("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
+				new("CreateTicket"),
+				new("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
 			};
 
 			((string) actionMapping).Should().Be(

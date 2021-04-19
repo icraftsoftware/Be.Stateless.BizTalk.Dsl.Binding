@@ -117,7 +117,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var receiveLocationMock = new Mock<IReceiveLocation<NamingConventionSpy>>();
 			receiveLocationMock.Setup(rl => rl.GetType()).Returns(typeof(StandaloneReceiveLocation));
 			receiveLocationMock.Setup(rl => rl.ReceivePort).Returns(receivePortMock.Object);
-			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(t => { }) });
+			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(_ => { }) });
 
 			var namingConventionMock = new Mock<NamingConventionSpy>();
 			namingConventionMock.Object.MessageName = "SomeMessage";
@@ -158,7 +158,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var sendPortMock = new Mock<ISendPort<NamingConventionSpy>>();
 			sendPortMock.Setup(sp => sp.GetType()).Returns(typeof(StandaloneSendPort));
 			sendPortMock.Setup(sp => sp.ApplicationBinding).Returns(applicationBindingMock.Object);
-			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(t => { }) });
+			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(_ => { }) });
 
 			var namingConventionMock = new Mock<NamingConventionSpy>();
 			namingConventionMock.Object.Party = "SomeParty";
@@ -235,7 +235,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var receiveLocationMock = new Mock<IReceiveLocation<NamingConventionSpy>>();
 			receiveLocationMock.Setup(rl => rl.GetType()).Returns(typeof(BankReceiveLocation));
 			receiveLocationMock.Setup(rl => rl.ReceivePort).Returns(receivePortMock.Object);
-			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(t => { }) });
+			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
@@ -258,7 +258,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var receiveLocationMock = new Mock<IReceiveLocation<NamingConventionSpy>>();
 			receiveLocationMock.Setup(rl => rl.GetType()).Returns(typeof(StandaloneReceiveLocation));
 			receiveLocationMock.Setup(rl => rl.ReceivePort).Returns(receivePortMock.Object);
-			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(t => { }) });
+			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
@@ -281,7 +281,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var receiveLocationMock = new Mock<IReceiveLocation<NamingConventionSpy>>();
 			receiveLocationMock.Setup(rl => rl.GetType()).Returns(typeof(StandaloneReceiveLocation));
 			receiveLocationMock.Setup(rl => rl.ReceivePort).Returns(receivePortMock.Object);
-			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(t => { }) });
+			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
@@ -304,7 +304,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var receiveLocationMock = new Mock<IReceiveLocation<NamingConventionSpy>>();
 			receiveLocationMock.Setup(rl => rl.GetType()).Returns(typeof(StandaloneReceiveLocation));
 			receiveLocationMock.Setup(rl => rl.ReceivePort).Returns(receivePortMock.Object);
-			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(t => { }) });
+			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = string.Empty };
 
@@ -327,7 +327,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var receiveLocationMock = new Mock<IReceiveLocation<NamingConventionSpy>>();
 			receiveLocationMock.Setup(rl => rl.GetType()).Returns(typeof(StandaloneReceiveLocation));
 			receiveLocationMock.Setup(rl => rl.ReceivePort).Returns(receivePortMock.Object);
-			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(t => { }) });
+			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
@@ -352,7 +352,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var receiveLocationMock = new Mock<IReceiveLocation<NamingConventionSpy>>();
 			receiveLocationMock.Setup(rl => rl.GetType()).Returns(typeof(BankReceiveLocation));
 			receiveLocationMock.Setup(rl => rl.ReceivePort).Returns(receivePortMock.Object);
-			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(t => { }) });
+			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
@@ -445,7 +445,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var receiveLocationMock = new Mock<IReceiveLocation<NamingConventionSpy>>();
 			receiveLocationMock.Setup(rl => rl.GetType()).Returns(typeof(StandaloneReceiveLocation));
 			receiveLocationMock.Setup(rl => rl.ReceivePort).Returns(receivePortMock.Object);
-			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(t => { }) });
+			receiveLocationMock.Setup(rl => rl.Transport).Returns(new ReceiveLocationTransport { Adapter = new FileAdapter.Inbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
@@ -540,7 +540,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var sendPortMock = new Mock<ISendPort<NamingConventionSpy>>();
 			sendPortMock.Setup(sp => sp.GetType()).Returns(typeof(BankSendPort));
 			sendPortMock.Setup(sp => sp.ApplicationBinding).Returns(applicationBindingMock.Object);
-			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(t => { }) });
+			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { Party = "SomeParty", MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
@@ -558,7 +558,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var sendPortMock = new Mock<ISendPort<NamingConventionSpy>>();
 			sendPortMock.Setup(sp => sp.GetType()).Returns(typeof(StandaloneSendPort));
 			sendPortMock.Setup(sp => sp.ApplicationBinding).Returns(applicationBindingMock.Object);
-			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(t => { }) });
+			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { Party = "SomeParty", MessageName = "SomeMessage", MessageFormat = "SomeFormat" };
 
@@ -576,7 +576,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var sendPortMock = new Mock<ISendPort<NamingConventionSpy>>();
 			sendPortMock.Setup(sp => sp.GetType()).Returns(typeof(StandaloneSendPort));
 			sendPortMock.Setup(sp => sp.ApplicationBinding).Returns(applicationBindingMock.Object);
-			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(t => { }) });
+			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(_ => { }) });
 
 			var sut = new NamingConventionSpy { Party = "SomeParty", MessageName = "SomeMessage", MessageFormat = string.Empty };
 
@@ -657,7 +657,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			var sendPortMock = new Mock<ISendPort<NamingConventionSpy>>();
 			sendPortMock.Setup(sp => sp.GetType()).Returns(typeof(StandaloneSendPort));
 			sendPortMock.Setup(sp => sp.ApplicationBinding).Returns(applicationBindingMock.Object);
-			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(t => { }) });
+			sendPortMock.Setup(sp => sp.Transport).Returns(new SendPortTransport { Adapter = new FileAdapter.Outbound(_ => { }) });
 			sendPortMock.Setup(sp => sp.IsTwoWay).Returns(true);
 
 			var sut = new NamingConventionSpy { Party = "SomeParty", MessageName = "SomeMessage", MessageFormat = "SomeFormat" };

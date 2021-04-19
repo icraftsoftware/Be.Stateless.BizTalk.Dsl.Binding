@@ -44,8 +44,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.PropagateFaultMessage = true;
 					a.SendTimeout = TimeSpan.FromMinutes(2);
 					a.StaticAction = new ActionMapping {
-						new ActionMappingOperation("CreateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/CREATE_TICKET"),
-						new ActionMappingOperation("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
+						new("CreateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/CREATE_TICKET"),
+						new("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
 					};
 					a.UserName = "Scott";
 					a.Password = "Tiger";
@@ -95,8 +95,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.OutboundBodyLocation = OutboundMessageBodySelection.UseBodyElement;
 					a.PropagateFaultMessage = true;
 					a.StaticAction = new ActionMapping {
-						new ActionMappingOperation("CreateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/CREATE_TICKET"),
-						new ActionMappingOperation("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
+						new("CreateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/CREATE_TICKET"),
+						new("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
 					};
 					a.UserName = "Scott";
 					a.Password = "Tiger";

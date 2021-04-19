@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,9 +66,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		public bool AutomaticallyAdjustForDaylightSavingTime { get; set; }
 
 		public RecurrenceType RecurrenceType => ServiceWindow switch {
-			MonthlyServiceWindow _ => RecurrenceType.Month,
-			WeeklyServiceWindow _ => RecurrenceType.Week,
-			DailyServiceWindow _ => RecurrenceType.Day,
+			MonthlyServiceWindow => RecurrenceType.Month,
+			WeeklyServiceWindow => RecurrenceType.Week,
+			DailyServiceWindow => RecurrenceType.Day,
 			_ => RecurrenceType.None
 		};
 

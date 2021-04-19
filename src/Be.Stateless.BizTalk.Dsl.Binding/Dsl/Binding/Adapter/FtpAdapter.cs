@@ -54,9 +54,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			#endregion
 
-			public static Boolean False => new Boolean("False");
+			public static Boolean False => new("False");
 
-			public static Boolean True => new Boolean("True");
+			public static Boolean True => new("True");
 
 			[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 			public Boolean()

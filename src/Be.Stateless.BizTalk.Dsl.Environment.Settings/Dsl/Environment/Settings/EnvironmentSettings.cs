@@ -85,8 +85,8 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		/// <remarks>
 		/// Notice that the set of properties that need to be deployed in SSO is determined by the actual concrete type that
 		/// inherits from <see cref="EnvironmentSettings{T}"/>, that is to say <typeparamref name="T"/>, and cannot be customized
-      /// by any override type provided through <see
-      /// cref="DeploymentContext.EnvironmentSettingOverridesType">DeploymentContext.EnvironmentSettingOverridesType</see>.
+		/// by any override type provided through <see
+		/// cref="DeploymentContext.EnvironmentSettingOverridesType">DeploymentContext.EnvironmentSettingOverridesType</see>.
 		/// </remarks>
 		public Dictionary<string, string> SsoSettings => _runtimeSsoSettings ??= typeof(T).GetInterfaces().Append(typeof(T))
 			.Select(t => t.GetTypeInfo().GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public))
@@ -95,7 +95,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 
 		#endregion
 
-		protected static Lazy<T> _lazySingletonInstance = new Lazy<T>(CreateSingletonInstance);
+		protected static Lazy<T> _lazySingletonInstance = new(CreateSingletonInstance);
 		private Dictionary<string, string> _runtimeSsoSettings;
 	}
 }

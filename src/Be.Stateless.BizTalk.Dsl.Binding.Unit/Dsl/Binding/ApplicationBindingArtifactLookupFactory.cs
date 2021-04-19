@@ -86,6 +86,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[SuppressMessage("ReSharper", "StaticMemberInGenericType")]
-		private static readonly Dictionary<string, IApplicationBindingArtifactLookup> _cache = new Dictionary<string, IApplicationBindingArtifactLookup>();
+		private static readonly Dictionary<string, IApplicationBindingArtifactLookup> _cache = new();
 	}
 }

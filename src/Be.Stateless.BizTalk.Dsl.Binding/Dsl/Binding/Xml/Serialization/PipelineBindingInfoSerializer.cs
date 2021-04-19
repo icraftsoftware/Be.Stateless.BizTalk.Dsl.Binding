@@ -71,7 +71,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 
 		#endregion
 
-		private XmlWriterSettings XmlWriterSettings => new XmlWriterSettings { Indent = false, Encoding = Encoding.UTF8, OmitXmlDeclaration = true };
+		private XmlWriterSettings XmlWriterSettings => new() { Indent = false, Encoding = Encoding.UTF8, OmitXmlDeclaration = true };
 
 		[SuppressMessage("ReSharper", "InvertIf")]
 		private void Serialize(XmlWriter writer)

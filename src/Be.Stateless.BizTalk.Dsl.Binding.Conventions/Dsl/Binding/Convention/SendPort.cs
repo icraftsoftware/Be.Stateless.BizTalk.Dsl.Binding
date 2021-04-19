@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +27,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		protected internal SendPort(Action<ISendPort<TNamingConvention>> sendPortConfigurator) : base(sendPortConfigurator) { }
 
-		protected SendPortNamingConvention<TNamingConvention> SendPortName => new SendPortNamingConvention<TNamingConvention>();
+		protected SendPortNamingConvention<TNamingConvention> SendPortName => new();
 	}
 }

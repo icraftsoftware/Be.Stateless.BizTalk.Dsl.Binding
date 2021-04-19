@@ -77,7 +77,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ifa = new FileAdapter.Inbound(a => { });
+			var ifa = new FileAdapter.Inbound(_ => { });
 			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Inbound file adapter has no source folder.");

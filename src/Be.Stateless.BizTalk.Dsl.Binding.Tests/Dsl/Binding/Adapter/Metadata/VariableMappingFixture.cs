@@ -17,7 +17,6 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.ContextProperties;
 using FluentAssertions;
 using Xunit;
@@ -28,10 +27,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 	public class VariableMappingFixture
 	{
 		[Fact]
-		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void PropertyCannotBeNull()
 		{
-			Invoking(() => new VariableMapping { new VariablePropertyMapping("id", null) })
+			Invoking(() => new VariableMapping { new("id", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("property");
 		}
@@ -40,7 +38,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		public void SerializeToXmlString()
 		{
 			var variableMapping = new VariableMapping {
-				new VariablePropertyMapping("id", BizTalkFactoryProperties.MapTypeName)
+				new("id", BizTalkFactoryProperties.MapTypeName)
 			};
 
 			((string) variableMapping).Should().Be(
@@ -50,16 +48,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		}
 
 		[Fact]
-		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void VariableNameCannotBeEmpty()
 		{
-			Invoking(() => new VariableMapping { new VariablePropertyMapping(null, null) })
+			Invoking(() => new VariableMapping { new(null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Invoking(() => new VariableMapping { new VariablePropertyMapping("", null) })
+			Invoking(() => new VariableMapping { new("", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Invoking(() => new VariableMapping { new VariablePropertyMapping("  ", null) })
+			Invoking(() => new VariableMapping { new("  ", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
 		}

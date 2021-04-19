@@ -58,11 +58,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.SuppressMessageBodyForHttpVerbs = "GET";
 					a.HttpHeaders = "Content-Type: application/json";
 					a.HttpUrlMapping = new HttpUrlMapping {
-						new HttpUrlMappingOperation("AddCustomer", "POST", "/Customer/{id}"),
-						new HttpUrlMappingOperation("DeleteCustomer", "DELETE", "/Customer/{id}")
+						new("AddCustomer", "POST", "/Customer/{id}"),
+						new("DeleteCustomer", "DELETE", "/Customer/{id}")
 					};
 					a.VariableMapping = new VariableMapping {
-						new VariablePropertyMapping("id", BizTalkFactoryProperties.MapTypeName)
+						new("id", BizTalkFactoryProperties.MapTypeName)
 					};
 
 					a.SendTimeout = TimeSpan.FromMinutes(2);
@@ -90,8 +90,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"<VariablePropertyMapping vt=\"8\">" + (
 					"&lt;BtsVariablePropertyMapping&gt;" +
 					$"&lt;Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.MapTypeName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.MapTypeName.Namespace}\" /&gt;"
-					+
-					"&lt;/BtsVariablePropertyMapping&gt;") +
+					+ "&lt;/BtsVariablePropertyMapping&gt;") +
 				"</VariablePropertyMapping>" +
 				"<EndpointBehaviorConfiguration vt=\"8\">" + (
 					"&lt;behavior name=\"EndpointBehavior\" /&gt;") +
@@ -142,11 +141,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.SuppressMessageBodyForHttpVerbs = "GET";
 					a.HttpHeaders = "Content-Type: application/json";
 					a.HttpUrlMapping = new HttpUrlMapping {
-						new HttpUrlMappingOperation("AddCustomer", "POST", "/Customer/{id}"),
-						new HttpUrlMappingOperation("DeleteCustomer", "DELETE", "/Customer/{id}")
+						new("AddCustomer", "POST", "/Customer/{id}"),
+						new("DeleteCustomer", "DELETE", "/Customer/{id}")
 					};
 					a.VariableMapping = new VariableMapping {
-						new VariablePropertyMapping("id", BizTalkFactoryProperties.MapTypeName)
+						new("id", BizTalkFactoryProperties.MapTypeName)
 					};
 
 					a.MaxReceivedMessageSize = 2048;

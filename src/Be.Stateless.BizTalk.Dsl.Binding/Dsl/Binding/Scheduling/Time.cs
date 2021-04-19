@@ -26,7 +26,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 
 		public static implicit operator Time(DateTime dateTime)
 		{
-			return new Time(dateTime);
+			return new(dateTime);
 		}
 
 		public static implicit operator DateTime(Time time)

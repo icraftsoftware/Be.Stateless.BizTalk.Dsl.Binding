@@ -46,7 +46,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[Fact]
 		public void AutomaticallyValidatesOnConfiguratorInvoking()
 		{
-			var orchestrationBindingMock = new Mock<ProcessOrchestrationBinding>((Action<IProcessOrchestrationBinding>) (o => { })) { CallBase = true };
+			var orchestrationBindingMock = new Mock<ProcessOrchestrationBinding>((Action<IProcessOrchestrationBinding>) (_ => { })) { CallBase = true };
 			var validatingOrchestrationBindingMock = orchestrationBindingMock.As<ISupportValidation>();
 			validatingOrchestrationBindingMock.Setup(o => o.Validate()).Verifiable();
 

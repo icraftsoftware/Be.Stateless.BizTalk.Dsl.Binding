@@ -97,7 +97,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			var transportMock = new Mock<TransportBase<IAdapter>> { CallBase = true };
-			transportMock.Object.Adapter = new FileAdapter.Outbound(a => { });
+			transportMock.Object.Adapter = new FileAdapter.Outbound(_ => { });
 
 			Invoking(() => ((ISupportValidation) transportMock.Object).Validate())
 				.Should().Throw<BindingException>()

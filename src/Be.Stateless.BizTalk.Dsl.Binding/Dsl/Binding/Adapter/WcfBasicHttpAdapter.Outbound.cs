@@ -107,7 +107,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public Uri StsUri
 			{
-				get => new Uri(AdapterConfig.StsUri);
+				get => new(AdapterConfig.StsUri);
 				set => AdapterConfig.StsUri = (value ?? throw new ArgumentNullException(nameof(value))).ToString();
 			}
 

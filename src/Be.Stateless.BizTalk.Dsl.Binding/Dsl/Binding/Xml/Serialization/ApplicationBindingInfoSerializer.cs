@@ -63,7 +63,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 
 		#endregion
 
-		private XmlWriterSettings XmlWriterSettings => new XmlWriterSettings { Indent = true, Encoding = Encoding.UTF8, OmitXmlDeclaration = true };
+		private XmlWriterSettings XmlWriterSettings => new() { Indent = true, Encoding = Encoding.UTF8, OmitXmlDeclaration = true };
 
 		private void Serialize(XmlWriter xmlWriter)
 		{

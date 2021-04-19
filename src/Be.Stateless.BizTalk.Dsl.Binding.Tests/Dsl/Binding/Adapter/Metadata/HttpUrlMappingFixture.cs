@@ -31,13 +31,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void MethodCannotBeEmpty()
 		{
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", null, null) })
+			Invoking(() => new HttpUrlMapping { new("AddCustomer", null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("method");
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", "", null) })
+			Invoking(() => new HttpUrlMapping { new("AddCustomer", "", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("method");
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", "  ", null) })
+			Invoking(() => new HttpUrlMapping { new("AddCustomer", "  ", null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("method");
 		}
@@ -46,13 +46,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void OperationNameCannotBeEmpty()
 		{
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation(null, null, null) })
+			Invoking(() => new HttpUrlMapping { new(null, null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("", null, null) })
+			Invoking(() => new HttpUrlMapping { new("", null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("  ", null, null) })
+			Invoking(() => new HttpUrlMapping { new("  ", null, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("name");
 		}
@@ -61,8 +61,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		public void SerializeToXmlString()
 		{
 			var httpUrlMapping = new HttpUrlMapping {
-				new HttpUrlMappingOperation("AddCustomer", HttpMethod.Post.Method, "/Customer/{id}"),
-				new HttpUrlMappingOperation("DeleteCustomer", HttpMethod.Delete.Method, "/Customer/{id}")
+				new("AddCustomer", HttpMethod.Post.Method, "/Customer/{id}"),
+				new("DeleteCustomer", HttpMethod.Delete.Method, "/Customer/{id}")
 			};
 
 			((string) httpUrlMapping).Should().Be(
@@ -76,13 +76,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void UrlCannotBeEmpty()
 		{
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, null) })
+			Invoking(() => new HttpUrlMapping { new("AddCustomer", HttpMethod.Delete.Method, null) })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("url");
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, "") })
+			Invoking(() => new HttpUrlMapping { new("AddCustomer", HttpMethod.Delete.Method, "") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("url");
-			Invoking(() => new HttpUrlMapping { new HttpUrlMappingOperation("AddCustomer", HttpMethod.Delete.Method, "  ") })
+			Invoking(() => new HttpUrlMapping { new("AddCustomer", HttpMethod.Delete.Method, "  ") })
 				.Should().Throw<ArgumentNullException>()
 				.Which.ParamName.Should().Be("url");
 		}

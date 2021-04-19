@@ -51,11 +51,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.AddMessageBodyForHttpVerbs = "GET,HEAD";
 					a.HttpHeaders = "Content-Type: application/json\r\nReferer: http://www.my.org/";
 					a.HttpUrlMapping = new HttpUrlMapping {
-						new HttpUrlMappingOperation("AddCustomer", "POST", "/Customer/{id}"),
-						new HttpUrlMappingOperation("DeleteCustomer", "DELETE", "/Customer/{id}")
+						new("AddCustomer", "POST", "/Customer/{id}"),
+						new("DeleteCustomer", "DELETE", "/Customer/{id}")
 					};
 					a.VariableMapping = new VariableMapping {
-						new VariablePropertyMapping("id", BizTalkFactoryProperties.MapTypeName)
+						new("id", BizTalkFactoryProperties.MapTypeName)
 					};
 
 					a.MaxConcurrentCalls = 400;
@@ -81,8 +81,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"<VariablePropertyMapping vt=\"8\">" + (
 					"&lt;BtsVariablePropertyMapping&gt;" +
 					$"&lt;Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.MapTypeName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.MapTypeName.Namespace}\" /&gt;"
-					+
-					"&lt;/BtsVariablePropertyMapping&gt;") +
+					+ "&lt;/BtsVariablePropertyMapping&gt;") +
 				"</VariablePropertyMapping>" +
 				"<AddMessageBodyForHttpVerbs vt=\"8\">" + (
 					"GET,HEAD") +
@@ -130,11 +129,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.AddMessageBodyForHttpVerbs = "GET,HEAD";
 					a.HttpHeaders = "Content-Type: application/json\r\nReferer: http://www.my.org/";
 					a.HttpUrlMapping = new HttpUrlMapping {
-						new HttpUrlMappingOperation("AddCustomer", "POST", "/Customer/{id}"),
-						new HttpUrlMappingOperation("DeleteCustomer", "DELETE", "/Customer/{id}")
+						new("AddCustomer", "POST", "/Customer/{id}"),
+						new("DeleteCustomer", "DELETE", "/Customer/{id}")
 					};
 					a.VariableMapping = new VariableMapping {
-						new VariablePropertyMapping("id", BizTalkFactoryProperties.MapTypeName)
+						new("id", BizTalkFactoryProperties.MapTypeName)
 					};
 
 					a.MaxConcurrentCalls = 400;

@@ -56,6 +56,14 @@ namespace Be.Stateless.BizTalk.Install.Command
 			return cmd;
 		}
 
+		public static IApplicationHostEnumerationCommand CreateApplicationHostEnumerationCommand(Type applicationBindingType)
+		{
+			applicationBindingType.ValidateApplicationBindingType();
+			var cmdType = typeof(ApplicationHostEnumerationCommand<>).MakeGenericType(applicationBindingType);
+			var cmd = (IApplicationHostEnumerationCommand) Activator.CreateInstance(cmdType);
+			return cmd;
+		}
+
 		public static IApplicationBindingCommand CreateApplicationStateInitializationCommand(Type applicationBindingType)
 		{
 			applicationBindingType.ValidateApplicationBindingType();

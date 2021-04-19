@@ -57,6 +57,14 @@ namespace Be.Stateless.BizTalk.Install.Command
 		}
 
 		[Fact]
+		public void CreateApplicationHostEnumerationCommand()
+		{
+			ApplicationBindingCommandFactory.CreateApplicationHostEnumerationCommand(typeof(UnnamedApplication))
+				.Should().NotBeNull()
+				.And.BeAssignableTo<ApplicationHostEnumerationCommand<UnnamedApplication>>();
+		}
+
+		[Fact]
 		public void CreateApplicationStateInitializationCommand()
 		{
 			ApplicationBindingCommandFactory.CreateApplicationStateInitializationCommand(typeof(UnnamedApplication))

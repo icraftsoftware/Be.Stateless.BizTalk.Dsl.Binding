@@ -123,10 +123,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// also be in UTC.
 			/// </remarks>
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
-			public DateTime DefaultScheduledEnqueueTimeUtc
+			public DateTime? DefaultScheduledEnqueueTimeUtc
 			{
 				get => AdapterConfig.DefaultScheduledEnqueueTimeUtc;
-				set => AdapterConfig.DefaultScheduledEnqueueTimeUtc = value;
+				set
+				{
+					if (value.HasValue) AdapterConfig.DefaultScheduledEnqueueTimeUtc = value;
+				}
 			}
 
 			/// <summary>

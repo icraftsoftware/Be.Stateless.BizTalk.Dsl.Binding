@@ -78,6 +78,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					"<RedownloadInterval vt=\"3\">0</RedownloadInterval>" +
 					"<ConnectionLimit vt=\"3\">6</ConnectionLimit>" +
 					"<MaxConnectionReuseTimeInSeconds vt=\"3\">0</MaxConnectionReuseTimeInSeconds>" +
+					"<ErrorThreshold vt=\"3\">0</ErrorThreshold>" +
 					"<ProxyPassword vt=\"8\">p@ssw0rd</ProxyPassword>" +
 					"<ProxyUserName vt=\"8\">proxy-user</ProxyUserName>" +
 					"<ProxyType vt=\"8\">SOCKS4</ProxyType>" +

@@ -35,25 +35,25 @@ namespace Be.Stateless.BizTalk.Factory
 
 		#region IPlatformEnvironmentSettings Members
 
-		public string IsolatedHost => "BizTalkServerIsolatedHost";
+		public string IsolatedHost => GetOverriddenOrDefaultValue("BizTalkServerIsolatedHost");
 
-		public string ManagementDatabaseInstance => string.Empty;
+		public string ManagementDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
 
-		public string ManagementDatabaseServer => "localhost";
+		public string ManagementDatabaseServer => GetOverriddenOrDefaultValue("localhost");
 
-		public string MonitoringDatabaseInstance => string.Empty;
+		public string MonitoringDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
 
-		public string MonitoringDatabaseServer => "localhost";
+		public string MonitoringDatabaseServer => GetOverriddenOrDefaultValue("localhost");
 
-		public string ProcessingDatabaseInstance => string.Empty;
+		public string ProcessingDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
 
-		public string ProcessingDatabaseServer => "localhost";
+		public string ProcessingDatabaseServer => GetOverriddenOrDefaultValue("localhost");
 
-		public string ProcessingHost => "BizTalkServerApplication";
+		public string ProcessingHost => GetOverriddenOrDefaultValue("BizTalkServerApplication");
 
-		public string ReceivingHost => "BizTalkServerApplication";
+		public string ReceivingHost => GetOverriddenOrDefaultValue("BizTalkServerApplication");
 
-		public string TransmittingHost => "BizTalkServerApplication";
+		public string TransmittingHost => GetOverriddenOrDefaultValue("BizTalkServerApplication");
 
 		#endregion
 

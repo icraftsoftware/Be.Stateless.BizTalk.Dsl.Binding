@@ -60,6 +60,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"<CustomBrokeredPropertyNamespace vt=\"8\">urn:schemas.stateless.be:biztalk:service-bus:queue</CustomBrokeredPropertyNamespace>" +
 				"<UseAcsAuthentication vt=\"11\">-1</UseAcsAuthentication>" +
 				"<UseSasAuthentication vt=\"11\">0</UseSasAuthentication>" +
+				"<OrderedProcessing vt=\"11\">0</OrderedProcessing>" +
 				"<OpenTimeout vt=\"8\">00:01:00</OpenTimeout>" +
 				"<SendTimeout vt=\"8\">00:00:00</SendTimeout>" +
 				"<CloseTimeout vt=\"8\">00:01:00</CloseTimeout>" +

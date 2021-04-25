@@ -30,14 +30,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.21007.39752" />
+    <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.21115.28670" />
     <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.21105.29865" />
     <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21073.36728" />
-    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.0">
+    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BizTalk.Server.2020.Runtime.Adapters" Version="1.0.1">
+    <PackageReference Include="BizTalk.Server.2020.Runtime.Adapters" Version="1.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -61,7 +61,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"<CustomBrokeredPropertyNamespace vt=\"8\">urn:schemas.stateless.be:biztalk:service-bus:queue</CustomBrokeredPropertyNamespace>" +
 				"<DefaultCorrelationId vt=\"8\">correlation_id</DefaultCorrelationId>" +
 				$"<DefaultScheduledEnqueueTimeUtc vt=\"7\">{defaultScheduledEnqueueTimeUtc.ToString("G", DateTimeFormatInfo.InvariantInfo)}</DefaultScheduledEnqueueTimeUtc>" +
-				$"<DefaultTimeToLive vt=\"8\">{TimeSpan.MaxValue}</DefaultTimeToLive>" +
+				$"<DefaultTimeToLive vt=\"8\">{TimeSpan.Zero}</DefaultTimeToLive>" +
 				"<DefaultPartitionKey vt=\"8\">partition</DefaultPartitionKey>" +
 				"<UseAcsAuthentication vt=\"11\">-1</UseAcsAuthentication>" +
 				"<UseSasAuthentication vt=\"11\">0</UseSasAuthentication>" +

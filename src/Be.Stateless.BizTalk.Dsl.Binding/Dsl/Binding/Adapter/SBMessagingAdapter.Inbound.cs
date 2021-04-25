@@ -114,6 +114,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				set => AdapterConfig.IsSessionful = value;
 			}
 
+			/// <summary>
+			/// Whether to preserve message ordering within each session when processing messages.
+			/// </summary>
+			public bool OrderedProcessing
+			{
+				get => AdapterConfig.OrderedProcessing;
+				set
+				{
+					AdapterConfig.OrderedProcessing = value;
+					if (value) IsSessionful = true;
+				}
+			}
+
 			#endregion
 
 			#region Properties Tab

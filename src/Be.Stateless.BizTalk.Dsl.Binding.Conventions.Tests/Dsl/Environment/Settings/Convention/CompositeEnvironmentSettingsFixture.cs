@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Xunit;
@@ -31,36 +32,22 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 		#region Nested Type: AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClass
 
 		[Collection("DeploymentContext")]
-		public class AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClass : IDisposable
+		public class AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClass
 		{
-			#region Setup/Teardown
-
-			public AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClass()
-			{
-				DeploymentContext.TargetEnvironment = "ANYWHERE";
-			}
-
-			public void Dispose()
-			{
-				DeploymentContext.EnvironmentSettingOverridesType = null;
-				DeploymentContext.TargetEnvironment = null;
-			}
-
-			#endregion
-
 			[Fact]
 			public void SingletonCanBeConstructedAndCanBeAccessed()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					// construction
+					Invoking(() => CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings).Should().NotThrow();
 
-				// construction
-				Invoking(() => CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings).Should().NotThrow();
-
-				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
-				// access
-				CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.Should().BeSameAs(FooApp.Settings);
-				CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.ApplicationName.Should().Be(nameof(FooApp));
-				CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
+					FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
+					// access
+					CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.Should().BeSameAs(FooApp.Settings);
+					CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.ApplicationName.Should().Be(nameof(FooApp));
+					CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
+				}
 			}
 
 			[SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -131,36 +118,22 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
 
 		[Collection("DeploymentContext")]
-		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass : IDisposable
+		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
 		{
-			#region Setup/Teardown
-
-			public AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass()
-			{
-				DeploymentContext.TargetEnvironment = "ANYWHERE";
-			}
-
-			public void Dispose()
-			{
-				DeploymentContext.EnvironmentSettingOverridesType = null;
-				DeploymentContext.TargetEnvironment = null;
-			}
-
-			#endregion
-
 			[Fact]
 			public void SingletonCannotBeConstructedButCanBeAccessed()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					// construction
+					Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().Throw<InvalidCastException>();
 
-				// construction
-				Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().Throw<InvalidCastException>();
-
-				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
-				// access
-				EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
-				EnvironmentSettings<FooApp>.Settings.ApplicationName.Should().Be(nameof(FooApp));
-				EnvironmentSettings<FooApp>.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
+					FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
+					// access
+					EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
+					EnvironmentSettings<FooApp>.Settings.ApplicationName.Should().Be(nameof(FooApp));
+					EnvironmentSettings<FooApp>.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
+				}
 			}
 
 			[SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -231,38 +204,28 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 		#region Nested Type: WithoutEnvironmentSettingOverrides
 
 		[Collection("DeploymentContext")]
-		public class WithoutEnvironmentSettingOverrides : IDisposable
+		public class WithoutEnvironmentSettingOverrides
 		{
-			#region Setup/Teardown
-
-			public WithoutEnvironmentSettingOverrides()
-			{
-				DeploymentContext.TargetEnvironment = "ANYWHERE";
-			}
-
-			public void Dispose()
-			{
-				DeploymentContext.TargetEnvironment = null;
-			}
-
-			#endregion
-
 			[Fact]
 			public void SettingsReturnDefaultValues()
 			{
-				FooApp.Settings.Should().BeAssignableTo<IEnvironmentSettings>();
-				FooApp.Settings.Should().BeAssignableTo<IPlatformEnvironmentSettings>();
-				FooApp.Settings.Should().BeOfType<FooApp>();
-				FooApp.Settings.ReceivingHost.Should().Be("ReceivingHost");
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE"))
+				{
+					FooApp.Settings.Should().BeAssignableTo<IEnvironmentSettings>();
+					FooApp.Settings.Should().BeAssignableTo<IPlatformEnvironmentSettings>();
+					FooApp.Settings.Should().BeOfType<FooApp>();
+					FooApp.Settings.ReceivingHost.Should().Be("ReceivingHost");
+				}
 			}
 
 			[Fact]
 			public void SsoSettingsReturnDefaultValues()
 			{
-				FooApp.Settings.SsoSettings.Should().BeEquivalentTo(
-					new Dictionary<string, string> {
-						{ nameof(FooApp.TargetEnvironment), DeploymentContext.TargetEnvironment }
-					});
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE"))
+					FooApp.Settings.SsoSettings.Should().BeEquivalentTo(
+						new Dictionary<string, string> {
+							{ nameof(FooApp.TargetEnvironment), DeploymentContext.TargetEnvironment }
+						});
 			}
 
 			private class FooApp : CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>, IPlatformEnvironmentSettings, IEnvironmentSettings
@@ -307,52 +270,39 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 		#region Nested Type: WithRelatedEnvironmentSettingOverrides
 
 		[Collection("DeploymentContext")]
-		public class WithRelatedEnvironmentSettingOverrides : IDisposable
+		public class WithRelatedEnvironmentSettingOverrides
 		{
-			#region Setup/Teardown
-
-			public WithRelatedEnvironmentSettingOverrides()
-			{
-				DeploymentContext.TargetEnvironment = "ANYWHERE";
-			}
-
-			public void Dispose()
-			{
-				DeploymentContext.EnvironmentSettingOverridesType = null;
-				DeploymentContext.TargetEnvironment = null;
-			}
-
-			#endregion
-
 			[Fact]
 			public void SettingsReturnOverriddenValues()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
-
-				FooApp.Settings.Should().BeAssignableTo<IEnvironmentSettings>();
-				FooApp.Settings.Should().BeAssignableTo<IPlatformEnvironmentSettings>();
-				FooApp.Settings.Should().BeOfType<FooApp>();
-				FooApp.Settings.Should().NotBeOfType<FooAppOverrides>();
-				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
-				FooApp.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
-				// overriden even though not part of IPlatformEnvironmentSettings interface
-				FooApp.Settings.CheckInFolder.Should().Be(@"c:\claim\store\in\overridden");
-				FooApp.Settings.SsoProperty.Should().Be("SsoPropertyOverride");
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					FooApp.Settings.Should().BeAssignableTo<IEnvironmentSettings>();
+					FooApp.Settings.Should().BeAssignableTo<IPlatformEnvironmentSettings>();
+					FooApp.Settings.Should().BeOfType<FooApp>();
+					FooApp.Settings.Should().NotBeOfType<FooAppOverrides>();
+					FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
+					FooApp.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
+					// overriden even though not part of IPlatformEnvironmentSettings interface
+					FooApp.Settings.CheckInFolder.Should().Be(@"c:\claim\store\in\overridden");
+					FooApp.Settings.SsoProperty.Should().Be("SsoPropertyOverride");
+				}
 			}
 
 			[Fact]
 			public void SsoSettingsReturnOverriddenValues()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
-
-				FooApp.Settings.SsoSettings
-					.Should().BeEquivalentTo(
-						new Dictionary<string, string> {
-							{ nameof(FooApp.CheckInFolder), @"c:\claim\store\in\overridden" },
-							{ nameof(FooApp.CheckOutFolder), @"c:\claim\store\out\overridden" },
-							{ nameof(FooApp.SsoProperty), "SsoPropertyOverride" },
-							{ nameof(FooApp.TargetEnvironment), DeploymentContext.TargetEnvironment }
-						});
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					FooApp.Settings.SsoSettings
+						.Should().BeEquivalentTo(
+							new Dictionary<string, string> {
+								{ nameof(FooApp.CheckInFolder), @"c:\claim\store\in\overridden" },
+								{ nameof(FooApp.CheckOutFolder), @"c:\claim\store\out\overridden" },
+								{ nameof(FooApp.SsoProperty), "SsoPropertyOverride" },
+								{ nameof(FooApp.TargetEnvironment), DeploymentContext.TargetEnvironment }
+							});
+				}
 			}
 
 			[SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -452,29 +402,15 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 		#region Nested Type: WithUnrelatedEnvironmentSettingOverrides
 
 		[Collection("DeploymentContext")]
-		public class WithUnrelatedEnvironmentSettingOverrides : IDisposable
+		public class WithUnrelatedEnvironmentSettingOverrides
 		{
-			#region Setup/Teardown
-
-			public WithUnrelatedEnvironmentSettingOverrides()
-			{
-				DeploymentContext.TargetEnvironment = "ANYWHERE";
-			}
-
-			public void Dispose()
-			{
-				DeploymentContext.EnvironmentSettingOverridesType = null;
-				DeploymentContext.TargetEnvironment = null;
-			}
-
-			#endregion
-
 			[Fact]
 			public void SettingsThrows()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
-
-				Invoking(() => FooApp.Settings.ApplicationName).Should().Throw<InvalidCastException>();
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					Invoking(() => FooApp.Settings.ApplicationName).Should().Throw<InvalidCastException>();
+				}
 			}
 
 			[SuppressMessage("ReSharper", "UnusedMember.Global")]

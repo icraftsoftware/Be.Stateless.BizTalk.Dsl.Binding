@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Install;
+using Be.Stateless.BizTalk.Dsl.Binding;
 using FluentAssertions;
 using Xunit;
 using static FluentAssertions.FluentActions;
@@ -31,36 +31,22 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
 
 		[Collection("DeploymentContext")]
-		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass : IDisposable
+		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
 		{
-			#region Setup/Teardown
-
-			public AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass()
-			{
-				DeploymentContext.TargetEnvironment = "ANYWHERE";
-			}
-
-			public void Dispose()
-			{
-				DeploymentContext.EnvironmentSettingOverridesType = null;
-				DeploymentContext.TargetEnvironment = null;
-			}
-
-			#endregion
-
 			[Fact]
 			public void SingletonCanBeConstructedAndCanBeAccessed()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					// construction
+					Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().NotThrow();
 
-				// construction
-				Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().NotThrow();
-
-				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
-				// access
-				EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
-				EnvironmentSettings<FooApp>.Settings.ApplicationName.Should().Be(nameof(FooApp));
-				EnvironmentSettings<FooApp>.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
+					FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
+					// access
+					EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
+					EnvironmentSettings<FooApp>.Settings.ApplicationName.Should().Be(nameof(FooApp));
+					EnvironmentSettings<FooApp>.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
+				}
 			}
 
 			private class FooApp : EnvironmentSettings<FooApp>, IEnvironmentSettings
@@ -182,47 +168,41 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		#region Nested Type: WithRelatedEnvironmentSettingOverrides
 
 		[Collection("DeploymentContext")]
-		public class WithRelatedEnvironmentSettingOverrides : IDisposable
+		public class WithRelatedEnvironmentSettingOverrides
 		{
-			#region Setup/Teardown
-
-			public void Dispose()
-			{
-				DeploymentContext.EnvironmentSettingOverridesType = null;
-			}
-
-			#endregion
-
 			[Fact]
 			public void EnvironmentSettingOverridesCanBeItself()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(BarApp);
-
-				Invoking(() => BarApp.Settings).Should().NotThrow();
-				BarApp.Settings.ApplicationName.Should().Be(nameof(BarApp));
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(BarApp)))
+				{
+					Invoking(() => BarApp.Settings).Should().NotThrow();
+					BarApp.Settings.ApplicationName.Should().Be(nameof(BarApp));
+				}
 			}
 
 			[Fact]
 			public void SettingsReturnsDerivedAppSettingInstanceAndValuesAreOverridden()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
-
-				FooApp.Settings.Should().BeOfType<FooAppOverrides>();
-				FooApp.Settings.Should().NotBeOfType<FooApp>();
-				FooAppOverrides.Settings.Should().BeSameAs(FooApp.Settings);
-				FooApp.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
-				FooAppOverrides.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					FooApp.Settings.Should().BeOfType<FooAppOverrides>();
+					FooApp.Settings.Should().NotBeOfType<FooApp>();
+					FooAppOverrides.Settings.Should().BeSameAs(FooApp.Settings);
+					FooApp.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
+					FooAppOverrides.Settings.ReceivingHost.Should().Be("Overridden Receive Host");
+				}
 			}
 
 			[Fact]
 			public void SsoSettings()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(FooAppOverrides);
-
-				FooApp.Settings.SsoSettings
-					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\overridden" } });
-				FooAppOverrides.Settings.SsoSettings
-					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\overridden" } });
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					FooApp.Settings.SsoSettings
+						.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\overridden" } });
+					FooAppOverrides.Settings.SsoSettings
+						.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\overridden" } });
+				}
 			}
 
 			private class BarApp : EnvironmentSettings<BarApp>, IEnvironmentSettings
@@ -277,23 +257,15 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		#region Nested Type: WithUnrelatedEnvironmentSettingOverrides
 
 		[Collection("DeploymentContext")]
-		public class WithUnrelatedEnvironmentSettingOverrides : IDisposable
+		public class WithUnrelatedEnvironmentSettingOverrides
 		{
-			#region Setup/Teardown
-
-			public void Dispose()
-			{
-				DeploymentContext.EnvironmentSettingOverridesType = null;
-			}
-
-			#endregion
-
 			[Fact]
 			public void EnvironmentSettingOverridesThrow()
 			{
-				DeploymentContext.EnvironmentSettingOverridesType = typeof(BarApp);
-
-				Invoking(() => FooApp.Settings).Should().Throw<InvalidCastException>();
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(BarApp)))
+				{
+					Invoking(() => FooApp.Settings).Should().Throw<InvalidCastException>();
+				}
 			}
 
 			private class BarApp : EnvironmentSettings<BarApp>, IEnvironmentSettings

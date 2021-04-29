@@ -17,11 +17,13 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 
 namespace Be.Stateless.BizTalk.Install
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 	public static class EnvironmentDependentValue
 	{
 		public static EnvironmentDependentValue<T> ForAcceptance<T>(T value, [CallerMemberName] string settingName = null!)

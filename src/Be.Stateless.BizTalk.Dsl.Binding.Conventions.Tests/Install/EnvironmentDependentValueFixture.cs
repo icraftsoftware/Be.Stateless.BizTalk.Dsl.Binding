@@ -41,6 +41,7 @@ namespace Be.Stateless.BizTalk.Install
 					.Should().Throw<NotSupportedException>()
 					.WithMessage($"'{nameof(Setting5)}' does not provide a value for target environment '{TargetEnvironment.ACCEPTANCE}'.");
 				Setting6.Should().Be(3);
+				Setting7.Should().Be(3);
 			}
 		}
 
@@ -60,6 +61,7 @@ namespace Be.Stateless.BizTalk.Install
 					.WithMessage($"'{nameof(Setting4)}' does not provide a value for target environment '{TargetEnvironment.BUILD}'.");
 				Invoking(() => Setting5).Should().NotThrow().And.Subject().Should().Be(0);
 				Setting6.Should().Be(2);
+				Setting7.Should().Be(2);
 			}
 		}
 
@@ -77,6 +79,7 @@ namespace Be.Stateless.BizTalk.Install
 					.WithMessage($"'{nameof(Setting4)}' does not provide a value for target environment '{TargetEnvironment.DEVELOPMENT}'.");
 				Invoking(() => Setting5).Should().NotThrow().And.Subject().Should().Be(0);
 				Setting6.Should().Be(1);
+				Setting7.Should().Be(1);
 			}
 		}
 
@@ -94,6 +97,7 @@ namespace Be.Stateless.BizTalk.Install
 					.Should().Throw<NotSupportedException>()
 					.WithMessage($"'{nameof(Setting5)}' does not provide a value for target environment '{TargetEnvironment.PREPRODUCTION}'.");
 				Setting6.Should().Be(4);
+				Setting7.Should().Be(4);
 			}
 		}
 
@@ -111,6 +115,7 @@ namespace Be.Stateless.BizTalk.Install
 					.Should().Throw<NotSupportedException>()
 					.WithMessage($"'{nameof(Setting5)}' does not provide a value for target environment '{TargetEnvironment.PRODUCTION}'.");
 				Setting6.Should().Be(4);
+				Setting7.Should().Be(4);
 			}
 		}
 
@@ -141,10 +146,18 @@ namespace Be.Stateless.BizTalk.Install
 			.ForDevelopmentOrBuild(0);
 
 		private int Setting6 => DeploymentContext.TargetEnvironment switch {
-			{ } e when e.IsDevelopment() => 1,
-			{ } e when e.IsBuild() => 2,
-			{ } e when e.IsAcceptance() => 3,
-			{ } e when e.IsPreProductionOrProduction() => 4,
+			var e when e.IsDevelopment() => 1,
+			var e when e.IsBuild() => 2,
+			var e when e.IsAcceptance() => 3,
+			var e when e.IsPreProductionOrProduction() => 4,
+			_ => throw new NotSupportedException()
+		};
+
+		private int Setting7 => DeploymentContext.TargetEnvironment switch {
+			TargetEnvironment.DEVELOPMENT => 1,
+			TargetEnvironment.BUILD => 2,
+			TargetEnvironment.ACCEPTANCE => 3,
+			TargetEnvironment.PREPRODUCTION or TargetEnvironment.PRODUCTION => 4,
 			_ => throw new NotSupportedException()
 		};
 	}

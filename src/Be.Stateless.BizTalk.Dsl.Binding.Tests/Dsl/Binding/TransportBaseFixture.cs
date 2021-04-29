@@ -17,6 +17,7 @@
 #endregion
 
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Moq;
@@ -37,9 +38,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var environmentSensitiveAdapterMock = adapterMock.As<ISupportEnvironmentOverride>();
 
 			transportMock.Object.Adapter = adapterMock.Object;
-			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides("ACC");
+			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
 		[Fact]
@@ -75,9 +76,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var transportMock = new Mock<TransportBase<IAdapter>> { CallBase = true };
 			var environmentSensitiveTransportMock = transportMock.As<ISupportEnvironmentOverride>();
 
-			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides("ACC");
+			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			transportMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			transportMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]

@@ -264,7 +264,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		[Fact]
 		public void EqualToStringMember()
 		{
-			var environmentTag = new ImplicitlyStringUnderlainEnvironmentTag("ACC");
+			var environmentTag = new ImplicitlyStringUnderlainEnvironmentTag(TargetEnvironment.ACCEPTANCE);
 
 			var filter = new Filter(() => BizTalkFactoryProperties.OutboundTransportLocation == environmentTag.Value);
 

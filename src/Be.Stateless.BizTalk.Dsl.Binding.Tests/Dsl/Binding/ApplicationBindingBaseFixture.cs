@@ -80,9 +80,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var applicationBindingMock = new Mock<ApplicationBindingBase<string>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) applicationBindingMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) applicationBindingMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			applicationBindingMock.Protected().Verify(nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides), Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			applicationBindingMock.Protected().Verify(
+				nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides),
+				Times.Once(),
+				ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]

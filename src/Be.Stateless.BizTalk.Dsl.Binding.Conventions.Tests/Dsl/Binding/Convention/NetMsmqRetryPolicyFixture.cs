@@ -30,7 +30,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		public void CanSerializeToXml()
 		{
 			var binding = new NetMsmqBindingElement { RetryPolicy = NetMsmqRetryPolicy.LongRunning };
-			binding.ApplyEnvironmentOverrides("ACC");
+			binding.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
 			binding.GetBindingElementXml("netMsmqBinding")
 				.Should().Be("<binding name=\"netMsmqBinding\" maxRetryCycles=\"3\" receiveRetryCount=\"3\" retryCycleDelay=\"00:09:00\" timeToLive=\"00:30:00\" />");

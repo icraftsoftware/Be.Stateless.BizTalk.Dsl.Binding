@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Be.Stateless.BizTalk.Dsl.Binding;
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Environment.Settings;
 using FluentAssertions;
 using Xunit;
@@ -33,10 +34,10 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void FailsWhenTargetEnvironmentValuesAreDefinedMultipleTimes()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV"))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
-				sut._targetEnvironments[0] = "DEV";
+				sut._targetEnvironments[0] = TargetEnvironment.DEVELOPMENT;
 				Invoking(() => sut.BamArchiveWindowTimeLength)
 					.Should().Throw<InvalidOperationException>()
 					.WithMessage("'DEV' target environment has been declared multiple times in the 'BizTalk.Factory.Settings' file.");
@@ -46,7 +47,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ReferenceTypeValueForTargetEnvironmentThrowsWhenValueIsNull()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV", excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT, excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				Invoking(() => sut.UninitializedReferenceTypeSetting)
@@ -58,7 +59,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ReferenceTypeValueForTargetEnvironmentWhoseOverrideIsNotFoundFallsBackToEmbeddedValue()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV", excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT, excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				sut.UnoverriddenReferenceTypeSetting.Should().Be("unoverridden");
@@ -68,7 +69,9 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ReferenceTypeValueForTargetEnvironmentWithNotFoundSettingOverridesFileFallsBackToEmbeddedValue()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV", excelSettingOverridesFolderPath: Path.Combine(ExcelSettingOverridesFolderPath, "dummy")))
+			using (new DeploymentContextInjectionScope(
+				targetEnvironment: TargetEnvironment.DEVELOPMENT,
+				excelSettingOverridesFolderPath: Path.Combine(ExcelSettingOverridesFolderPath, "dummy")))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				sut.ClaimStoreCheckInDirectory.Should().Be("C:\\Files\\CheckIn");
@@ -78,7 +81,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ReferenceTypeValueForTargetEnvironmentWithoutOverrideReturnsEmbeddedValue()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV"))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				sut.ClaimStoreCheckInDirectory.Should().Be("C:\\Files\\CheckIn");
@@ -88,7 +91,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ReferenceTypeValueForTargetEnvironmentWithOverrideReturnsOverride()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV", excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT, excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				sut.ClaimStoreCheckInDirectory.Should().Be("C:\\Files\\Drops\\BizTalk.Factory\\CheckIn");
@@ -98,7 +101,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ValueTypeValueForTargetEnvironmentThrowsWhenValueIsNull()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV", excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT, excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				Invoking(() => sut.UninitializedValueTypeSetting)
@@ -110,7 +113,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ValueTypeValueForTargetEnvironmentWhoseOverrideIsNotFoundFallsBackToEmbeddedValue()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV", excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT, excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				sut.UnoverriddenValueTypeSetting.Should().Be(-1);
@@ -120,7 +123,9 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ValueTypeValueForTargetEnvironmentWithNotFoundSettingOverridesFileFallsBackToEmbeddedValue()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV", excelSettingOverridesFolderPath: Path.Combine(ExcelSettingOverridesFolderPath, "dummy")))
+			using (new DeploymentContextInjectionScope(
+				targetEnvironment: TargetEnvironment.DEVELOPMENT,
+				excelSettingOverridesFolderPath: Path.Combine(ExcelSettingOverridesFolderPath, "dummy")))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				sut.BamArchiveWindowTimeLength.Should().Be(1);
@@ -130,7 +135,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ValueTypeValueForTargetEnvironmentWithoutOverrideReturnsEmbeddedValue()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV"))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				sut.BamArchiveWindowTimeLength.Should().Be(1);
@@ -140,7 +145,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Fact]
 		public void ValueTypeValueForTargetEnvironmentWithOverrideReturnsOverride()
 		{
-			using (new DeploymentContextInjectionScope(targetEnvironment: "DEV", excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT, excelSettingOverridesFolderPath: ExcelSettingOverridesFolderPath))
 			{
 				var sut = new DummyExcelEnvironmentSettings();
 				sut.BamArchiveWindowTimeLength.Should().Be(30);

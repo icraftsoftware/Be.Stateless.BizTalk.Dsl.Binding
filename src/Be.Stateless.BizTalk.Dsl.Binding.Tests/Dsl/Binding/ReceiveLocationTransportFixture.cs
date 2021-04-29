@@ -16,6 +16,7 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using FluentAssertions;
 using Moq;
@@ -42,9 +43,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var environmentSensitiveScheduleMock = scheduleMock.As<ISupportEnvironmentOverride>();
 
 			var rlt = new ReceiveLocationTransport { Schedule = scheduleMock.Object };
-			((ISupportEnvironmentOverride) rlt).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) rlt).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveScheduleMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveScheduleMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 	}
 }

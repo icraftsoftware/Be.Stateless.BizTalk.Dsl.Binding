@@ -19,6 +19,7 @@
 using System;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.CodeDom;
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Orchestrations.Bound;
@@ -69,9 +70,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var orchestrationBindingMock = new Mock<OrchestrationBindingBase<Process>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) orchestrationBindingMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) orchestrationBindingMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			orchestrationBindingMock.Protected().Verify(nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides), Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			orchestrationBindingMock.Protected().Verify(
+				nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides),
+				Times.Once(),
+				ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]

@@ -19,6 +19,7 @@
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.Reflection;
 using FluentAssertions;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
@@ -54,9 +55,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
 
-			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			adapterMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			adapterMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -78,9 +79,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
 			Reflector.SetProperty((WcfAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>) adapterMock.Object, "BindingElement", bindingMock.Object);
 
-			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveBindingMock.Verify(b => b.ApplyEnvironmentOverrides("ACC"), Times.Once());
+			environmentSensitiveBindingMock.Verify(b => b.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once());
 		}
 
 		[Fact]

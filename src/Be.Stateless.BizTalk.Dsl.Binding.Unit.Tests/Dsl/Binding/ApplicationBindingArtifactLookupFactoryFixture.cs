@@ -16,6 +16,7 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
@@ -30,8 +31,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV")
-				.Should().BeSameAs(ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV"));
+			ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT)
+				.Should().BeSameAs(ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT));
 		}
 
 		[SkippableFact]
@@ -39,7 +40,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
+			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT);
 			ab.Name.Should().Be("TestApplication");
 		}
 
@@ -48,7 +49,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
+			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT);
 			var rl = ab.ReceiveLocation<OneWayReceiveLocation>();
 			rl.Name.Should().Be("OneWayReceiveLocation");
 		}
@@ -58,7 +59,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
+			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT);
 			var rp = ab.ReceivePort<OneWayReceivePort>();
 			rp.Name.Should().Be("OneWayReceivePort");
 		}
@@ -68,7 +69,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
+			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT);
 			var rab = ab.ReferencedApplication<TestReferencedApplication>();
 			rab.Name.Should().Be("MyTestReferencedApplication");
 		}
@@ -78,7 +79,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
+			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT);
 			var rab = ab.ReferencedApplication<TestReferencedApplication>();
 			var rl = rab.ReceiveLocation<TestReferencedReceiveLocation>();
 			rl.Name.Should().Be("MyTestReferencedReceiveLocation");
@@ -89,7 +90,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
+			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT);
 			var rab = ab.ReferencedApplication<TestReferencedApplication>();
 			var rp = rab.ReceivePort<TestReferencedReceivePort>();
 			rp.Name.Should().Be("MyTestReferencedReceivePort");
@@ -100,7 +101,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
+			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT);
 			var rab = ab.ReferencedApplication<TestReferencedApplication>();
 			var sp = rab.SendPort<TestReferencedSendPort>();
 			sp.Name.Should().Be("MyTestReferencedSendPort");
@@ -111,7 +112,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create("DEV");
+			var ab = ApplicationBindingArtifactLookupFactory<TestApplication>.Create(TargetEnvironment.DEVELOPMENT);
 			var sp = ab.SendPort<OneWaySendPort>();
 			sp.Name.Should().Be("OneWaySendPort");
 		}

@@ -16,6 +16,7 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using FluentAssertions;
 using Moq;
@@ -42,9 +43,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var environmentSensitiveRetryPolicyMock = retryPolicyMock.As<ISupportEnvironmentOverride>();
 
 			var spt = new SendPortTransport { RetryPolicy = retryPolicyMock.Object };
-			((ISupportEnvironmentOverride) spt).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) spt).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveRetryPolicyMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveRetryPolicyMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
 		[Fact]
@@ -54,9 +55,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var environmentSensitiveServiceWindowMock = serviceWindowMock.As<ISupportEnvironmentOverride>();
 
 			var spt = new SendPortTransport { ServiceWindow = serviceWindowMock.Object };
-			((ISupportEnvironmentOverride) spt).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) spt).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveServiceWindowMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveServiceWindowMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 	}
 }

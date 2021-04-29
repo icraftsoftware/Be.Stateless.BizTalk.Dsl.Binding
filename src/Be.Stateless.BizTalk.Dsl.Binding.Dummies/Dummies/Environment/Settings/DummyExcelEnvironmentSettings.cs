@@ -16,6 +16,7 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Environment.Settings;
 
 namespace Be.Stateless.BizTalk.Dummies.Environment.Settings
@@ -42,6 +43,6 @@ namespace Be.Stateless.BizTalk.Dummies.Environment.Settings
 
 		public int UnoverriddenValueTypeSetting => ValueForTargetEnvironment(new int?[] { null, -1, -2, -3, -4 });
 
-		internal readonly string[] _targetEnvironments = { null, "DEV", "BLD", "ACC", "PRD" };
+		internal readonly string[] _targetEnvironments = { null, TargetEnvironment.DEVELOPMENT, TargetEnvironment.BUILD, TargetEnvironment.ACCEPTANCE, TargetEnvironment.PRODUCTION };
 	}
 }

@@ -16,10 +16,10 @@
 
 #endregion
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Environment.Settings;
 using Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention;
-using Be.Stateless.BizTalk.Install;
 
 namespace Be.Stateless.BizTalk.Factory
 {
@@ -29,7 +29,7 @@ namespace Be.Stateless.BizTalk.Factory
 	{
 		#region IEnvironmentSettings Members
 
-		public string ApplicationName => "BizTalk.Factory";
+		public string ApplicationName => throw new NotSupportedException();
 
 		#endregion
 
@@ -56,9 +56,5 @@ namespace Be.Stateless.BizTalk.Factory
 		public string TransmittingHost => GetOverriddenOrDefaultValue("BizTalkServerApplication");
 
 		#endregion
-
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Property that needs to be deployed in SSO.")]
-		[SsoSetting]
-		public string TargetEnvironment => DeploymentContext.TargetEnvironment;
 	}
 }

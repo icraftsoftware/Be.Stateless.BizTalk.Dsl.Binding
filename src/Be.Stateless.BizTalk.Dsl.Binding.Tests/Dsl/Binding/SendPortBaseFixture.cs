@@ -75,9 +75,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			sendPortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			sendPortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -99,9 +99,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
 			sendPortMock.Object.Filter = filterMock.Object;
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveFilterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveFilterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
 		[SkippableFact]
@@ -114,9 +114,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
 			sendPortMock.Object.ReceivePipeline = receivePipelineMock.Object;
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[SkippableFact]
@@ -129,9 +129,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
 			sendPortMock.Object.SendPipeline = sendPipelineMock.Object;
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -150,11 +150,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortMock.Object.BackupTransport.Host = "Host";
 			sendPortMock.Object.BackupTransport.Adapter = backupAdapterMock.Object;
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
 			// indirectly verifies that SendPortBase forwards ApplyEnvironmentOverrides() call to Transport, which forwards it to its adapter
-			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
-			environmentSensitiveBackupAdapterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
+			environmentSensitiveBackupAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
 		[Fact]

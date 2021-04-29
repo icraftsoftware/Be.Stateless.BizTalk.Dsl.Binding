@@ -67,9 +67,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			receiveLocationMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			receiveLocationMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -92,9 +92,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 			receiveLocationMock.Object.ReceivePipeline = receivePipelineMock.Object;
 
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[SkippableFact]
@@ -107,9 +107,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 			receiveLocationMock.Object.SendPipeline = sendPipelineMock.Object;
 
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -123,10 +123,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receiveLocationMock.Object.Transport.Host = "Host";
 			receiveLocationMock.Object.Transport.Adapter = adapterMock.Object;
 
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
 			// indirectly verifies that ReceiveLocationBase forwards ApplyEnvironmentOverrides() call to Transport, which forwards it to its adapter
-			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
 		[Fact]

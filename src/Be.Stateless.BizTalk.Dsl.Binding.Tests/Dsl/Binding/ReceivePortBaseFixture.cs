@@ -67,9 +67,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var receivePortMock = new Mock<ReceivePortBase<string>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) receivePortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receivePortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			receivePortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			receivePortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]

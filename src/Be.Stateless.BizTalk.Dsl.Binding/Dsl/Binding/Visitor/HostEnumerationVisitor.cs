@@ -51,7 +51,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		protected internal override void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
 			where TNamingConvention : class
 		{
-			_hosts.Add(receiveLocation.Transport.Host);
+			_hosts.Add(((ISupportHostNameResolution) receiveLocation.Transport).ResolveHostName());
 		}
 
 		protected internal override void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
@@ -60,7 +60,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		protected internal override void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
 			where TNamingConvention : class
 		{
-			_hosts.Add(sendPort.Transport.Host);
+			_hosts.Add(((ISupportHostNameResolution) sendPort.Transport).ResolveHostName());
+			if (sendPort.BackupTransport.IsValueCreated) _hosts.Add(((ISupportHostNameResolution) sendPort.BackupTransport.Value).ResolveHostName());
 		}
 
 		#endregion

@@ -30,10 +30,27 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[Fact]
 		public void DefaultUnknownInboundAdapterFailsValidate()
 		{
-			var rlt = new ReceiveLocationTransport { Host = "Host" };
+			var rlt = new ReceiveLocationTransport<string>(new Mock<IReceiveLocation<string>>().Object) { Host = "Host" };
 			Invoking(() => ((ISupportValidation) rlt).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Adapter is not defined.");
+		}
+
+		[Fact]
+		public void DelegatesHostNameResolutionToHostResolutionPolicy()
+		{
+			var receiveLocationMock = new Mock<IReceiveLocation<string>>();
+			receiveLocationMock.As<ISupportNamingConvention>();
+
+			var hostResolutionPolicyMock = new Mock<HostResolutionPolicy> { CallBase = true };
+			hostResolutionPolicyMock.As<ISupportNamingConvention>();
+			var sut = hostResolutionPolicyMock.As<IResolveTransportHost>();
+
+			var rlt = new ReceiveLocationTransport<string>(receiveLocationMock.Object) { Host = hostResolutionPolicyMock.Object };
+			sut.Setup(p => p.ResolveHostName(rlt)).Returns("name");
+			((ISupportHostNameResolution) rlt).ResolveHostName();
+
+			sut.Verify(p => p.ResolveHostName(rlt));
 		}
 
 		[Fact]
@@ -42,10 +59,31 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var scheduleMock = new Mock<Schedule>();
 			var environmentSensitiveScheduleMock = scheduleMock.As<ISupportEnvironmentOverride>();
 
-			var rlt = new ReceiveLocationTransport { Schedule = scheduleMock.Object };
+			var rlt = new ReceiveLocationTransport<string>(new Mock<IReceiveLocation<string>>().Object) { Schedule = scheduleMock.Object };
 			((ISupportEnvironmentOverride) rlt).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
 			environmentSensitiveScheduleMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
+		}
+
+		[Fact]
+		public void ReceiveLocationIsReferencedBack()
+		{
+			var receiveLocationMock = new Mock<ReceiveLocation>();
+			receiveLocationMock.Object.Transport.ReceiveLocation.Should().BeSameAs(receiveLocationMock.Object);
+		}
+
+		[Fact]
+		public void ThrowsWhenTransportHostNameCannotBeResolved()
+		{
+			var receiveLocationMock = new Mock<ReceiveLocation> { CallBase = true };
+			var conventionalReceiveLocationMock = receiveLocationMock.As<ISupportNamingConvention>();
+			conventionalReceiveLocationMock.Setup(m => m.Name).Returns("Dummy Receive Location Name");
+
+			var rlt = receiveLocationMock.Object.Transport;
+
+			Invoking(() => ((ISupportHostNameResolution) rlt).ResolveHostName())
+				.Should().Throw<BindingException>()
+				.WithMessage("Transport's Host could not be resolved for ReceiveLocation 'Dummy Receive Location Name'.");
 		}
 	}
 }

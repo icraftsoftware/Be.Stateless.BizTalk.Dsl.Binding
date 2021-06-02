@@ -24,6 +24,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Dummies.Bindings.Simple;
 using Be.Stateless.BizTalk.Explorer;
+using Be.Stateless.BizTalk.Unit.Dsl.Binding;
 using Be.Stateless.Finance;
 using Be.Stateless.Resources;
 using FluentAssertions;

@@ -17,8 +17,8 @@
 #endregion
 
 using System;
-using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Unit.Dsl.Binding;
 using FluentAssertions;
 using Xunit;
 using static FluentAssertions.FluentActions;

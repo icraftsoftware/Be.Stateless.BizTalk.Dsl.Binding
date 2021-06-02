@@ -16,13 +16,12 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
-	public interface ISendPortNamingConvention<TNamingConvention>
+	internal interface IResolveTransportHost
 	{
-		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Convention Public API.")]
-		IMessageSubjectConvention<TNamingConvention> Towards<T>(T party);
+		string ResolveHostName<TNamingConvention>(ReceiveLocationTransport<TNamingConvention> transport) where TNamingConvention : class;
+
+		string ResolveHostName<TNamingConvention>(SendPortTransport<TNamingConvention> transport) where TNamingConvention : class;
 	}
 }

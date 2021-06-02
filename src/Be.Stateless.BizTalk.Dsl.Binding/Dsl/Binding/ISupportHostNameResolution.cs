@@ -16,16 +16,10 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
-
-namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
+namespace Be.Stateless.BizTalk.Dsl.Binding
 {
-	[SuppressMessage("ReSharper", "UnusedMember.Global")]
-	internal enum MessageName
+	internal interface ISupportHostNameResolution
 	{
-		Unknown = 0,
-		CreditNote = 1,
-		Invoice = 2,
-		Statement = 3
+		string ResolveHostName();
 	}
 }

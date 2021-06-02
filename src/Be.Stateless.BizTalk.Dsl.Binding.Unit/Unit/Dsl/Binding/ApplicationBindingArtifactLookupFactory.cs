@@ -20,11 +20,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Be.Stateless.BizTalk.Dsl;
+using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 using Be.Stateless.BizTalk.Install;
 using Be.Stateless.Extensions;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 {
 	public static class ApplicationBindingArtifactLookupFactory<T>
 		where T : IApplicationBinding, IApplicationBindingArtifactLookup, IVisitable<IApplicationBindingVisitor>, new()

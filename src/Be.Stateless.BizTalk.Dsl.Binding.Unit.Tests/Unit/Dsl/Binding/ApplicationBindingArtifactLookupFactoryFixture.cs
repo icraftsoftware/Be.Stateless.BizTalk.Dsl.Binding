@@ -22,7 +22,7 @@ using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 {
 	public class ApplicationBindingArtifactLookupFactoryFixture
 	{

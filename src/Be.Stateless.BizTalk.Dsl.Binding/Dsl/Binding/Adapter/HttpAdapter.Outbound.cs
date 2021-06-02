@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -134,9 +134,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			protected override void Validate()
 			{
-				if (MaxRedirects < 0 || MaxRedirects > 10) throw new BindingException("MaxRedirects must range from 0 to 10.");
-				if (ProxyPort < 0 || ProxyPort > 65535) throw new BindingException("ProxyPort must range from 0 to 65535.");
-				if (AuthenticationScheme == AuthenticationScheme.Basic || AuthenticationScheme == AuthenticationScheme.Digest)
+				if (MaxRedirects is < 0 or > 10) throw new BindingException("MaxRedirects must range from 0 to 10.");
+				if (ProxyPort is < 0 or > 65535) throw new BindingException("ProxyPort must range from 0 to 65535.");
+				if (AuthenticationScheme is AuthenticationScheme.Basic or AuthenticationScheme.Digest)
 				{
 					if (UserName.IsNullOrEmpty() || Password.IsNullOrEmpty())
 						throw new BindingException(

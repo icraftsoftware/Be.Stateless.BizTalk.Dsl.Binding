@@ -21,6 +21,7 @@ using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention.Simple;
+using Be.Stateless.BizTalk.Dummies.Conventions;
 using Be.Stateless.Finance.Income;
 using Microsoft.BizTalk.DefaultPipelines;
 
@@ -43,7 +44,7 @@ namespace Be.Stateless.Finance
 		{
 			public TaxAgencyReceivePort()
 			{
-				Name = ReceivePortName.Offwards("Job");
+				Name = ReceivePortName.Offwards("TaxAgency");
 				ReceiveLocations.Add(new TaxAgencyReceiveLocation());
 			}
 		}
@@ -52,10 +53,10 @@ namespace Be.Stateless.Finance
 		{
 			public TaxAgencyReceiveLocation()
 			{
-				Name = ReceiveLocationName.About("AddPart").FormattedAs.Xml;
+				Name = ReceiveLocationName.About("Incomes").FormattedAs.Xml;
 				ReceivePipeline = new ReceivePipeline<PassThruReceive>();
 				Transport.Adapter = new FileAdapter.Inbound(a => { a.ReceiveFolder = @"c:\file\drops"; });
-				Transport.Host = "Host";
+				Transport.Host = DummyHostResolutionPolicy.Default;
 			}
 		}
 	}
@@ -66,10 +67,10 @@ namespace Be.Stateless.Finance
 		{
 			public BankSendPort()
 			{
-				Name = SendPortName.Towards("Job").About("Notification").FormattedAs.Xml;
+				Name = SendPortName.Towards("Job").About("Anything").FormattedAs.Xml;
 				SendPipeline = new SendPipeline<PassThruTransmit>();
 				Transport.Adapter = new FileAdapter.Outbound(a => { a.DestinationFolder = @"c:\file\drops"; });
-				Transport.Host = "Host";
+				Transport.Host = DummyHostResolutionPolicy.Default;
 			}
 		}
 
@@ -80,7 +81,7 @@ namespace Be.Stateless.Finance
 				Name = ReceiveLocationName.About("AddPart").FormattedAs.Xml;
 				ReceivePipeline = new ReceivePipeline<PassThruReceive>();
 				Transport.Adapter = new FileAdapter.Inbound(a => { a.ReceiveFolder = @"c:\file\drops"; });
-				Transport.Host = "Host";
+				Transport.Host = DummyHostResolutionPolicy.Default;
 			}
 		}
 	}

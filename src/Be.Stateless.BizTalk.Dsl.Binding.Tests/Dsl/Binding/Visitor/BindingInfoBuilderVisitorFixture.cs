@@ -607,7 +607,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			((IApplicationBindingVisitor) visitor).VisitReceiveLocation(receiveLocation);
 
 			Invoking(() => ((IApplicationBindingVisitor) visitor).VisitReceiveLocation(receiveLocation))
-				.Should().Throw<InvalidOperationException>()
+				.Should().Throw<BindingException>()
 				.WithMessage("Duplicate receive location name: 'OneWayReceiveLocation'.");
 		}
 
@@ -624,7 +624,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort);
 
 			Invoking(() => ((IApplicationBindingVisitor) visitor).VisitReceivePort(receivePort))
-				.Should().Throw<InvalidOperationException>()
+				.Should().Throw<BindingException>()
 				.WithMessage("Duplicate receive port name: 'OneWayReceivePort'.");
 		}
 
@@ -641,7 +641,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			((IApplicationBindingVisitor) visitor).VisitSendPort(sendPort);
 
 			Invoking(() => ((IApplicationBindingVisitor) visitor).VisitSendPort(sendPort))
-				.Should().Throw<InvalidOperationException>()
+				.Should().Throw<BindingException>()
 				.WithMessage("Duplicate send port name: 'OneWaySendPort'.");
 		}
 	}

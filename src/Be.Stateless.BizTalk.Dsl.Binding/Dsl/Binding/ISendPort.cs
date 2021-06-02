@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 #endregion
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
 using Be.Stateless.BizTalk.Dsl.Pipeline;
@@ -33,7 +34,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	{
 		IApplicationBinding<TNamingConvention> ApplicationBinding { get; }
 
-		SendPortTransport BackupTransport { get; }
+		Lazy<SendPortTransport<TNamingConvention>> BackupTransport { get; }
 
 		/// <summary>
 		/// Define conditions based on message context's promoted properties that determine which messages are routed to
@@ -131,6 +132,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		/// </remarks>
 		bool StopSendingOnOrderedDeliveryFailure { get; }
 
-		SendPortTransport Transport { get; }
+		SendPortTransport<TNamingConvention> Transport { get; }
 	}
 }

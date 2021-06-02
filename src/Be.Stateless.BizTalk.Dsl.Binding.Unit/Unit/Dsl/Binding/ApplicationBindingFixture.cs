@@ -18,11 +18,13 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Dsl;
+using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Install;
 using Be.Stateless.Extensions;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public DSL API.")]
 	public abstract class ApplicationBindingFixture<T> where T : class, IVisitable<IApplicationBindingVisitor>, new()

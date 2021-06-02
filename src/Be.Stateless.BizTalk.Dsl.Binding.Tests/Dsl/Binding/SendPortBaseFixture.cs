@@ -147,8 +147,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortMock.Object.Name = "Send Port Name";
 			sendPortMock.Object.Transport.Host = "Host";
 			sendPortMock.Object.Transport.Adapter = adapterMock.Object;
-			sendPortMock.Object.BackupTransport.Host = "Host";
-			sendPortMock.Object.BackupTransport.Adapter = backupAdapterMock.Object;
+			sendPortMock.Object.BackupTransport.Value.Host = "Host";
+			sendPortMock.Object.BackupTransport.Value.Adapter = backupAdapterMock.Object;
 
 			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
@@ -222,8 +222,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortMock.Object.SendPipeline = new SendPipeline<XMLTransmit>();
 			sendPortMock.Object.Transport.Host = "Host";
 			sendPortMock.Object.Transport.Adapter = adapterMock.Object;
-			sendPortMock.Object.BackupTransport.Host = "Host";
-			sendPortMock.Object.BackupTransport.Adapter = backupAdapterMock.Object;
+			sendPortMock.Object.BackupTransport.Value.Host = "Host";
+			sendPortMock.Object.BackupTransport.Value.Adapter = backupAdapterMock.Object;
 
 			((ISupportValidation) sendPortMock.Object).Validate();
 

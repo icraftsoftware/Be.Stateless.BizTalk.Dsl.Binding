@@ -16,6 +16,7 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Unit.Dsl.Binding;
 using Moq;
 using Xunit;
 

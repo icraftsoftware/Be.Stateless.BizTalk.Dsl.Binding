@@ -35,7 +35,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	{
 		protected internal ReceiveLocationBase()
 		{
-			Transport = new ReceiveLocationTransport();
+			Transport = new ReceiveLocationTransport<TNamingConvention>(this);
 		}
 
 		protected internal ReceiveLocationBase(Action<IReceiveLocation<TNamingConvention>> receiveLocationConfigurator) : this()
@@ -59,7 +59,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public SendPipeline SendPipeline { get; set; }
 
-		public ReceiveLocationTransport Transport { get; }
+		public ReceiveLocationTransport<TNamingConvention> Transport { get; }
 
 		#endregion
 

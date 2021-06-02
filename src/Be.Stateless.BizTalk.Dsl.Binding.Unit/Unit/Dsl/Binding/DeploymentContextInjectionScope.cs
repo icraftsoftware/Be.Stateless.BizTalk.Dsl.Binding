@@ -19,7 +19,7 @@
 using System;
 using Be.Stateless.BizTalk.Install;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 {
 	public class DeploymentContextInjectionScope : IDisposable
 	{

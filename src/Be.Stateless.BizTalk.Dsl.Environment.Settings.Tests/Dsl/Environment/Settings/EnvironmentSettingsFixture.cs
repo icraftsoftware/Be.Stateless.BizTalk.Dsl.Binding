@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Dsl.Binding;
+using Be.Stateless.BizTalk.Unit.Dsl.Binding;
 using FluentAssertions;
 using Xunit;
 using static FluentAssertions.FluentActions;
@@ -170,6 +170,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Collection("DeploymentContext")]
 		public class WithRelatedEnvironmentSettingOverrides
 		{
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
 			public void EnvironmentSettingOverridesCanBeItself()
 			{
@@ -180,6 +181,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 				}
 			}
 
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
 			public void SettingsReturnsDerivedAppSettingInstanceAndValuesAreOverridden()
 			{
@@ -193,6 +195,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 				}
 			}
 
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
 			public void SsoSettings()
 			{
@@ -259,6 +262,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		[Collection("DeploymentContext")]
 		public class WithUnrelatedEnvironmentSettingOverrides
 		{
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
 			public void EnvironmentSettingOverridesThrow()
 			{

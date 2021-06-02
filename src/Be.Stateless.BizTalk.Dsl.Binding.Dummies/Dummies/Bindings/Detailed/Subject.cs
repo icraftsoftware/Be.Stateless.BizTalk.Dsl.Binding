@@ -17,23 +17,15 @@
 #endregion
 
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Dsl.Pipeline;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Dummies.Bindings.Detailed
 {
-	public interface IReceiveLocation : IFluentInterface { }
-
-	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public DSL API.")]
-	public interface IReceiveLocation<TNamingConvention> : IReceiveLocation, IObjectBinding<TNamingConvention> where TNamingConvention : class
+	[SuppressMessage("ReSharper", "UnusedMember.Global")]
+	internal enum Subject
 	{
-		bool Enabled { get; set; }
-
-		ReceivePipeline ReceivePipeline { get; set; }
-
-		IReceivePort<TNamingConvention> ReceivePort { get; }
-
-		SendPipeline SendPipeline { get; set; }
-
-		ReceiveLocationTransport<TNamingConvention> Transport { get; }
+		Unknown = 0,
+		CreditNote = 1,
+		Invoice = 2,
+		Statement = 3
 	}
 }

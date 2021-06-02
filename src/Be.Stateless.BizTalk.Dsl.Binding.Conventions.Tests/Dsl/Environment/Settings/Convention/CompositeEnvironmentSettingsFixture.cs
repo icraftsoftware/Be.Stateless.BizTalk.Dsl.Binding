@@ -19,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Install;
+using Be.Stateless.BizTalk.Unit.Dsl.Binding;
 using FluentAssertions;
 using Xunit;
 using static FluentAssertions.FluentActions;

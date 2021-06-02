@@ -70,7 +70,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			var visitedReceiveLocation = CreateReceiveLocation(receiveLocation);
 			if (_lastVisitedReceivePort.ReceiveLocations.Cast<BtsReceiveLocation>().Any(rl => rl.Name == visitedReceiveLocation.Name))
-				throw new InvalidOperationException($"Duplicate receive location name: '{visitedReceiveLocation.Name}'.");
+				throw new BindingException($"Duplicate receive location name: '{visitedReceiveLocation.Name}'.");
 			_lastVisitedReceivePort.ReceiveLocations.Add(visitedReceiveLocation);
 		}
 
@@ -79,7 +79,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			_lastVisitedReceivePort = CreateReceivePort(receivePort);
 			if (BindingInfo.ReceivePortCollection.Find(_lastVisitedReceivePort.Name) != null)
-				throw new InvalidOperationException($"Duplicate receive port name: '{_lastVisitedReceivePort.Name}'.");
+				throw new BindingException($"Duplicate receive port name: '{_lastVisitedReceivePort.Name}'.");
 			BindingInfo.ReceivePortCollection.Add(_lastVisitedReceivePort);
 		}
 
@@ -87,7 +87,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			where TNamingConvention : class
 		{
 			var visitedSendPort = CreateSendPort(sendPort);
-			if (BindingInfo.SendPortCollection.Find(visitedSendPort.Name) != null) throw new InvalidOperationException($"Duplicate send port name: '{visitedSendPort.Name}'.");
+			if (BindingInfo.SendPortCollection.Find(visitedSendPort.Name) != null) throw new BindingException($"Duplicate send port name: '{visitedSendPort.Name}'.");
 			BindingInfo.SendPortCollection.Add(visitedSendPort);
 		}
 
@@ -212,7 +212,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				TransportType = receiveLocation.Transport.Adapter.ProtocolType,
 				TransportTypeData = receiveLocation.Transport.Adapter.GetAdapterBindingInfoSerializer().Serialize(),
 				ReceiveHandler = new ReceiveHandlerRef {
-					Name = receiveLocation.Transport.Host,
+					Name = ((ISupportHostNameResolution) receiveLocation.Transport).ResolveHostName(),
 					TransportType = receiveLocation.Transport.Adapter.ProtocolType
 				},
 				ReceivePipeline = CreateReceivePipelineRef(receiveLocation.ReceivePipeline),
@@ -278,16 +278,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				IsDynamic = false,
 				Name = ((ISupportNamingConvention) sendPort).Name,
 				OrderedDelivery = sendPort.OrderedDelivery,
-				PrimaryTransport = CreateTransportInfo(sendPort.Transport, true, sendPort.OrderedDelivery),
+				PrimaryTransport = CreateTransportInfo(sendPort.Transport),
 				Priority = (int) sendPort.Priority,
-				SecondaryTransport = sendPort.BackupTransport.Adapter is SendPortTransport.UnknownOutboundAdapter
-					? null
-					: CreateTransportInfo(sendPort.BackupTransport, false, false),
 				SendPipelineData = sendPort.SendPipeline.GetPipelineBindingInfoSerializer().Serialize(),
 				// sendPort.Status is the responsibility of BizTalkServiceStateInitializerVisitor
 				StopSendingOnFailure = sendPort.StopSendingOnOrderedDeliveryFailure,
 				TransmitPipeline = CreateSendPipelineRef(sendPort.SendPipeline)
 			};
+			if (sendPort.BackupTransport.IsValueCreated)
+			{
+				port.SecondaryTransport = CreateTransportInfo(sendPort.BackupTransport.Value);
+			}
 			if (sendPort.IsTwoWay)
 			{
 				port.IsTwoWay = true;
@@ -297,17 +298,20 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			return port;
 		}
 
-		protected virtual Microsoft.BizTalk.Deployment.Binding.TransportInfo CreateTransportInfo(SendPortTransport transport, bool primary, bool orderedDelivery)
+		protected virtual Microsoft.BizTalk.Deployment.Binding.TransportInfo CreateTransportInfo<TNamingConvention>(SendPortTransport<TNamingConvention> transport)
+			where TNamingConvention : class
 		{
 			var transportInfo = new Microsoft.BizTalk.Deployment.Binding.TransportInfo {
 				Address = transport.Adapter.Address,
 				FromTime = transport.ServiceWindow.StartTime,
-				OrderedDelivery = orderedDelivery,
-				Primary = primary,
+				// ordered delivery is meaningful only for a SendPort's primary transport 
+				OrderedDelivery = ReferenceEquals(transport.SendPort.Transport, transport) && transport.SendPort.OrderedDelivery,
+				// is it the SendPort's primary transport
+				Primary = ReferenceEquals(transport.SendPort.Transport, transport),
 				RetryCount = transport.RetryPolicy.Count,
 				RetryInterval = (int) transport.RetryPolicy.Interval.TotalMinutes,
 				SendHandler = new SendHandlerRef {
-					Name = transport.Host,
+					Name = ((ISupportHostNameResolution) transport).ResolveHostName(),
 					TransportType = transport.Adapter.ProtocolType
 				},
 				ServiceWindowEnabled = transport.ServiceWindow.Enabled,

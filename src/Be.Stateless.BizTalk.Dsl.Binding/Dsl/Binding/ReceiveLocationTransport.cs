@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,13 +16,17 @@
 
 #endregion
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
+using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
-	public sealed class ReceiveLocationTransport : TransportBase<IInboundAdapter>
+	public sealed class ReceiveLocationTransport<TNamingConvention> : TransportBase<IInboundAdapter>
+		where TNamingConvention : class
 	{
 		#region Nested Type: UnknownInboundAdapter
 
@@ -33,7 +37,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#endregion
 
-		public ReceiveLocationTransport()
+		public ReceiveLocationTransport(IReceiveLocation<TNamingConvention> receiveLocation) : this()
+		{
+			ReceiveLocation = receiveLocation ?? throw new ArgumentNullException(nameof(receiveLocation));
+		}
+
+		private ReceiveLocationTransport()
 		{
 			Adapter = UnknownInboundAdapter.Instance;
 			Schedule = Schedule.None;
@@ -47,7 +56,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			(Schedule as ISupportEnvironmentOverride)?.ApplyEnvironmentOverrides(environment);
 		}
 
+		protected override string ResolveHostName()
+		{
+			var name = ((IResolveTransportHost) Host)?.ResolveHostName(this);
+			if (name.IsNullOrEmpty())
+				throw new BindingException($"Transport's Host could not be resolved for ReceiveLocation '{((ISupportNamingConvention) ReceiveLocation).Name}'.");
+			return name;
+		}
+
 		#endregion
+
+		public IReceiveLocation<TNamingConvention> ReceiveLocation { get; }
 
 		/// <summary>
 		/// <see cref="Schedule"/> restricts receiving messages to specific dates.

@@ -30,10 +30,27 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[Fact]
 		public void DefaultUnknownOutboundAdapterFailsValidate()
 		{
-			var spt = new SendPortTransport { Host = "Host" };
+			var spt = new SendPortTransport<string>(new Mock<ISendPort<string>>().Object) { Host = "Host" };
 			Invoking(() => ((ISupportValidation) spt).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Adapter is not defined.");
+		}
+
+		[Fact]
+		public void DelegatesHostNameResolutionToHostResolutionPolicy()
+		{
+			var sendPortMock = new Mock<ISendPort<string>>();
+			sendPortMock.As<ISupportNamingConvention>();
+
+			var hostResolutionPolicyMock = new Mock<HostResolutionPolicy> { CallBase = true };
+			hostResolutionPolicyMock.As<ISupportNamingConvention>();
+			var sut = hostResolutionPolicyMock.As<IResolveTransportHost>();
+
+			var spt = new SendPortTransport<string>(sendPortMock.Object) { Host = hostResolutionPolicyMock.Object };
+			sut.Setup(p => p.ResolveHostName(spt)).Returns("name");
+			((ISupportHostNameResolution) spt).ResolveHostName();
+
+			sut.Verify(p => p.ResolveHostName(spt));
 		}
 
 		[Fact]
@@ -42,7 +59,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var retryPolicyMock = new Mock<RetryPolicy>();
 			var environmentSensitiveRetryPolicyMock = retryPolicyMock.As<ISupportEnvironmentOverride>();
 
-			var spt = new SendPortTransport { RetryPolicy = retryPolicyMock.Object };
+			var spt = new SendPortTransport<string>(new Mock<ISendPort<string>>().Object) { RetryPolicy = retryPolicyMock.Object };
 			((ISupportEnvironmentOverride) spt).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
 			environmentSensitiveRetryPolicyMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
@@ -54,10 +71,45 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var serviceWindowMock = new Mock<ServiceWindow>();
 			var environmentSensitiveServiceWindowMock = serviceWindowMock.As<ISupportEnvironmentOverride>();
 
-			var spt = new SendPortTransport { ServiceWindow = serviceWindowMock.Object };
+			var spt = new SendPortTransport<string>(new Mock<ISendPort<string>>().Object) { ServiceWindow = serviceWindowMock.Object };
 			((ISupportEnvironmentOverride) spt).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
 			environmentSensitiveServiceWindowMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
+		}
+
+		[Fact]
+		public void SendPortIsReferencedBack()
+		{
+			var sendPortMock = new Mock<SendPort>();
+			sendPortMock.Object.Transport.SendPort.Should().BeSameAs(sendPortMock.Object);
+		}
+
+		[Fact]
+		public void ThrowsWhenBackupTransportHostNameCannotBeResolved()
+		{
+			var sendPortMock = new Mock<SendPort> { CallBase = true };
+			var conventionalSendPortMock = sendPortMock.As<ISupportNamingConvention>();
+			conventionalSendPortMock.Setup(m => m.Name).Returns("Dummy Send Port Name");
+
+			var spt = sendPortMock.Object.BackupTransport.Value;
+
+			Invoking(() => ((ISupportHostNameResolution) spt).ResolveHostName())
+				.Should().Throw<BindingException>()
+				.WithMessage("Backup Transport's Host could not be resolved for SendPort 'Dummy Send Port Name'.");
+		}
+
+		[Fact]
+		public void ThrowsWhenPrimaryTransportHostNameCannotBeResolved()
+		{
+			var sendPortMock = new Mock<SendPort> { CallBase = true };
+			var conventionalSendPortMock = sendPortMock.As<ISupportNamingConvention>();
+			conventionalSendPortMock.Setup(m => m.Name).Returns("Dummy Send Port Name");
+
+			var spt = sendPortMock.Object.Transport;
+
+			Invoking(() => ((ISupportHostNameResolution) spt).ResolveHostName())
+				.Should().Throw<BindingException>()
+				.WithMessage("Primary Transport's Host could not be resolved for SendPort 'Dummy Send Port Name'.");
 		}
 	}
 }

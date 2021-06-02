@@ -20,8 +20,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
 	public class SendPortNamingConvention<TNamingConvention> :
 		ISendPortNamingConvention<TNamingConvention>,
-		ILocationMessageName<TNamingConvention>,
-		ILocationMessageFormat<TNamingConvention>
+		IMessageSubjectConvention<TNamingConvention>,
+		IMessageFormatConvention<TNamingConvention>
 		where TNamingConvention : new()
 	{
 		public SendPortNamingConvention()
@@ -29,17 +29,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			_convention = new TNamingConvention();
 		}
 
-		#region ILocationMessageFormat<TNamingConvention> Members
+		#region IMessageFormatConvention<TNamingConvention> Members
 
-		MessageFormat<TNamingConvention> ILocationMessageFormat<TNamingConvention>.FormattedAs => new(_convention);
+		MessageFormatConvention<TNamingConvention> IMessageFormatConvention<TNamingConvention>.FormattedAs => new(_convention);
 
 		#endregion
 
-		#region ILocationMessageName<TNamingConvention> Members
+		#region IMessageSubjectConvention<TNamingConvention> Members
 
-		ILocationMessageFormat<TNamingConvention> ILocationMessageName<TNamingConvention>.About<T>(T messageName)
+		IMessageFormatConvention<TNamingConvention> IMessageSubjectConvention<TNamingConvention>.About<T>(T subject)
 		{
-			((IMessageNameMemento<T>) _convention).MessageName = messageName;
+			((IMessageSubjectMemento<T>) _convention).Subject = subject;
 			return this;
 		}
 
@@ -47,7 +47,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		#region ISendPortNamingConvention<TNamingConvention> Members
 
-		public ILocationMessageName<TNamingConvention> Towards<T>(T party)
+		public IMessageSubjectConvention<TNamingConvention> Towards<T>(T party)
 		{
 			((IPartyMemento<T>) _convention).Party = party;
 			return this;

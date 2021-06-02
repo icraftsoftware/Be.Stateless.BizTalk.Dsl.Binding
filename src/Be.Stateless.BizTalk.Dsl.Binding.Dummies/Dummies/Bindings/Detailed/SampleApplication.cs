@@ -34,7 +34,7 @@ using Party = Be.Stateless.BizTalk.Dummies.Bindings.Detailed.Party;
 // ReSharper disable CheckNamespace
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 {
-	internal class SampleApplication : ApplicationBinding<NamingConvention<Party, MessageName>>
+	internal class SampleApplication : ApplicationBinding<NamingConvention<Party, Subject>>
 	{
 		public SampleApplication()
 		{
@@ -47,7 +47,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 							.Add(
 								ReceiveLocation(
 									l => {
-										l.Name = ReceiveLocationName.About(MessageName.Invoice).FormattedAs.Xml;
+										l.Name = ReceiveLocationName.About(Subject.Invoice).FormattedAs.Xml;
 										l.Enabled = false;
 										l.ReceivePipeline = new ReceivePipeline<XmlReceive>();
 										l.Transport.Adapter = new FileAdapter.Inbound(a => { a.ReceiveFolder = @"c:\file\drops"; });
@@ -55,7 +55,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 									}),
 								ReceiveLocation(
 									l => {
-										l.Name = ReceiveLocationName.About(MessageName.CreditNote).FormattedAs.Edi;
+										l.Name = ReceiveLocationName.About(Subject.CreditNote).FormattedAs.Edi;
 										l.Enabled = false;
 										l.ReceivePipeline = new ReceivePipeline<XmlReceive>();
 										l.Transport.Adapter = new FileAdapter.Inbound(a => { a.ReceiveFolder = @"c:\file\drops"; });
@@ -70,7 +70,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 						p.ReceiveLocations.Add(
 							ReceiveLocation(
 								l => {
-									l.Name = ReceiveLocationName.About(MessageName.Statement).FormattedAs.Csv;
+									l.Name = ReceiveLocationName.About(Subject.Statement).FormattedAs.Csv;
 									l.Enabled = true;
 									l.ReceivePipeline = new ReceivePipeline<PassThruReceive>(pl => { pl.Decoder<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; }); });
 									l.SendPipeline = new SendPipeline<PassThruTransmit>(pl => { pl.PreAssembler<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; }); });
@@ -85,7 +85,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 						p.ReceiveLocations.Add(
 							ReceiveLocation(
 								l => {
-									l.Name = ReceiveLocationName.About(MessageName.Statement).FormattedAs.Xml;
+									l.Name = ReceiveLocationName.About(Subject.Statement).FormattedAs.Xml;
 									l.Enabled = true;
 									l.ReceivePipeline = new ReceivePipeline<XmlReceive>(
 										pl => {
@@ -119,7 +119,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 				BankOneWaySendPort = new BankSendPort(),
 				CustomerTwoWaySendPort = SendPort(
 					p => {
-						p.Name = SendPortName.Towards(Party.Customer).About(MessageName.Statement).FormattedAs.Csv;
+						p.Name = SendPortName.Towards(Party.Customer).About(Subject.Statement).FormattedAs.Csv;
 						p.SendPipeline = new SendPipeline<PassThruTransmit>(pl => { pl.PreAssembler<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; }); });
 						p.ReceivePipeline = new ReceivePipeline<PassThruReceive>(pl => { pl.Decoder<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; }); });
 						p.Transport.Adapter = new FileAdapter.Outbound(a => { a.DestinationFolder = @"c:\file\drops"; });
@@ -138,9 +138,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 			//		}));
 		}
 
-		internal IReceivePort<NamingConvention<Party, MessageName>> CustomerOneWayReceivePort { get; }
+		internal IReceivePort<NamingConvention<Party, Subject>> CustomerOneWayReceivePort { get; }
 
-		internal ISendPort<NamingConvention<Party, MessageName>> CustomerTwoWaySendPort { get; }
+		internal ISendPort<NamingConvention<Party, Subject>> CustomerTwoWaySendPort { get; }
 
 		internal TaxAgencyReceivePort TaxAgencyOneWayReceivePort { get; }
 
@@ -148,14 +148,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 		private BankSendPort BankOneWaySendPort { get; }
 
 		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-		private IReceivePort<NamingConvention<Party, MessageName>> CustomerTwoWayReceivePort { get; }
+		private IReceivePort<NamingConvention<Party, Subject>> CustomerTwoWayReceivePort { get; }
 	}
 
-	internal class BankSendPort : SendPort<NamingConvention<Party, MessageName>>
+	internal class BankSendPort : SendPort<NamingConvention<Party, Subject>>
 	{
 		public BankSendPort()
 		{
-			Name = SendPortName.Towards(Party.Bank).About(MessageName.CreditNote).FormattedAs.Edi;
+			Name = SendPortName.Towards(Party.Bank).About(Subject.CreditNote).FormattedAs.Edi;
 			SendPipeline = new SendPipeline<XmlTransmit>();
 			Transport.Adapter = new FileAdapter.Outbound(a => { a.DestinationFolder = @"c:\file\drops"; });
 			Transport.Host = Host.SENDING_HOST;
@@ -164,7 +164,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 		}
 	}
 
-	internal class TaxAgencyReceivePort : ReceivePort<NamingConvention<Party, MessageName>>
+	internal class TaxAgencyReceivePort : ReceivePort<NamingConvention<Party, Subject>>
 	{
 		public TaxAgencyReceivePort()
 		{
@@ -172,7 +172,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 			ReceiveLocations.Add(
 				ReceiveLocation(
 					l => {
-						l.Name = ReceiveLocationName.About(MessageName.Statement).FormattedAs.Xml;
+						l.Name = ReceiveLocationName.About(Subject.Statement).FormattedAs.Xml;
 						l.Enabled = false;
 						l.ReceivePipeline = new ReceivePipeline<PassThruReceive>(
 							pl => {

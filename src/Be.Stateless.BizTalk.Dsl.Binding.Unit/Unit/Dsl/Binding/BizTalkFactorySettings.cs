@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Settings;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
+namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 {
-	internal interface IMessageNameMemento<T>
+	public static class BizTalkFactorySettings
 	{
-		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global")]
-		T MessageName { get; set; }
+		public static string TargetEnvironment => (string) SsoConfigurationReader.Instance.Read(APPLICATION_NAME, TARGET_ENVIRONMENT_PROPERTY_NAME);
+
+		private const string APPLICATION_NAME = "BizTalk.Factory";
+		private const string TARGET_ENVIRONMENT_PROPERTY_NAME = "TargetEnvironment";
 	}
 }

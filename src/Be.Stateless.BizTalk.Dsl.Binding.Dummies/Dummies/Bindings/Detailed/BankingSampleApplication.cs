@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Dummies.Bindings.Detailed;
 // ReSharper disable CheckNamespace
 namespace Be.Stateless.Banking
 {
-	internal class BankingSampleApplication : ApplicationBinding<NamingConvention<Party, MessageName>>
+	internal class BankingSampleApplication : ApplicationBinding<NamingConvention<Party, Subject>>
 	{
 		public BankingSampleApplication()
 		{

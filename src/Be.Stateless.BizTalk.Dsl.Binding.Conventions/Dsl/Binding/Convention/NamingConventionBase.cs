@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,12 +28,12 @@ using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
-	public abstract class NamingConventionBase<TNamingConvention, TParty, TMessageName> :
+	public abstract class NamingConventionBase<TNamingConvention, TParty, TSubject> :
 		IApplicationNameMemento<string>,
 		IPartyMemento<TParty>,
-		IMessageNameMemento<TMessageName>,
+		IMessageSubjectMemento<TSubject>,
 		IMessageFormatMemento<string>
-		where TNamingConvention : NamingConventionBase<TNamingConvention, TParty, TMessageName>, INamingConvention<TNamingConvention>
+		where TNamingConvention : NamingConventionBase<TNamingConvention, TParty, TSubject>, INamingConvention<TNamingConvention>
 	{
 		#region IApplicationNameMemento<string> Members
 
@@ -47,9 +47,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		#endregion
 
-		#region IMessageNameMemento<TMessageName> Members
+		#region IMessageSubjectMemento<TSubject> Members
 
-		public TMessageName MessageName { get; set; }
+		public TSubject Subject { get; set; }
 
 		#endregion
 
@@ -91,7 +91,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			if (!Equals(Party, receiveLocation.ReceivePort.Name.Party))
 				throw new NamingConventionException(
 					$"'{receiveLocation.GetType().Name}' ReceiveLocation's Party, '{Party}', does not match its ReceivePort's one, '{receiveLocation.ReceivePort.Name.Party}'.");
-			if (Equals(MessageName, default(TMessageName))) throw new NamingConventionException($"'{receiveLocation.GetType().Name}' ReceiveLocation's MessageName is required.");
+			if (Equals(Subject, default(TSubject))) throw new NamingConventionException($"'{receiveLocation.GetType().Name}' ReceiveLocation's Subject is required.");
 			if (MessageFormat == null) throw new NamingConventionException("A non null MessageFormat is required.");
 
 			var aggregate = ComputeAggregateName(receiveLocation.GetType());
@@ -108,7 +108,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 				aggregate.IsNullOrEmpty() ? string.Empty : $".{aggregate}",
 				receiveLocation.ReceivePort.IsTwoWay ? "2" : "1",
 				Party,
-				MessageName,
+				Subject,
 				ComputeAdapterName(receiveLocation.Transport.Adapter),
 				MessageFormat.IsNullOrEmpty() ? string.Empty : $".{MessageFormat}");
 		}
@@ -119,7 +119,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			if (sendPort.ApplicationBinding == null)
 				throw new NamingConventionException($"'{sendPort.GetType().Name}' SendPort is not bound to application's send port collection.");
 			if (Equals(Party, default(TParty))) throw new NamingConventionException($"'{sendPort.GetType().Name}' SendPort's Party is required.");
-			if (Equals(MessageName, default(TMessageName))) throw new NamingConventionException($"'{sendPort.GetType().Name}' SendPort's MessageName is required.");
+			if (Equals(Subject, default(TSubject))) throw new NamingConventionException($"'{sendPort.GetType().Name}' SendPort's Subject is required.");
 			if (MessageFormat == null) throw new NamingConventionException("A non null MessageFormat is required.");
 
 			var aggregate = ComputeAggregateName(sendPort.GetType());
@@ -130,7 +130,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 				aggregate.IsNullOrEmpty() ? string.Empty : $".{aggregate}",
 				sendPort.IsTwoWay ? "2" : "1",
 				Party,
-				MessageName,
+				Subject,
 				ComputeAdapterName(sendPort.Transport.Adapter),
 				MessageFormat.IsNullOrEmpty() ? string.Empty : $".{MessageFormat}");
 		}

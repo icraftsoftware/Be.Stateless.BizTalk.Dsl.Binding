@@ -21,37 +21,37 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 {
-	public class NamingConvention<TParty, TMessageName> : NamingConventionBase<NamingConvention<TParty, TMessageName>, TParty, TMessageName>,
-		INamingConvention<NamingConvention<TParty, TMessageName>>
+	public class NamingConvention<TParty, TSubject> : NamingConventionBase<NamingConvention<TParty, TSubject>, TParty, TSubject>,
+		INamingConvention<NamingConvention<TParty, TSubject>>
 	{
 		#region Operators
 
 		[SuppressMessage("ReSharper", "UnusedParameter.Global")]
-		public static implicit operator string(NamingConvention<TParty, TMessageName> _)
+		public static implicit operator string(NamingConvention<TParty, TSubject> _)
 		{
 			throw new NotSupportedException($"In order to support {typeof(Subscription.FilterTranslator).FullName}.");
 		}
 
 		#endregion
 
-		#region INamingConvention<NamingConvention<TParty,TMessageName>> Members
+		#region INamingConvention<NamingConvention<TParty,TSubject>> Members
 
-		string INamingConvention<NamingConvention<TParty, TMessageName>>.ComputeApplicationName(IApplicationBinding<NamingConvention<TParty, TMessageName>> application)
+		string INamingConvention<NamingConvention<TParty, TSubject>>.ComputeApplicationName(IApplicationBinding<NamingConvention<TParty, TSubject>> application)
 		{
 			return base.ComputeApplicationName(application);
 		}
 
-		string INamingConvention<NamingConvention<TParty, TMessageName>>.ComputeReceivePortName(IReceivePort<NamingConvention<TParty, TMessageName>> receivePort)
+		string INamingConvention<NamingConvention<TParty, TSubject>>.ComputeReceivePortName(IReceivePort<NamingConvention<TParty, TSubject>> receivePort)
 		{
 			return base.ComputeReceivePortName(receivePort);
 		}
 
-		string INamingConvention<NamingConvention<TParty, TMessageName>>.ComputeReceiveLocationName(IReceiveLocation<NamingConvention<TParty, TMessageName>> receiveLocation)
+		string INamingConvention<NamingConvention<TParty, TSubject>>.ComputeReceiveLocationName(IReceiveLocation<NamingConvention<TParty, TSubject>> receiveLocation)
 		{
 			return base.ComputeReceiveLocationName(receiveLocation);
 		}
 
-		string INamingConvention<NamingConvention<TParty, TMessageName>>.ComputeSendPortName(ISendPort<NamingConvention<TParty, TMessageName>> sendPort)
+		string INamingConvention<NamingConvention<TParty, TSubject>>.ComputeSendPortName(ISendPort<NamingConvention<TParty, TSubject>> sendPort)
 		{
 			return base.ComputeSendPortName(sendPort);
 		}

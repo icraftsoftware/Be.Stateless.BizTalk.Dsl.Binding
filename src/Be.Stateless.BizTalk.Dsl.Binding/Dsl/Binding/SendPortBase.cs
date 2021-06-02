@@ -39,7 +39,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		protected internal SendPortBase()
 		{
 			Priority = Priority.Normal;
-			Transport = new SendPortTransport();
+			Transport = new SendPortTransport<TNamingConvention>(this);
+			BackupTransport = new Lazy<SendPortTransport<TNamingConvention>>(() => new SendPortTransport<TNamingConvention>(this));
 		}
 
 		protected internal SendPortBase(Action<ISendPort<TNamingConvention>> sendPortConfigurator) : this()
@@ -52,11 +53,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		#region ISendPort<TNamingConvention> Members
 
 		public IApplicationBinding<TNamingConvention> ApplicationBinding { get; internal set; }
-
-		public SendPortTransport BackupTransport
-		{
-			get { return _backupTransport ??= new SendPortTransport(); }
-		}
 
 		public string Description { get; set; }
 
@@ -78,7 +74,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public bool StopSendingOnOrderedDeliveryFailure { get; set; }
 
-		public SendPortTransport Transport { get; }
+		public SendPortTransport<TNamingConvention> Transport { get; }
+
+		public Lazy<SendPortTransport<TNamingConvention>> BackupTransport { get; }
 
 		#endregion
 
@@ -95,7 +93,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				((ISupportEnvironmentOverride) ReceivePipeline)?.ApplyEnvironmentOverrides(environment);
 				((ISupportEnvironmentOverride) SendPipeline)?.ApplyEnvironmentOverrides(environment);
 				((ISupportEnvironmentOverride) Transport).ApplyEnvironmentOverrides(environment);
-				((ISupportEnvironmentOverride) _backupTransport)?.ApplyEnvironmentOverrides(environment);
+				if (BackupTransport.IsValueCreated) ((ISupportEnvironmentOverride) BackupTransport.Value).ApplyEnvironmentOverrides(environment);
 			}
 		}
 
@@ -114,7 +112,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			if (Name == null) throw new BindingException("Send Port's Name is not defined.");
 			if (SendPipeline == null) throw new BindingException("Send Port's Send Pipeline is not defined.");
 			Transport.Validate("Send Port's Primary Transport");
-			_backupTransport?.Validate("Send Port's Backup Transport");
+			if (BackupTransport.IsValueCreated) BackupTransport.Value.Validate("Send Port's Backup Transport");
 		}
 
 		#endregion
@@ -132,7 +130,5 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global", Justification = "Public DSL API.")]
 		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = "Public DSL API.")]
 		protected virtual void ApplyEnvironmentOverrides(string environment) { }
-
-		private SendPortTransport _backupTransport;
 	}
 }

@@ -18,6 +18,7 @@
 
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Moq;
 using Xunit;

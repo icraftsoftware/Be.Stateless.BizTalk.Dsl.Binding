@@ -16,8 +16,8 @@
 
 #endregion
 
-using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Environment.Settings;
+using Be.Stateless.BizTalk.Install;
 
 namespace Be.Stateless.BizTalk.Dummies.Environment.Settings
 {

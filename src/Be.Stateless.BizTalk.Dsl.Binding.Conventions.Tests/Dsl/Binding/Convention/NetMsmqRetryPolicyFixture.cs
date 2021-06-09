@@ -18,6 +18,7 @@
 
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Xunit;
 

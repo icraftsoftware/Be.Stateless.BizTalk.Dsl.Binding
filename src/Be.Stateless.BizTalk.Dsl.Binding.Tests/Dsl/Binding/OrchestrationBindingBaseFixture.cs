@@ -19,9 +19,9 @@
 using System;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.CodeDom;
-using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Explorer;
+using Be.Stateless.BizTalk.Install;
 using Be.Stateless.BizTalk.Orchestrations.Bound;
 using FluentAssertions;
 using Moq;

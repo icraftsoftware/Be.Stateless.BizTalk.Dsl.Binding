@@ -16,7 +16,7 @@
 
 #endregion
 
-using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Install;
 using Microsoft.BizTalk.Deployment.Binding;
 using Moq;
 using Moq.Protected;

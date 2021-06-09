@@ -36,6 +36,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding.Conventions\Be.Stateless.BizTalk.Dsl.Binding.Conventions.csproj" />
     <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Binding\Be.Stateless.BizTalk.Dsl.Binding.csproj" />
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Dsl.Environment.Settings\Be.Stateless.BizTalk.Dsl.Environment.Settings.csproj" />
   </ItemGroup>
 
   <ItemGroup>

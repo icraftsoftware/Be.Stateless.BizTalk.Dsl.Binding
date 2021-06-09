@@ -19,6 +19,7 @@
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Pipeline;
+using Be.Stateless.BizTalk.Install;
 using Be.Stateless.Reflection;
 using FluentAssertions;
 using Moq;

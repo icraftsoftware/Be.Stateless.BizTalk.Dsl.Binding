@@ -18,6 +18,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Install;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {

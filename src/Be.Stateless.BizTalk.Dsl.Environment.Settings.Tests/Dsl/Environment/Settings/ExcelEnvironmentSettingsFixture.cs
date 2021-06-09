@@ -19,8 +19,8 @@
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Environment.Settings;
+using Be.Stateless.BizTalk.Install;
 using Be.Stateless.BizTalk.Unit.Dsl.Binding;
 using FluentAssertions;
 using Xunit;

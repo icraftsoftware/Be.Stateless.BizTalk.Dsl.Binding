@@ -18,7 +18,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
+namespace Be.Stateless.BizTalk.Install
 {
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]

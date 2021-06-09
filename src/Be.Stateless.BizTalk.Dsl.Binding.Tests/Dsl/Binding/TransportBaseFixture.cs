@@ -17,8 +17,8 @@
 #endregion
 
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
-using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Explorer;
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;

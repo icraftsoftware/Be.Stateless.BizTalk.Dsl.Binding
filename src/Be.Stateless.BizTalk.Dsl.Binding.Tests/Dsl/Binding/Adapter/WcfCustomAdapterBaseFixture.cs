@@ -19,7 +19,7 @@
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
-using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Install;
 using Be.Stateless.Reflection;
 using FluentAssertions;
 using Microsoft.BizTalk.Adapter.Wcf.Config;

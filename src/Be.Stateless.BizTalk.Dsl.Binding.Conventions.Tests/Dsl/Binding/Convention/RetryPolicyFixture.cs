@@ -16,6 +16,7 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Xunit;
 

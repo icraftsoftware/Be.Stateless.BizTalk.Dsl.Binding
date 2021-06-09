@@ -24,6 +24,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
 using Be.Stateless.BizTalk.Dummies.Bindings.Detailed;
+using Be.Stateless.BizTalk.Install;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
 using Be.Stateless.BizTalk.Schema.Annotation;

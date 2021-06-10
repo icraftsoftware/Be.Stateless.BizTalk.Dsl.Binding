@@ -16,6 +16,7 @@
 
 #endregion
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Install
@@ -24,24 +25,14 @@ namespace Be.Stateless.BizTalk.Install
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 	public static class TargetEnvironment
 	{
-		public static bool IsAcceptance(this string environment)
+		public static bool IsDevelopment(this string environment)
 		{
-			return Equals(environment, ACCEPTANCE);
-		}
-
-		public static bool IsAcceptanceOrProduction(this string environment)
-		{
-			return environment.IsAcceptance() || environment.IsPreProduction() || environment.IsProduction();
+			return environment is DEVELOPMENT;
 		}
 
 		public static bool IsBuild(this string environment)
 		{
-			return Equals(environment, BUILD);
-		}
-
-		public static bool IsDevelopment(this string environment)
-		{
-			return Equals(environment, DEVELOPMENT);
+			return environment is BUILD;
 		}
 
 		public static bool IsDevelopmentOrBuild(this string environment)
@@ -49,25 +40,55 @@ namespace Be.Stateless.BizTalk.Install
 			return environment.IsDevelopment() || environment.IsBuild();
 		}
 
-		public static bool IsPreProduction(this string environment)
+		public static bool IsIntegration(this string environment)
 		{
-			return Equals(environment, PREPRODUCTION);
+			return environment is INTEGRATION;
 		}
 
-		public static bool IsPreProductionOrProduction(this string environment)
+		public static bool IsIntegrationUpwards(this string environment)
+		{
+			return environment.IsIntegration() || environment.IsAcceptanceUpwards();
+		}
+
+		public static bool IsAcceptance(this string environment)
+		{
+			return environment is ACCEPTANCE;
+		}
+
+		public static bool IsAcceptanceUpwards(this string environment)
+		{
+			return environment.IsAcceptance() || environment.IsPreProductionUpwards();
+		}
+
+		// TODO discard Obsolete
+		[Obsolete("Use IsAcceptanceUpwards() instead.")]
+		public static bool IsAcceptanceOrProduction(this string environment)
+		{
+			return environment.IsAcceptance() || environment.IsPreProduction() || environment.IsProduction();
+		}
+
+		public static bool IsPreProduction(this string environment)
+		{
+			return environment is PREPRODUCTION;
+		}
+
+		public static bool IsPreProductionUpwards(this string environment)
 		{
 			return environment.IsPreProduction() || environment.IsProduction();
 		}
 
 		public static bool IsProduction(this string environment)
 		{
-			return Equals(environment, PRODUCTION);
+			return environment is PRODUCTION;
 		}
 
-		public const string ACCEPTANCE = "ACC";
-		public const string BUILD = "BLD";
+		// @formatter:off
 		public const string DEVELOPMENT = "DEV";
+		public const string BUILD = "BLD";
+		public const string INTEGRATION = "INT";
+		public const string ACCEPTANCE = "ACC";
 		public const string PREPRODUCTION = "PRE";
 		public const string PRODUCTION = "PRD";
+		// @formatter:on
 	}
 }

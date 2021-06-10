@@ -40,7 +40,7 @@ namespace Be.Stateless.BizTalk.Install
 					.Should().Throw<NotSupportedException>()
 					.WithMessage($"'{nameof(Setting5)}' does not provide a value for target environment '{TargetEnvironment.ACCEPTANCE}'.");
 				Setting6.Should().Be(3);
-				Setting7.Should().Be(3);
+				Setting7.Should().Be(4);
 			}
 		}
 
@@ -83,6 +83,32 @@ namespace Be.Stateless.BizTalk.Install
 		}
 
 		[Fact]
+		public void ReturnIntegrationValue()
+		{
+			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.INTEGRATION))
+			{
+				Invoking(() => DateSetting)
+					.Should().Throw<NotSupportedException>()
+					.WithMessage($"'{nameof(DateSetting)}' does not provide a value for target environment '{TargetEnvironment.INTEGRATION}'.");
+				Invoking(() => Setting1)
+					.Should().Throw<NotSupportedException>()
+					.WithMessage($"'{nameof(Setting1)}' does not provide a value for target environment '{TargetEnvironment.INTEGRATION}'.");
+				Invoking(() => Setting2)
+					.Should().Throw<NotSupportedException>()
+					.WithMessage($"'{nameof(Setting2)}' does not provide a value for target environment '{TargetEnvironment.INTEGRATION}'.");
+				Setting3.Should().Be("three.2");
+				Invoking(() => Setting4)
+					.Should().Throw<NotSupportedException>()
+					.WithMessage($"'{nameof(Setting4)}' does not provide a value for target environment '{TargetEnvironment.INTEGRATION}'.");
+				Invoking(() => Setting5)
+					.Should().Throw<NotSupportedException>()
+					.WithMessage($"'{nameof(Setting5)}' does not provide a value for target environment '{TargetEnvironment.INTEGRATION}'.");
+				Invoking(() => Setting5).Should().Throw<NotSupportedException>();
+				Setting7.Should().Be(3);
+			}
+		}
+
+		[Fact]
 		public void ReturnPreProductionValue()
 		{
 			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.PREPRODUCTION))
@@ -96,7 +122,7 @@ namespace Be.Stateless.BizTalk.Install
 					.Should().Throw<NotSupportedException>()
 					.WithMessage($"'{nameof(Setting5)}' does not provide a value for target environment '{TargetEnvironment.PREPRODUCTION}'.");
 				Setting6.Should().Be(4);
-				Setting7.Should().Be(4);
+				Setting7.Should().Be(5);
 			}
 		}
 
@@ -114,18 +140,18 @@ namespace Be.Stateless.BizTalk.Install
 					.Should().Throw<NotSupportedException>()
 					.WithMessage($"'{nameof(Setting5)}' does not provide a value for target environment '{TargetEnvironment.PRODUCTION}'.");
 				Setting6.Should().Be(4);
-				Setting7.Should().Be(4);
+				Setting7.Should().Be(5);
 			}
 		}
 
 		private DateTime DateSetting => EnvironmentDependentValue
 			.ForDevelopment(new DateTime(2021, 3, 3))
-			.ForAcceptanceOrProduction(DateTime.MinValue);
+			.ForAcceptanceUpwards(DateTime.MinValue);
 
 		private string Setting1 => EnvironmentDependentValue
 			.ForDevelopmentOrBuild("one.1")
 			.ForAcceptance("one.2")
-			.ForPreProductionOrProduction("one.3");
+			.ForPreProductionUpwards("one.3");
 
 		private int Setting2 => EnvironmentDependentValue
 			.ForAcceptance(1)
@@ -136,10 +162,10 @@ namespace Be.Stateless.BizTalk.Install
 
 		private string Setting3 => EnvironmentDependentValue
 			.ForDevelopmentOrBuild("three.1")
-			.ForAcceptanceOrProduction("three.2");
+			.ForIntegrationUpwards("three.2");
 
 		private string Setting4 => EnvironmentDependentValue
-			.ForAcceptanceOrProduction("four");
+			.ForAcceptanceUpwards("four");
 
 		private int Setting5 => EnvironmentDependentValue
 			.ForDevelopmentOrBuild(0);
@@ -148,15 +174,16 @@ namespace Be.Stateless.BizTalk.Install
 			var e when e.IsDevelopment() => 1,
 			var e when e.IsBuild() => 2,
 			var e when e.IsAcceptance() => 3,
-			var e when e.IsPreProductionOrProduction() => 4,
+			var e when e.IsPreProductionUpwards() => 4,
 			_ => throw new NotSupportedException()
 		};
 
 		private int Setting7 => DeploymentContext.TargetEnvironment switch {
 			TargetEnvironment.DEVELOPMENT => 1,
 			TargetEnvironment.BUILD => 2,
-			TargetEnvironment.ACCEPTANCE => 3,
-			TargetEnvironment.PREPRODUCTION or TargetEnvironment.PRODUCTION => 4,
+			TargetEnvironment.INTEGRATION => 3,
+			TargetEnvironment.ACCEPTANCE => 4,
+			TargetEnvironment.PREPRODUCTION or TargetEnvironment.PRODUCTION => 5,
 			_ => throw new NotSupportedException()
 		};
 	}

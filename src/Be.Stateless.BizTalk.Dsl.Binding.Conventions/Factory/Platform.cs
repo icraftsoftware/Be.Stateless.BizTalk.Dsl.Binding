@@ -56,5 +56,8 @@ namespace Be.Stateless.BizTalk.Factory
 		public string TransmittingHost => GetOverriddenOrDefaultValue("BizTalkServerApplication");
 
 		#endregion
+
+		[SuppressMessage("ReSharper", "RedundantNameQualifier")]
+		public Be.Stateless.BizTalk.Dsl.Binding.Convention.HostResolutionPolicy HostResolutionPolicy => Be.Stateless.BizTalk.Factory.Convention.HostResolutionPolicy.Default;
 	}
 }

@@ -58,7 +58,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		protected override string ResolveHostName()
 		{
-			var name = ((IResolveTransportHost) Host)?.ResolveHostName(this);
+			var name = ((IResolveHost) Host)?.ResolveHostName(this);
 			if (name.IsNullOrEmpty())
 				throw new BindingException($"Transport's Host could not be resolved for ReceiveLocation '{((ISupportNamingConvention) ReceiveLocation).Name}'.");
 			return name;

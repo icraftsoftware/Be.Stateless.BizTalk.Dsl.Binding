@@ -42,33 +42,33 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 	{
 		static CompositeEnvironmentSettings()
 		{
-			// overriding base class' lazy singleton factory is possible because this class hides base class' Settings property
-			_lazySingletonInstance = new Lazy<T>(CreateSingletonInstance);
+			// overriding base class' SingletonFactory is possible because this class hides base class' Settings property
+			SingletonFactory = CreateCompositeEnvironmentSettingsSingletonInstance;
 		}
 
 		/// <summary>
-		/// Supports runtime discovery and composition of environment setting overrides.
+		/// Supports runtime discovery and composition of <see cref="CompositeEnvironmentSettings{T,TI}"/> overrides via <see
+		/// cref="DeploymentContext.EnvironmentSettingOverridesType">DeploymentContext.EnvironmentSettingOverridesType</see> and
+		/// their instantiation.
 		/// </summary>
 		/// <returns>
 		/// The <typeparamref name="T"/> environment settings instance possibly composing a <typeparamref name="TI"/>-derived
 		/// setting overrides instance.
 		/// </returns>
-		private static T CreateSingletonInstance()
+		private static T CreateCompositeEnvironmentSettingsSingletonInstance()
 		{
-			var instance = new T();
-			if (DeploymentContext.EnvironmentSettingOverridesType != null)
-			{
-				instance.EnvironmentSettingOverrides = (TI) Activator.CreateInstance(DeploymentContext.EnvironmentSettingOverridesType);
-			}
-			return instance;
+			return new() {
+				EnvironmentSettingOverrides = DeploymentContext.EnvironmentSettingOverridesType != null
+					? (TI) Activator.CreateInstance(DeploymentContext.EnvironmentSettingOverridesType)
+					: default
+			};
 		}
 
 		/// <summary>
 		/// Singleton instance.
 		/// </summary>
-		// hack: hiding base class' Settings property and declaring it again ensures this class' static ctor is called
-		// see https://stackoverflow.com/a/4653075/1789441
-		public new static T Settings => _lazySingletonInstance.Value;
+		/// <seealso href="https://stackoverflow.com/a/4653075/1789441">hack: hiding base class' Settings property and declaring it anew ensures this class' static ctor is called see</seealso>
+		public new static T Settings => LazySingletonInstance.Value;
 
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
 		protected TI EnvironmentSettingOverrides { get; private set; }

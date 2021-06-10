@@ -60,7 +60,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		protected override string ResolveHostName()
 		{
-			var name = ((IResolveTransportHost) Host)?.ResolveHostName(this);
+			var name = ((IResolveHost) Host)?.ResolveHostName(this);
 			if (name.IsNullOrEmpty())
 				throw new BindingException(
 					$"{(ReferenceEquals(SendPort.Transport, this) ? "Primary" : "Backup")} Transport's Host could not be resolved for SendPort '{((ISupportNamingConvention) SendPort).Name}'.");

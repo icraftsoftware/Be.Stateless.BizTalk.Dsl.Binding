@@ -139,7 +139,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var serviceRef = new ServiceRef {
 				Description = orchestrationBinding.Description,
 				Host = new HostRef {
-					Name = orchestrationBinding.Host
+					Name = ((ISupportHostNameResolution) orchestrationBinding).ResolveHostName()
 				},
 				Name = orchestrationBinding.Type.FullName,
 				// Un/Enlisting/Starting/Stopping orchestrations is the responsibility of BizTalkServiceStateInitializerVisitor

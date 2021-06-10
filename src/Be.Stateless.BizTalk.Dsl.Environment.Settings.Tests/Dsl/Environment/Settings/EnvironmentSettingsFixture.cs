@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Install;
 using Be.Stateless.BizTalk.Unit.Dsl.Binding;
 using FluentAssertions;
 using Xunit;
@@ -28,19 +29,19 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 {
 	public static class EnvironmentSettingsFixture
 	{
-		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
+		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClassWithEnvironmentSettingOverridesType
 
 		[Collection("DeploymentContext")]
-		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
+		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClassWithEnvironmentSettingOverridesType
 		{
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
 			public void SingletonCanBeConstructedAndCanBeAccessed()
 			{
-				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(FooAppOverrides)))
 				{
 					// construction
 					Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().NotThrow();
-
 					FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
 					// access
 					EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
@@ -68,6 +69,119 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 
 				#endregion
 			}
+		}
+
+		#endregion
+
+		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClassWithoutEnvironmentSettingOverridesType
+
+		[Collection("DeploymentContext")]
+		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClassWithoutEnvironmentSettingOverridesType
+		{
+			[Fact]
+			public void SingletonCanBeConstructedAndCanBeAccessed()
+			{
+				// construction
+				Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().NotThrow();
+				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
+				// access
+				EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
+				EnvironmentSettings<FooApp>.Settings.ApplicationName.Should().Be(nameof(FooApp));
+				EnvironmentSettings<FooApp>.Settings.ReceivingHost.Should().Be("Default Receive Host");
+			}
+
+			private class FooApp : EnvironmentSettings<FooApp>, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+
+				public string ReceivingHost => "Default Receive Host";
+			}
+		}
+
+		#endregion
+
+		#region Nested Type: InstantiatingEnvironmentSettingsExplicitlyWithEnvironmentSettingOverridesType
+
+		[Collection("DeploymentContext")]
+		public class InstantiatingEnvironmentSettingsExplicitlyWithEnvironmentSettingOverridesType
+		{
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
+			[Fact]
+			public void EnvironmentSettingsThrowWhenInstantiatedExplicitly()
+			{
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					Invoking(() => new BarApp()).Should().Throw<InvalidOperationException>();
+					Invoking(() => new BarAppOverrides()).Should().Throw<InvalidOperationException>();
+					Invoking(() => new FooApp()).Should().Throw<InvalidOperationException>();
+					Invoking(() => new FooAppOverrides()).Should().Throw<InvalidOperationException>();
+				}
+			}
+
+			private class BarApp : EnvironmentSettings<BarApp>, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(BarApp);
+
+				#endregion
+			}
+
+			private class BarAppOverrides : BarApp { }
+
+			private class FooApp : EnvironmentSettings<FooApp>, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+			}
+
+			private class FooAppOverrides : FooApp { }
+		}
+
+		#endregion
+
+		#region Nested Type: InstantiatingEnvironmentSettingsExplicitlyWithoutEnvironmentSettingOverridesType
+
+		[Collection("DeploymentContext")]
+		public class InstantiatingEnvironmentSettingsExplicitlyWithoutEnvironmentSettingOverridesType
+		{
+			[Fact]
+			public void EnvironmentSettingsThrowWhenInstantiatedExplicitly()
+			{
+				Invoking(() => new BarApp()).Should().Throw<InvalidOperationException>();
+				Invoking(() => new BarAppOverrides()).Should().Throw<InvalidOperationException>();
+				Invoking(() => new FooApp()).Should().Throw<InvalidOperationException>();
+				Invoking(() => new FooAppOverrides()).Should().Throw<InvalidOperationException>();
+			}
+
+			private class BarApp : EnvironmentSettings<BarApp>, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(BarApp);
+
+				#endregion
+			}
+
+			private class BarAppOverrides : BarApp { }
+
+			private class FooApp : EnvironmentSettings<FooApp>, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+			}
+
+			private class FooAppOverrides : FooApp { }
 		}
 
 		#endregion
@@ -105,14 +219,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 			}
 
 			[Fact]
-			public void EnvironmentSettingsThrowWhenInstantiatedExplicitly()
-			{
-				Invoking(() => new BarApp()).Should().Throw<InvalidOperationException>();
-				Invoking(() => new BarAppOverride()).Should().Throw<InvalidOperationException>();
-			}
-
-			[Fact]
-			public void SsoSettings()
+			public void SsoSettingsReturnDefaultValues()
 			{
 				FooApp.Settings.SsoSettings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\default" } });
@@ -120,7 +227,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 					.Should().BeEquivalentTo(new Dictionary<string, string> { { "CheckInFolder", @"c:\claim\store\in\default" } });
 			}
 
-			public class BarApp : EnvironmentSettings<BarApp>, IEnvironmentSettings
+			private class BarApp : EnvironmentSettings<BarApp>, IEnvironmentSettings
 			{
 				#region IEnvironmentSettings Members
 
@@ -128,8 +235,6 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 
 				#endregion
 			}
-
-			private class BarAppOverride : BarApp { }
 
 			private class FooApp : EnvironmentSettings<FooApp>, IEnvironmentSettings
 			{
@@ -197,7 +302,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 
 			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
-			public void SsoSettings()
+			public void SsoSettingsReturnOverriddenValues()
 			{
 				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(FooAppOverrides)))
 				{
@@ -225,8 +330,8 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 
 				#endregion
 
-				[SsoSetting]
 				[SuppressMessage("ReSharper", "UnusedMember.Global")]
+				[SsoSetting]
 				public virtual string CheckInFolder => @"c:\claim\store\in\default";
 
 				public virtual string ReceivingHost => "Default Receive Host";
@@ -249,8 +354,8 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 				/// <summary>
 				/// This property will not be part of the properties being deployed to SSO.
 				/// </summary>
-				[SsoSetting]
 				[SuppressMessage("ReSharper", "UnusedMember.Local")]
+				[SsoSetting]
 				public string MySsoProperty => nameof(MySsoProperty);
 			}
 		}
@@ -264,11 +369,14 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		{
 			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
-			public void EnvironmentSettingOverridesThrow()
+			public void SettingThrows()
 			{
 				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(BarApp)))
 				{
-					Invoking(() => FooApp.Settings).Should().Throw<InvalidCastException>();
+					Invoking(() => FooApp.Settings)
+						.Should().Throw<InvalidOperationException>()
+						.WithMessage(
+							$"'{nameof(BarApp)}' does not derive from '{nameof(FooApp)}' and cannot be used as its {nameof(DeploymentContext.EnvironmentSettingOverridesType)}.");
 				}
 			}
 

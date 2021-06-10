@@ -54,6 +54,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			((ISupportHostNameResolution) receiveLocationMock.Object.Transport).ResolveHostName().Should().Be("BizTalkServerIsolatedHost");
 		}
 
+		[Fact]
+		public void HowToResolveHostNameAccordingToOrchestration()
+		{
+			var orchestrationBinding = new Orchestrations.Bound.ProcessOrchestrationBinding {
+				Host = DummyHostResolutionPolicy.Default
+			};
+
+			((ISupportHostNameResolution) orchestrationBinding).ResolveHostName().Should().Be("DummyHost");
+		}
+
 		[SkippableFact]
 		public void HowToResolveHostNameAccordingToPipelineComponent()
 		{

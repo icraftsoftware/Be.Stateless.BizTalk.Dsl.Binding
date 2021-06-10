@@ -28,8 +28,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 		[Fact]
 		public void GetEnvironmentSettingsType()
 		{
-			typeof(EnvironmentSettingsFixture.WithoutEnvironmentSettingOverrides.BarApp).Assembly.GetEnvironmentSettingsType(true)
-				.Should().BeSameAs(typeof(EnvironmentSettingsFixture.WithoutEnvironmentSettingOverrides.BarApp));
+			typeof(Dummies.Environment.Settings.DummyApp).Assembly.GetEnvironmentSettingsType(true).Should().BeSameAs(typeof(Dummies.Environment.Settings.DummyApp));
 		}
 
 		[Fact]

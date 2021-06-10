@@ -16,12 +16,6 @@
 
 #endregion
 
-namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
-{
-	internal interface IResolveTransportHost
-	{
-		string ResolveHostName<TNamingConvention>(ReceiveLocationTransport<TNamingConvention> transport) where TNamingConvention : class;
+using Xunit;
 
-		string ResolveHostName<TNamingConvention>(SendPortTransport<TNamingConvention> transport) where TNamingConvention : class;
-	}
-}
+[assembly: CollectionBehavior(DisableTestParallelization = true)]

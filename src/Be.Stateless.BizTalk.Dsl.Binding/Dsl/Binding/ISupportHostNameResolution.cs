@@ -18,7 +18,7 @@
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
-	internal interface ISupportHostNameResolution
+	public interface ISupportHostNameResolution
 	{
 		string ResolveHostName();
 	}

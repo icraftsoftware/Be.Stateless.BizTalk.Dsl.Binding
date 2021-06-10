@@ -45,7 +45,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 		protected internal override void VisitOrchestration(IOrchestrationBinding orchestrationBinding)
 		{
-			_hosts.Add(orchestrationBinding.Host);
+			_hosts.Add(((ISupportHostNameResolution) orchestrationBinding).ResolveHostName());
 		}
 
 		protected internal override void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)

@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
+using Be.Stateless.BizTalk.Reflection;
 using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install.Command

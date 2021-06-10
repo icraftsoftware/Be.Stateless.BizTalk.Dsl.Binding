@@ -33,7 +33,7 @@ using Xunit;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
-	public class HostResolutionPolicyFixture
+	public class DummyHostResolutionPolicyFixture
 	{
 		[SkippableFact]
 		public void HowToResolveHostNameAccordingToAdapter()
@@ -52,6 +52,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			receiveLocationMock.As<ISupportValidation>().Setup(rl => rl.Validate());
 
 			((ISupportHostNameResolution) receiveLocationMock.Object.Transport).ResolveHostName().Should().Be("BizTalkServerIsolatedHost");
+		}
+
+		[Fact]
+		public void HowToResolveHostNameAccordingToOrchestration()
+		{
+			var orchestrationBinding = new Orchestrations.Bound.ProcessOrchestrationBinding {
+				Host = DummyHostResolutionPolicy.Default
+			};
+
+			((ISupportHostNameResolution) orchestrationBinding).ResolveHostName().Should().Be("DummyHost");
 		}
 
 		[SkippableFact]

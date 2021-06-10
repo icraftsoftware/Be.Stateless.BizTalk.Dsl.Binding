@@ -34,6 +34,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	public abstract class OrchestrationBindingBase<T>
 		: IOrchestrationBinding,
 			ISupportEnvironmentOverride,
+			ISupportHostNameResolution,
 			ISupportNamingConvention,
 			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
@@ -72,12 +73,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public string Description { get; set; }
 
-		public string Host { get; set; }
+		public HostResolutionPolicy Host { get; set; }
 
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		public Type Type => typeof(T);
 
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		public IOrchestrationPortBinding[] PortBindings => LogicalPorts.Select(lp => new PortBindingInfo(this, lp)).Cast<IOrchestrationPortBinding>().ToArray();
 
 		public ServiceState State { get; set; }
@@ -96,6 +97,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#endregion
 
+		#region ISupportHostNameResolution Members
+
+		string ISupportHostNameResolution.ResolveHostName()
+		{
+			var name = ((IResolveHost) Host)?.ResolveHostName(this);
+			if (name.IsNullOrEmpty()) throw new BindingException($"Host could not be resolved for Orchestration '{((ISupportNamingConvention) this).Name}'.");
+			return name;
+		}
+
+		#endregion
+
 		#region ISupportNamingConvention Members
 
 		string ISupportNamingConvention.Name => typeof(T).FullName;
@@ -108,7 +120,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
 		void ISupportValidation.Validate()
 		{
-			if (Host.IsNullOrEmpty()) throw new BindingException("Orchestration's Host is not defined.");
+			if (Host == null) throw new BindingException("Orchestration's Host is not defined.");
 
 			// validate that all logical ports are bound
 			var unboundPorts = LogicalPorts

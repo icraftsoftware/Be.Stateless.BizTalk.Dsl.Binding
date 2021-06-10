@@ -23,25 +23,17 @@ using Be.Stateless.BizTalk.Install;
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 {
 	/// <summary>
-	/// Elementary Microsoft BizTalk Server's Platform Settings that allows <see cref="ApplicationBinding"/> to be
+	/// Elementary Microsoft BizTalk Server's Database Platform Settings that allows <see cref="ApplicationBinding"/> to be
 	/// XML-serialized for a given target deployment environment and that provides an overriding point for <see
 	/// cref="ApplicationBinding"/> written against these settings.
 	/// </summary>
 	/// <seealso cref="CompositeEnvironmentSettings{T,TI}"/>
 	/// <seealso cref="DeploymentContext"/>
+	/// <seealso cref="DeploymentContext.EnvironmentSettingOverridesType">DeploymentContext.EnvironmentSettingOverridesType</seealso>
 	/// <seealso cref="TargetEnvironment"/>
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
-	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
-	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
-	public interface IPlatformEnvironmentSettings
+	public interface IProvideDatabaseNames : IProvideEnvironmentSettings
 	{
-		/// <summary>
-		/// Name of the Microsoft BizTalk Server isolated host in the target deployment environment.
-		/// </summary>
-		/// <seealso cref="DeploymentContext"/>
-		/// <seealso cref="TargetEnvironment"/>
-		string IsolatedHost { get; }
-
 		/// <summary>
 		/// Name of the SQL Server Database Instance hosting the management-related databases, e.g.<c>BizTalkMgmtDb</c>,
 		/// <c>BizTalkFactoryMgmtDb</c>.
@@ -93,26 +85,5 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 		/// <seealso cref="DeploymentContext"/>
 		/// <seealso cref="TargetEnvironment"/>
 		string ProcessingDatabaseServer { get; }
-
-		/// <summary>
-		/// Name of the Microsoft BizTalk Server host that will host orchestrations in the target deployment environment.
-		/// </summary>
-		/// <seealso cref="DeploymentContext"/>
-		/// <seealso cref="TargetEnvironment"/>
-		string ProcessingHost { get; }
-
-		/// <summary>
-		/// Name of the Microsoft BizTalk Server host that will host receive locations in the target deployment environment.
-		/// </summary>
-		/// <seealso cref="DeploymentContext"/>
-		/// <seealso cref="TargetEnvironment"/>
-		string ReceivingHost { get; }
-
-		/// <summary>
-		/// Name of the Microsoft BizTalk Server host that will host send ports in the target deployment environment.
-		/// </summary>
-		/// <seealso cref="DeploymentContext"/>
-		/// <seealso cref="TargetEnvironment"/>
-		string TransmittingHost { get; }
 	}
 }

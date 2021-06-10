@@ -21,7 +21,7 @@ using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
-	public class HostResolutionPolicy : IResolveTransportHost
+	public class HostResolutionPolicy : IResolveHost
 	{
 		#region Operators
 
@@ -40,19 +40,29 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			_name = name;
 		}
 
-		#region IResolveTransportHost Members
+		#region IResolveHost Members
 
-		string IResolveTransportHost.ResolveHostName<TNamingConvention>(ReceiveLocationTransport<TNamingConvention> transport) where TNamingConvention : class
+		string IResolveHost.ResolveHostName(IOrchestrationBinding orchestration)
+		{
+			return ResolveHostName(orchestration);
+		}
+
+		string IResolveHost.ResolveHostName<TNamingConvention>(ReceiveLocationTransport<TNamingConvention> transport) where TNamingConvention : class
 		{
 			return ResolveHostName(transport);
 		}
 
-		string IResolveTransportHost.ResolveHostName<TNamingConvention>(SendPortTransport<TNamingConvention> transport) where TNamingConvention : class
+		string IResolveHost.ResolveHostName<TNamingConvention>(SendPortTransport<TNamingConvention> transport) where TNamingConvention : class
 		{
 			return ResolveHostName(transport);
 		}
 
 		#endregion
+
+		protected virtual string ResolveHostName(IOrchestrationBinding orchestration)
+		{
+			return _name;
+		}
 
 		protected virtual string ResolveHostName<TNamingConvention>(ReceiveLocationTransport<TNamingConvention> transport)
 			where TNamingConvention : class

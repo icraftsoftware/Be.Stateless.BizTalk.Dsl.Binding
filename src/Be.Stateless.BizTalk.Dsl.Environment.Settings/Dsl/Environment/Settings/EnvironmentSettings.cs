@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Be.Stateless.BizTalk.Install;
@@ -49,29 +50,60 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 	public abstract class EnvironmentSettings<T> : IProvideSsoSettings
 		where T : EnvironmentSettings<T>, IEnvironmentSettings, new()
 	{
+		static EnvironmentSettings()
+		{
+			SingletonFactory = CreateEnvironmentSettingsSingletonInstance;
+		}
+
 		/// <summary>
-		/// Supports runtime discovery of environment setting overrides and their instantiation.
+		/// Supports runtime discovery and composition of <see cref="EnvironmentSettings{T}"/> overrides via <see
+		/// cref="DeploymentContext.EnvironmentSettingOverridesType">DeploymentContext.EnvironmentSettingOverridesType</see> and
+		/// their instantiation.
 		/// </summary>
 		/// <returns>
 		/// The possibly <typeparamref name="T"/>-derived environment settings instance.
 		/// </returns>
-		private static T CreateSingletonInstance()
+		private static T CreateEnvironmentSettingsSingletonInstance()
 		{
 			var resolvedEnvironmentSettingType = DeploymentContext.EnvironmentSettingOverridesType ?? typeof(T);
+			if (!typeof(T).IsAssignableFrom(resolvedEnvironmentSettingType))
+				throw new InvalidOperationException(
+					$"'{resolvedEnvironmentSettingType.Name}' does not derive from '{typeof(T).Name}' and cannot be used as its {nameof(DeploymentContext.EnvironmentSettingOverridesType)}.");
 			return (T) Activator.CreateInstance(resolvedEnvironmentSettingType);
 		}
+
+		protected internal static Lazy<T> LazySingletonInstance { get; internal set; } = new(InvokeSingletonFactory);
 
 		/// <summary>
 		/// Singleton instance.
 		/// </summary>
-		public static T Settings => _lazySingletonInstance.Value;
+		public static T Settings => LazySingletonInstance.Value;
+
+		protected static Func<T> SingletonFactory { get; set; }
+
+		/// <summary>
+		/// Together with this class protected default ctor, enforces that <see cref="EnvironmentSettings{T}"/> instances, or
+		/// derived instances thereof, can only be created through <seealso cref="LazySingletonInstance"/> lazy factory.
+		/// </summary>
+		internal static T InvokeSingletonFactory()
+		{
+			try
+			{
+				_isCreatingSingletonInstance = true;
+				return SingletonFactory.Invoke();
+			}
+			finally
+			{
+				_isCreatingSingletonInstance = false;
+			}
+		}
 
 		/// <summary>
 		/// Ensures singleton instantiation.
 		/// </summary>
 		protected EnvironmentSettings()
 		{
-			if (_lazySingletonInstance.IsValueCreated)
+			if (!_isCreatingSingletonInstance || LazySingletonInstance.IsValueCreated)
 				throw new InvalidOperationException(
 					$"EnvironmentSettings<T>-derived {GetType().Name} class cannot be instantiated explicitly and is accessible only through its static {nameof(Settings)} property.");
 		}
@@ -95,7 +127,9 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 
 		#endregion
 
-		protected static Lazy<T> _lazySingletonInstance = new(CreateSingletonInstance);
+		[SuppressMessage("ReSharper", "StaticMemberInGenericType")]
+		private static bool _isCreatingSingletonInstance;
+
 		private Dictionary<string, string> _runtimeSsoSettings;
 	}
 }

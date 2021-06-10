@@ -16,23 +16,14 @@
 
 #endregion
 
-using FluentAssertions;
-using Xunit;
-
-namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
+namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
-	public class TypeExtensionsFixture
+	internal interface IResolveHost
 	{
-		[Fact]
-		public void IsEnvironmentSettingsType()
-		{
-			typeof(Dummies.Environment.Settings.DummyApp).IsEnvironmentSettingsType().Should().BeTrue();
-		}
+		string ResolveHostName(IOrchestrationBinding orchestration);
 
-		[Fact]
-		public void IsNotEnvironmentSettingsType()
-		{
-			typeof(int).IsEnvironmentSettingsType().Should().BeFalse();
-		}
+		string ResolveHostName<TNamingConvention>(ReceiveLocationTransport<TNamingConvention> transport) where TNamingConvention : class;
+
+		string ResolveHostName<TNamingConvention>(SendPortTransport<TNamingConvention> transport) where TNamingConvention : class;
 	}
 }

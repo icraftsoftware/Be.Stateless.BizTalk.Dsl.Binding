@@ -19,6 +19,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -28,10 +29,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		string Description { get; set; }
 
-		string Host { get; set; }
+		/// <summary>
+		/// The BizTalk Server Host Name that will host this orchestration at runtime.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="Host"/> property can either be set directly to a <see cref="string"/> value or to a <see
+		/// cref="HostResolutionPolicy"/>-derived object instance.
+		/// </remarks>
+		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
+		HostResolutionPolicy Host { get; set; }
 
 		[SuppressMessage("ReSharper", "ReturnTypeCanBeEnumerable.Global", Justification = "Public DSL API.")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		IOrchestrationPortBinding[] PortBindings { get; }
 
 		/// <summary>
@@ -54,7 +63,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 		ServiceState State { get; set; }
 
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		Type Type { get; }
 	}
 }

@@ -16,23 +16,16 @@
 
 #endregion
 
-using FluentAssertions;
-using Xunit;
+using Be.Stateless.BizTalk.Dsl.Environment.Settings;
 
-namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
+namespace Be.Stateless.BizTalk.Dummies.Environment.Settings
 {
-	public class TypeExtensionsFixture
+	public class DummyApp : EnvironmentSettings<DummyApp>, IEnvironmentSettings
 	{
-		[Fact]
-		public void IsEnvironmentSettingsType()
-		{
-			typeof(Dummies.Environment.Settings.DummyApp).IsEnvironmentSettingsType().Should().BeTrue();
-		}
+		#region IEnvironmentSettings Members
 
-		[Fact]
-		public void IsNotEnvironmentSettingsType()
-		{
-			typeof(int).IsEnvironmentSettingsType().Should().BeFalse();
-		}
+		public string ApplicationName => nameof(DummyApp);
+
+		#endregion
 	}
 }

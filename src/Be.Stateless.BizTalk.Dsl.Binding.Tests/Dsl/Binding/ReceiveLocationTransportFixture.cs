@@ -44,8 +44,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receiveLocationMock.As<ISupportNamingConvention>();
 
 			var hostResolutionPolicyMock = new Mock<HostResolutionPolicy> { CallBase = true };
-			hostResolutionPolicyMock.As<ISupportNamingConvention>();
-			var sut = hostResolutionPolicyMock.As<IResolveTransportHost>();
+			var sut = hostResolutionPolicyMock.As<IResolveHost>();
 
 			var rlt = new ReceiveLocationTransport<string>(receiveLocationMock.Object) { Host = hostResolutionPolicyMock.Object };
 			sut.Setup(p => p.ResolveHostName(rlt)).Returns("name");

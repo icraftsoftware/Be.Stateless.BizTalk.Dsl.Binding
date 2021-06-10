@@ -29,45 +29,32 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 {
 	public static class CompositeEnvironmentSettingsFixture
 	{
-		#region Nested Type: AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClass
+		#region Nested Type: AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClassWithEnvironmentSettingOverridesType
 
 		[Collection("DeploymentContext")]
-		public class AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClass
+		public class AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClassWithEnvironmentSettingOverridesType
 		{
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
 			public void SingletonCanBeConstructedAndCanBeAccessed()
 			{
-				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(FooAppOverrides)))
 				{
 					// construction
-					Invoking(() => CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings).Should().NotThrow();
-
+					Invoking(() => CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>.Settings).Should().NotThrow();
 					FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
 					// access
-					CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.Should().BeSameAs(FooApp.Settings);
-					CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.ApplicationName.Should().Be(nameof(FooApp));
-					CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
+					CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>.Settings.Should().BeSameAs(FooApp.Settings);
+					CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>.Settings.ApplicationName.Should().Be(nameof(FooApp));
+					CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
 				}
 			}
 
-			[SuppressMessage("ReSharper", "UnusedMember.Local")]
-			private class FooAppOverrides : IPlatformEnvironmentSettings
+			private class FooAppOverrides : IProvideHostNames
 			{
-				#region IPlatformEnvironmentSettings Members
+				#region IProvideHostNames Members
 
 				public string IsolatedHost => nameof(IsolatedHost) + "Override";
-
-				public string ManagementDatabaseInstance => "Override";
-
-				public string ManagementDatabaseServer => "localhost" + "Override";
-
-				public string MonitoringDatabaseInstance => "Override";
-
-				public string MonitoringDatabaseServer => "localhost" + "Override";
-
-				public string ProcessingDatabaseInstance => string.Empty;
-
-				public string ProcessingDatabaseServer => "localhost" + "Override";
 
 				public string ProcessingHost => nameof(ProcessingHost) + "Override";
 
@@ -78,8 +65,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 				#endregion
 			}
 
-			[SuppressMessage("ReSharper", "UnusedMember.Global")]
-			private class FooApp : CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>, IPlatformEnvironmentSettings, IEnvironmentSettings
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideHostNames, IEnvironmentSettings
 			{
 				#region IEnvironmentSettings Members
 
@@ -87,21 +73,9 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 
 				#endregion
 
-				#region IPlatformEnvironmentSettings Members
+				#region IProvideHostNames Members
 
-				public string IsolatedHost => GetOverriddenOrDefaultValue("myIsolatedHost");
-
-				public string ManagementDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ManagementDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string MonitoringDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string MonitoringDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string ProcessingDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ProcessingDatabaseServer => GetOverriddenOrDefaultValue("localhost");
+				public string IsolatedHost => GetOverriddenOrDefaultValue(nameof(IsolatedHost));
 
 				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
 
@@ -115,45 +89,170 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 
 		#endregion
 
-		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
+		#region Nested Type: AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClassWithoutEnvironmentSettingOverridesType
 
 		[Collection("DeploymentContext")]
-		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClass
+		public class AccessingAndConstructingSingletonViaCompositeEnvironmentSettingsBaseClassWithoutEnvironmentSettingOverridesType
 		{
 			[Fact]
-			public void SingletonCannotBeConstructedButCanBeAccessed()
+			public void SingletonCanBeConstructedAndCanBeAccessed()
 			{
-				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				// construction
+				Invoking(() => CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>.Settings).Should().NotThrow();
+				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
+				// access
+				CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>.Settings.Should().BeSameAs(FooApp.Settings);
+				CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>.Settings.ApplicationName.Should().Be(nameof(FooApp));
+				CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>.Settings.ReceivingHost.Should().Be("ReceivingHost");
+			}
+
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideHostNames, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+
+				#region IProvideHostNames Members
+
+				public string IsolatedHost => GetOverriddenOrDefaultValue(nameof(IsolatedHost));
+
+				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
+
+				public string ReceivingHost => GetOverriddenOrDefaultValue(nameof(ReceivingHost));
+
+				public string TransmittingHost => GetOverriddenOrDefaultValue(nameof(TransmittingHost));
+
+				#endregion
+			}
+		}
+
+		#endregion
+
+		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClassWithEnvironmentSettingOverridesType
+
+		[Collection("DeploymentContext")]
+		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClassWithEnvironmentSettingOverridesType
+		{
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
+			[Fact]
+			public void SingletonCannotBeConstructedAndCannotBeAccessed()
+			{
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(FooAppOverrides)))
 				{
 					// construction
-					Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().Throw<InvalidCastException>();
+					Invoking(() => EnvironmentSettings<FooApp>.Settings)
+						.Should().Throw<InvalidOperationException>()
+						.WithMessage(
+							$"'{nameof(FooAppOverrides)}' does not derive from '{nameof(FooApp)}' and cannot be used as its {nameof(DeploymentContext.EnvironmentSettingOverridesType)}.");
 
-					FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
-					// access
-					EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
-					EnvironmentSettings<FooApp>.Settings.ApplicationName.Should().Be(nameof(FooApp));
-					EnvironmentSettings<FooApp>.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
+					// Lazy<T> caches the previous result and makes FooApp.Settings unusable
+					Invoking(() => FooApp.Settings)
+						.Should().Throw<InvalidOperationException>()
+						.WithMessage(
+							$"'{nameof(FooAppOverrides)}' does not derive from '{nameof(FooApp)}' and cannot be used as its {nameof(DeploymentContext.EnvironmentSettingOverridesType)}.");
 				}
 			}
 
-			[SuppressMessage("ReSharper", "UnusedMember.Local")]
-			private class FooAppOverrides : IPlatformEnvironmentSettings
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideEnvironmentSettings, IEnvironmentSettings
 			{
-				#region IPlatformEnvironmentSettings Members
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+			}
+
+			private class FooAppOverrides : IProvideEnvironmentSettings { }
+		}
+
+		#endregion
+
+		#region Nested Type: AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClassWithoutEnvironmentSettingOverridesType
+
+		[Collection("DeploymentContext")]
+		public class AccessingAndConstructingSingletonViaEnvironmentSettingsBaseClassWithoutEnvironmentSettingOverridesType
+		{
+			[Fact]
+			public void SingletonCanBeConstructedAndCanBeAccessed()
+			{
+				// construction
+				Invoking(() => EnvironmentSettings<FooApp>.Settings).Should().NotThrow();
+				FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
+				// access
+				EnvironmentSettings<FooApp>.Settings.Should().BeSameAs(FooApp.Settings);
+				EnvironmentSettings<FooApp>.Settings.ApplicationName.Should().Be(nameof(FooApp));
+				EnvironmentSettings<FooApp>.Settings.ReceivingHost.Should().Be("ReceivingHost");
+			}
+
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideHostNames, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+
+				#region IProvideHostNames Members
+
+				public string IsolatedHost => GetOverriddenOrDefaultValue(nameof(IsolatedHost));
+
+				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
+
+				public string ReceivingHost => GetOverriddenOrDefaultValue(nameof(ReceivingHost));
+
+				public string TransmittingHost => GetOverriddenOrDefaultValue(nameof(TransmittingHost));
+
+				#endregion
+			}
+		}
+
+		#endregion
+
+		#region Nested Type: InstantiatingCompositeEnvironmentSettingsExplicitlyWithEnvironmentSettingOverridesType
+
+		[Collection("DeploymentContext")]
+		public class InstantiatingCompositeEnvironmentSettingsExplicitlyWithEnvironmentSettingOverridesType
+		{
+			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
+			[Fact]
+			public void CompositeEnvironmentSettingsThrowWhenInstantiatedExplicitly()
+			{
+				using (new DeploymentContextInjectionScope(environmentSettingOverridesType: typeof(FooAppOverrides)))
+				{
+					Invoking(() => new FooApp()).Should().Throw<InvalidOperationException>();
+					Invoking(() => new FooAppOverrides()).Should().NotThrow();
+				}
+			}
+
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideHostNames, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+
+				#region IProvideHostNames Members
+
+				public string IsolatedHost => GetOverriddenOrDefaultValue(nameof(IsolatedHost));
+
+				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
+
+				public string ReceivingHost => GetOverriddenOrDefaultValue(nameof(ReceivingHost));
+
+				public string TransmittingHost => GetOverriddenOrDefaultValue(nameof(TransmittingHost));
+
+				#endregion
+			}
+
+			[SuppressMessage("ReSharper", "UnusedMember.Local")]
+			private class FooAppOverrides : IProvideHostNames
+			{
+				#region IProvideHostNames Members
 
 				public string IsolatedHost => nameof(IsolatedHost) + "Override";
-
-				public string ManagementDatabaseInstance => "Override";
-
-				public string ManagementDatabaseServer => "localhost" + "Override";
-
-				public string MonitoringDatabaseInstance => "Override";
-
-				public string MonitoringDatabaseServer => "localhost" + "Override";
-
-				public string ProcessingDatabaseInstance => string.Empty;
-
-				public string ProcessingDatabaseServer => "localhost" + "Override";
 
 				public string ProcessingHost => nameof(ProcessingHost) + "Override";
 
@@ -163,37 +262,26 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 
 				#endregion
 			}
+		}
 
-			[SuppressMessage("ReSharper", "UnusedMember.Global")]
-			private class FooApp : CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>, IPlatformEnvironmentSettings, IEnvironmentSettings
+		#endregion
+
+		#region Nested Type: InstantiatingCompositeEnvironmentSettingsExplicitlyWithoutEnvironmentSettingOverridesType
+
+		[Collection("DeploymentContext")]
+		public class InstantiatingCompositeEnvironmentSettingsExplicitlyWithoutEnvironmentSettingOverridesType
+		{
+			[Fact]
+			public void CompositeEnvironmentSettingsThrowWhenInstantiatedExplicitly()
+			{
+				Invoking(() => new FooApp()).Should().Throw<InvalidOperationException>();
+			}
+
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideEnvironmentSettings, IEnvironmentSettings
 			{
 				#region IEnvironmentSettings Members
 
 				public string ApplicationName => nameof(FooApp);
-
-				#endregion
-
-				#region IPlatformEnvironmentSettings Members
-
-				public string IsolatedHost => GetOverriddenOrDefaultValue("myIsolatedHost");
-
-				public string ManagementDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ManagementDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string MonitoringDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string MonitoringDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string ProcessingDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ProcessingDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
-
-				public string ReceivingHost => GetOverriddenOrDefaultValue(nameof(ReceivingHost));
-
-				public string TransmittingHost => GetOverriddenOrDefaultValue(nameof(TransmittingHost));
 
 				#endregion
 			}
@@ -212,7 +300,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE"))
 				{
 					FooApp.Settings.Should().BeAssignableTo<IEnvironmentSettings>();
-					FooApp.Settings.Should().BeAssignableTo<IPlatformEnvironmentSettings>();
+					FooApp.Settings.Should().BeAssignableTo<IProvideEnvironmentSettings>();
 					FooApp.Settings.Should().BeOfType<FooApp>();
 					FooApp.Settings.ReceivingHost.Should().Be("ReceivingHost");
 				}
@@ -222,13 +310,19 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 			public void SsoSettingsReturnDefaultValues()
 			{
 				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE"))
-					FooApp.Settings.SsoSettings.Should().BeEquivalentTo(
-						new Dictionary<string, string> {
-							{ nameof(FooApp.TargetEnvironment), DeploymentContext.TargetEnvironment }
-						});
+				{
+					FooApp.Settings.SsoSettings
+						.Should().BeEquivalentTo(
+							new Dictionary<string, string> {
+								{ nameof(FooApp.CheckInFolder), @"c:\claim\store\in\default" },
+								{ nameof(FooApp.CheckOutFolder), @"c:\claim\store\out\default" },
+								{ nameof(FooApp.SsoProperty), "SsoProperty" },
+								{ nameof(FooApp.TargetEnvironment), DeploymentContext.TargetEnvironment }
+							});
+				}
 			}
 
-			private class FooApp : CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>, IPlatformEnvironmentSettings, IEnvironmentSettings
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideHostNames, IEnvironmentSettings
 			{
 				#region IEnvironmentSettings Members
 
@@ -236,21 +330,9 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 
 				#endregion
 
-				#region IPlatformEnvironmentSettings Members
+				#region IProvideHostNames Members
 
-				public string IsolatedHost => GetOverriddenOrDefaultValue("IsolatedHost");
-
-				public string ManagementDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ManagementDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string MonitoringDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string MonitoringDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string ProcessingDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ProcessingDatabaseServer => GetOverriddenOrDefaultValue("localhost");
+				public string IsolatedHost => GetOverriddenOrDefaultValue("myIsolatedHost");
 
 				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
 
@@ -259,6 +341,15 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 				public string TransmittingHost => GetOverriddenOrDefaultValue(nameof(TransmittingHost));
 
 				#endregion
+
+				[SsoSetting]
+				public string CheckInFolder => GetOverriddenOrDefaultValue(@"c:\claim\store\in\default");
+
+				[SsoSetting]
+				public string CheckOutFolder => GetOverriddenOrDefaultValue(@"c:\claim\store\out\default");
+
+				[SsoSetting]
+				public string SsoProperty => GetOverriddenOrDefaultValue(nameof(SsoProperty));
 
 				[SsoSetting]
 				public string TargetEnvironment => DeploymentContext.TargetEnvironment;
@@ -278,12 +369,12 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
 				{
 					FooApp.Settings.Should().BeAssignableTo<IEnvironmentSettings>();
-					FooApp.Settings.Should().BeAssignableTo<IPlatformEnvironmentSettings>();
+					FooApp.Settings.Should().BeAssignableTo<IProvideEnvironmentSettings>();
 					FooApp.Settings.Should().BeOfType<FooApp>();
 					FooApp.Settings.Should().NotBeOfType<FooAppOverrides>();
 					FooApp.Settings.ApplicationName.Should().Be(nameof(FooApp));
 					FooApp.Settings.ReceivingHost.Should().Be("ReceivingHostOverride");
-					// overriden even though not part of IPlatformEnvironmentSettings interface
+					// overriden even though not part of IProvideEnvironmentSettings interface
 					FooApp.Settings.CheckInFolder.Should().Be(@"c:\claim\store\in\overridden");
 					FooApp.Settings.SsoProperty.Should().Be("SsoPropertyOverride");
 				}
@@ -305,24 +396,45 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 				}
 			}
 
-			[SuppressMessage("ReSharper", "UnusedMember.Local")]
-			private class FooAppOverrides : IPlatformEnvironmentSettings
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideHostNames, IEnvironmentSettings
 			{
-				#region IPlatformEnvironmentSettings Members
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
+
+				#region IProvideHostNames Members
+
+				public string IsolatedHost => GetOverriddenOrDefaultValue("myIsolatedHost");
+
+				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
+
+				public string ReceivingHost => GetOverriddenOrDefaultValue(nameof(ReceivingHost));
+
+				public string TransmittingHost => GetOverriddenOrDefaultValue(nameof(TransmittingHost));
+
+				#endregion
+
+				[SsoSetting]
+				public string CheckInFolder => GetOverriddenOrDefaultValue(@"c:\claim\store\in\default");
+
+				[SsoSetting]
+				public string CheckOutFolder => GetOverriddenOrDefaultValue(@"c:\claim\store\out\default");
+
+				[SsoSetting]
+				public string SsoProperty => GetOverriddenOrDefaultValue(nameof(SsoProperty));
+
+				[SsoSetting]
+				public string TargetEnvironment => DeploymentContext.TargetEnvironment;
+			}
+
+			[SuppressMessage("ReSharper", "UnusedMember.Local")]
+			private class FooAppOverrides : IProvideHostNames
+			{
+				#region IProvideHostNames Members
 
 				public string IsolatedHost => nameof(IsolatedHost) + "Override";
-
-				public string ManagementDatabaseInstance => "Override";
-
-				public string ManagementDatabaseServer => "localhost" + "Override";
-
-				public string MonitoringDatabaseInstance => "Override";
-
-				public string MonitoringDatabaseServer => "localhost" + "Override";
-
-				public string ProcessingDatabaseInstance => string.Empty;
-
-				public string ProcessingDatabaseServer => "localhost" + "Override";
 
 				public string ProcessingHost => nameof(ProcessingHost) + "Override";
 
@@ -349,52 +461,6 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 
 				public string SsoProperty => nameof(SsoProperty) + "Override";
 			}
-
-			[SuppressMessage("ReSharper", "UnusedMember.Global")]
-			private class FooApp : CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>, IPlatformEnvironmentSettings, IEnvironmentSettings
-			{
-				#region IEnvironmentSettings Members
-
-				public string ApplicationName => nameof(FooApp);
-
-				#endregion
-
-				#region IPlatformEnvironmentSettings Members
-
-				public string IsolatedHost => GetOverriddenOrDefaultValue("myIsolatedHost");
-
-				public string ManagementDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ManagementDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string MonitoringDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string MonitoringDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string ProcessingDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ProcessingDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
-
-				public string ReceivingHost => GetOverriddenOrDefaultValue(nameof(ReceivingHost));
-
-				public string TransmittingHost => GetOverriddenOrDefaultValue(nameof(TransmittingHost));
-
-				#endregion
-
-				[SsoSetting]
-				public string CheckInFolder => GetOverriddenOrDefaultValue(@"c:\claim\store\in\default");
-
-				[SsoSetting]
-				public string CheckOutFolder => GetOverriddenOrDefaultValue(@"c:\claim\store\out\default");
-
-				[SsoSetting]
-				public string SsoProperty => GetOverriddenOrDefaultValue(nameof(SsoProperty));
-
-				[SsoSetting]
-				public string TargetEnvironment => DeploymentContext.TargetEnvironment;
-			}
 		}
 
 		#endregion
@@ -407,10 +473,19 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 			[Fact]
 			public void SettingsThrows()
 			{
-				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(FooAppOverrides)))
+				using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE", environmentSettingOverridesType: typeof(ForeignAppOverrides)))
 				{
 					Invoking(() => FooApp.Settings.ApplicationName).Should().Throw<InvalidCastException>();
 				}
+			}
+
+			private class FooApp : CompositeEnvironmentSettings<FooApp, IProvideEnvironmentSettings>, IProvideEnvironmentSettings, IEnvironmentSettings
+			{
+				#region IEnvironmentSettings Members
+
+				public string ApplicationName => nameof(FooApp);
+
+				#endregion
 			}
 
 			[SuppressMessage("ReSharper", "UnusedMember.Global")]
@@ -420,45 +495,11 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Convention
 			}
 
 			[SuppressMessage("ReSharper", "UnusedMember.Local")]
-			private class FooAppOverrides : IForeignPlatformEnvironmentSettings
+			private class ForeignAppOverrides : IForeignPlatformEnvironmentSettings
 			{
 				#region IForeignPlatformEnvironmentSettings Members
 
 				public string ForeignHost => nameof(ForeignHost);
-
-				#endregion
-			}
-
-			[SuppressMessage("ReSharper", "UnusedMember.Global")]
-			private class FooApp : CompositeEnvironmentSettings<FooApp, IPlatformEnvironmentSettings>, IPlatformEnvironmentSettings, IEnvironmentSettings
-			{
-				#region IEnvironmentSettings Members
-
-				public string ApplicationName => nameof(FooApp);
-
-				#endregion
-
-				#region IPlatformEnvironmentSettings Members
-
-				public string IsolatedHost => GetOverriddenOrDefaultValue("myIsolatedHost");
-
-				public string ManagementDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ManagementDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string MonitoringDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string MonitoringDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string ProcessingDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-				public string ProcessingDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-				public string ProcessingHost => GetOverriddenOrDefaultValue(nameof(ProcessingHost));
-
-				public string ReceivingHost => GetOverriddenOrDefaultValue(nameof(ReceivingHost));
-
-				public string TransmittingHost => GetOverriddenOrDefaultValue(nameof(TransmittingHost));
 
 				#endregion
 			}

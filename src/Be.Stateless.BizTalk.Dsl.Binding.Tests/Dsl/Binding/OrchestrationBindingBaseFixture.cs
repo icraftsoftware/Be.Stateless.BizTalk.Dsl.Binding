@@ -19,6 +19,7 @@
 using System;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.CodeDom;
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Install;
@@ -54,6 +55,21 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBindingMock.Object.Host = "Force Moq to call ctor.";
 
 			validatingOrchestrationBindingMock.Verify(m => m.Validate(), Times.Once);
+		}
+
+		[Fact]
+		public void DelegatesHostNameResolutionToHostResolutionPolicy()
+		{
+			var hostResolutionPolicyMock = new Mock<HostResolutionPolicy> { CallBase = true };
+			var sut = hostResolutionPolicyMock.As<IResolveHost>();
+
+			var orchestrationBindingMock = new Mock<OrchestrationBindingBase<Process>> { CallBase = true };
+			orchestrationBindingMock.Object.Host = hostResolutionPolicyMock.Object;
+
+			sut.Setup(p => p.ResolveHostName(orchestrationBindingMock.Object)).Returns("name");
+			((ISupportHostNameResolution) orchestrationBindingMock.Object).ResolveHostName();
+
+			sut.Verify(p => p.ResolveHostName(orchestrationBindingMock.Object));
 		}
 
 		[Fact]
@@ -179,6 +195,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public void OperationName()
 		{
 			ProcessOrchestrationBinding.SolicitResponsePort.Operations.SolicitResponseOperation.Name.Should().NotBeEmpty();
+		}
+
+		[Fact]
+		public void ThrowsWhenHostNameCannotBeResolved()
+		{
+			var orchestrationBindingMock = new Mock<OrchestrationBindingBase<Process>> { CallBase = true };
+			orchestrationBindingMock.Object.Host = new Mock<HostResolutionPolicy> { CallBase = true }.Object;
+
+			Invoking(() => ((ISupportHostNameResolution) orchestrationBindingMock.Object).ResolveHostName())
+				.Should().Throw<BindingException>()
+				.WithMessage($"Host could not be resolved for Orchestration '{typeof(Process).FullName}'.");
 		}
 	}
 }

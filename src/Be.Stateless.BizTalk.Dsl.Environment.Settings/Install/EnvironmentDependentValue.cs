@@ -60,13 +60,6 @@ namespace Be.Stateless.BizTalk.Install
 			return new EnvironmentDependentValue<T>(settingName).ForAcceptanceUpwards(value);
 		}
 
-		// TODO discard Obsolete
-		[Obsolete("Use ForAcceptanceUpwards() instead.")]
-		public static EnvironmentDependentValue<T> ForAcceptanceOrProduction<T>(T value, [CallerMemberName] string settingName = null!)
-		{
-			return new EnvironmentDependentValue<T>(settingName).ForAcceptanceUpwards(value);
-		}
-
 		public static EnvironmentDependentValue<T> ForPreProduction<T>(T value, [CallerMemberName] string settingName = null!)
 		{
 			return new EnvironmentDependentValue<T>(settingName).ForPreProduction(value);
@@ -151,14 +144,6 @@ namespace Be.Stateless.BizTalk.Install
 		{
 			if (DeploymentContext.TargetEnvironment.IsAcceptanceUpwards()) Value = value;
 			return this;
-		}
-
-		// TODO discard Obsolete
-		[SuppressMessage("ReSharper", "UnusedMember.Global")]
-		[Obsolete("Use ForAcceptanceUpwards() instead.")]
-		public EnvironmentDependentValue<T> ForAcceptanceOrProduction(T value)
-		{
-			return ForAcceptanceUpwards(value);
 		}
 
 		public EnvironmentDependentValue<T> ForPreProduction(T value)

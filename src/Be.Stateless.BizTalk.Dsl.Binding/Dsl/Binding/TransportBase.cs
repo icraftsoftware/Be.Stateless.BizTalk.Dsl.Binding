@@ -101,6 +101,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public T Adapter { get; set; }
 
+		/// <summary>
+		/// The BizTalk Server Host Name that will host this transport's <see cref="Adapter"/> at runtime.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="Host"/> property can either be set directly to a <see cref="string"/> value or to a <see
+		/// cref="HostResolutionPolicy"/>-derived object instance.
+		/// </remarks>
 		public HostResolutionPolicy Host { get; set; }
 
 		protected abstract void ApplyEnvironmentOverrides(string environment);

@@ -25,36 +25,97 @@ namespace Be.Stateless.BizTalk.Factory
 {
 	[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "Public API.")]
 	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
-	public class Platform : CompositeEnvironmentSettings<Platform, IPlatformEnvironmentSettings>, IPlatformEnvironmentSettings, IEnvironmentSettings
+	public class Platform : CompositeEnvironmentSettings<Platform, IProvideEnvironmentSettings>,
+		IProvideDatabaseNames,
+		IProvideHostNames,
+		IProvideHostResolutionPolicy,
+		IEnvironmentSettings
 	{
+		#region Nested Type: DefaultHostNameProvider
+
+		private class DefaultHostNameProvider : IProvideHostNames
+		{
+			#region IProvideHostNames Members
+
+			public string IsolatedHost => "BizTalkServerIsolatedHost";
+
+			public string ProcessingHost => "BizTalkServerApplication";
+
+			public string ReceivingHost => "BizTalkServerApplication";
+
+			public string TransmittingHost => "BizTalkServerApplication";
+
+			#endregion
+		}
+
+		#endregion
+
 		#region IEnvironmentSettings Members
 
-		public string ApplicationName => throw new NotSupportedException();
+		string IEnvironmentSettings.ApplicationName => throw new NotSupportedException();
 
 		#endregion
 
-		#region IPlatformEnvironmentSettings Members
+		#region IProvideDatabaseNames Members
 
-		public string IsolatedHost => GetOverriddenOrDefaultValue("BizTalkServerIsolatedHost");
+		public string ManagementDatabaseInstance => EnvironmentSettingOverrides is IProvideDatabaseNames p ? p.ManagementDatabaseInstance : string.Empty;
 
-		public string ManagementDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
+		public string ManagementDatabaseServer => EnvironmentSettingOverrides is IProvideDatabaseNames p ? p.ManagementDatabaseServer : "localhost";
 
-		public string ManagementDatabaseServer => GetOverriddenOrDefaultValue("localhost");
+		public string MonitoringDatabaseInstance => EnvironmentSettingOverrides is IProvideDatabaseNames p ? p.MonitoringDatabaseInstance : string.Empty;
 
-		public string MonitoringDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
+		public string MonitoringDatabaseServer => EnvironmentSettingOverrides is IProvideDatabaseNames p ? p.MonitoringDatabaseServer : "localhost";
 
-		public string MonitoringDatabaseServer => GetOverriddenOrDefaultValue("localhost");
+		public string ProcessingDatabaseInstance => EnvironmentSettingOverrides is IProvideDatabaseNames p ? p.ProcessingDatabaseInstance : string.Empty;
 
-		public string ProcessingDatabaseInstance => GetOverriddenOrDefaultValue(string.Empty);
-
-		public string ProcessingDatabaseServer => GetOverriddenOrDefaultValue("localhost");
-
-		public string ProcessingHost => GetOverriddenOrDefaultValue("BizTalkServerApplication");
-
-		public string ReceivingHost => GetOverriddenOrDefaultValue("BizTalkServerApplication");
-
-		public string TransmittingHost => GetOverriddenOrDefaultValue("BizTalkServerApplication");
+		public string ProcessingDatabaseServer => EnvironmentSettingOverrides is IProvideDatabaseNames p ? p.ProcessingDatabaseServer : "localhost";
 
 		#endregion
+
+		#region IProvideHostNames Members
+
+		string IProvideHostNames.IsolatedHost => ThrowIProvideHostNamesTraitNotSupported();
+
+		string IProvideHostNames.ProcessingHost => ThrowIProvideHostNamesTraitNotSupported();
+
+		string IProvideHostNames.ReceivingHost => ThrowIProvideHostNamesTraitNotSupported();
+
+		string IProvideHostNames.TransmittingHost => ThrowIProvideHostNamesTraitNotSupported();
+
+		#endregion
+
+		#region IProvideHostResolutionPolicy Members
+
+		public Dsl.Binding.Convention.HostResolutionPolicy HostResolutionPolicy => EnvironmentSettingOverrides is IProvideHostResolutionPolicy p
+			? p.HostResolutionPolicy
+			: Convention.HostResolutionPolicy.Default;
+
+		#endregion
+
+		internal IProvideHostNames HostNameProvider
+		{
+			get
+			{
+				return _hostNameProvider ??= EnvironmentSettingOverrides switch {
+					IProvideHostNames and IProvideHostResolutionPolicy => ThrowIProvideHostNamesAndIProvideHostResolutionPolicyAmbiguity(),
+					IProvideHostNames hostNameProvider => hostNameProvider,
+					_ => new DefaultHostNameProvider()
+				};
+			}
+		}
+
+		private IProvideHostNames ThrowIProvideHostNamesAndIProvideHostResolutionPolicyAmbiguity()
+		{
+			throw new InvalidOperationException(
+				$"{nameof(EnvironmentSettingOverrides)} '{EnvironmentSettingOverrides.GetType().Name}' should only implement either '{nameof(IProvideHostNames)}' or '{nameof(IProvideHostResolutionPolicy)}'; but it implements both.");
+		}
+
+		private string ThrowIProvideHostNamesTraitNotSupported()
+		{
+			throw new NotSupportedException(
+				$"{nameof(Platform)} provides a {nameof(HostResolutionPolicy)}; its {nameof(IProvideHostNames)} trait is only an overriding point and must not be called explicitly.");
+		}
+
+		private IProvideHostNames _hostNameProvider;
 	}
 }

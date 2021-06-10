@@ -32,6 +32,13 @@ namespace Be.Stateless.BizTalk.Dummies.Conventions
 
 		#region Base Class Member Overrides
 
+		protected override string ResolveHostName(IOrchestrationBinding orchestration)
+		{
+			return orchestration.Type == typeof(Orchestrations.Bound.Process)
+				? "DummyHost"
+				: "BizTalkServerApplication";
+		}
+
 		protected override string ResolveHostName<TNamingConvention>(ReceiveLocationTransport<TNamingConvention> transport)
 		{
 			// determine host according to port's associated party

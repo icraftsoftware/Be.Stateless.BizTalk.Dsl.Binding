@@ -44,8 +44,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortMock.As<ISupportNamingConvention>();
 
 			var hostResolutionPolicyMock = new Mock<HostResolutionPolicy> { CallBase = true };
-			hostResolutionPolicyMock.As<ISupportNamingConvention>();
-			var sut = hostResolutionPolicyMock.As<IResolveTransportHost>();
+			var sut = hostResolutionPolicyMock.As<IResolveHost>();
 
 			var spt = new SendPortTransport<string>(sendPortMock.Object) { Host = hostResolutionPolicyMock.Object };
 			sut.Setup(p => p.ResolveHostName(spt)).Returns("name");

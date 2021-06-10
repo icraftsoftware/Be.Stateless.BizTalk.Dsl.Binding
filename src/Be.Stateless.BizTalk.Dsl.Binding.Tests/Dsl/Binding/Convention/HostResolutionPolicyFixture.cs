@@ -36,7 +36,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		public void ReceiveLocationTransportHostNameResolutionCanBeOverridden()
 		{
 			var policyMock = new Mock<HostResolutionPolicy> { CallBase = true };
-			var sut = policyMock.As<IResolveTransportHost>();
+			var sut = policyMock.As<IResolveHost>();
 
 			var receiveLocationMock = new Mock<ReceiveLocation> { CallBase = true };
 			receiveLocationMock.Object.Transport.Host = policyMock.Object;
@@ -59,7 +59,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		public void SendPortTransportHostNameResolutionCanBeOverridden()
 		{
 			var policyMock = new Mock<HostResolutionPolicy> { CallBase = true };
-			var sut = policyMock.As<IResolveTransportHost>();
+			var sut = policyMock.As<IResolveHost>();
 
 			var sendPortMock = new Mock<SendPort> { CallBase = true };
 			sendPortMock.Object.Transport.Host = policyMock.Object;

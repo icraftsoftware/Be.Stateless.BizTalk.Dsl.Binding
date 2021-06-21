@@ -68,6 +68,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.BizTalk.Adapter.LogicApp.Config">
+      <HintPath>..\..\..\.BizTalk.Server.Nuget\BizTalk.Server.2020.Runtime.Adapters\lib\net40\Microsoft.BizTalk.Adapter.LogicApp.Config.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Microsoft.BizTalk.ExplorerOM">
       <Aliases>ExplorerOM</Aliases>
     </Reference>

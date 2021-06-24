@@ -17,8 +17,7 @@
 #endregion
 
 using Be.Stateless.BizTalk.Dsl.Binding;
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
-using Be.Stateless.Extensions;
+using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
 
 namespace Be.Stateless.BizTalk.Factory.Convention
 {
@@ -35,16 +34,10 @@ namespace Be.Stateless.BizTalk.Factory.Convention
 
 		protected override string ResolveHostName<TNamingConvention>(ReceiveLocationTransport<TNamingConvention> transport)
 		{
-			// see https://docs.microsoft.com/en-us/biztalk/install-and-config-guides/whats-new-in-biztalk-server-2020#deprecated--removed-list
-			return transport.Adapter switch {
-				HttpAdapter.Inbound => Platform.Settings.HostNameProvider.IsolatedHost,
-				// TODO LogicAppAdapter.Inbound => hostNameProvider.IsolatedHost,
-				WcfBasicHttpAdapter.Inbound => Platform.Settings.HostNameProvider.IsolatedHost,
-				WcfWebHttpAdapter.Inbound => Platform.Settings.HostNameProvider.IsolatedHost,
-				WcfWSHttpAdapter.Inbound => Platform.Settings.HostNameProvider.IsolatedHost,
-				var adapter when adapter.GetType().IsSubclassOfGenericType(typeof(WcfCustomIsolatedAdapter.Inbound<>)) => Platform.Settings.HostNameProvider.IsolatedHost,
-				_ => Platform.Settings.HostNameProvider.ReceivingHost
-			};
+			// see also https://docs.microsoft.com/en-us/biztalk/install-and-config-guides/whats-new-in-biztalk-server-2020#deprecated--removed-list
+			return transport.Adapter.ProtocolType.RequiresIsolatedHostForReceiveHandler()
+				? Platform.Settings.HostNameProvider.IsolatedHost
+				: Platform.Settings.HostNameProvider.ReceivingHost;
 		}
 
 		protected override string ResolveHostName<TNamingConvention>(SendPortTransport<TNamingConvention> transport)

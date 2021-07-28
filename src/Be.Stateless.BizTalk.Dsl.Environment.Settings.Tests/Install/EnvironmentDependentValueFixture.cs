@@ -69,7 +69,7 @@ namespace Be.Stateless.BizTalk.Install
 		{
 			using (new DeploymentContextInjectionScope(targetEnvironment: TargetEnvironment.DEVELOPMENT))
 			{
-				DateSetting.Should().Be(new DateTime(2021, 3, 3));
+				DateSetting.Should().Be(new(2021, 3, 3));
 				Setting1.Should().Be("one.1");
 				Setting2.Should().Be(3);
 				Setting3.Should().Be("three.1");

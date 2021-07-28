@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Pipeline;
 using Be.Stateless.BizTalk.Install;
@@ -83,6 +84,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Never(), ItExpr.IsAny<string>());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void NameIsMandatory()
 		{
@@ -95,6 +97,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Receive Port's Name is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ReceiveLocationIsMandatory()
 		{
@@ -107,6 +110,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Receive Port has no Receive Locations.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ReceivePortCannotMixOneWayAndTwoWayReceiveLocations()
 		{
@@ -126,6 +130,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Receive Port has a mix of one-way and two-way Receive Locations.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportINamingConvention()
 		{
@@ -140,6 +145,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((ISupportNamingConvention) receivePortMock.Object).Name.Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportStringNamingConvention()
 		{

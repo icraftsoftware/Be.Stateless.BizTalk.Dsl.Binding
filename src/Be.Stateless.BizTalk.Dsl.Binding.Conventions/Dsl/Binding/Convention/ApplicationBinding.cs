@@ -26,14 +26,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 	{
 		protected ApplicationBinding()
 		{
-			Name = new TNamingConvention();
+			Name = new();
 		}
 
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 		protected internal ApplicationBinding(Action<IApplicationBinding<TNamingConvention>> applicationBindingConfigurator) : base(applicationBindingConfigurator)
 		{
 			// do not override NamingConvention set by applicationBindingConfigurator
-			Name ??= new TNamingConvention();
+			Name ??= new();
 		}
 
 		protected ApplicationNamingConvention<TNamingConvention> ApplicationName => new();

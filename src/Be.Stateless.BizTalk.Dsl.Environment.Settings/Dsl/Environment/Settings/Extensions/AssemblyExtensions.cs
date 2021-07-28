@@ -24,6 +24,11 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 {
 	public static class AssemblyExtensions
 	{
+		public static IEnvironmentSettings GetEnvironmentSettingsSingleton(this Assembly assembly, bool throwOnError = false)
+		{
+			return assembly.GetEnvironmentSettingsType(throwOnError).CreateEnvironmentSettingsSingleton();
+		}
+
 		public static Type GetEnvironmentSettingsType(this Assembly assembly, bool throwOnError = false)
 		{
 			if (assembly == null) throw new ArgumentNullException(nameof(assembly));

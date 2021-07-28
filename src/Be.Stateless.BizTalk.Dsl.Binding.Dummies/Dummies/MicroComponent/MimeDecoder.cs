@@ -30,7 +30,7 @@ namespace Be.Stateless.BizTalk.Dummies.MicroComponent
 	{
 		public MimeDecoder()
 		{
-			_wrappedComponent = new MIME_SMIME_Decoder {
+			_wrappedComponent = new() {
 				AllowNonMIMEMessage = false,
 				BodyPartContentType = MediaTypeNames.Text.Xml,
 				BodyPartIndex = 0,

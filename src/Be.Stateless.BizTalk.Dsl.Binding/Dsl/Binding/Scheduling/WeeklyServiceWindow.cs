@@ -31,7 +31,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		static WeeklyServiceWindow()
 		{
 			var rl = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocation();
-			Default = new WeeklyServiceWindow(rl.ScheduleRecurFrom, rl.ScheduleRecurInterval, rl.ScheduleDaysOfWeek);
+			Default = new(rl.ScheduleRecurFrom, rl.ScheduleRecurInterval, rl.ScheduleDaysOfWeek);
 		}
 
 		private static WeeklyServiceWindow Default { get; }

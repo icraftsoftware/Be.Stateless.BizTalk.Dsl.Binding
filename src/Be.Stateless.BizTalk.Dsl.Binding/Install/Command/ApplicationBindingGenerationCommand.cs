@@ -24,23 +24,28 @@ using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationBindingGenerationCommand<T> : ApplicationBindingCommand<T>, IApplicationBindingGenerationCommand
+	public class ApplicationBindingGenerationCommand<T> : ApplicationBindingBasedCommand<T, ISupplyApplicationBindingGenerationCommandArguments>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		#region IApplicationBindingGenerationCommand Members
-
-		public string OutputFilePath { get; set; }
-
-		#endregion
-
 		#region Base Class Member Overrides
 
-		protected override void ExecuteCore(Action<string> logAppender)
+		protected override void Execute(Action<string> logAppender)
 		{
-			if (OutputFilePath.IsNullOrEmpty()) throw new InvalidOperationException($"{nameof(OutputFilePath)} has not been set.");
 			ApplicationBinding.GetApplicationBindingInfoSerializer().Save(OutputFilePath);
 		}
 
+		protected override void InitializeParameters(ISupplyApplicationBindingGenerationCommandArguments arguments)
+		{
+			OutputFilePath = arguments.OutputFilePath;
+		}
+
+		protected override void ValidateParameters()
+		{
+			if (OutputFilePath.IsNullOrEmpty()) throw new ArgumentNullException(nameof(OutputFilePath));
+		}
+
 		#endregion
+
+		public string OutputFilePath { get; set; }
 	}
 }

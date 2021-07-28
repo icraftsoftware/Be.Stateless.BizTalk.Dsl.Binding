@@ -45,7 +45,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfBasicHttpAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("467c1a52-373f-4f09-9008-27af6b985f14"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("467c1a52-373f-4f09-9008-27af6b985f14"));
 		}
 
 		protected WcfBasicHttpAdapter() : base(_protocolType)

@@ -16,7 +16,6 @@
 
 #endregion
 
-using System.CodeDom.Compiler;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -65,7 +64,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 				provider.GenerateCodeFromCompileUnit(
 					btxServiceType.ConvertToOrchestrationBindingCodeCompileUnit(),
 					writer,
-					new CodeGeneratorOptions { BracingStyle = "C", IndentString = "\t", VerbatimOrder = true });
+					new() { BracingStyle = "C", IndentString = "\t", VerbatimOrder = true });
 			}
 
 			// Notice that ProcessOrchestrationBinding.Designer.cs is indeed included twice, in both Compile and

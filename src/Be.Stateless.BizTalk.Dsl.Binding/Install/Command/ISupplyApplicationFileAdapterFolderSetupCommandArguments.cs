@@ -16,18 +16,10 @@
 
 #endregion
 
-using System;
-
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public interface IApplicationBindingCommand
+	public interface ISupplyApplicationFileAdapterFolderSetupCommandArguments : ISupplyApplicationBindingBasedCommandArguments
 	{
-		string[] AssemblyProbingFolderPaths { get; set; }
-
-		Type EnvironmentSettingOverridesType { get; set; }
-
-		string ExcelSettingOverridesFolderPath { get; set; }
-
-		string TargetEnvironment { get; set; }
+		string[] Users { get; }
 	}
 }

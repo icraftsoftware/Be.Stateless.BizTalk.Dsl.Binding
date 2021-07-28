@@ -39,13 +39,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wba = new WcfBasicHttpRelayAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.MaxReceivedMessageSize = 64512;
 					a.MessageEncoding = WSMessageEncoding.Mtom;
 					a.SendTimeout = TimeSpan.FromMinutes(2);
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 				});
@@ -89,7 +89,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wba = new WcfBasicHttpRelayAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.TextEncoding = Encoding.ASCII;
 				});
 			Invoking(() => ((ISupportValidation) wba).Validate())
@@ -105,13 +105,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wba = new WcfBasicHttpRelayAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 
 					a.MaxReceivedMessageSize = 64512;
 					a.MessageEncoding = WSMessageEncoding.Mtom;
 
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 				});

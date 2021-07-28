@@ -16,13 +16,30 @@
 
 #endregion
 
+using System;
 using FluentAssertions;
 using Xunit;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 {
 	public class TypeExtensionsFixture
 	{
+		[Fact]
+		public void CreateEnvironmentSettingsSingleton()
+		{
+			typeof(Dummies.Environment.Settings.DummyApp).CreateEnvironmentSettingsSingleton()
+				.Should().BeSameAs(Dummies.Environment.Settings.DummyApp.Settings);
+		}
+
+		[Fact]
+		public void CreateEnvironmentSettingsSingletonThrowsWhenNotEnvironmentSettingsType()
+		{
+			Invoking(() => typeof(int).CreateEnvironmentSettingsSingleton())
+				.Should().Throw<ArgumentException>()
+				.WithMessage($"{nameof(Int32)} does not derive from {typeof(EnvironmentSettings<>).Name}.*");
+		}
+
 		[Fact]
 		public void IsEnvironmentSettingsType()
 		{

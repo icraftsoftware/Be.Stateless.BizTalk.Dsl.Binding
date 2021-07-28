@@ -31,7 +31,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		static ServiceWindow()
 		{
 			var ti = new TransportInfo();
-			None = new ServiceWindow(ti.FromTime, ti.ToTime);
+			None = new(ti.FromTime, ti.ToTime);
 		}
 
 		public static ServiceWindow None { get; }
@@ -67,7 +67,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		{
 			var date = None._startTime.Date;
 			var timeOfDay = ((DateTime) time).TimeOfDay;
-			return new DateTime(date.Year, date.Month, date.Day, timeOfDay.Hours, timeOfDay.Minutes, timeOfDay.Seconds);
+			return new(date.Year, date.Month, date.Day, timeOfDay.Hours, timeOfDay.Minutes, timeOfDay.Seconds);
 		}
 
 		private DateTime _startTime;

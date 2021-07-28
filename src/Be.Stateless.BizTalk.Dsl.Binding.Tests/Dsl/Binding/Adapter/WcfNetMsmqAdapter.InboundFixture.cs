@@ -34,7 +34,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var nma = new WcfNetMsmqAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Address = new("net.msmq://localhost/private/service_queue");
 					a.SecurityMode = NetMsmqSecurityMode.Message;
 					a.EnableTransaction = true;
 					a.OrderedProcessing = true;
@@ -76,7 +76,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var nma = new WcfNetMsmqAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Address = new("net.msmq://localhost/private/service_queue");
 					a.SecurityMode = NetMsmqSecurityMode.Message;
 					a.EnableTransaction = true;
 					a.OrderedProcessing = true;

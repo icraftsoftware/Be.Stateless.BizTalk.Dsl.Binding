@@ -37,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var osa = new WcfSapAdapter.Outbound(
 				a => {
-					a.Address = new SAPConnectionUri {
+					a.Address = new() {
 						ApplicationServerHost = "appHost",
 						ConnectionType = OutboundConnectionType.A,
 						MsServ = "msServer",
@@ -87,7 +87,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var osa = new WcfSapAdapter.Outbound(
 				a => {
-					a.Address = new SAPConnectionUri {
+					a.Address = new() {
 						ApplicationServerHost = "appHost",
 						ConnectionType = OutboundConnectionType.A,
 						MsServ = "msServer",

@@ -41,7 +41,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wnt = new WcfNetTcpRelayAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("sb://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("sb://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.MaxReceivedMessageSize = 64512;
 					a.SecurityMode = EndToEndSecurityMode.TransportWithMessageCredential;
@@ -52,7 +52,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ClientCertificate = "thumbprint";
 					a.PropagateFaultMessage = true;
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 				});
@@ -94,7 +94,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			var wnt = new WcfNetTcpRelayAdapter.Outbound(
-				a => { a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue"); });
+				a => { a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue"); });
 			Invoking(() => ((ISupportValidation) wnt).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
@@ -108,7 +108,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wnt = new WcfNetTcpRelayAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("sb://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("sb://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 
 					a.MaxReceivedMessageSize = 64512;
@@ -122,7 +122,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.PropagateFaultMessage = true;
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 				});

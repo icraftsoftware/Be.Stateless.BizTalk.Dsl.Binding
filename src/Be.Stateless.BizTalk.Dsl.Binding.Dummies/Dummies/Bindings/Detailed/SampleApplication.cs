@@ -22,11 +22,11 @@ using Be.Stateless.BizTalk.Component;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
-using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
 using Be.Stateless.BizTalk.Dummies.Bindings.Detailed;
 using Be.Stateless.BizTalk.Install;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
+using Be.Stateless.BizTalk.Schema;
 using Be.Stateless.BizTalk.Schema.Annotation;
 using Microsoft.Adapters.Sql;
 using Microsoft.XLANGs.BaseTypes;
@@ -96,15 +96,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 													c.Components = new IMicroComponent[] {
 														new FailedMessageRoutingEnabler { EnableFailedMessageRouting = true, SuppressRoutingFailureReport = false },
 														new ContextPropertyExtractor {
-															Extractors = new PropertyExtractorCollection(
-																new ConstantExtractor(BizTalkFactoryProperties.OutboundTransportLocation, TargetEnvironment.ACCEPTANCE))
+															Extractors = new(new ConstantExtractor(BizTalkFactoryProperties.OutboundTransportLocation, TargetEnvironment.ACCEPTANCE))
 														}
 													};
 												});
 										});
 									l.Transport.Adapter = new WcfSqlAdapter.Inbound(
 										a => {
-											a.Address = new SqlAdapterConnectionUri { InboundId = "FinancialMovements", InitialCatalog = "BankDb", Server = "localhost" };
+											a.Address = new() { InboundId = "FinancialMovements", InitialCatalog = "BankDb", Server = "localhost" };
 											a.InboundOperationType = InboundOperation.XmlPolling;
 											a.PolledDataAvailableStatement = "select count(1) from data";
 											a.PollingStatement = "select * from data for XML";
@@ -114,10 +113,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 									l.Transport.Host = Host.RECEIVING_HOST;
 								}));
 					}),
-				TaxAgencyOneWayReceivePort = new TaxAgencyReceivePort()
+				TaxAgencyOneWayReceivePort = new()
 			);
 			SendPorts.Add(
-				BankOneWaySendPort = new BankSendPort(),
+				BankOneWaySendPort = new(),
 				CustomerTwoWaySendPort = SendPort(
 					p => {
 						p.Name = SendPortName.Towards(Party.Customer).About(Subject.Statement).FormattedAs.Csv;
@@ -161,7 +160,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 			Transport.Adapter = new FileAdapter.Outbound(a => { a.DestinationFolder = @"c:\file\drops"; });
 			Transport.Host = Host.SENDING_HOST;
 			Transport.RetryPolicy = RetryPolicy.LongRunning;
-			Filter = new Filter(() => BtsProperties.MessageType == Schema<Any>.MessageType);
+			Filter = new(() => BtsProperties.MessageType == SchemaMetadata.For<Any>().MessageType);
 		}
 	}
 
@@ -189,14 +188,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention.Detailed
 							});
 						l.Transport.Adapter = new FileAdapter.Inbound(a => { a.ReceiveFolder = @"c:\file\drops"; });
 						l.Transport.Host = Host.ISOLATED_HOST;
-						l.Transport.Schedule = new Schedule {
-							StartDate = new DateTime(2015, 2, 17),
+						l.Transport.Schedule = new() {
+							StartDate = new(2015, 2, 17),
 							StopDate = new DateTime(2015, 2, 17).AddDays(12),
 							ServiceWindow = new DailyServiceWindow {
 								Interval = 10,
-								From = new DateTime(2020, 1, 30),
-								StartTime = new Time(13, 15),
-								StopTime = new Time(14, 15)
+								From = new(2020, 1, 30),
+								StartTime = new(13, 15),
+								StopTime = new(14, 15)
 							}
 						};
 					})

@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl;
@@ -25,24 +26,34 @@ using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationHostEnumerationCommand<T> : ApplicationBindingCommand<T>, IApplicationHostEnumerationCommand
+	public class ApplicationHostEnumerationCommand<T> : ApplicationBindingBasedCommand<T>, IEnumerable<string>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		#region IApplicationHostEnumerationCommand Members
+		#region IEnumerable<string> Members
 
-		public IEnumerable<string> Hosts { get; private set; }
+		public IEnumerator<string> GetEnumerator()
+		{
+			return _hosts.AsEnumerable().GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 
 		#endregion
 
 		#region Base Class Member Overrides
 
-		protected override void ExecuteCore(Action<string> logAppender)
+		protected override void Execute(Action<string> logAppender)
 		{
 			var visitor = new HostEnumerationVisitor();
 			ApplicationBinding.Accept(visitor);
-			Hosts = visitor.ToArray();
+			_hosts = visitor.ToArray();
 		}
 
 		#endregion
+
+		private string[] _hosts = Array.Empty<string>();
 	}
 }

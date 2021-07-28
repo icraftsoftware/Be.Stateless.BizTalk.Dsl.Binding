@@ -82,7 +82,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wha = new WcfWSHttpAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("http://localhost/dummy.svc");
+					a.Address = new("http://localhost/dummy.svc");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.SecurityMode = SecurityMode.Message;
 					a.TextEncoding = Encoding.Unicode;

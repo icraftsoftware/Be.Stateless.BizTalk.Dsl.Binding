@@ -89,7 +89,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var wca = new WcfCustomAdapter.Outbound<NetTcpBindingElement>(
 				a => {
 					const int tenMegaBytes = 1024 * 1024 * 10;
-					a.Address = new EndpointAddress("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Binding.MaxReceivedMessageSize = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxArrayLength = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxStringContentLength = tenMegaBytes;
@@ -134,7 +134,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wca = new WcfCustomAdapter.Outbound<BasicHttpBindingElement>(
 				a => {
-					a.Address = new EndpointAddress("https://services.stateless.be/soap/default");
+					a.Address = new("https://services.stateless.be/soap/default");
 					a.Binding.Security.Mode = BasicHttpSecurityMode.Transport;
 					a.Binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Certificate;
 					a.EndpointBehaviors = new[] {
@@ -163,7 +163,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wca = new WcfCustomAdapter.Outbound<CustomBindingElement>(
 				a => {
-					a.Address = new EndpointAddress("https://localhost/biztalk.factory/service.svc");
+					a.Address = new("https://localhost/biztalk.factory/service.svc");
 					a.Binding.Add(
 						new MtomMessageEncodingElement { MessageVersion = MessageVersion.Soap11 },
 						new HttpsTransportElement { RequireClientCertificate = true });
@@ -179,7 +179,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var wca = new WcfCustomAdapter.Outbound<NetTcpBindingElement>(
 				a => {
 					const int tenMegaBytes = 1024 * 1024 * 10;
-					a.Address = new EndpointAddress("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Binding.MaxReceivedMessageSize = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxArrayLength = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxStringContentLength = tenMegaBytes;

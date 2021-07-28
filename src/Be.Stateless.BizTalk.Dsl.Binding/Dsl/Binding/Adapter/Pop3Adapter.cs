@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Xml.Serialization;
 using Microsoft.BizTalk.Adapter.POP3;
 using Microsoft.BizTalk.Deployment.Binding;
@@ -52,7 +51,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		static Pop3Adapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("1787fcc1-9aaa-4bbd-9096-7eb77e3d9d9b"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("1787fcc1-9aaa-4bbd-9096-7eb77e3d9d9b"));
 		}
 
 		protected Pop3Adapter() : base(_protocolType) { }

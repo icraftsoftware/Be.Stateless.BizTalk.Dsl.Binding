@@ -16,10 +16,6 @@
 
 #endregion
 
-namespace Be.Stateless.BizTalk.Install.Command
-{
-	public interface IApplicationFileAdapterFolderSetupCommand : IApplicationBindingCommand
-	{
-		string[] Users { get; set; }
-	}
-}
+using Xunit;
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 			// }
 			var constructor = new CodeConstructor { Attributes = MemberAttributes.Public };
 			constructor.Parameters.Add(
-				new CodeParameterDeclarationExpression(
+				new(
 					new CodeTypeReference(typeof(Action<>).Name, new CodeTypeReference(bindingConfigurationType.Name)),
 					"orchestrationBindingConfigurator"));
 			constructor.Statements.Add(
@@ -95,7 +95,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 					Name = port.Name,
 					HasGet = true,
 					HasSet = true,
-					Type = new CodeTypeReference(port.Polarity == Polarity.uses ? nameof(ISendPort) : nameof(IReceivePort))
+					Type = new(port.Polarity == Polarity.uses ? nameof(ISendPort) : nameof(IReceivePort))
 				});
 		}
 
@@ -118,7 +118,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 			var field = new CodeMemberField {
 				Attributes = MemberAttributes.Private,
 				Name = "_" + port.Name,
-				Type = new CodeTypeReference(port.Polarity == Polarity.uses ? nameof(ISendPort) : nameof(IReceivePort))
+				Type = new(port.Polarity == Polarity.uses ? nameof(ISendPort) : nameof(IReceivePort))
 			};
 			@class.Members.Add(field);
 			var property = new CodeMemberProperty {
@@ -128,8 +128,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 				SetStatements = {
 					new CodeAssignStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), field.Name), new CodePropertySetValueReferenceExpression())
 				},
-				Type = new CodeTypeReference(port.Polarity == Polarity.uses ? nameof(ISendPort) : nameof(IReceivePort)),
-				PrivateImplementationType = new CodeTypeReference(bindingConfigurationInterface.Name)
+				Type = new(port.Polarity == Polarity.uses ? nameof(ISendPort) : nameof(IReceivePort)),
+				PrivateImplementationType = new(bindingConfigurationInterface.Name)
 			};
 			@class.Members.Add(property);
 		}
@@ -179,7 +179,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 						Name = "Name",
 						Attributes = MemberAttributes.Public | MemberAttributes.Static,
 						InitExpression = new CodePrimitiveExpression(operation.Name),
-						Type = new CodeTypeReference(typeof(string))
+						Type = new(typeof(string))
 					};
 					operationStructure.Members.Add(nameField);
 				});

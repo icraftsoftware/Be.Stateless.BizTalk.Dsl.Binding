@@ -34,11 +34,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var adapter = new SBMessagingAdapter.Inbound(
 				a => {
-					a.Address = new Uri("sb://biztalkfactory.servicebus.windows.net/");
+					a.Address = new("sb://biztalkfactory.servicebus.windows.net/");
 					a.IsSessionful = true;
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
@@ -83,7 +83,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var adapter = new SBMessagingAdapter.Inbound(a => { a.Address = new Uri("file://biztalk.factory.servicebus.windows.net/batching/"); });
+			var adapter = new SBMessagingAdapter.Inbound(a => { a.Address = new("file://biztalk.factory.servicebus.windows.net/batching/"); });
 			Invoking(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"The specified address is invalid.");
@@ -96,11 +96,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var adapter = new SBMessagingAdapter.Inbound(
 				a => {
-					a.Address = new Uri("sb://biztalkfactory.servicebus.windows.net/");
+					a.Address = new("sb://biztalkfactory.servicebus.windows.net/");
 					a.IsSessionful = true;
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 

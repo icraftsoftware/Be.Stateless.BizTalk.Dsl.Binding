@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
@@ -33,7 +32,7 @@ namespace Be.Stateless.BizTalk.Factory.Convention
 
 		public HostResolutionPolicyFixture()
 		{
-			Platform.LazySingletonInstance = new Lazy<Platform>(Platform.InvokeSingletonFactory);
+			Platform.LazySingletonInstance = new(Platform.InvokeSingletonFactory);
 		}
 
 		#endregion

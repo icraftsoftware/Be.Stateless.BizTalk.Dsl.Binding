@@ -18,7 +18,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.ServiceModel;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
@@ -38,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wnt = new WcfNetTcpRelayAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("sb://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("sb://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.MaxConcurrentCalls = 201;
 					a.MaxReceivedMessageSize = 64512;
@@ -46,7 +45,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.SuspendRequestMessageOnFailure = true;
 					a.IncludeExceptionDetailInFaults = true;
 
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
@@ -97,7 +96,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			var wnt = new WcfNetTcpRelayAdapter.Inbound(
-				a => { a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue"); });
+				a => { a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue"); });
 			Invoking(() => ((ISupportValidation) wnt).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
@@ -111,7 +110,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wnt = new WcfNetTcpRelayAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("sb://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("sb://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.MaxConcurrentCalls = 201;
 					a.MaxReceivedMessageSize = 64512;
@@ -119,7 +118,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.SuspendRequestMessageOnFailure = true;
 					a.IncludeExceptionDetailInFaults = true;
 
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 

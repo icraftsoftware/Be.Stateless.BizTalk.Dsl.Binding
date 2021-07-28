@@ -41,11 +41,12 @@ namespace Be.Stateless.BizTalk.Factory
 
 			public WithoutOverriddenHostResolutionPolicyAndWithoutEnvironmentSettingOverridesType()
 			{
-				Platform.LazySingletonInstance = new Lazy<Platform>(Platform.InvokeSingletonFactory);
+				Platform.LazySingletonInstance = new(Platform.InvokeSingletonFactory);
 			}
 
 			#endregion
 
+			[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 			[Fact]
 			public void DoesNotOverridePlatformHosts()
 			{
@@ -70,12 +71,13 @@ namespace Be.Stateless.BizTalk.Factory
 
 			public WithoutOverriddenHostResolutionPolicyButWithEnvironmentSettingOverridesType()
 			{
-				Platform.LazySingletonInstance = new Lazy<Platform>(Platform.InvokeSingletonFactory);
+				Platform.LazySingletonInstance = new(Platform.InvokeSingletonFactory);
 			}
 
 			#endregion
 
 			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
+			[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 			[Fact]
 			public void DoesOverridePlatformHosts()
 			{
@@ -116,12 +118,13 @@ namespace Be.Stateless.BizTalk.Factory
 
 			public WithOverriddenHostResolutionPolicyAndOverriddenHostNames()
 			{
-				Platform.LazySingletonInstance = new Lazy<Platform>(Platform.InvokeSingletonFactory);
+				Platform.LazySingletonInstance = new(Platform.InvokeSingletonFactory);
 			}
 
 			#endregion
 
 			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
+			[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 			[Fact]
 			public void ThrowsAmbiguous()
 			{
@@ -132,7 +135,8 @@ namespace Be.Stateless.BizTalk.Factory
 
 					Invoking(() => ((ISupportHostNameResolution) orchestrationBindingMock.Object).ResolveHostName())
 						.Should().Throw<InvalidOperationException>()
-						.WithMessage("EnvironmentSettingOverrides 'PlatformOverrides' should only implement either 'IProvideHostNames' or 'IProvideHostResolutionPolicy'; but it implements both.");
+						.WithMessage(
+							"EnvironmentSettingOverrides 'PlatformOverrides' should only implement either 'IProvideHostNames' or 'IProvideHostResolutionPolicy'; but it implements both.");
 				}
 			}
 
@@ -169,12 +173,13 @@ namespace Be.Stateless.BizTalk.Factory
 
 			public WithOverriddenHostResolutionPolicyDerivingFromDslBindingConventionHostResolutionPolicy()
 			{
-				Platform.LazySingletonInstance = new Lazy<Platform>(Platform.InvokeSingletonFactory);
+				Platform.LazySingletonInstance = new(Platform.InvokeSingletonFactory);
 			}
 
 			#endregion
 
 			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
+			[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 			[Fact]
 			public void CanOverrideHostResolutionPolicy()
 			{
@@ -225,11 +230,12 @@ namespace Be.Stateless.BizTalk.Factory
 
 			public WithOverriddenHostResolutionPolicyDerivingFromFactoryConventionHostResolutionPolicy()
 			{
-				Platform.LazySingletonInstance = new Lazy<Platform>(Platform.InvokeSingletonFactory);
+				Platform.LazySingletonInstance = new(Platform.InvokeSingletonFactory);
 			}
 
 			#endregion
 
+			[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 			[SuppressMessage("ReSharper", "ArgumentsStyleOther")]
 			[Fact]
 			public void CanOverrideHostResolutionPolicy()

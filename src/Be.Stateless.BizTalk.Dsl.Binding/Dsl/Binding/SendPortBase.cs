@@ -39,8 +39,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		protected internal SendPortBase()
 		{
 			Priority = Priority.Normal;
-			Transport = new SendPortTransport<TNamingConvention>(this);
-			BackupTransport = new Lazy<SendPortTransport<TNamingConvention>>(() => new SendPortTransport<TNamingConvention>(this));
+			Transport = new(this);
+			BackupTransport = new(() => new(this));
 		}
 
 		protected internal SendPortBase(Action<ISendPort<TNamingConvention>> sendPortConfigurator) : this()

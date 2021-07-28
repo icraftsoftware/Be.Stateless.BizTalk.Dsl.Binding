@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Security;
 using System.ServiceModel;
@@ -45,7 +44,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfNetNamedPipeAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("148d2e28-d634-4127-aa9e-7d6298156bf1"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("148d2e28-d634-4127-aa9e-7d6298156bf1"));
 		}
 
 		protected WcfNetNamedPipeAdapter() : base(_protocolType)

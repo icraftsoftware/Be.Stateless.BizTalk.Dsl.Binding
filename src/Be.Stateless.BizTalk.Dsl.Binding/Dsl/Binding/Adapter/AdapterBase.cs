@@ -40,7 +40,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			using (var mos = new ManagementObjectSearcher(scope, query))
 			using (var mo = mos.Get().Cast<ManagementObject>().Single())
 			{
-				return new ProtocolType {
+				return new() {
 					Capabilities = (int) (uint) mo["Constraints"],
 					ConfigurationClsid = configurationClassId.ToString(),
 					Name = (string) mo["Name"]

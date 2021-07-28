@@ -37,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wha = new WcfWSHttpAdapter.Inbound(
 				a => {
-					a.Address = new Uri("/dummy.svc", UriKind.Relative);
+					a.Address = new("/dummy.svc", UriKind.Relative);
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.SecurityMode = SecurityMode.Message;
 					a.TextEncoding = Encoding.Unicode;
@@ -83,7 +83,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wha = new WcfWSHttpAdapter.Inbound(
 				a => {
-					a.Address = new Uri("/dummy.svc", UriKind.Relative);
+					a.Address = new("/dummy.svc", UriKind.Relative);
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.SecurityMode = SecurityMode.Message;
 					a.TextEncoding = Encoding.Unicode;

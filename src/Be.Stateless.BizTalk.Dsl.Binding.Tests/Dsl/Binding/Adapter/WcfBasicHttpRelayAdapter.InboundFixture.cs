@@ -39,7 +39,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wba = new WcfBasicHttpRelayAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.MaxConcurrentCalls = 201;
 					a.MaxReceivedMessageSize = 64512;
@@ -48,7 +48,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.IncludeExceptionDetailInFaults = true;
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
@@ -100,7 +100,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wba = new WcfBasicHttpRelayAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.TextEncoding = Encoding.ASCII;
 				});
 			Invoking(() => ((ISupportValidation) wba).Validate())
@@ -116,7 +116,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wba = new WcfBasicHttpRelayAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.MaxConcurrentCalls = 201;
 					a.MaxReceivedMessageSize = 64512;
@@ -124,7 +124,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.SuspendRequestMessageOnFailure = true;
 					a.IncludeExceptionDetailInFaults = true;
 
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 

@@ -21,9 +21,16 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Scaffolding interface for a.o. cmdlets.")]
+	[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public scaffolding interface for a.o. cmdlets.")]
 	public interface ICommand
 	{
-		void Execute(Action<string> logAppender);
+		ICommand Execute(Action<string> logAppender);
+	}
+
+	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Scaffolding interface for a.o. cmdlets.")]
+	public interface ICommand<in TA> : ICommand
+		where TA : class
+	{
+		ICommand<TA> InitializeParameters(TA arguments);
 	}
 }

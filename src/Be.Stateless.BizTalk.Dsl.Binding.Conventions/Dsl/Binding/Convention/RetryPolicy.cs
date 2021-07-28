@@ -59,9 +59,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		static RetryPolicy()
 		{
-			ActualLongRunning = new Binding.RetryPolicy { Count = 72, Interval = TimeSpan.FromHours(1) };
-			RealTime = new Binding.RetryPolicy { Count = 0 };
-			ActualShortRunning = new Binding.RetryPolicy { Count = 6, Interval = TimeSpan.FromMinutes(5) };
+			ActualLongRunning = new() { Count = 72, Interval = TimeSpan.FromHours(1) };
+			RealTime = new() { Count = 0 };
+			ActualShortRunning = new() { Count = 6, Interval = TimeSpan.FromMinutes(5) };
 		}
 
 		public static Binding.RetryPolicy LongRunning => new EnvironmentSensitiveRetryPolicy(

@@ -38,7 +38,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var wca = new WcfCustomIsolatedAdapter.Inbound<NetTcpBindingElement>(
 				a => {
 					const int tenMegaBytes = 1024 * 1024 * 10;
-					a.Address = new Uri("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Binding.MaxReceivedMessageSize = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxArrayLength = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxStringContentLength = tenMegaBytes;
@@ -86,7 +86,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var wca = new WcfCustomIsolatedAdapter.Inbound<NetTcpBindingElement>(
 				a => {
 					const int tenMegaBytes = 1024 * 1024 * 10;
-					a.Address = new Uri("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Binding.MaxReceivedMessageSize = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxArrayLength = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxStringContentLength = tenMegaBytes;

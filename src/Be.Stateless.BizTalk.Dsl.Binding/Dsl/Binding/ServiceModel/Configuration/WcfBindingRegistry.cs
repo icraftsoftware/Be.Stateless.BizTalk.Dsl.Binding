@@ -28,7 +28,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration
 	{
 		static WcfBindingRegistry()
 		{
-			_instance = new WcfBindingRegistry();
+			_instance = new();
 
 			var machineConfiguration = ConfigurationManager.OpenMachineConfiguration();
 			var modelSectionGroup = ServiceModelSectionGroup.GetSectionGroup(machineConfiguration);

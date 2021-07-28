@@ -19,12 +19,10 @@
 using System;
 using Be.Stateless.BizTalk.Component;
 using Be.Stateless.BizTalk.ContextProperties;
-using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
-using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
-using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
+using Be.Stateless.BizTalk.Schema;
 using BTS;
 
 namespace Be.Stateless.BizTalk.Dummies.Bindings
@@ -35,7 +33,7 @@ namespace Be.Stateless.BizTalk.Dummies.Bindings
 		{
 			Name = nameof(OneWaySendPort);
 			Description = "Some Useless One-Way Test Send Port";
-			Filter = new Filter(() => BtsProperties.MessageType == Schema<soap_envelope_1__2.Envelope>.MessageType);
+			Filter = new(() => BtsProperties.MessageType == SchemaMetadata.For<soap_envelope_1__2.Envelope>().MessageType);
 			Priority = Priority.Highest;
 			OrderedDelivery = true;
 			StopSendingOnOrderedDeliveryFailure = true;
@@ -51,8 +49,8 @@ namespace Be.Stateless.BizTalk.Dummies.Bindings
 					}));
 			Transport.Adapter = new DummyAdapter();
 			Transport.Host = "Send Host Name";
-			Transport.RetryPolicy = new RetryPolicy { Count = 30, Interval = TimeSpan.FromMinutes(60) };
-			Transport.ServiceWindow = new ServiceWindow { StartTime = new Time(8, 0), StopTime = new Time(20, 0) };
+			Transport.RetryPolicy = new() { Count = 30, Interval = TimeSpan.FromMinutes(60) };
+			Transport.ServiceWindow = new() { StartTime = new(8, 0), StopTime = new(20, 0) };
 		}
 	}
 }

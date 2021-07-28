@@ -29,7 +29,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		static DailyServiceWindow()
 		{
 			var rl = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocation();
-			Default = new DailyServiceWindow(rl.ScheduleRecurFrom, rl.ScheduleRecurInterval);
+			Default = new(rl.ScheduleRecurFrom, rl.ScheduleRecurInterval);
 		}
 
 		private static DailyServiceWindow Default { get; }

@@ -16,28 +16,25 @@
 
 #endregion
 
-using System;
-using Be.Stateless.Extensions;
+using Be.Stateless.BizTalk.Dummies.Bindings;
+using Be.Stateless.BizTalk.Explorer;
+using FluentAssertions;
+using Xunit;
+using static FluentAssertions.FluentActions;
 
-namespace Be.Stateless.BizTalk.Install
+namespace Be.Stateless.BizTalk.Install.Command
 {
-	public static class DeploymentContext
+	public class ApplicationBindingValidationCommandFixture
 	{
-		public static Type EnvironmentSettingOverridesType { get; internal set; }
-
-		public static string ExcelSettingOverridesFolderPath
+		[SkippableFact]
+		public void Execute()
 		{
-			get => _excelSettingOverridesFolderPath;
-			internal set => _excelSettingOverridesFolderPath = value.IsNullOrEmpty() ? default : value;
-		}
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-		public static string TargetEnvironment
-		{
-			get => _targetEnvironment;
-			internal set => _targetEnvironment = value.IsNullOrEmpty() ? default : value;
+			ICommand sut = new ApplicationBindingValidationCommand<TestApplication> {
+				TargetEnvironment = TargetEnvironment.DEVELOPMENT
+			};
+			Invoking(() => sut.Execute(_ => { })).Should().NotThrow();
 		}
-
-		private static string _excelSettingOverridesFolderPath;
-		private static string _targetEnvironment;
 	}
 }

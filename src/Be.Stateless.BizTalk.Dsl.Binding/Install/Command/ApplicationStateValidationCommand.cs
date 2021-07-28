@@ -23,12 +23,12 @@ using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationStateValidationCommand<T> : ApplicationBindingCommand<T>
+	public class ApplicationStateValidationCommand<T> : ApplicationBindingBasedCommand<T>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		#region Base Class Member Overrides
 
-		protected override void ExecuteCore(Action<string> logAppender)
+		protected override void Execute(Action<string> logAppender)
 		{
 			using (var bizTalkServiceStateValidatorVisitor = new BizTalkServiceStateValidatorVisitor())
 			{

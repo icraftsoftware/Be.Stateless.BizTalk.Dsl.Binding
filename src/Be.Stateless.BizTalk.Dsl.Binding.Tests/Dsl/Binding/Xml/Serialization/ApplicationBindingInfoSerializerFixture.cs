@@ -91,7 +91,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 								p.SendPipeline = new SendPipeline<PassThruTransmit>();
 								p.Transport.Adapter = new HttpAdapter.Outbound(
 									ha => {
-										ha.Url = new Uri("http://localhost:8000/soap-stub");
+										ha.Url = new("http://localhost:8000/soap-stub");
 										ha.EnableChunkedEncoding = false;
 										ha.MaxRedirects = 0;
 										ha.RequestTimeout = TimeSpan.FromMinutes(1);

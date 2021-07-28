@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
@@ -91,6 +92,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Never(), ItExpr.IsAny<string>());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ForwardsApplyEnvironmentOverridesToFilter()
 		{
@@ -105,6 +107,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			environmentSensitiveFilterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToReceivePipeline()
 		{
@@ -120,6 +123,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToSendPipeline()
 		{
@@ -135,6 +139,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ForwardsApplyEnvironmentOverridesToTransport()
 		{
@@ -158,6 +163,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			environmentSensitiveBackupAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void NameIsMandatory()
 		{
@@ -170,6 +176,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Send Port's Name is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SendPipelineIsMandatory()
 		{
@@ -182,6 +189,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Send Port's Send Pipeline is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportINamingConvention()
 		{
@@ -196,6 +204,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((ISupportNamingConvention) sendPortMock.Object).Name.Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportStringNamingConvention()
 		{
@@ -207,6 +216,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((ISupportNamingConvention) sendPortMock.Object).Name.Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void TransportIsValidated()
 		{

@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dummies.Adapter;
@@ -101,6 +102,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			sut.ComputeAdapterNameSpy(adapter).Should().Be("WCF-CustomIsolatedBasicHttp");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void ComputeAggregateNameIsCalledForReceiveLocation()
 		{
@@ -130,6 +132,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			namingConventionMock.Protected().Verify("ComputeAggregateName", Times.Once(), receiveLocationMock.Object.GetType());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ComputeAggregateNameIsCalledForReceivePort()
 		{
@@ -148,6 +151,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 			namingConventionMock.Protected().Verify("ComputeAggregateName", Times.Once(), receivePortMock.Object.GetType());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void ComputeAggregateNameIsCalledForSendPort()
 		{

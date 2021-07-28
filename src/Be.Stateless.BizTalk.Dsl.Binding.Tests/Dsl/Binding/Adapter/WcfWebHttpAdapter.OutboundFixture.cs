@@ -41,7 +41,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wha = new WcfWebHttpAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("https://localhost/dummy.svc");
+					a.Address = new("https://localhost/dummy.svc");
 
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.SecurityMode = WebHttpSecurityMode.Transport;
@@ -51,7 +51,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.Password = "p@ssw0rd";
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://localhost/swt_token_issuer");
+					a.StsUri = new("https://localhost/swt_token_issuer");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "secret";
 
@@ -124,7 +124,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var wha = new WcfWebHttpAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("https://localhost/dummy.svc");
+					a.Address = new("https://localhost/dummy.svc");
 
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.SecurityMode = WebHttpSecurityMode.Transport;
@@ -134,7 +134,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.Password = "p@ssw0rd";
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://localhost/swt_token_issuer");
+					a.StsUri = new("https://localhost/swt_token_issuer");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "secret";
 

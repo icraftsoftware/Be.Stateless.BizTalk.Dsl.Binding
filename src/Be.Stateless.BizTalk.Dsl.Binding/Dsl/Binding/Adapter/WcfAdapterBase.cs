@@ -57,8 +57,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		protected WcfAdapterBase(ProtocolType protocolType) : base(protocolType)
 		{
-			AdapterConfig = new TConfig();
-			BindingElement = new TBinding();
+			AdapterConfig = new();
+			BindingElement = new();
 		}
 
 		#region IAdapterConfigAddress<TAddress> Members

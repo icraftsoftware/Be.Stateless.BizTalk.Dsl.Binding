@@ -106,7 +106,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 
 				var compileUnit = type.ConvertToOrchestrationBindingCodeCompileUnit();
 				var results = provider.CompileAssemblyFromDom(parameters, compileUnit);
-				if (results.Errors.Count > 0) throw new Exception(results.Errors.Cast<CompilerError>().Aggregate(string.Empty, (k, e) => $"{k}\r\n{e}"));
+				if (results.Errors.Count > 0) throw new(results.Errors.Cast<CompilerError>().Aggregate(string.Empty, (k, e) => $"{k}\r\n{e}"));
 
 				return results.CompiledAssembly;
 			}

@@ -16,25 +16,10 @@
 
 #endregion
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.BizTalk.Deployment.Binding;
-
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Install.Command
 {
-	[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = "Public DSL API.")]
-	public class RetryPolicy
+	public interface ISupplyApplicationFileAdapterFolderTeardownCommandArguments : ISupplyApplicationBindingBasedCommandArguments
 	{
-		static RetryPolicy()
-		{
-			var ti = new TransportInfo();
-			Default = new() { Count = ti.RetryCount, Interval = TimeSpan.FromMinutes(ti.RetryInterval) };
-		}
-
-		public static RetryPolicy Default { get; }
-
-		public virtual int Count { get; set; }
-
-		public virtual TimeSpan Interval { get; set; }
+		bool Recurse { get; }
 	}
 }

@@ -21,26 +21,32 @@ using System.Linq;
 using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
+using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationFileAdapterFolderSetupCommand<T> : ApplicationBindingCommand<T>, IApplicationFileAdapterFolderSetupCommand
+	public class ApplicationFileAdapterFolderSetupCommand<T> : ApplicationBindingBasedCommand<T, ISupplyApplicationFileAdapterFolderSetupCommandArguments>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		#region IApplicationFileAdapterFolderSetupCommand Members
-
-		public string[] Users { get; set; }
-
-		#endregion
-
 		#region Base Class Member Overrides
 
-		protected override void ExecuteCore(Action<string> logAppender)
+		protected override void Execute(Action<string> logAppender)
 		{
-			if (Users == null || !Users.Any()) throw new InvalidOperationException($"{nameof(Users)} has not been set.");
 			ApplicationBinding.Accept(new FileAdapterFolderSetUpVisitor(Users, logAppender));
 		}
 
+		protected override void InitializeParameters(ISupplyApplicationFileAdapterFolderSetupCommandArguments arguments)
+		{
+			Users = arguments.Users;
+		}
+
+		protected override void ValidateParameters()
+		{
+			if (Users?.Any(u => !u.IsNullOrEmpty()) == false) throw new ArgumentNullException(nameof(Users));
+		}
+
 		#endregion
+
+		public string[] Users { get; set; }
 	}
 }

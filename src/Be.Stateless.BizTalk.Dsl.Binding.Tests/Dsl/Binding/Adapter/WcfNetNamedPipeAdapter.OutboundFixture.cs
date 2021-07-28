@@ -36,7 +36,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var npa = new WcfNetNamedPipeAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("net.pipe://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.pipe://localhost/biztalk.factory/service.svc");
 					a.SecurityMode = NetNamedPipeSecurityMode.Transport;
 					a.SendTimeout = TimeSpan.FromMinutes(2);
 					a.TransportProtectionLevel = ProtectionLevel.EncryptAndSign;
@@ -73,7 +73,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var npa = new WcfNetNamedPipeAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("net.pipe://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.pipe://localhost/biztalk.factory/service.svc");
 					a.SecurityMode = NetNamedPipeSecurityMode.Transport;
 					a.TransportProtectionLevel = ProtectionLevel.EncryptAndSign;
 				});

@@ -142,7 +142,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		static FtpAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("3979ffed-0067-4cc6-9f5a-859a5db6e9bb"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("3979ffed-0067-4cc6-9f5a-859a5db6e9bb"));
 		}
 
 		protected FtpAdapter() : base(_protocolType) { }

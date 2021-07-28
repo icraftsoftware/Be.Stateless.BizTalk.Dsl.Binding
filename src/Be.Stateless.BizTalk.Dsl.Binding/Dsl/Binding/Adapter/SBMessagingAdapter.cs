@@ -40,12 +40,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static SBMessagingAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("9c458d4a-a73c-4cb3-89c4-86ae0103de2f"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("9c458d4a-a73c-4cb3-89c4-86ae0103de2f"));
 		}
 
 		protected SBMessagingAdapter() : base(_protocolType)
 		{
-			AdapterConfig = new TConfig();
+			AdapterConfig = new();
 		}
 
 		#region IAdapterConfigAddress<Uri> Members

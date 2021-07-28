@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Explorer;
@@ -83,6 +84,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receiveLocationMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Never(), ItExpr.IsAny<string>());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToReceivePipeline()
 		{
@@ -98,6 +100,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToSendPipeline()
 		{
@@ -113,6 +116,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ForwardsApplyEnvironmentOverridesToTransport()
 		{
@@ -130,6 +134,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void NameIsMandatory()
 		{
@@ -141,6 +146,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Receive Location's Name is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ReceivePipelineIsMandatory()
 		{
@@ -152,6 +158,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Receive Location's Receive Pipeline is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportINamingConvention()
 		{
@@ -166,6 +173,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((ISupportNamingConvention) receiveLocationMock.Object).Name.Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportStringNamingConvention()
 		{
@@ -177,6 +185,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((ISupportNamingConvention) receiveLocationMock.Object).Name.Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void TransportIsValidated()
 		{

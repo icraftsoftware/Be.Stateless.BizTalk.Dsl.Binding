@@ -53,7 +53,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfBasicHttpRelayAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("f15097a3-283a-40b2-aca7-6b7bae0a0955"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("f15097a3-283a-40b2-aca7-6b7bae0a0955"));
 		}
 
 		protected WcfBasicHttpRelayAdapter() : base(_protocolType)

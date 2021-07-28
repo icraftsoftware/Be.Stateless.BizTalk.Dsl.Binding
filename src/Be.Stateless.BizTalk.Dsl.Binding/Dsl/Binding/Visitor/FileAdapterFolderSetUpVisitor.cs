@@ -59,9 +59,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				Directory.CreateDirectory(path);
 				_logAppender?.Invoke($"Created directory '{path}'.");
 			}
-			catch (Exception exception)
+			catch (Exception exception) when (!exception.IsFatal())
 			{
-				if (exception.IsFatal()) throw;
 				_logAppender?.Invoke($"Could not create directory '{path}'.\r\n{exception}");
 			}
 		}
@@ -86,7 +85,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				{
 					var acl = Directory.GetAccessControl(path);
 					acl.AddAccessRule(
-						new FileSystemAccessRule(
+						new(
 							user,
 							FileSystemRights.FullControl,
 							InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
@@ -95,9 +94,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					Directory.SetAccessControl(path, acl);
 					_logAppender?.Invoke($"Granted Full Control permission to '{user}' on directory '{path}'.");
 				}
-				catch (Exception exception)
+				catch (Exception exception) when (!exception.IsFatal())
 				{
-					if (exception.IsFatal()) throw;
 					_logAppender?.Invoke($"Could not grant Full Control permission to '{user}' on directory '{path}'.\r\n{exception}");
 				}
 			}

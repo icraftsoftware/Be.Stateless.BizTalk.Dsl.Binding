@@ -33,7 +33,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			if (left == null) throw new ArgumentNullException(nameof(left));
 			if (right == null) throw new ArgumentNullException(nameof(right));
 			// see https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-and-operator
-			return new Filter(
+			return new(
 				Expression.Lambda<Func<bool>>(
 					Expression.MakeBinary(
 						ExpressionType.AndAlso,
@@ -46,7 +46,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			if (left == null) throw new ArgumentNullException(nameof(left));
 			if (right == null) throw new ArgumentNullException(nameof(right));
 			// see https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-or-operator
-			return new Filter(
+			return new(
 				Expression.Lambda<Func<bool>>(
 					Expression.MakeBinary(
 						ExpressionType.OrElse,

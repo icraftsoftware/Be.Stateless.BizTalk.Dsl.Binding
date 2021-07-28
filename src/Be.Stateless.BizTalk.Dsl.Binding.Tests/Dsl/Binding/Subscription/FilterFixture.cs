@@ -24,6 +24,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Install;
+using Be.Stateless.BizTalk.Schema;
 using FluentAssertions;
 using Microsoft.BizTalk.B2B.PartnerManagement;
 using Microsoft.XLANGs.BaseTypes;
@@ -107,8 +108,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			const string senderNameToken = "BizTalkFactory.Batching";
 			const int retryCountToken = 3;
 			var filter = new Filter(
-				() => (BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken)
-					&& BtsProperties.MessageType == Schema<Any>.MessageType);
+				() => (
+						BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken)
+					&& BtsProperties.MessageType == SchemaMetadata.For<Any>().MessageType
+			);
 
 			filter.ToString().Should().Be(
 				string.Format(
@@ -121,7 +124,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					senderNameToken,
 					BtsProperties.MessageType.Type.FullName,
 					(int) FilterOperator.Equals,
-					Schema<Any>.MessageType,
+					SchemaMetadata.For<Any>().MessageType,
 					BtsProperties.ActualRetryCount.Type.FullName,
 					(int) FilterOperator.GreaterThan,
 					retryCountToken));
@@ -133,8 +136,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			const string senderNameToken = "BizTalkFactory.Batching";
 			const int retryCountToken = 3;
 			var filter = new Filter(
-				() => BtsProperties.MessageType == Schema<Any>.MessageType
-					&& (BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken));
+				() => BtsProperties.MessageType == SchemaMetadata.For<Any>().MessageType
+					&& (BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken)
+			);
 
 			filter.ToString().Should().Be(
 				string.Format(
@@ -144,7 +148,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					+ "</Filter>",
 					BtsProperties.MessageType.Type.FullName,
 					(int) FilterOperator.Equals,
-					Schema<Any>.MessageType,
+					SchemaMetadata.For<Any>().MessageType,
 					BizTalkFactoryProperties.MapTypeName.Type.FullName,
 					(int) FilterOperator.Equals,
 					senderNameToken,
@@ -185,13 +189,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			const int token2 = 3;
 
 			var filter = new Filter(
-				() => BizTalkFactoryProperties.MapTypeName == token1 || BtsProperties.ActualRetryCount > token2 && BtsProperties.MessageType == Schema<Any>.MessageType);
+				() => BizTalkFactoryProperties.MapTypeName == token1 || BtsProperties.ActualRetryCount > token2
+					&& BtsProperties.MessageType == SchemaMetadata.For<Any>().MessageType
+			);
 
 			filter.ToString().Should().Be(
 				"<Filter>"
 				+ $"<Group><Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{token1}\" /></Group>"
 				+ $"<Group><Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{token2}\" />"
-				+ $"<Statement Property=\"{BtsProperties.MessageType.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{Schema<Any>.MessageType}\" /></Group>"
+				+ $"<Statement Property=\"{BtsProperties.MessageType.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{SchemaMetadata.For<Any>().MessageType}\" /></Group>"
 				+ "</Filter>");
 		}
 
@@ -373,11 +379,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		[Fact]
 		public void MessageTypeBasedFilter()
 		{
-			var filter = new Filter(() => BtsProperties.MessageType == Schema<Any>.MessageType);
+			var filter = new Filter(() => BtsProperties.MessageType == SchemaMetadata.For<Any>().MessageType);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"
-				+ $"<Statement Property=\"{BtsProperties.MessageType.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{Schema<Any>.MessageType}\" />"
+				+ $"<Statement Property=\"{BtsProperties.MessageType.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{SchemaMetadata.For<Any>().MessageType}\" />"
 				+ "</Group></Filter>");
 		}
 
@@ -387,9 +393,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			var filter = new Filter(
 				() => BtsProperties.ActualRetryCount > 3
-					&& BtsProperties.MessageType == Schema<Any>.MessageType
+					&& BtsProperties.MessageType == SchemaMetadata.For<Any>().MessageType
 					&& BtsProperties.SendPortName == "Dummy port name"
-					&& BtsProperties.IsRequestResponse != true);
+					&& BtsProperties.IsRequestResponse != true
+			);
 			Invoking(() => filter.ToString()).Should().NotThrow();
 		}
 
@@ -444,7 +451,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		{
 			get
 			{
-				var messageType = Schema<Any>.MessageType;
+				var messageType = SchemaMetadata.For<Any>().MessageType;
 				const string operation = "Operation";
 				const string senderName = "BizTalkFactory.Accumulator";
 

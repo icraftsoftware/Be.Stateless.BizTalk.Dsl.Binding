@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -24,67 +23,30 @@ using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 using Be.Stateless.BizTalk.Install;
-using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 {
 	public static class ApplicationBindingArtifactLookupFactory<T>
 		where T : IApplicationBinding, IApplicationBindingArtifactLookup, IVisitable<IApplicationBindingVisitor>, new()
 	{
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
-		public static IApplicationBindingArtifactLookup Create()
+		[SuppressMessage("ReSharper", "InvertIf")]
+		public static IApplicationBindingArtifactLookup Create(params IApplicationBinding[] referencedApplications)
 		{
+			// rely on ApplicationBinding's assembly to compute an ExcelSettingOverridesFolderPath by convention
+			DeploymentContext.ExcelSettingOverridesFolderPath ??= Path.Combine(typeof(T).Assembly.Location!, "EnvironmentSettings");
 			// rely on BizTalk.Factory SSO store, which has to be deployed to run process tests anyway, to determine the target
 			// environment to generate the binding artifacts' names for
-			var targetEnvironment = BizTalkFactorySettings.TargetEnvironment;
-			var assemblyPath = typeof(T).Assembly.Location;
-			// rely on ApplicationBinding's assembly to compute an ExcelSettingOverridesFolderPath by convention
-			var excelSettingOverridesFolderPath = Path.Combine(assemblyPath!, "EnvironmentSettings");
-			return Create(targetEnvironment, excelSettingOverridesFolderPath);
-		}
+			DeploymentContext.TargetEnvironment ??= BizTalkFactorySettings.TargetEnvironment;
 
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
-		public static IApplicationBindingArtifactLookup Create(Type environmentSettingOverridesType)
-		{
-			DeploymentContext.EnvironmentSettingOverridesType = environmentSettingOverridesType ?? throw new ArgumentNullException(nameof(environmentSettingOverridesType));
-			return Create();
-		}
-
-		[SuppressMessage("ReSharper", "InvertIf")]
-		public static IApplicationBindingArtifactLookup Create(string targetEnvironment)
-		{
-			if (targetEnvironment.IsNullOrEmpty()) throw new ArgumentNullException(nameof(targetEnvironment));
-			DeploymentContext.TargetEnvironment = targetEnvironment;
-			if (!_cache.ContainsKey(targetEnvironment))
+			if (!_cache.ContainsKey(DeploymentContext.TargetEnvironment))
 			{
 				var applicationBinding = new T();
-				ApplyEnvironmentOverridesForCurrentTargetEnvironment(applicationBinding);
-				_cache[targetEnvironment] = applicationBinding;
+				applicationBinding.ReferencedApplications.Add(referencedApplications);
+				// ensure application bindings are settled for target environment
+				applicationBinding.Accept(new EnvironmentOverrideApplicationVisitor());
+				_cache[DeploymentContext.TargetEnvironment] = applicationBinding;
 			}
-			return _cache[targetEnvironment];
-		}
-
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
-		public static IApplicationBindingArtifactLookup Create(string targetEnvironment, Type environmentSettingOverridesType)
-		{
-			DeploymentContext.EnvironmentSettingOverridesType = environmentSettingOverridesType ?? throw new ArgumentNullException(nameof(environmentSettingOverridesType));
-			return Create(targetEnvironment);
-		}
-
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
-		public static IApplicationBindingArtifactLookup Create(string targetEnvironment, string excelSettingOverridesFolderPath)
-		{
-			if (excelSettingOverridesFolderPath.IsNullOrEmpty()) throw new ArgumentNullException(nameof(excelSettingOverridesFolderPath));
-			DeploymentContext.ExcelSettingOverridesFolderPath = excelSettingOverridesFolderPath;
-			return Create(targetEnvironment);
-		}
-
-		private static void ApplyEnvironmentOverridesForCurrentTargetEnvironment(T applicationBinding)
-		{
-			// ensure application bindings are settled for target environment before visit
-			applicationBinding.Accept(new EnvironmentOverrideApplicationVisitor());
+			return _cache[DeploymentContext.TargetEnvironment];
 		}
 
 		[SuppressMessage("ReSharper", "StaticMemberInGenericType")]

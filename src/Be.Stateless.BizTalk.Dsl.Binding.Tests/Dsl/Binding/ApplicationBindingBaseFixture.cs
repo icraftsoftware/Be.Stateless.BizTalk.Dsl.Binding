@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Install;
@@ -99,6 +100,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			applicationBindingMock.Protected().Verify(nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides), Times.Never(), ItExpr.IsAny<string>());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void NameIsMandatory()
 		{
@@ -110,6 +112,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Application's Name is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportINamingConvention()
 		{
@@ -124,6 +127,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((ISupportNamingConvention) applicationBindingMock.Object).Name.Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportStringNamingConvention()
 		{

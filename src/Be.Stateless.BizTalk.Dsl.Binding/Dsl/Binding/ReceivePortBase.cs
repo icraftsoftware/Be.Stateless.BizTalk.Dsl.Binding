@@ -34,7 +34,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	{
 		protected internal ReceivePortBase()
 		{
-			_receiveLocations = new ReceiveLocationCollection<TNamingConvention>(this);
+			_receiveLocations = new(this);
 		}
 
 		protected internal ReceivePortBase(Action<IReceivePort<TNamingConvention>> receivePortConfigurator) : this()

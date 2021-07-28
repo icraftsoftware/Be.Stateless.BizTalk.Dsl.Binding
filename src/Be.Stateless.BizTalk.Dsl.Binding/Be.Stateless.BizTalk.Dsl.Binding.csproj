@@ -43,10 +43,10 @@
     <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.21163.21265" />
     <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.21173.35392" />
     <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21163.28366" />
-    <PackageReference Include="Be.Stateless.BizTalk.Messaging" Version="2.0.21171.58430" />
     <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.21173.34896" />
     <PackageReference Include="Be.Stateless.Extensions" Version="2.0.21005.38790" />
-    <PackageReference Include="Be.Stateless.Stream" Version="2.0.21104.42258" />
+    <PackageReference Include="Be.Stateless.Reflection" Version="2.0.21071.48539" />
+    <PackageReference Include="Be.Stateless.Stream" Version="2.0.21212.92" />
     <PackageReference Include="Be.Stateless.Xml" Version="2.0.21104.42878" />
     <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>

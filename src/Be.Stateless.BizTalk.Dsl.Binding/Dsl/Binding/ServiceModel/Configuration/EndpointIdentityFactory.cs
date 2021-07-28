@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,27 +32,25 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration
 			string findValue,
 			bool isChainIncluded = false)
 		{
-			var ie = new IdentityElement();
-			ie.CertificateReference.StoreLocation = storeLocation;
-			ie.CertificateReference.StoreName = storeName;
-			ie.CertificateReference.X509FindType = findType;
-			ie.CertificateReference.FindValue = findValue;
-			ie.CertificateReference.IsChainIncluded = isChainIncluded;
-			return ie;
+			return new() {
+				CertificateReference = {
+					StoreLocation = storeLocation,
+					StoreName = storeName,
+					X509FindType = findType,
+					FindValue = findValue,
+					IsChainIncluded = isChainIncluded
+				}
+			};
 		}
 
 		public static IdentityElement CreateDnsIdentity(string dnsName)
 		{
-			var ie = new IdentityElement();
-			ie.Dns.Value = dnsName;
-			return ie;
+			return new() { Dns = { Value = dnsName } };
 		}
 
 		public static IdentityElement CreateSpnIdentity(string spnName)
 		{
-			var ie = new IdentityElement();
-			ie.ServicePrincipalName.Value = spnName;
-			return ie;
+			return new() { ServicePrincipalName = { Value = spnName } };
 		}
 	}
 }

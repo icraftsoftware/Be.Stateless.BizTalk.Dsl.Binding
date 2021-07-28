@@ -17,7 +17,6 @@
 #endregion
 
 extern alias ExplorerOM;
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -101,15 +100,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			where TNamingConvention : class
 		{
 			var bi = new BindingInfo();
-			bi.BindingParameters = new BindingParameters(new Version(bi.Version)) {
+			bi.BindingParameters = new(new(bi.Version)) {
 				BindingActions = BindingParameters.BindingActionTypes.Bind,
 				BindingItems = BindingParameters.BindingItemTypes.All,
 				BindingScope = BindingParameters.BindingScopeType.Application,
 				BindingSetState = BindingParameters.BindingSetStateType.UseServiceState
 			};
 			bi.Description = applicationBinding.Description;
-			bi.ModuleRefCollection = new ModuleRefCollection {
-				new ModuleRef($"[Application:{ApplicationName}]", string.Empty, string.Empty, string.Empty)
+			bi.ModuleRefCollection = new() {
+				new($"[Application:{ApplicationName}]", string.Empty, string.Empty, string.Empty)
 			};
 			bi.Timestamp = applicationBinding.Timestamp;
 			return bi;
@@ -138,7 +137,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			// see https://docs.microsoft.com/en-us/dotnet/api/microsoft.biztalk.deployment.binding.serviceref
 			var serviceRef = new ServiceRef {
 				Description = orchestrationBinding.Description,
-				Host = new HostRef {
+				Host = new() {
 					Name = ((ISupportHostNameResolution) orchestrationBinding).ResolveHostName()
 				},
 				Name = orchestrationBinding.Type.FullName,
@@ -164,7 +163,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			// see https://docs.microsoft.com/en-us/dotnet/api/microsoft.biztalk.deployment.binding.serviceref
 			if (portBinding.IsInbound)
-				return new ServicePortRef {
+				return new() {
 					// see Microsoft.BizTalk.Deployment.Assembly.BtsOrchestrationPort.GetBindingOption(IBizTalkPort port)
 					// see Microsoft.BizTalk.OrchestrationDesigner.PortBinding, Microsoft.BizTalk.OrchestrationDesigner
 					// where 0=Physical, 1=Logical, 2=Direct, 3=Dynamic
@@ -174,13 +173,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					// Export Indicates an Inbound port of an orchestration)
 					Modifier = (int) PortModifier.Export,
 					Name = portBinding.LogicalPortName,
-					ReceivePortRef = new ReceivePortRef { Name = portBinding.ActualPortName }
+					ReceivePortRef = new() { Name = portBinding.ActualPortName }
 				};
 
-			return new ServicePortRef {
+			return new() {
 				Modifier = (int) PortModifier.Import,
 				Name = portBinding.LogicalPortName,
-				SendPortRef = new SendPortRef { Name = portBinding.ActualPortName }
+				SendPortRef = new() { Name = portBinding.ActualPortName }
 			};
 		}
 
@@ -192,7 +191,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				Description = receivePort.Description,
 				IsTwoWay = receivePort.IsTwoWay,
 				Name = ((ISupportNamingConvention) receivePort).Name,
-				ReceiveLocations = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocationCollection()
+				ReceiveLocations = new()
 			};
 			return port;
 		}
@@ -211,7 +210,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 
 				TransportType = receiveLocation.Transport.Adapter.ProtocolType,
 				TransportTypeData = receiveLocation.Transport.Adapter.GetAdapterBindingInfoSerializer().Serialize(),
-				ReceiveHandler = new ReceiveHandlerRef {
+				ReceiveHandler = new() {
 					Name = ((ISupportHostNameResolution) receiveLocation.Transport).ResolveHostName(),
 					TransportType = receiveLocation.Transport.Adapter.ProtocolType
 				},
@@ -310,7 +309,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				Primary = ReferenceEquals(transport.SendPort.Transport, transport),
 				RetryCount = transport.RetryPolicy.Count,
 				RetryInterval = (int) transport.RetryPolicy.Interval.TotalMinutes,
-				SendHandler = new SendHandlerRef {
+				SendHandler = new() {
 					Name = ((ISupportHostNameResolution) transport).ResolveHostName(),
 					TransportType = transport.Adapter.ProtocolType
 				},

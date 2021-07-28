@@ -43,9 +43,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				Directory.Delete(path, _recurse);
 				_logAppender?.Invoke($"Deleted directory '{path}'.");
 			}
-			catch (Exception exception)
+			catch (Exception exception) when (!exception.IsFatal())
 			{
-				if (exception.IsFatal()) throw;
 				_logAppender?.Invoke($"Could not delete directory '{path}'.\r\n${exception}");
 			}
 		}

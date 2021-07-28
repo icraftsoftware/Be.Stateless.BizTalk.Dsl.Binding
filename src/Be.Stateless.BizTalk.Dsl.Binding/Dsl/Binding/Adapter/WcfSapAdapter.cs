@@ -42,7 +42,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfSapAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("a5f15999-8879-472d-8c62-3b5ea9406504"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("a5f15999-8879-472d-8c62-3b5ea9406504"));
 		}
 
 		protected WcfSapAdapter() : base(_protocolType)

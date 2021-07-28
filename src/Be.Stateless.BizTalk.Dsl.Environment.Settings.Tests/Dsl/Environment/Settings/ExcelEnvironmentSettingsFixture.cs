@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Be.Stateless.BizTalk.Dummies.Environment.Settings;
@@ -31,6 +32,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 	[Collection("DeploymentContext")]
 	public class ExcelEnvironmentSettingsFixture
 	{
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void FailsWhenTargetEnvironmentValuesAreDefinedMultipleTimes()
 		{

@@ -35,7 +35,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var nta = new WcfNetTcpAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.SecurityMode = SecurityMode.Message;
 					a.MessageClientCredentialType = MessageCredentialType.Windows;
@@ -80,7 +80,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var nta = new WcfNetTcpAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.SecurityMode = SecurityMode.Message;
 					a.MessageClientCredentialType = MessageCredentialType.Windows;

@@ -24,16 +24,12 @@ using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.MicroPipelines;
 using Be.Stateless.BizTalk.Orchestrations.Bound;
+using ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper;
 using ExplorerOM::Microsoft.BizTalk.ExplorerOM;
 using FluentAssertions;
-using Microsoft.BizTalk.BtsScheduleHelper;
 using Microsoft.BizTalk.Deployment.Binding;
 using Xunit;
 using static FluentAssertions.FluentActions;
-using BtsDayOfWeek = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.BtsDayOfWeek;
-using Month = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.Month;
-using MonthDay = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.MonthDay;
-using OrdinalType = ExplorerOM::Microsoft.BizTalk.BtsScheduleHelper.OrdinalType;
 using ProtocolType = Microsoft.BizTalk.Deployment.Binding.ProtocolType;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
@@ -188,14 +184,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					rl.Name = "Dummy Receive Location";
 					rl.Transport.Adapter = new DummyAdapter();
 					rl.Transport.Host = "Receive Host Name";
-					rl.Transport.Schedule = new Schedule {
+					rl.Transport.Schedule = new() {
 						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"),
 						AutomaticallyAdjustForDaylightSavingTime = false,
-						StartDate = new DateTime(2020, 1, 30),
-						StopDate = new DateTime(2020, 3, 13),
+						StartDate = new(2020, 1, 30),
+						StopDate = new(2020, 3, 13),
 						ServiceWindow = new CalendricalMonthlyServiceWindow {
-							StartTime = new Time(19, 19, 19),
-							StopTime = new Time(9, 9, 9),
+							StartTime = new(19, 19, 19),
+							StopTime = new(9, 9, 9),
 							Months = Month.January | Month.Feburary | Month.March,
 							Days = MonthDay.Day31 | MonthDay.Day14 | MonthDay.Day15,
 							OnLastDay = true
@@ -208,9 +204,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var binding = visitor.CreateReceiveLocation(receiveLocation);
 			binding.ScheduleTimeZone.Should().Be("Pacific Standard Time");
 			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
-			binding.StartDate.Should().Be(new DateTime(2020, 1, 30));
+			binding.StartDate.Should().Be(new(2020, 1, 30));
 			binding.StartDateEnabled.Should().BeTrue();
-			binding.EndDate.Should().Be(new DateTime(2020, 3, 13));
+			binding.EndDate.Should().Be(new(2020, 3, 13));
 			binding.EndDateEnabled.Should().BeTrue();
 
 			binding.ServiceWindowEnabled.Should().BeTrue();
@@ -241,15 +237,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					rl.Name = "Dummy Receive Location";
 					rl.Transport.Adapter = new DummyAdapter();
 					rl.Transport.Host = "Receive Host Name";
-					rl.Transport.Schedule = new Schedule {
+					rl.Transport.Schedule = new() {
 						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"),
 						AutomaticallyAdjustForDaylightSavingTime = false,
-						StartDate = new DateTime(2020, 1, 30),
-						StopDate = new DateTime(2020, 3, 13),
+						StartDate = new(2020, 1, 30),
+						StopDate = new(2020, 3, 13),
 						ServiceWindow = new DailyServiceWindow {
-							StartTime = new Time(19, 19, 19),
-							StopTime = new Time(9, 9, 9),
-							From = new DateTime(2020, 2, 14),
+							StartTime = new(19, 19, 19),
+							StopTime = new(9, 9, 9),
+							From = new(2020, 2, 14),
 							Interval = 10
 						}
 					};
@@ -260,9 +256,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var binding = visitor.CreateReceiveLocation(receiveLocation);
 			binding.ScheduleTimeZone.Should().Be("Atlantic Standard Time");
 			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
-			binding.StartDate.Should().Be(new DateTime(2020, 1, 30));
+			binding.StartDate.Should().Be(new(2020, 1, 30));
 			binding.StartDateEnabled.Should().BeTrue();
-			binding.EndDate.Should().Be(new DateTime(2020, 3, 13));
+			binding.EndDate.Should().Be(new(2020, 3, 13));
 			binding.EndDateEnabled.Should().BeTrue();
 
 			binding.ServiceWindowEnabled.Should().BeTrue();
@@ -270,7 +266,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ToTime.TimeOfDay.Should().Be(((DateTime) new Time(9, 9, 9)).TimeOfDay);
 
 			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.Day);
-			binding.ScheduleRecurFrom.Should().Be(new DateTime(2020, 2, 14));
+			binding.ScheduleRecurFrom.Should().Be(new(2020, 2, 14));
 			binding.ScheduleRecurInterval.Should().Be(10);
 
 			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.None);
@@ -293,14 +289,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					rl.Name = "Dummy Receive Location";
 					rl.Transport.Adapter = new DummyAdapter();
 					rl.Transport.Host = "Receive Host Name";
-					rl.Transport.Schedule = new Schedule {
+					rl.Transport.Schedule = new() {
 						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"),
 						AutomaticallyAdjustForDaylightSavingTime = false,
-						StartDate = new DateTime(2020, 1, 30),
-						StopDate = new DateTime(2020, 3, 13),
+						StartDate = new(2020, 1, 30),
+						StopDate = new(2020, 3, 13),
 						ServiceWindow = new OrdinalMonthlyServiceWindow {
-							StartTime = new Time(19, 19, 19),
-							StopTime = new Time(9, 9, 9),
+							StartTime = new(19, 19, 19),
+							StopTime = new(9, 9, 9),
 							Months = Month.January | Month.Feburary | Month.March,
 							WeekDays = BtsDayOfWeek.Friday | BtsDayOfWeek.Saturday,
 							Ordinality = OrdinalType.Second | OrdinalType.Last
@@ -313,9 +309,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var binding = visitor.CreateReceiveLocation(receiveLocation);
 			binding.ScheduleTimeZone.Should().Be("Pacific Standard Time");
 			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
-			binding.StartDate.Should().Be(new DateTime(2020, 1, 30));
+			binding.StartDate.Should().Be(new(2020, 1, 30));
 			binding.StartDateEnabled.Should().BeTrue();
-			binding.EndDate.Should().Be(new DateTime(2020, 3, 13));
+			binding.EndDate.Should().Be(new(2020, 3, 13));
 			binding.EndDateEnabled.Should().BeTrue();
 
 			binding.ServiceWindowEnabled.Should().BeTrue();
@@ -387,15 +383,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 					rl.Name = "Dummy Receive Location";
 					rl.Transport.Adapter = new DummyAdapter();
 					rl.Transport.Host = "Receive Host Name";
-					rl.Transport.Schedule = new Schedule {
+					rl.Transport.Schedule = new() {
 						TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"),
 						AutomaticallyAdjustForDaylightSavingTime = false,
-						StartDate = new DateTime(2020, 1, 30),
-						StopDate = new DateTime(2020, 3, 13),
+						StartDate = new(2020, 1, 30),
+						StopDate = new(2020, 3, 13),
 						ServiceWindow = new WeeklyServiceWindow {
-							StartTime = new Time(19, 19, 19),
-							StopTime = new Time(9, 9, 9),
-							From = new DateTime(2020, 2, 14),
+							StartTime = new(19, 19, 19),
+							StopTime = new(9, 9, 9),
+							From = new(2020, 2, 14),
 							Interval = 10,
 							WeekDays = BtsDayOfWeek.Friday | BtsDayOfWeek.Saturday
 						}
@@ -407,9 +403,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var binding = visitor.CreateReceiveLocation(receiveLocation);
 			binding.ScheduleTimeZone.Should().Be("Atlantic Standard Time");
 			binding.ScheduleAutoAdjustToDaylightSaving.Should().BeFalse();
-			binding.StartDate.Should().Be(new DateTime(2020, 1, 30));
+			binding.StartDate.Should().Be(new(2020, 1, 30));
 			binding.StartDateEnabled.Should().BeTrue();
-			binding.EndDate.Should().Be(new DateTime(2020, 3, 13));
+			binding.EndDate.Should().Be(new(2020, 3, 13));
 			binding.EndDateEnabled.Should().BeTrue();
 
 			binding.ServiceWindowEnabled.Should().BeTrue();
@@ -417,7 +413,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			binding.ToTime.TimeOfDay.Should().Be(((DateTime) new Time(9, 9, 9)).TimeOfDay);
 
 			binding.ScheduleRecurrenceType.Should().Be(RecurrenceType.Week);
-			binding.ScheduleRecurFrom.Should().Be(new DateTime(2020, 2, 14));
+			binding.ScheduleRecurFrom.Should().Be(new(2020, 2, 14));
 			binding.ScheduleRecurInterval.Should().Be(10);
 
 			binding.ScheduleDaysOfWeek.Should().Be(BtsDayOfWeek.Friday | BtsDayOfWeek.Saturday);

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,20 +21,21 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
-	public interface IApplicationBinding : IFluentInterface { }
-
-	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
-	public interface IApplicationBinding<TNamingConvention> : IApplicationBinding, IObjectBinding<TNamingConvention> where TNamingConvention : class
+	public interface IApplicationBinding : IFluentInterface
 	{
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 		IOrchestrationBindingCollection Orchestrations { get; }
-
-		IReceivePortCollection<TNamingConvention> ReceivePorts { get; }
 
 		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public DSL API.")]
 		IReferencedApplicationBindingCollection ReferencedApplications { get; }
 
-		ISendPortCollection<TNamingConvention> SendPorts { get; }
-
 		DateTime Timestamp { get; }
+	}
+
+	public interface IApplicationBinding<TNamingConvention> : IApplicationBinding, IObjectBinding<TNamingConvention> where TNamingConvention : class
+	{
+		IReceivePortCollection<TNamingConvention> ReceivePorts { get; }
+
+		ISendPortCollection<TNamingConvention> SendPorts { get; }
 	}
 }

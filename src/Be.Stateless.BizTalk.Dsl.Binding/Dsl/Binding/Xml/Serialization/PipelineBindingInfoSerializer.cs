@@ -105,15 +105,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 		{
 			var overrides = new XmlAttributeOverrides();
 
-			overrides.Add<Document>(new XmlAttributes { XmlType = new XmlTypeAttribute("Root") });
+			overrides.Add<Document>(new() { XmlType = new("Root") });
 			overrides.Ignore<Document>(d => d.Description);
 			overrides.Ignore<Document>(d => d.MajorVersion);
 			overrides.Ignore<Document>(d => d.MinorVersion);
 			overrides.Ignore<Document>(d => d.PolicyFilePath);
 
-			overrides.Add<Stage>(s => s.Components, new XmlAttributes { XmlArrayItems = { new XmlArrayItemAttribute("Component", typeof(ComponentBinding)) } });
+			overrides.Add<Stage>(s => s.Components, new() { XmlArrayItems = { new XmlArrayItemAttribute("Component", typeof(ComponentBinding)) } });
 
-			overrides.Add<ComponentInfo>(ci => ci.QualifiedNameOrClassId, new XmlAttributes { XmlAttribute = new XmlAttributeAttribute("Name") });
+			overrides.Add<ComponentInfo>(ci => ci.QualifiedNameOrClassId, new() { XmlAttribute = new("Name") });
 			overrides.Ignore<ComponentInfo>(ci => ci.CachedDisplayName);
 			overrides.Ignore<ComponentInfo>(ci => ci.CachedIsManaged);
 			overrides.Ignore<ComponentInfo>(ci => ci.ComponentName);

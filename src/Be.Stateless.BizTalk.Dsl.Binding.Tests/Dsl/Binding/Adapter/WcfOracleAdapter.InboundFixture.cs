@@ -36,7 +36,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var ioa = new WcfOracleAdapter.Inbound(
 				a => {
-					a.Address = new OracleDBConnectionUri { DataSourceName = "TNS", PollingId = "ticket" };
+					a.Address = new() { DataSourceName = "TNS", PollingId = "ticket" };
 					a.InboundOperationType = InboundOperation.Polling;
 					a.PolledDataAvailableStatement = "SELECT COUNT(1) FROM EVENTS";
 					a.PollingInterval = TimeSpan.FromHours(2);
@@ -95,7 +95,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var ioa = new WcfOracleAdapter.Inbound(
 				a => {
-					a.Address = new OracleDBConnectionUri { DataSourceName = "TNS", PollingId = "ticket" };
+					a.Address = new() { DataSourceName = "TNS", PollingId = "ticket" };
 					a.InboundOperationType = InboundOperation.Polling;
 					a.PolledDataAvailableStatement = "SELECT COUNT(1) FROM EVENTS";
 					a.PollingInterval = TimeSpan.FromHours(2);

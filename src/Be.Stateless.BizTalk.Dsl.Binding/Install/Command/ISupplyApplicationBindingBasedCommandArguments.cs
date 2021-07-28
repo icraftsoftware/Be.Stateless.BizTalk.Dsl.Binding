@@ -16,15 +16,16 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public interface IApplicationHostEnumerationCommand
+	public interface ISupplyApplicationBindingBasedCommandArguments
 	{
-		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
-		IEnumerable<string> Hosts { get; }
+		Type EnvironmentSettingOverridesType { get; }
+
+		string ExcelSettingOverridesFolderPath { get; }
+
+		string TargetEnvironment { get; }
 	}
 }

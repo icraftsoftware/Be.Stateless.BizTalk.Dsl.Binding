@@ -17,14 +17,22 @@
 #endregion
 
 using System;
+using Be.Stateless.Extensions;
+using Be.Stateless.Reflection;
 
 namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 {
 	public static class TypeExtensions
 	{
+		public static IEnvironmentSettings CreateEnvironmentSettingsSingleton(this Type type)
+		{
+			if (!type.IsEnvironmentSettingsType()) throw new ArgumentException($"{type.Name} does not derive from {typeof(EnvironmentSettings<>).Name}.", nameof(type));
+			return (IEnvironmentSettings) Reflector.GetProperty(type, "Settings");
+		}
+
 		public static bool IsEnvironmentSettingsType(this Type type)
 		{
-			return type != null && typeof(IEnvironmentSettings).IsAssignableFrom(type);
+			return type != null && typeof(IEnvironmentSettings).IsAssignableFrom(type) && type.IsSubclassOfGenericType(typeof(EnvironmentSettings<>));
 		}
 	}
 }

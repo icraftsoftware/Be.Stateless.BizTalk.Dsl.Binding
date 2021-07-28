@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -53,7 +52,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfWebHttpAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("e5b2de81-de67-4559-869b-20925949a1e0"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("e5b2de81-de67-4559-869b-20925949a1e0"));
 		}
 
 		protected WcfWebHttpAdapter() : base(_protocolType)

@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.CodeDom.Compiler;
 using System.IO;
 using System.Linq;
@@ -62,7 +61,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.CodeDom
 
 				var compileUnit = xmlDocument.ConvertToEnvironmentSettingsCodeCompileUnit(@namespace, typeName, "BizTalk.Factory.Settings.xml");
 				var results = provider.CompileAssemblyFromDom(parameters, compileUnit);
-				if (results.Errors.Count > 0) throw new Exception(results.Errors.Cast<CompilerError>().Aggregate(string.Empty, (k, e) => $"{k}\r\n{e}"));
+				if (results.Errors.Count > 0) throw new(results.Errors.Cast<CompilerError>().Aggregate(string.Empty, (k, e) => $"{k}\r\n{e}"));
 
 				var assembly = results.CompiledAssembly;
 				var settings = assembly.CreateInstance($"{@namespace}.{typeName}");
@@ -89,7 +88,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.CodeDom
 				provider.GenerateCodeFromCompileUnit(
 					xmlDocument.ConvertToEnvironmentSettingsCodeCompileUnit("Be.Stateless.BizTalk.Factory", "BizTalkFactorySettings", "BizTalk.Factory.Settings.xml"),
 					writer,
-					new CodeGeneratorOptions { BracingStyle = "C", IndentString = "\t", VerbatimOrder = true });
+					new() { BracingStyle = "C", IndentString = "\t", VerbatimOrder = true });
 			}
 
 			builder.ToString()

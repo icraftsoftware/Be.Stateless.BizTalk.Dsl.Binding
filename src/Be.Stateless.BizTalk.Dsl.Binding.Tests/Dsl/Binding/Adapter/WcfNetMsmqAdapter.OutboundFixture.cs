@@ -39,7 +39,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var nma = new WcfNetMsmqAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Address = new("net.msmq://localhost/private/service_queue");
 					a.Identity = EndpointIdentityFactory.CreateCertificateIdentity(
 						StoreLocation.LocalMachine,
 						StoreName.TrustedPeople,
@@ -99,7 +99,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var nma = new WcfNetMsmqAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Address = new("net.msmq://localhost/private/service_queue");
 					a.SecurityMode = NetMsmqSecurityMode.Message;
 					a.UseSourceJournal = true;
 					a.DeadLetterQueue = DeadLetterQueue.Custom;

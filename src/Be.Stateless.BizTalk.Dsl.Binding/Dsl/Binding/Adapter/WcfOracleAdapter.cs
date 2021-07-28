@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Transactions;
 using Microsoft.Adapters.OracleDB;
@@ -43,7 +42,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfOracleAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("d7127586-e851-412e-8a8a-2428aeddc219"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("d7127586-e851-412e-8a8a-2428aeddc219"));
 		}
 
 		protected WcfOracleAdapter() : base(_protocolType)

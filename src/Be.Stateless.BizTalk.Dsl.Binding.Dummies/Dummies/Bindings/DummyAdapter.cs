@@ -19,13 +19,12 @@
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Microsoft.BizTalk.Component.Interop;
-using Microsoft.BizTalk.Deployment.Binding;
 
 namespace Be.Stateless.BizTalk.Dummies.Bindings
 {
 	internal class DummyAdapter : AdapterBase, IInboundAdapter, IOutboundAdapter
 	{
-		public DummyAdapter() : base(new ProtocolType { Name = "Test Dummy" }) { }
+		public DummyAdapter() : base(new() { Name = "Test Dummy" }) { }
 
 		#region IInboundAdapter Members
 

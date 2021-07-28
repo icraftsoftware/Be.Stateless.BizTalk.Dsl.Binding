@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Install
@@ -58,13 +57,6 @@ namespace Be.Stateless.BizTalk.Install
 		public static bool IsAcceptanceUpwards(this string environment)
 		{
 			return environment.IsAcceptance() || environment.IsPreProductionUpwards();
-		}
-
-		// TODO discard Obsolete
-		[Obsolete("Use IsAcceptanceUpwards() instead.")]
-		public static bool IsAcceptanceOrProduction(this string environment)
-		{
-			return environment.IsAcceptance() || environment.IsPreProduction() || environment.IsProduction();
 		}
 
 		public static bool IsPreProduction(this string environment)

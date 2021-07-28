@@ -26,7 +26,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 	{
 		public SendPortNamingConvention()
 		{
-			_convention = new TNamingConvention();
+			_convention = new();
 		}
 
 		#region IMessageFormatConvention<TNamingConvention> Members

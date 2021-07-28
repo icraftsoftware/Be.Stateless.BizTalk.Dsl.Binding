@@ -17,7 +17,6 @@
 #endregion
 
 extern alias ExplorerOM;
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Microsoft.BizTalk.Component.Interop;
@@ -30,12 +29,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static SftpAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("f75aeff5-ebc7-4e7c-a753-fdd68ab45c95"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("f75aeff5-ebc7-4e7c-a753-fdd68ab45c95"));
 		}
 
 		protected SftpAdapter() : base(_protocolType)
 		{
-			AdapterConfig = new TConfig();
+			AdapterConfig = new();
 		}
 
 		#region Base Class Member Overrides

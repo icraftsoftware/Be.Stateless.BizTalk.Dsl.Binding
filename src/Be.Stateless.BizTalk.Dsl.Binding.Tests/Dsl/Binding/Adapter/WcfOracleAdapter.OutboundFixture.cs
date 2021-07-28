@@ -22,7 +22,6 @@ using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Utils;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using FluentAssertions;
-using Microsoft.Adapters.OracleDB;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Xunit;
 using static FluentAssertions.FluentActions;
@@ -38,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var ooa = new WcfOracleAdapter.Outbound(
 				a => {
-					a.Address = new OracleDBConnectionUri { DataSourceName = "TNS" };
+					a.Address = new() { DataSourceName = "TNS" };
 					a.IsolationLevel = IsolationLevel.ReadCommitted;
 					a.OutboundBodyLocation = OutboundMessageBodySelection.UseBodyElement;
 					a.PropagateFaultMessage = true;
@@ -90,7 +89,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var ooa = new WcfOracleAdapter.Outbound(
 				a => {
-					a.Address = new OracleDBConnectionUri { DataSourceName = "TNS" };
+					a.Address = new() { DataSourceName = "TNS" };
 					a.IsolationLevel = IsolationLevel.ReadCommitted;
 					a.OutboundBodyLocation = OutboundMessageBodySelection.UseBodyElement;
 					a.PropagateFaultMessage = true;

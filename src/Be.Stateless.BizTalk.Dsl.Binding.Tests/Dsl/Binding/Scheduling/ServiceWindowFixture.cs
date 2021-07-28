@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		[Fact]
 		public void DateOfCustomStartAndSopTimeIsEqualsToDateOfDefaultStartAndStopTime()
 		{
-			var sw = new ServiceWindow { StartTime = new Time(8, 0), StopTime = new Time(20, 0) };
+			var sw = new ServiceWindow { StartTime = new(8, 0), StopTime = new(20, 0) };
 
 			((DateTime) sw.StartTime).Date.Should().Be(((DateTime) ServiceWindow.None.StartTime).Date);
 			((DateTime) sw.StartTime).TimeOfDay.Should().NotBe(((DateTime) ServiceWindow.None.StartTime).TimeOfDay);
@@ -38,7 +38,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		[Fact]
 		public void EnabledOnStartAndStopTime()
 		{
-			var sw = new ServiceWindow { StartTime = new Time(8, 0), StopTime = new Time(20, 0) };
+			var sw = new ServiceWindow { StartTime = new(8, 0), StopTime = new(20, 0) };
 
 			sw.Enabled.Should().BeTrue();
 		}
@@ -46,7 +46,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		[Fact]
 		public void EnabledOnStartTime()
 		{
-			var sw = new ServiceWindow { StartTime = new Time(8, 0) };
+			var sw = new ServiceWindow { StartTime = new(8, 0) };
 
 			sw.Enabled.Should().BeTrue();
 		}
@@ -54,7 +54,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		[Fact]
 		public void EnabledOnStopTime()
 		{
-			var sw = new ServiceWindow { StopTime = new Time(20, 0) };
+			var sw = new ServiceWindow { StopTime = new(20, 0) };
 
 			sw.Enabled.Should().BeTrue();
 		}

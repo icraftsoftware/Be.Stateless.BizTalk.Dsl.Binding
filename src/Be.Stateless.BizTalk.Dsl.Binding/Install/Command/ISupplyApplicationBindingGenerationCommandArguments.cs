@@ -18,8 +18,8 @@
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public interface IApplicationBindingGenerationCommand : IApplicationBindingCommand
+	public interface ISupplyApplicationBindingGenerationCommandArguments : ISupplyApplicationBindingBasedCommandArguments
 	{
-		public string OutputFilePath { get; set; }
+		public string OutputFilePath { get; }
 	}
 }

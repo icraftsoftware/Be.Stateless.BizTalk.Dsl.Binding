@@ -23,44 +23,63 @@ using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Install.Command;
+using Be.Stateless.BizTalk.Reflection;
 using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install
 {
+	[SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
 	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public DSL API.")]
-	public abstract class ApplicationBindingInstaller<T> : Installer
+	public abstract class ApplicationBindingInstaller<T> : Installer,
+		ISupplyApplicationBindingBasedCommandArguments,
+		ISupplyApplicationBindingGenerationCommandArguments,
+		ISupplyApplicationFileAdapterFolderSetupCommandArguments,
+		ISupplyApplicationFileAdapterFolderTeardownCommandArguments
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
+		#region ISupplyApplicationBindingBasedCommandArguments Members
+
+		public Type EnvironmentSettingOverridesType => Context.Parameters[$"{nameof(EnvironmentSettingOverridesType)}Name"].IfNotNullOrEmpty(t => Type.GetType(t, true));
+
+		public string ExcelSettingOverridesFolderPath => Context.Parameters[nameof(ExcelSettingOverridesFolderPath)];
+
+		public string TargetEnvironment => Context.Parameters[nameof(TargetEnvironment)];
+
+		#endregion
+
+		#region ISupplyApplicationBindingGenerationCommandArguments Members
+
+		public string OutputFilePath => Context.Parameters[nameof(OutputFilePath)];
+
+		#endregion
+
+		#region ISupplyApplicationFileAdapterFolderSetupCommandArguments Members
+
+		public string[] Users => Context.Parameters[nameof(ApplicationFileAdapterFolderSetupCommand<T>.Users)]?.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+		#endregion
+
+		#region ISupplyApplicationFileAdapterFolderTeardownCommandArguments Members
+
+		public bool Recurse => Context.Parameters.ContainsKey(nameof(Recurse));
+
+		#endregion
+
 		#region Base Class Member Overrides
 
-		[SuppressMessage("ReSharper", "InvertIf")]
 		public override void Install(IDictionary stateSaver)
 		{
 			base.Install(stateSaver);
 
-			if (Context.Parameters.ContainsKey(nameof(IApplicationBindingGenerationCommand.OutputFilePath)))
+			using (new BizTalkAssemblyResolver(Context.LogMessage, true, AssemblyProbingFolderPaths))
 			{
-				var cmd = new ApplicationBindingGenerationCommand<T> {
-					OutputFilePath = Context.Parameters[nameof(IApplicationBindingGenerationCommand.OutputFilePath)]
+				ICommand cmd = Context.Parameters switch {
+					var p when p.ContainsKey(nameof(OutputFilePath)) => CommandFactory.CreateApplicationBindingGenerationCommand<T>().InitializeParameters(this),
+					var p when p.ContainsKey("CreateFileAdapterFolders") => CommandFactory.CreateApplicationFileAdapterFolderSetupCommand<T>().InitializeParameters(this),
+					var p when p.ContainsKey("InitializeApplication") => CommandFactory.CreateApplicationStateInitializationCommand<T>().InitializeParameters(this),
+					_ => null
 				};
-				SetCommandCommonArguments(cmd);
-				cmd.Execute(msg => Context.LogMessage(msg));
-			}
-
-			if (Context.Parameters.ContainsKey("SetupFileAdapterFolders"))
-			{
-				var cmd = new ApplicationFileAdapterFolderSetupCommand<T> {
-					Users = Context.Parameters[nameof(IApplicationFileAdapterFolderSetupCommand.Users)].IfNotNullOrEmpty(u => u.Split(';', ','))
-				};
-				SetCommandCommonArguments(cmd);
-				cmd.Execute(msg => Context.LogMessage(msg));
-			}
-
-			if (Context.Parameters.ContainsKey("InitializeServices"))
-			{
-				var cmd = new ApplicationStateInitializationCommand<T>();
-				SetCommandCommonArguments(cmd);
-				cmd.Execute(msg => Context.LogMessage(msg));
+				cmd?.Execute(Context.LogMessage);
 			}
 		}
 
@@ -69,26 +88,18 @@ namespace Be.Stateless.BizTalk.Install
 		{
 			base.Uninstall(savedState);
 
-			if (Context.Parameters.ContainsKey("TeardownFileAdapterFolders"))
+			using (new BizTalkAssemblyResolver(Context.LogMessage, true, AssemblyProbingFolderPaths))
 			{
-				var cmd = new ApplicationFileAdapterFolderTeardownCommand<T> {
-					Recurse = Context.Parameters.ContainsKey(nameof(ApplicationFileAdapterFolderTeardownCommand<T>.Recurse))
-				};
-				SetCommandCommonArguments(cmd);
-				cmd.Execute(msg => Context.LogMessage(msg));
+				if (Context.Parameters.ContainsKey("DeleteFileAdapterFolders"))
+				{
+					var cmd = CommandFactory.CreateApplicationFileAdapterFolderTeardownCommand<T>().InitializeParameters(this);
+					cmd.Execute(Context.LogMessage);
+				}
 			}
 		}
 
 		#endregion
 
-		private void SetCommandCommonArguments(IApplicationBindingCommand cmd)
-		{
-			cmd.EnvironmentSettingOverridesType = Context.Parameters[nameof(IApplicationBindingCommand.EnvironmentSettingOverridesType)]
-				.IfNotNullOrEmpty(t => Type.GetType(t, true));
-			cmd.AssemblyProbingFolderPaths = Context.Parameters[nameof(IApplicationBindingCommand.AssemblyProbingFolderPaths)]
-				.IfNotNullOrEmpty(p => p.Split(';'));
-			cmd.ExcelSettingOverridesFolderPath = Context.Parameters[nameof(IApplicationBindingCommand.ExcelSettingOverridesFolderPath)];
-			cmd.TargetEnvironment = Context.Parameters[nameof(IApplicationBindingCommand.TargetEnvironment)];
-		}
+		public string[] AssemblyProbingFolderPaths => Context.Parameters[nameof(AssemblyProbingFolderPaths)]?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 	}
 }

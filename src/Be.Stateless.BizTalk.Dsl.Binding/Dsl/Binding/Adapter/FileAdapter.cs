@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
 using Be.Stateless.Extensions;
@@ -29,12 +28,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static FileAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("5e49e3a6-b4fc-4077-b44c-22f34a242fdb"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("5e49e3a6-b4fc-4077-b44c-22f34a242fdb"));
 		}
 
 		protected FileAdapter() : base(_protocolType)
 		{
-			NetworkCredentials = new Credentials();
+			NetworkCredentials = new();
 		}
 
 		#region Base Class Member Overrides

@@ -26,6 +26,13 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings.Extensions
 	public class AssemblyExtensionsFixture
 	{
 		[Fact]
+		public void GetEnvironmentSettingsSingleton()
+		{
+			typeof(Dummies.Environment.Settings.DummyApp).Assembly.GetEnvironmentSettingsSingleton()
+				.Should().BeSameAs(Dummies.Environment.Settings.DummyApp.Settings);
+		}
+
+		[Fact]
 		public void GetEnvironmentSettingsType()
 		{
 			typeof(Dummies.Environment.Settings.DummyApp).Assembly.GetEnvironmentSettingsType(true).Should().BeSameAs(typeof(Dummies.Environment.Settings.DummyApp));

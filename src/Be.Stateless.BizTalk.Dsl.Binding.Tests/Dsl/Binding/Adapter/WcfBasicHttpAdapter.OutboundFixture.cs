@@ -37,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var bha = new WcfBasicHttpAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("http://localhost/biztalk.factory/service.svc");
+					a.Address = new("http://localhost/biztalk.factory/service.svc");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.SecurityMode = BasicHttpSecurityMode.Message;
 					a.SendTimeout = TimeSpan.FromMinutes(2);
@@ -82,7 +82,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var bha = new WcfBasicHttpAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("http://localhost/biztalk.factory/service.svc");
+					a.Address = new("http://localhost/biztalk.factory/service.svc");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.MessageClientCredentialType = BasicHttpMessageCredentialType.Certificate;
 					a.SecurityMode = BasicHttpSecurityMode.Message;

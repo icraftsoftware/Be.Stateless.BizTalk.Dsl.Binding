@@ -33,7 +33,7 @@ namespace Be.Stateless.BizTalk.Dsl.Environment.Settings
 		internal ExcelEnvironmentSettingOverrides(string filePath)
 		{
 			if (filePath == null) throw new ArgumentNullException(nameof(filePath));
-			using (var xmlReader = XmlReader.Create(new StreamReader(filePath), new XmlReaderSettings { XmlResolver = null, CloseInput = true }))
+			using (var xmlReader = XmlReader.Create(new StreamReader(filePath), new() { XmlResolver = null, CloseInput = true }))
 			{
 				var xmlDocument = new XmlDocument();
 				xmlDocument.Load(xmlReader);

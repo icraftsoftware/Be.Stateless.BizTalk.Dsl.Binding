@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -104,31 +104,31 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					}
 					yield break;
 				case ExpressionType.Equal:
-					yield return new FilterStatement(
+					yield return new(
 						TranslatePropertyExpression(expression.Left),
 						FilterOperator.Equals,
 						TranslateValueExpression(expression.Right));
 					yield break;
 				case ExpressionType.GreaterThan:
-					yield return new FilterStatement(
+					yield return new(
 						TranslatePropertyExpression(expression.Left),
 						FilterOperator.GreaterThan,
 						TranslateValueExpression(expression.Right));
 					yield break;
 				case ExpressionType.GreaterThanOrEqual:
-					yield return new FilterStatement(
+					yield return new(
 						TranslatePropertyExpression(expression.Left),
 						FilterOperator.GreaterThanOrEquals,
 						TranslateValueExpression(expression.Right));
 					yield break;
 				case ExpressionType.LessThan:
-					yield return new FilterStatement(
+					yield return new(
 						TranslatePropertyExpression(expression.Left),
 						FilterOperator.LessThan,
 						TranslateValueExpression(expression.Right));
 					yield break;
 				case ExpressionType.LessThanOrEqual:
-					yield return new FilterStatement(
+					yield return new(
 						TranslatePropertyExpression(expression.Left),
 						FilterOperator.LessThanOrEquals,
 						TranslateValueExpression(expression.Right));
@@ -136,7 +136,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				case ExpressionType.NotEqual:
 					// != null is rewritten as Exists operator
 					var value = TranslateValueExpression(expression.Right);
-					yield return new FilterStatement(
+					yield return new(
 						TranslatePropertyExpression(expression.Left),
 						value == null ? FilterOperator.Exists : FilterOperator.NotEqual,
 						value);
@@ -180,14 +180,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		[SuppressMessage("ReSharper", "InvertIf")]
 		private static string TranslateValueExpression(MemberExpression expression)
 		{
-			// handle Schema<T>
-			var type = expression.Member.ReflectedType;
-			if (type != null && type.IsSubclassOfGenericType(typeof(Schema<>)))
-			{
-				var value = Expression.Lambda(expression).Compile().DynamicInvoke();
-				return value.ToString();
-			}
-
 			// handle IReceivePort<TNamingConvention>.Name and ISendPort<TNamingConvention>.Name
 			var containingObjectType = expression.Expression.Type;
 			if (containingObjectType.IsSubclassOfGenericType(typeof(IReceivePort<>)) || containingObjectType.IsSubclassOfGenericType(typeof(ISendPort<>)))
@@ -197,7 +189,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			}
 
 			// handle string value
-			type = expression.Type;
+			var type = expression.Type;
 			if (type == typeof(string))
 			{
 				var value = (string) Expression.Lambda(expression).Compile().DynamicInvoke();

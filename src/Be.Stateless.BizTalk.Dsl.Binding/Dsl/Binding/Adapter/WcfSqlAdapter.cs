@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Adapters.Sql;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
@@ -40,7 +39,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfSqlAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("59b35d03-6a06-4734-a249-ef561254ecf7"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("59b35d03-6a06-4734-a249-ef561254ecf7"));
 		}
 
 		protected WcfSqlAdapter() : base(_protocolType)

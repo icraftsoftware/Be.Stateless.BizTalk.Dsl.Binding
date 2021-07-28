@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.CodeDom;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
@@ -57,6 +58,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			validatingOrchestrationBindingMock.Verify(m => m.Validate(), Times.Once);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void DelegatesHostNameResolutionToHostResolutionPolicy()
 		{
@@ -104,6 +106,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBindingMock.Protected().Verify(nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides), Times.Never(), ItExpr.IsAny<string>());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void HostIsMandatory()
 		{
@@ -197,6 +200,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			ProcessOrchestrationBinding.SolicitResponsePort.Operations.SolicitResponseOperation.Name.Should().NotBeEmpty();
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ThrowsWhenHostNameCannotBeResolved()
 		{

@@ -38,7 +38,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 
 		public Time(int hour, int minute, int second = 0)
 		{
-			_time = new DateTime(DateTime.MinValue.Year, DateTime.MinValue.Month, DateTime.MinValue.Day, hour, minute, second);
+			_time = new(DateTime.MinValue.Year, DateTime.MinValue.Month, DateTime.MinValue.Day, hour, minute, second);
 		}
 
 		private Time(DateTime dateTime)

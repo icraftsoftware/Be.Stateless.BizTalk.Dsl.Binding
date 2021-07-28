@@ -52,7 +52,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		protected string Serialize()
 		{
 			var builder = new StringBuilder();
-			using (var writer = XmlWriter.Create(builder, new XmlWriterSettings { OmitXmlDeclaration = true }))
+			using (var writer = XmlWriter.Create(builder, new() { OmitXmlDeclaration = true }))
 			{
 				var serializer = CachingXmlSerializerFactory.Create(GetType());
 				serializer.SerializeWithoutDefaultNamespaces(writer!, this);

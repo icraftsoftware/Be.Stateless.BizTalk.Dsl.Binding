@@ -63,19 +63,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 
 		static NetMsmqRetryPolicy()
 		{
-			ActualLongRunning = new ServiceModel.Configuration.NetMsmqRetryPolicy {
+			ActualLongRunning = new() {
 				MaxRetryCycles = 71,
 				ReceiveRetryCount = 1,
 				RetryCycleDelay = TimeSpan.FromHours(1),
 				TimeToLive = TimeSpan.FromDays(3)
 			};
-			RealTime = new ServiceModel.Configuration.NetMsmqRetryPolicy {
+			RealTime = new() {
 				MaxRetryCycles = 0,
 				ReceiveRetryCount = 2,
 				RetryCycleDelay = TimeSpan.Zero,
 				TimeToLive = TimeSpan.FromMinutes(1)
 			};
-			ActualShortRunning = new ServiceModel.Configuration.NetMsmqRetryPolicy {
+			ActualShortRunning = new() {
 				MaxRetryCycles = 3,
 				ReceiveRetryCount = 3,
 				RetryCycleDelay = TimeSpan.FromMinutes(9),

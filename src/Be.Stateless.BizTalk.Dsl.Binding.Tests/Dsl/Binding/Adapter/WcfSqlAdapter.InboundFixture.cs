@@ -37,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var isa = new WcfSqlAdapter.Inbound(
 				a => {
-					a.Address = new SqlAdapterConnectionUri { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
+					a.Address = new() { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
 					a.InboundOperationType = InboundOperation.XmlPolling;
 					a.PolledDataAvailableStatement = "SELECT COUNT(1) FROM vw_claim_AvailableTokens";
 					a.PollingStatement = "EXEC usp_claim_CheckOut";
@@ -96,7 +96,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var isa = new WcfSqlAdapter.Inbound(
 				a => {
-					a.Address = new SqlAdapterConnectionUri { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
+					a.Address = new() { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
 					a.InboundOperationType = InboundOperation.XmlPolling;
 					a.PolledDataAvailableStatement = "SELECT COUNT(1) FROM vw_claim_AvailableTokens";
 					a.PollingStatement = "EXEC usp_claim_CheckOut";

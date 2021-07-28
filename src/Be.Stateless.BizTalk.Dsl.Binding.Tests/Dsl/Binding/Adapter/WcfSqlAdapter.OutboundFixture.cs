@@ -22,7 +22,6 @@ using System.Transactions;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
-using Microsoft.Adapters.Sql;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Xunit;
 using static FluentAssertions.FluentActions;
@@ -38,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 			var osa = new WcfSqlAdapter.Outbound(
 				a => {
-					a.Address = new SqlAdapterConnectionUri { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
+					a.Address = new() { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
 					a.IsolationLevel = IsolationLevel.ReadCommitted;
 					a.OutboundBodyLocation = OutboundMessageBodySelection.UseBodyElement;
 					a.PropagateFaultMessage = true;
@@ -78,7 +77,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var osa = new WcfSqlAdapter.Outbound(
 				a => {
-					a.Address = new SqlAdapterConnectionUri { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
+					a.Address = new() { InboundId = "AvailableBatches", Server = "localhost", InitialCatalog = "BizTalkFactoryTransientStateDb" };
 					a.IsolationLevel = IsolationLevel.ReadCommitted;
 					a.OutboundBodyLocation = OutboundMessageBodySelection.UseBodyElement;
 					a.PropagateFaultMessage = true;

@@ -34,10 +34,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	{
 		protected internal ApplicationBindingBase()
 		{
-			_referencedApplications = new ReferencedApplicationBindingCollection();
-			_receivePorts = new ReceivePortCollection<TNamingConvention>(this);
-			_sendPorts = new SendPortCollection<TNamingConvention>(this);
-			_orchestrations = new OrchestrationBindingCollection<TNamingConvention>(this);
+			_referencedApplications = new();
+			_receivePorts = new(this);
+			_sendPorts = new(this);
+			_orchestrations = new(this);
 			Timestamp = DateTime.Now;
 		}
 

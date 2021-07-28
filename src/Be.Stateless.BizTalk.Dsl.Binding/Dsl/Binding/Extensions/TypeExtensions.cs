@@ -26,5 +26,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Extensions
 		{
 			return type != null && typeof(IApplicationBinding).IsAssignableFrom(type);
 		}
+
+		public static void ValidateApplicationBindingType(this Type applicationBindingType)
+		{
+			if (applicationBindingType == null) throw new ArgumentNullException(nameof(applicationBindingType));
+			if (!applicationBindingType.IsApplicationBindingType())
+				throw new ArgumentException($"Type '{applicationBindingType.Name}' does not derive from {nameof(IApplicationBinding)}.'.", nameof(applicationBindingType));
+		}
 	}
 }

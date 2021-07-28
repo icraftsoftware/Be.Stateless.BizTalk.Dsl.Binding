@@ -16,6 +16,7 @@
 
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Install;
@@ -81,6 +82,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			transportMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void TransportAdapterIsMandatory()
 		{
@@ -92,6 +94,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Transport's Adapter is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[SkippableFact]
 		public void TransportHostIsMandatory()
 		{
@@ -105,6 +108,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				.WithMessage("Transport's Host is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void TransportUnknownAdapterIsInvalid()
 		{

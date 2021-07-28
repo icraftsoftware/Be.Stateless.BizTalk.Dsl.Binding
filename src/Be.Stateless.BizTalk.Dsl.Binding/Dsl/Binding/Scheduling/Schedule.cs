@@ -33,7 +33,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 			var rl = new Microsoft.BizTalk.Deployment.Binding.ReceiveLocation();
 			// force TimeZone and AutomaticallyAdjustForDaylightSavingTime as default rl.ScheduleTimeZone and rl.ScheduleAutoAdjustToDaylightSaving
 			// values do not match the values exported in the bindings for a Schedule that has not been configured
-			None = new Schedule(TimeZoneInfo.Utc.Id, true, rl.StartDate, rl.EndDate, RecurringServiceWindow.None);
+			None = new(TimeZoneInfo.Utc.Id, true, rl.StartDate, rl.EndDate, RecurringServiceWindow.None);
 		}
 
 		public static Schedule None { get; }

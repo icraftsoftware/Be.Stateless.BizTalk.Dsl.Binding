@@ -35,7 +35,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	{
 		protected internal ReceiveLocationBase()
 		{
-			Transport = new ReceiveLocationTransport<TNamingConvention>(this);
+			Transport = new(this);
 		}
 
 		protected internal ReceiveLocationBase(Action<IReceiveLocation<TNamingConvention>> receiveLocationConfigurator) : this()

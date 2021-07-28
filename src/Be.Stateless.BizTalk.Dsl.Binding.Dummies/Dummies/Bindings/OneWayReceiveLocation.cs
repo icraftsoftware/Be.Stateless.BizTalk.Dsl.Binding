@@ -45,12 +45,12 @@ namespace Be.Stateless.BizTalk.Dummies.Bindings
 			Transport.Adapter = new DummyAdapter();
 
 			Transport.Host = "Receive Host Name";
-			Transport.Schedule = new Schedule {
+			Transport.Schedule = new() {
 				StartDate = DateTime.Today,
 				StopDate = DateTime.Today.AddDays(12),
 				ServiceWindow = new DailyServiceWindow {
-					StartTime = new Time(13, 15),
-					StopTime = new Time(14, 15)
+					StartTime = new(13, 15),
+					StopTime = new(14, 15)
 				}
 			};
 		}

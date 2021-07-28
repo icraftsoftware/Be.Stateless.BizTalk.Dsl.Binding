@@ -16,7 +16,6 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
 using Be.Stateless.BizTalk.Explorer;
@@ -29,7 +28,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration
 	public class NetMsmqBindingElementFixture
 	{
 		[SkippableFact]
-		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void NetMsmqBindingElementDecoratorCanBeUsedAsWcfCustomAdapterTypeParameter()
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);

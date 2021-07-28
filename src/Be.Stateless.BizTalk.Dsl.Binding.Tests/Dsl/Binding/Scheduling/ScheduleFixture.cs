@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		[Fact]
 		public void StartAndStopDatesAreEnabled()
 		{
-			var s = new Schedule { StartDate = new DateTime(2015, 2, 13), StopDate = new DateTime(2015, 2, 20) };
+			var s = new Schedule { StartDate = new(2015, 2, 13), StopDate = new(2015, 2, 20) };
 
 			s.StartDateEnabled.Should().BeTrue();
 			s.StopDateEnabled.Should().BeTrue();
@@ -90,7 +90,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		[Fact]
 		public void StartDateIsEnabled()
 		{
-			var s = new Schedule { StartDate = new DateTime(2015, 2, 13) };
+			var s = new Schedule { StartDate = new(2015, 2, 13) };
 
 			s.StartDateEnabled.Should().BeTrue();
 			s.StopDate.Should().Be(Schedule.None.StopDate);
@@ -104,7 +104,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 		[Fact]
 		public void StopDateIsEnabled()
 		{
-			var s = new Schedule { StopDate = new DateTime(2015, 2, 20) };
+			var s = new Schedule { StopDate = new(2015, 2, 20) };
 
 			s.StartDate.Should().Be(Schedule.None.StartDate);
 			s.StartDateEnabled.Should().BeFalse();

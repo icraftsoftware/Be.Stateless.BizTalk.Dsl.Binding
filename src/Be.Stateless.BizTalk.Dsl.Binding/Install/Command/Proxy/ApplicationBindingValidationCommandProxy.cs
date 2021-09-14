@@ -16,24 +16,21 @@
 
 #endregion
 
-using System;
-using Be.Stateless.BizTalk.Dsl;
-using Be.Stateless.BizTalk.Dsl.Binding;
-using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Be.Stateless.BizTalk.Install.Command
+namespace Be.Stateless.BizTalk.Install.Command.Proxy
 {
-	public sealed class ApplicationStateValidationCommand<T> : ApplicationBindingBasedCommand<T>
-		where T : class, IVisitable<IApplicationBindingVisitor>, new()
+	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
+	public class ApplicationBindingValidationCommandProxy : ApplicationBindingBasedCommandProxy
 	{
 		#region Base Class Member Overrides
 
-		protected override void Execute(Action<string> logAppender)
+		protected override void Execute(IOutputAppender outputAppender)
 		{
-			using (var bizTalkServiceStateValidatorVisitor = new BizTalkServiceStateValidatorVisitor())
-			{
-				ApplicationBinding.Accept(bizTalkServiceStateValidatorVisitor);
-			}
+			CommandFactory
+				.CreateApplicationBindingValidationCommand(ApplicationBindingType)
+				.InitializeParameters(this)
+				.Execute(outputAppender.WriteInformation);
 		}
 
 		#endregion

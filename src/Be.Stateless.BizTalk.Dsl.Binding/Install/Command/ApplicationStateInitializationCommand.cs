@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationStateInitializationCommand<T> : ApplicationBindingBasedCommand<T>
+	public sealed class ApplicationStateInitializationCommand<T> : ApplicationBindingBasedCommand<T>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		#region Base Class Member Overrides

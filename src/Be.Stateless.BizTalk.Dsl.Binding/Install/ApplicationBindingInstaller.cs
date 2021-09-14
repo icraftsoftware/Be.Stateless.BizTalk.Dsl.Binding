@@ -74,12 +74,12 @@ namespace Be.Stateless.BizTalk.Install
 			using (new BizTalkAssemblyResolver(Context.LogMessage, true, AssemblyProbingFolderPaths))
 			{
 				ICommand cmd = Context.Parameters switch {
-					var p when p.ContainsKey(nameof(OutputFilePath)) => CommandFactory.CreateApplicationBindingGenerationCommand<T>().InitializeParameters(this),
 					var p when p.ContainsKey("CreateFileAdapterFolders") => CommandFactory.CreateApplicationFileAdapterFolderSetupCommand<T>().InitializeParameters(this),
+					var p when p.ContainsKey("GenerateBindings") => CommandFactory.CreateApplicationBindingGenerationCommand<T>().InitializeParameters(this),
 					var p when p.ContainsKey("InitializeApplication") => CommandFactory.CreateApplicationStateInitializationCommand<T>().InitializeParameters(this),
-					_ => null
+					_ => throw new InvalidOperationException("No operation has been provided.")
 				};
-				cmd?.Execute(Context.LogMessage);
+				cmd.Execute(Context.LogMessage);
 			}
 		}
 
@@ -90,11 +90,11 @@ namespace Be.Stateless.BizTalk.Install
 
 			using (new BizTalkAssemblyResolver(Context.LogMessage, true, AssemblyProbingFolderPaths))
 			{
-				if (Context.Parameters.ContainsKey("DeleteFileAdapterFolders"))
-				{
-					var cmd = CommandFactory.CreateApplicationFileAdapterFolderTeardownCommand<T>().InitializeParameters(this);
-					cmd.Execute(Context.LogMessage);
-				}
+				ICommand cmd = Context.Parameters switch {
+					var p when p.ContainsKey("DeleteFileAdapterFolders") => CommandFactory.CreateApplicationFileAdapterFolderTeardownCommand<T>().InitializeParameters(this),
+					_ => throw new InvalidOperationException("No operation has been provided.")
+				};
+				cmd.Execute(Context.LogMessage);
 			}
 		}
 

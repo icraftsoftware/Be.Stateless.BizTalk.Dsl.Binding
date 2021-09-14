@@ -16,26 +16,12 @@
 
 #endregion
 
-using System;
-using Be.Stateless.BizTalk.Dsl;
-using Be.Stateless.BizTalk.Dsl.Binding;
-using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
-
-namespace Be.Stateless.BizTalk.Install.Command
+namespace Be.Stateless.BizTalk.Install.Command.Proxy
 {
-	public sealed class ApplicationStateValidationCommand<T> : ApplicationBindingBasedCommand<T>
-		where T : class, IVisitable<IApplicationBindingVisitor>, new()
+	public interface IOutputAppender
 	{
-		#region Base Class Member Overrides
+		void WriteInformation(string message);
 
-		protected override void Execute(Action<string> logAppender)
-		{
-			using (var bizTalkServiceStateValidatorVisitor = new BizTalkServiceStateValidatorVisitor())
-			{
-				ApplicationBinding.Accept(bizTalkServiceStateValidatorVisitor);
-			}
-		}
-
-		#endregion
+		void WriteVerbose(string message);
 	}
 }

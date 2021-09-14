@@ -25,7 +25,7 @@ using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationFileAdapterFolderSetupCommand<T> : ApplicationBindingBasedCommand<T, ISupplyApplicationFileAdapterFolderSetupCommandArguments>
+	public sealed class ApplicationFileAdapterFolderSetupCommand<T> : ApplicationBindingBasedCommand<T, ISupplyApplicationFileAdapterFolderSetupCommandArguments>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		#region Base Class Member Overrides

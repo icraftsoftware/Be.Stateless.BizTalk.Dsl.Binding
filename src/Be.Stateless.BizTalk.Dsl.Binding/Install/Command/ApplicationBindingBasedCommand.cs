@@ -29,9 +29,9 @@ namespace Be.Stateless.BizTalk.Install.Command
 	{
 		#region Base Class Member Overrides
 
-		protected override void InitializeParameters(ISupplyApplicationBindingBasedCommandArguments arguments) { }
+		protected sealed override void InitializeParameters(ISupplyApplicationBindingBasedCommandArguments arguments) { }
 
-		protected override void ValidateParameters() { }
+		protected sealed override void ValidateParameters() { }
 
 		#endregion
 	}

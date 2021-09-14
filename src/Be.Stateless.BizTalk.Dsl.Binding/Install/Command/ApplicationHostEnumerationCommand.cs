@@ -26,7 +26,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Visitor;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationHostEnumerationCommand<T> : ApplicationBindingBasedCommand<T>, IEnumerable<string>
+	public sealed class ApplicationHostEnumerationCommand<T> : ApplicationBindingBasedCommand<T>, IEnumerable<string>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		#region IEnumerable<string> Members

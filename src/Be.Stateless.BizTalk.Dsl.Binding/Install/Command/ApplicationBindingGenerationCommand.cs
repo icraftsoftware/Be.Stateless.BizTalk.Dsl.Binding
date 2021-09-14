@@ -24,7 +24,7 @@ using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install.Command
 {
-	public class ApplicationBindingGenerationCommand<T> : ApplicationBindingBasedCommand<T, ISupplyApplicationBindingGenerationCommandArguments>
+	public sealed class ApplicationBindingGenerationCommand<T> : ApplicationBindingBasedCommand<T, ISupplyApplicationBindingGenerationCommandArguments>
 		where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		#region Base Class Member Overrides

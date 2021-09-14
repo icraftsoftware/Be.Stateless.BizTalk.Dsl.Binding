@@ -32,7 +32,7 @@
   <ItemGroup>
     <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.0.21171.29951" />
     <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.21163.21265" />
-    <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21250.23893" />
+    <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21266.16505" />
     <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

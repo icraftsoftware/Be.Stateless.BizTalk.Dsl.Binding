@@ -36,5 +36,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.CodeDom
 
 			orchestrationTypes.Should().BeEquivalentTo(new[] { typeof(Orchestrations.Bound.Process), typeof(Orchestrations.Direct.Process) });
 		}
+
+		[Fact]
+		public void IsBizTalkAssembly()
+		{
+			Assembly.GetExecutingAssembly().IsBizTalkAssembly().Should().BeFalse();
+		}
 	}
 }

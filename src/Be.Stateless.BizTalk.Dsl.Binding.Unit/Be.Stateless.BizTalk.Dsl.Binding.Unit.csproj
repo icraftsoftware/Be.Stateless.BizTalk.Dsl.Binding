@@ -40,7 +40,7 @@
   <ItemGroup>
     <PackageReference Include="Be.Stateless.BizTalk.Dsl.Abstractions" Version="2.0.21284.50613" />
     <PackageReference Include="Be.Stateless.BizTalk.Settings" Version="2.0.21285.38408" />
-    <PackageReference Include="Be.Stateless.Extensions" Version="2.0.21281.26117" />
+    <PackageReference Include="Be.Stateless.Extensions" Version="2.0.21308.30406" />
   </ItemGroup>
 
   <ItemGroup>

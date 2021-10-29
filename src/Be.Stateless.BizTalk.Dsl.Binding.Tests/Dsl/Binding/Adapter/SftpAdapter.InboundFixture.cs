@@ -84,7 +84,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					"<ProxyType vt=\"8\">SOCKS4</ProxyType>" +
 					"<ProxyAddress vt=\"8\">proxy.server.com</ProxyAddress>" +
 					"<ProxyPort vt=\"3\">1082</ProxyPort>" +
-					"<EncryptionCipher vt=\"8\">AES</EncryptionCipher>") +
+					"<EncryptionCipher vt=\"8\">AES</EncryptionCipher>" +
+					"<TransferMode vt=\"8\">Binary</TransferMode>") +
 				"</CustomProps>");
 		}
 

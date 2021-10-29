@@ -127,6 +127,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				set => AdapterConfig.MaxConnectionReuseTimeInSeconds = (int) value.TotalSeconds;
 			}
 
+			/// <summary>
+			/// Specify the transfer mode.
+			/// </summary>
+			/// <remarks>
+			/// When <see cref="TransferMode"/> is set to <see cref="Microsoft.BizTalk.Adapter.Sftp.TransferMode.ASCII"/>, it
+			/// allows to not only transfer but also to convert text files to the format used by the target platform.
+			/// </remarks>
+			public TransferMode TransferMode
+			{
+				get => AdapterConfig.TransferMode;
+				set => AdapterConfig.TransferMode = value;
+			}
+
 			#endregion
 
 			#region Proxy Settings

@@ -44,7 +44,7 @@
     <PackageReference Include="Be.Stateless.BizTalk.Dsl.Pipeline" Version="2.0.21285.44011" />
     <PackageReference Include="Be.Stateless.BizTalk.Explorer" Version="2.0.21281.40704" />
     <PackageReference Include="Be.Stateless.BizTalk.Pipeline.Components" Version="2.0.21285.43232" />
-    <PackageReference Include="Be.Stateless.Extensions" Version="2.0.21308.30406" />
+    <PackageReference Include="Be.Stateless.Extensions" Version="2.0.21343.20798" />
     <PackageReference Include="Be.Stateless.Reflection" Version="2.0.21281.37160" />
     <PackageReference Include="Be.Stateless.Stream" Version="2.0.21281.39270" />
     <PackageReference Include="Be.Stateless.Xml" Version="2.0.21281.40683" />
@@ -65,7 +65,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <PackageReference Include="System.Management" Version="5.0.0" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

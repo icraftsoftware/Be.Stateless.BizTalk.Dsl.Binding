@@ -18,6 +18,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Be.Stateless.BizTalk.Dsl;
 using Be.Stateless.BizTalk.Dsl.Binding;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
@@ -43,7 +44,16 @@ namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 			DeploymentContext.TargetEnvironment = targetEnvironment;
 			if (EnvironmentSettingOverridesType != null) DeploymentContext.EnvironmentSettingOverridesType = EnvironmentSettingOverridesType;
 			if (!ExcelSettingOverridesFolderPath.IsNullOrEmpty()) DeploymentContext.ExcelSettingOverridesFolderPath = ExcelSettingOverridesFolderPath;
-			return new T().GetApplicationBindingInfoSerializer().Serialize();
+			string applicationBinding = null;
+			try
+			{
+				applicationBinding = new T().GetApplicationBindingInfoSerializer().Serialize();
+			}
+			catch (TargetInvocationException exception) when (exception.InnerException is not null)
+			{
+				exception.InnerException.Rethrow();
+			}
+			return applicationBinding;
 		}
 	}
 }

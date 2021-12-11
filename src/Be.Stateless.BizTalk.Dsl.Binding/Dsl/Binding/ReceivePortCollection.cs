@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	internal class ReceivePortCollection<TNamingConvention>
 		: List<IReceivePort<TNamingConvention>>,
 			IReceivePortCollection<TNamingConvention>,
+			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
 	{
@@ -53,6 +54,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public IReceivePort<TNamingConvention> Find<T>() where T : IReceivePort<TNamingConvention>
 		{
 			return this.OfType<T>().Single();
+		}
+
+		#endregion
+
+		#region ISupportValidation Members
+
+		void ISupportValidation.Validate()
+		{
+			this.Cast<ISupportValidation>().ForEach(rp => rp.Validate());
 		}
 
 		#endregion

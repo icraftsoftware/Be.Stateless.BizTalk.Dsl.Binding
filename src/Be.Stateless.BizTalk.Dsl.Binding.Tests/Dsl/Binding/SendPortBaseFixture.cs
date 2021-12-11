@@ -53,25 +53,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			visitorMock.Verify(m => m.VisitSendPort(sendPortMock.Object), Times.Once);
 		}
 
-		[SkippableFact]
-		public void AutomaticallyValidatesOnConfiguratorInvoking()
-		{
-			Skip.IfNot(BizTalkServerGroup.IsConfigured);
-
-			var sendPortMock = new Mock<SendPortBase<string>>(
-				(Action<ISendPort<string>>) (sp => {
-					sp.Name = "Send Port Name";
-					sp.SendPipeline = new SendPipeline<XMLTransmit>();
-					sp.Transport.Adapter = new FileAdapter.Outbound(ifa => { ifa.DestinationFolder = @"c:\file\drops"; });
-					sp.Transport.Host = "Host";
-				})) { CallBase = true };
-			var validatingSendPortMock = sendPortMock.As<ISupportValidation>();
-
-			sendPortMock.Object.Description = "Force Moq to call ctor.";
-
-			validatingSendPortMock.Verify(m => m.Validate(), Times.Once);
-		}
-
 		[Fact]
 		public void EnvironmentOverridesAreAppliedForGivenEnvironment()
 		{
@@ -186,7 +167,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			Invoking(() => ((ISupportValidation) sendPortMock.Object).Validate())
 				.Should().Throw<BindingException>()
-				.WithMessage("Send Port's Send Pipeline is not defined.");
+				.WithMessage("[Send Port Name] Send Port's Send Pipeline is not defined.");
 		}
 
 		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]

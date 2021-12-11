@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	internal class OrchestrationBindingCollection<TNamingConvention>
 		: List<IOrchestrationBinding>,
 			IOrchestrationBindingCollection,
+			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
 	{
@@ -52,7 +53,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public T Find<T>() where T : IOrchestrationBinding
 		{
-			return (T) this.Single(or => or.GetType() == typeof(T));
+			return (T) this.Single(ob => ob.GetType() == typeof(T));
+		}
+
+		#endregion
+
+		#region ISupportValidation Members
+
+		void ISupportValidation.Validate()
+		{
+			this.Cast<ISupportValidation>().ForEach(ob => ob.Validate());
 		}
 
 		#endregion
@@ -61,7 +71,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
 		{
-			this.Cast<IVisitable<IApplicationBindingVisitor>>().ForEach(orchestrationBinding => orchestrationBinding.Accept(visitor));
+			this.Cast<IVisitable<IApplicationBindingVisitor>>().ForEach(ob => ob.Accept(visitor));
 		}
 
 		#endregion

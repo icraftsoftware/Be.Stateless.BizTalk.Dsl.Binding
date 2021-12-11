@@ -31,7 +31,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Extensions
 			}
 			catch (Exception exception) when (!exception.IsFatal())
 			{
-				throw new BindingException($"{subject} is not valid: {exception.Message}.", exception);
+				var message = $"{subject} is not valid: {exception.Message}";
+				if (!message.EndsWith(".")) message += ".";
+				throw new BindingException(message, exception);
 			}
 		}
 	}

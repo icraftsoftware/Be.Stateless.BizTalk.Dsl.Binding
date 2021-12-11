@@ -47,7 +47,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			if (sendPortConfigurator == null) throw new ArgumentNullException(nameof(sendPortConfigurator));
 			sendPortConfigurator(this);
-			((ISupportValidation) this).Validate();
 		}
 
 		#region ISendPort<TNamingConvention> Members
@@ -110,9 +109,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Send Port's Name is not defined.");
-			if (SendPipeline == null) throw new BindingException("Send Port's Send Pipeline is not defined.");
-			Transport.Validate("Send Port's Primary Transport");
-			if (BackupTransport.IsValueCreated) BackupTransport.Value.Validate("Send Port's Backup Transport");
+			if (SendPipeline == null) throw new BindingException($"[{((ISupportNamingConvention) this).Name}] Send Port's Send Pipeline is not defined.");
+			Transport.Validate($"[{((ISupportNamingConvention) this).Name}] Send Port's Primary Transport");
+			if (BackupTransport.IsValueCreated) BackupTransport.Value.Validate($"[{((ISupportNamingConvention) this).Name}] Send Port's Backup Transport");
 		}
 
 		#endregion

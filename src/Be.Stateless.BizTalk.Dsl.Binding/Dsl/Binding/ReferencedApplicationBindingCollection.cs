@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	internal class ReferencedApplicationBindingCollection : List<IApplicationBinding>,
 		IReferencedApplicationBindingCollection,
+		ISupportValidation,
 		IVisitable<IApplicationBindingVisitor>
 	{
 		#region IReferencedApplicationBindingCollection Members
@@ -42,6 +43,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public T Find<T>() where T : IApplicationBinding
 		{
 			return this.OfType<T>().Single();
+		}
+
+		#endregion
+
+		#region ISupportValidation Members
+
+		void ISupportValidation.Validate()
+		{
+			this.Cast<ISupportValidation>().ForEach(ra => ra.Validate());
 		}
 
 		#endregion

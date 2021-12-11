@@ -37,19 +37,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var applicationBindingMock = new Mock<ApplicationBindingBase<string>> { CallBase = true };
 
-			var referencedApplicationBindingCollectionMock = new Mock<ReferencedApplicationBindingCollection> { CallBase = false };
+			var referencedApplicationBindingCollectionMock = new Mock<ReferencedApplicationBindingCollection>();
 			referencedApplicationBindingCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
 			Reflector.SetField(applicationBindingMock.Object, "_referencedApplications", referencedApplicationBindingCollectionMock.Object);
 
-			var orchestrationBindingCollectionMock = new Mock<OrchestrationBindingCollection<string>>(applicationBindingMock.Object) { CallBase = false };
+			var orchestrationBindingCollectionMock = new Mock<OrchestrationBindingCollection<string>>(applicationBindingMock.Object);
 			orchestrationBindingCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
 			Reflector.SetField(applicationBindingMock.Object, "_orchestrations", orchestrationBindingCollectionMock.Object);
 
-			var receivePortCollectionMock = new Mock<ReceivePortCollection<string>>(applicationBindingMock.Object) { CallBase = false };
+			var receivePortCollectionMock = new Mock<ReceivePortCollection<string>>(applicationBindingMock.Object);
 			receivePortCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
 			Reflector.SetField(applicationBindingMock.Object, "_receivePorts", receivePortCollectionMock.Object);
 
-			var sendPortCollectionMock = new Mock<SendPortCollection<string>>(applicationBindingMock.Object) { CallBase = false };
+			var sendPortCollectionMock = new Mock<SendPortCollection<string>>(applicationBindingMock.Object);
 			sendPortCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
 			Reflector.SetField(applicationBindingMock.Object, "_sendPorts", sendPortCollectionMock.Object);
 
@@ -65,7 +65,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[SkippableFact]
-		public void AutomaticallyValidatesOnConfiguratorInvoking()
+		public void AutomaticallyValidatesOnConfiguratorInvocation()
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
@@ -125,6 +125,37 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			applicationBindingMock.Object.Name = conventionMock.Object;
 
 			((ISupportNamingConvention) applicationBindingMock.Object).Name.Should().Be(name);
+		}
+
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[Fact]
+		public void SupportsAndPropagatesISupportValidation()
+		{
+			var applicationBindingMock = new Mock<ApplicationBindingBase<string>> { CallBase = true };
+			applicationBindingMock.Object.Name = "Application Name";
+
+			var referencedApplicationBindingCollectionMock = new Mock<ReferencedApplicationBindingCollection>();
+			referencedApplicationBindingCollectionMock.As<ISupportValidation>();
+			Reflector.SetField(applicationBindingMock.Object, "_referencedApplications", referencedApplicationBindingCollectionMock.Object);
+
+			var orchestrationBindingCollectionMock = new Mock<OrchestrationBindingCollection<string>>(applicationBindingMock.Object);
+			orchestrationBindingCollectionMock.As<ISupportValidation>();
+			Reflector.SetField(applicationBindingMock.Object, "_orchestrations", orchestrationBindingCollectionMock.Object);
+
+			var receivePortCollectionMock = new Mock<ReceivePortCollection<string>>(applicationBindingMock.Object);
+			receivePortCollectionMock.As<ISupportValidation>();
+			Reflector.SetField(applicationBindingMock.Object, "_receivePorts", receivePortCollectionMock.Object);
+
+			var sendPortCollectionMock = new Mock<SendPortCollection<string>>(applicationBindingMock.Object);
+			sendPortCollectionMock.As<ISupportValidation>();
+			Reflector.SetField(applicationBindingMock.Object, "_sendPorts", sendPortCollectionMock.Object);
+
+			((ISupportValidation) applicationBindingMock.Object).Validate();
+
+			referencedApplicationBindingCollectionMock.As<ISupportValidation>().Verify(m => m.Validate(), Times.Once);
+			receivePortCollectionMock.As<ISupportValidation>().Verify(m => m.Validate(), Times.Once);
+			sendPortCollectionMock.As<ISupportValidation>().Verify(m => m.Validate(), Times.Once);
+			orchestrationBindingCollectionMock.As<ISupportValidation>().Verify(m => m.Validate(), Times.Once);
 		}
 
 		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]

@@ -41,7 +41,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			if (receivePortConfigurator == null) throw new ArgumentNullException(nameof(receivePortConfigurator));
 			receivePortConfigurator(this);
-			((ISupportValidation) this).Validate();
 		}
 
 		#region IReceivePort<TNamingConvention> Members
@@ -81,7 +80,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Receive Port's Name is not defined.");
-			if (!_receiveLocations.Any()) throw new BindingException("Receive Port has no Receive Locations.");
+			if (!_receiveLocations.Any()) throw new BindingException($"[{((ISupportNamingConvention) this).Name}] Receive Port's Receive Locations are not defined.");
+			((ISupportValidation) _receiveLocations).Validate();
 			ComputeIsTwoWay();
 		}
 
@@ -103,10 +103,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		private bool ComputeIsTwoWay()
 		{
-			if (!_receiveLocations.Any()) throw new BindingException("Receive Port has no Receive Location.");
 			var isOneWay = _receiveLocations.All(rl => rl.SendPipeline == null);
 			var isTwoWay = _receiveLocations.All(rl => rl.SendPipeline != null);
-			if (!isOneWay && !isTwoWay) throw new BindingException("Receive Port has a mix of one-way and two-way Receive Locations.");
+			if (!isOneWay && !isTwoWay)
+				throw new BindingException($"[{((ISupportNamingConvention) this).Name}] Receive Port defines a mix of one-way and two-way Receive Locations.");
 			return isTwoWay;
 		}
 

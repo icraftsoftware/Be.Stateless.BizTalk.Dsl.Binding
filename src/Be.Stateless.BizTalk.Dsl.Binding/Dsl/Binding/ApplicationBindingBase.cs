@@ -106,6 +106,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Application's Name is not defined.");
+			((ISupportValidation) _referencedApplications).Validate();
+			((ISupportValidation) _receivePorts).Validate();
+			((ISupportValidation) _sendPorts).Validate();
+			((ISupportValidation) _orchestrations).Validate();
 		}
 
 		#endregion

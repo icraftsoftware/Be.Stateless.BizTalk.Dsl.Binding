@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
@@ -43,25 +42,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((IVisitable<IApplicationBindingVisitor>) receiveLocationMock.Object).Accept(visitorMock.Object);
 
 			visitorMock.Verify(m => m.VisitReceiveLocation(receiveLocationMock.Object), Times.Once);
-		}
-
-		[SkippableFact]
-		public void AutomaticallyValidatesOnConfiguratorInvoking()
-		{
-			Skip.IfNot(BizTalkServerGroup.IsConfigured);
-
-			var receiveLocationMock = new Mock<ReceiveLocationBase<string>>(
-				(Action<IReceiveLocation<string>>) (rl => {
-					rl.Name = "Receive Location Name";
-					rl.ReceivePipeline = new ReceivePipeline<XMLReceive>();
-					rl.Transport.Adapter = new FileAdapter.Inbound(ifa => { ifa.ReceiveFolder = @"c:\file\drops"; });
-					rl.Transport.Host = "Host";
-				})) { CallBase = true };
-			var validatingReceiveLocationBindingMock = receiveLocationMock.As<ISupportValidation>();
-
-			receiveLocationMock.Object.Description = "Force Moq to call ctor.";
-
-			validatingReceiveLocationBindingMock.Verify(m => m.Validate(), Times.Once);
 		}
 
 		[Fact]
@@ -155,7 +135,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			Invoking(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
 				.Should().Throw<BindingException>()
-				.WithMessage("Receive Location's Receive Pipeline is not defined.");
+				.WithMessage("[Receive Location Name] Receive Location's Receive Pipeline is not defined.");
 		}
 
 		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]

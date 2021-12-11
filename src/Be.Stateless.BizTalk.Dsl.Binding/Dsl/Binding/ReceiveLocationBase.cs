@@ -42,7 +42,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			if (receiveLocationConfigurator == null) throw new ArgumentNullException(nameof(receiveLocationConfigurator));
 			receiveLocationConfigurator(this);
-			((ISupportValidation) this).Validate();
 		}
 
 		#region IReceiveLocation<TNamingConvention> Members
@@ -90,8 +89,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Receive Location's Name is not defined.");
-			if (ReceivePipeline == null) throw new BindingException("Receive Location's Receive Pipeline is not defined.");
-			Transport.Validate("Receive Location's Transport");
+			if (ReceivePipeline == null) throw new BindingException($"[{((ISupportNamingConvention) this).Name}] Receive Location's Receive Pipeline is not defined.");
+			Transport.Validate($"[{((ISupportNamingConvention) this).Name}] Receive Location's Transport");
 		}
 
 		#endregion

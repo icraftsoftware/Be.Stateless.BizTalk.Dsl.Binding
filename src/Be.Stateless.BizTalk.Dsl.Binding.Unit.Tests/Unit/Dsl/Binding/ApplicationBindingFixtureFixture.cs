@@ -30,7 +30,7 @@ namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 		{
 			Invoking(() => GenerateApplicationBindingForTargetEnvironment("ANYWHERE"))
 				.Should().Throw<BindingException>()
-				.WithMessage("Receive Port has no Receive Locations.");
+				.WithMessage("[ReceivePort] Receive Port's Receive Locations are not defined.");
 		}
 
 		public class Application : ApplicationBinding

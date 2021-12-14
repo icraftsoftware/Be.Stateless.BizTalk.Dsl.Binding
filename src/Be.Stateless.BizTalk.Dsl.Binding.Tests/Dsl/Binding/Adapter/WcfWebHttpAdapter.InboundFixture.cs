@@ -19,8 +19,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel;
+using Be.Stateless.BizTalk.Adapter.Metadata;
 using Be.Stateless.BizTalk.ContextProperties;
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Explorer;

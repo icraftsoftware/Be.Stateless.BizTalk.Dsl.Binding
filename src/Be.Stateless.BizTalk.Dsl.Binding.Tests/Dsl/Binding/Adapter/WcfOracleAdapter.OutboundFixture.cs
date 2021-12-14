@@ -18,7 +18,7 @@
 
 using System;
 using System.Transactions;
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
+using Be.Stateless.BizTalk.Adapter.Metadata;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Utils;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using FluentAssertions;

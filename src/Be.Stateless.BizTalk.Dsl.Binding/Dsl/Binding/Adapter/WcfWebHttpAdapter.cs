@@ -22,7 +22,6 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Deployment.Binding;
@@ -259,8 +258,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// specify that using <see cref="VariableMapping"/>.
 		/// </para>
 		/// </remarks>
-		/// <seealso cref="Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata.HttpUrlMapping"/>
-		/// <seealso cref="HttpUrlMappingOperation"/>
+		/// <seealso cref="Be.Stateless.BizTalk.Adapter.Metadata.HttpUrlMapping"/>
+		/// <seealso cref="Be.Stateless.BizTalk.Adapter.Metadata.HttpUrlMappingOperation"/>
 		public string HttpUrlMapping
 		{
 			get => AdapterConfig.HttpMethodAndUrl;
@@ -280,8 +279,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// already defined/promoted this property as part of your solution. You must also provide the namespace for the property
 		/// in the Property Namespace field.
 		/// </remarks>
-		/// <seealso cref="Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata.HttpUrlMapping"/>
-		/// <seealso cref="HttpUrlMappingOperation"/>
+		/// <seealso cref="Be.Stateless.BizTalk.Adapter.Metadata.VariableMapping"/>
+		/// <seealso cref="Be.Stateless.BizTalk.Adapter.Metadata.VariablePropertyMapping"/>
 		public string VariableMapping
 		{
 			get => AdapterConfig.VariablePropertyMapping;

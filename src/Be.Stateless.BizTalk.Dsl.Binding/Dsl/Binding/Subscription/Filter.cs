@@ -20,7 +20,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
-using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 {

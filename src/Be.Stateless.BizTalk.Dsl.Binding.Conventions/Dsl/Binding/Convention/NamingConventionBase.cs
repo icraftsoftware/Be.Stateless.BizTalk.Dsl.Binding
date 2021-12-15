@@ -140,6 +140,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 		{
 			if (adapter == null) throw new ArgumentNullException(nameof(adapter));
 			var name = adapter.ProtocolType.Name;
+			if (adapter.GetType().IsSubclassOfGenericType(typeof(Office365EmailAdapter<>))) return "Office365Email";
 			if (!adapter.GetType().IsSubclassOfGenericType(typeof(WcfCustomAdapterBase<,,>))) return name;
 
 			// cast to dynamic in order to access Binding property which is declared by WcfCustomAdapterBase<,,>

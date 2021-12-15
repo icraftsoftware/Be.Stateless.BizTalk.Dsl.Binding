@@ -28,6 +28,7 @@ using Be.Stateless.Extensions;
 namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public DSL API.")]
+	[SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global", Justification = "Public DSL API.")]
 	public abstract class ApplicationBindingFixture<T> where T : class, IVisitable<IApplicationBindingVisitor>, new()
 	{
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]

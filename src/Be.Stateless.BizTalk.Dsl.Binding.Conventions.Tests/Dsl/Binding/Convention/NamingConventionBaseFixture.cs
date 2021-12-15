@@ -44,6 +44,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 	public class NamingConventionBaseFixture
 	{
 		[SkippableFact]
+		public void ComputeAdapterNameForOffice365EmailAdapter()
+		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var sut = new NamingConventionSpy();
+
+			IAdapter adapter = new Office365EmailAdapter.Inbound();
+			sut.ComputeAdapterNameSpy(adapter).Should().Be("Office365Email");
+		}
+
+		[SkippableFact]
 		public void ComputeAdapterNameResolvesActualProtocolTypeNameForWcfCustomAdapter()
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -78,8 +78,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string ClientCertificate
 			{
-				get => _adapterConfig.ClientCertificate;
-				set => _adapterConfig.ClientCertificate = value;
+				get => AdapterConfig.ClientCertificate;
+				set => AdapterConfig.ClientCertificate = value;
 			}
 
 			#endregion
@@ -103,8 +103,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public TimeSpan TimeToLive
 			{
-				get => _adapterConfig.TimeToLive;
-				set => _adapterConfig.TimeToLive = value;
+				get => AdapterConfig.TimeToLive;
+				set => AdapterConfig.TimeToLive = value;
 			}
 
 			/// <summary>
@@ -115,8 +115,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public bool UseSourceJournal
 			{
-				get => _adapterConfig.UseSourceJournal;
-				set => _adapterConfig.UseSourceJournal = value;
+				get => AdapterConfig.UseSourceJournal;
+				set => AdapterConfig.UseSourceJournal = value;
 			}
 
 			/// <summary>
@@ -149,8 +149,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public DeadLetterQueue DeadLetterQueue
 			{
-				get => _adapterConfig.DeadLetterQueue;
-				set => _adapterConfig.DeadLetterQueue = value;
+				get => AdapterConfig.DeadLetterQueue;
+				set => AdapterConfig.DeadLetterQueue = value;
 			}
 
 			/// <summary>
@@ -170,8 +170,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string CustomDeadLetterQueue
 			{
-				get => _adapterConfig.CustomDeadLetterQueue;
-				set => _adapterConfig.CustomDeadLetterQueue = value;
+				get => AdapterConfig.CustomDeadLetterQueue;
+				set => AdapterConfig.CustomDeadLetterQueue = value;
 			}
 
 			#endregion
@@ -180,8 +180,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public string StaticAction
 			{
-				get => _adapterConfig.StaticAction;
-				set => _adapterConfig.StaticAction = value;
+				get => AdapterConfig.StaticAction;
+				set => AdapterConfig.StaticAction = value;
 			}
 
 			#endregion
@@ -190,26 +190,26 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool UseSSO
 			{
-				get => _adapterConfig.UseSSO;
-				set => _adapterConfig.UseSSO = value;
+				get => AdapterConfig.UseSSO;
+				set => AdapterConfig.UseSSO = value;
 			}
 
 			public string AffiliateApplicationName
 			{
-				get => _adapterConfig.AffiliateApplicationName;
-				set => _adapterConfig.AffiliateApplicationName = value;
+				get => AdapterConfig.AffiliateApplicationName;
+				set => AdapterConfig.AffiliateApplicationName = value;
 			}
 
 			public string UserName
 			{
-				get => _adapterConfig.UserName;
-				set => _adapterConfig.UserName = value;
+				get => AdapterConfig.UserName;
+				set => AdapterConfig.UserName = value;
 			}
 
 			public string Password
 			{
-				get => _adapterConfig.Password;
-				set => _adapterConfig.Password = value;
+				get => AdapterConfig.Password;
+				set => AdapterConfig.Password = value;
 			}
 
 			#endregion
@@ -246,8 +246,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public OutboundMessageBodySelection OutboundBodyLocation
 			{
-				get => _adapterConfig.OutboundBodyLocation;
-				set => _adapterConfig.OutboundBodyLocation = value;
+				get => AdapterConfig.OutboundBodyLocation;
+				set => AdapterConfig.OutboundBodyLocation = value;
 			}
 
 			/// <summary>
@@ -270,8 +270,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string OutboundXmlTemplate
 			{
-				get => _adapterConfig.OutboundXmlTemplate;
-				set => _adapterConfig.OutboundXmlTemplate = value;
+				get => AdapterConfig.OutboundXmlTemplate;
+				set => AdapterConfig.OutboundXmlTemplate = value;
 			}
 
 			#endregion

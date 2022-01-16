@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,22 +19,25 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.Adapters.SAP;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfSapAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var osa = new WcfSapAdapter.Outbound(
 				a => {
-					a.Address = new SAPConnectionUri {
+					a.Address = new() {
 						ApplicationServerHost = "appHost",
 						ConnectionType = OutboundConnectionType.A,
 						MsServ = "msServer",
@@ -54,7 +57,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"<CustomProps>" +
 				"<BindingType vt=\"8\">sapBinding</BindingType>" +
 				"<BindingConfiguration vt=\"8\">" + (
-					"&lt;binding name=\"sapBinding\" sendTimeout=\"00:02:00\" enableBizTalkCompatibilityMode=\"true\" maxConnectionsPerSystem=\"30\" autoConfirmSentIdocs=\"true\" /&gt;") +
+					"&lt;binding name=\"sapBinding\" sendTimeout=\"00:02:00\" enableBizTalkCompatibilityMode=\"true\" maxConnectionsPerSystem=\"30\" autoConfirmSentIdocs=\"true\" /&gt;"
+				) +
 				"</BindingConfiguration>" +
 				"<EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration>" +
 				"<UseSSO vt=\"11\">0</UseSSO>" +
@@ -76,12 +80,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var osa = new WcfSapAdapter.Outbound(
 				a => {
-					a.Address = new SAPConnectionUri {
+					a.Address = new() {
 						ApplicationServerHost = "appHost",
 						ConnectionType = OutboundConnectionType.A,
 						MsServ = "msServer",
@@ -96,7 +102,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.MaxConnectionsPerSystem = 30;
 				});
 
-			Action(() => ((ISupportValidation) osa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) osa).Validate()).Should().NotThrow();
 		}
 	}
 }

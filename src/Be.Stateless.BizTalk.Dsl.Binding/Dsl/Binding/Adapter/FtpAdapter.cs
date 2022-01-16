@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ using Microsoft.BizTalk.Deployment.Binding;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
-	[SuppressMessage("Design", "CA1724:Type names should not match namespaces")]
 	public abstract partial class FtpAdapter : LegacyAdapterBase<FtpAdapterManagement>
 	{
 		#region Nested Type: Boolean
@@ -39,18 +38,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <remarks>
 		/// This class is intended to be used only with <see cref="FtpAdapter"/>-derived classes.
 		/// </remarks>
-		[SuppressMessage("Naming", "CA1716:Identifiers should not match keywords")]
 		public class Boolean : IXmlSerializable
 		{
 			#region Operators
 
-			[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 			public static implicit operator Boolean(bool @bool)
 			{
 				return @bool ? True : False;
 			}
 
-			[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 			public static implicit operator bool(Boolean boolean)
 			{
 				return boolean.IfNotNull(b => b._value.IfNotNullOrEmpty(v => Convert.ToBoolean(v, CultureInfo.InvariantCulture)));
@@ -58,9 +54,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			#endregion
 
-			public static Boolean False => new Boolean("False");
+			public static Boolean False => new("False");
 
-			public static Boolean True => new Boolean("True");
+			public static Boolean True => new("True");
 
 			[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 			public Boolean()
@@ -146,7 +142,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		static FtpAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("3979ffed-0067-4cc6-9f5a-859a5db6e9bb"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("3979ffed-0067-4cc6-9f5a-859a5db6e9bb"));
 		}
 
 		protected FtpAdapter() : base(_protocolType) { }

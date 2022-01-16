@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,24 +18,27 @@
 
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class SBMessagingAdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Inbound(
 				a => {
-					a.Address = new Uri("sb://biztalkfactory.servicebus.windows.net/");
+					a.Address = new("sb://biztalkfactory.servicebus.windows.net/");
 					a.IsSessionful = true;
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
@@ -57,47 +60,54 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"<CustomBrokeredPropertyNamespace vt=\"8\">urn:schemas.stateless.be:biztalk:service-bus:queue</CustomBrokeredPropertyNamespace>" +
 				"<UseAcsAuthentication vt=\"11\">-1</UseAcsAuthentication>" +
 				"<UseSasAuthentication vt=\"11\">0</UseSasAuthentication>" +
+				"<OrderedProcessing vt=\"11\">0</OrderedProcessing>" +
 				"<OpenTimeout vt=\"8\">00:01:00</OpenTimeout>" +
 				"<SendTimeout vt=\"8\">00:00:00</SendTimeout>" +
 				"<CloseTimeout vt=\"8\">00:01:00</CloseTimeout>" +
 				"</CustomProps>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void Validate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Inbound();
-			Action(() => ((ISupportValidation) adapter).Validate())
+			Invoking(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"Required property Address (URI) not specified.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateAddress()
 		{
-			var adapter = new SBMessagingAdapter.Inbound(a => { a.Address = new Uri("file://biztalf.factory.servicebus.windows.net/batching/"); });
-			Action(() => ((ISupportValidation) adapter).Validate())
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var adapter = new SBMessagingAdapter.Inbound(a => { a.Address = new("file://biztalk.factory.servicebus.windows.net/batching/"); });
+			Invoking(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"The specified address is invalid.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Inbound(
 				a => {
-					a.Address = new Uri("sb://biztalkfactory.servicebus.windows.net/");
+					a.Address = new("sb://biztalkfactory.servicebus.windows.net/");
 					a.IsSessionful = true;
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
 					a.CustomBrokeredPropertyNamespace = "urn:schemas.stateless.be:biztalk:service-bus:queue";
 					a.PromoteCustomProperties = true;
 				});
-			Action(() => ((ISupportValidation) adapter).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) adapter).Validate()).Should().NotThrow();
 		}
 	}
 }

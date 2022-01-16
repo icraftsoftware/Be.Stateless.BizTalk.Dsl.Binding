@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		static RetryPolicy()
 		{
 			var ti = new TransportInfo();
-			Default = new RetryPolicy { Count = ti.RetryCount, Interval = TimeSpan.FromMinutes(ti.RetryInterval) };
+			Default = new() { Count = ti.RetryCount, Interval = TimeSpan.FromMinutes(ti.RetryInterval) };
 		}
 
 		public static RetryPolicy Default { get; }

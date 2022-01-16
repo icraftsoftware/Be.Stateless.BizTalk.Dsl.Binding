@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -73,8 +73,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public InboundMessageBodySelection InboundBodyLocation
 		{
-			get => _adapterConfig.InboundBodyLocation;
-			set => _adapterConfig.InboundBodyLocation = value;
+			get => AdapterConfig.InboundBodyLocation;
+			set => AdapterConfig.InboundBodyLocation = value;
 		}
 
 		/// <summary>
@@ -100,8 +100,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public string InboundBodyPathExpression
 		{
-			get => _adapterConfig.InboundBodyPathExpression;
-			set => _adapterConfig.InboundBodyPathExpression = value;
+			get => AdapterConfig.InboundBodyPathExpression;
+			set => AdapterConfig.InboundBodyPathExpression = value;
 		}
 
 		/// <summary>
@@ -136,8 +136,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MessageBodyFormat InboundNodeEncoding
 		{
-			get => _adapterConfig.InboundNodeEncoding;
-			set => _adapterConfig.InboundNodeEncoding = value;
+			get => AdapterConfig.InboundNodeEncoding;
+			set => AdapterConfig.InboundNodeEncoding = value;
 		}
 
 		#endregion
@@ -174,8 +174,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public OutboundMessageBodySelection OutboundBodyLocation
 		{
-			get => _adapterConfig.OutboundBodyLocation;
-			set => _adapterConfig.OutboundBodyLocation = value;
+			get => AdapterConfig.OutboundBodyLocation;
+			set => AdapterConfig.OutboundBodyLocation = value;
 		}
 
 		/// <summary>
@@ -198,8 +198,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public string OutboundXmlTemplate
 		{
-			get => _adapterConfig.OutboundXmlTemplate;
-			set => _adapterConfig.OutboundXmlTemplate = value;
+			get => AdapterConfig.OutboundXmlTemplate;
+			set => AdapterConfig.OutboundXmlTemplate = value;
 		}
 
 		#endregion

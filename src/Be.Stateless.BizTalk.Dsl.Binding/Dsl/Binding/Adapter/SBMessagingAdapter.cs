@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 #endregion
 
+extern alias ExplorerOM;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
@@ -39,12 +40,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static SBMessagingAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("9c458d4a-a73c-4cb3-89c4-86ae0103de2f"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("9c458d4a-a73c-4cb3-89c4-86ae0103de2f"));
 		}
 
 		protected SBMessagingAdapter() : base(_protocolType)
 		{
-			_adapterConfig = new TConfig();
+			AdapterConfig = new();
 		}
 
 		#region IAdapterConfigAddress<Uri> Members
@@ -55,7 +56,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <remarks>
 		/// The URL is generally formatted as follows: <![CDATA[sb://<namespace>.servicebus.windows.net/<queue_name>/]]>.
 		/// </remarks>
-		[SuppressMessage("Naming", "CA1721:Property names should not match get methods")]
 		public Uri Address { get; set; }
 
 		#endregion
@@ -64,26 +64,26 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool UseAcsAuthentication
 		{
-			get => _adapterConfig.UseAcsAuthentication;
-			set => _adapterConfig.UseAcsAuthentication = value;
+			get => AdapterConfig.UseAcsAuthentication;
+			set => AdapterConfig.UseAcsAuthentication = value;
 		}
 
 		public Uri StsUri
 		{
-			get => new Uri(_adapterConfig.StsUri);
-			set => _adapterConfig.StsUri = value?.ToString();
+			get => new(AdapterConfig.StsUri);
+			set => AdapterConfig.StsUri = value?.ToString();
 		}
 
 		public string IssuerName
 		{
-			get => _adapterConfig.IssuerName;
-			set => _adapterConfig.IssuerName = value;
+			get => AdapterConfig.IssuerName;
+			set => AdapterConfig.IssuerName = value;
 		}
 
 		public string IssuerSecret
 		{
-			get => _adapterConfig.IssuerSecret;
-			set => _adapterConfig.IssuerSecret = value;
+			get => AdapterConfig.IssuerSecret;
+			set => AdapterConfig.IssuerSecret = value;
 		}
 
 		#endregion
@@ -95,8 +95,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string SharedAccessKey
 		{
-			get => _adapterConfig.SharedAccessKey;
-			set => _adapterConfig.SharedAccessKey = value;
+			get => AdapterConfig.SharedAccessKey;
+			set => AdapterConfig.SharedAccessKey = value;
 		}
 
 		/// <summary>
@@ -104,8 +104,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string SharedAccessKeyName
 		{
-			get => _adapterConfig.SharedAccessKeyName;
-			set => _adapterConfig.SharedAccessKeyName = value;
+			get => AdapterConfig.SharedAccessKeyName;
+			set => AdapterConfig.SharedAccessKeyName = value;
 		}
 
 		/// <summary>
@@ -113,8 +113,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public bool UseSasAuthentication
 		{
-			get => _adapterConfig.UseSasAuthentication;
-			set => _adapterConfig.UseSasAuthentication = value;
+			get => AdapterConfig.UseSasAuthentication;
+			set => AdapterConfig.UseSasAuthentication = value;
 		}
 
 		#endregion
@@ -128,14 +128,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		protected override void Save(IPropertyBag propertyBag)
 		{
-			_adapterConfig.Save(propertyBag as Microsoft.BizTalk.ExplorerOM.IPropertyBag);
+			AdapterConfig.Save(propertyBag as ExplorerOM::Microsoft.BizTalk.ExplorerOM.IPropertyBag);
 		}
 
 		protected override void Validate()
 		{
-			_adapterConfig.Address = GetAddress();
-			_adapterConfig.Validate();
-			_adapterConfig.Address = null;
+			AdapterConfig.Address = GetAddress();
+			AdapterConfig.Validate();
+			AdapterConfig.Address = null;
 		}
 
 		#endregion
@@ -148,8 +148,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public TimeSpan CloseTimeout
 		{
-			get => _adapterConfig.CloseTimeout;
-			set => _adapterConfig.CloseTimeout = value;
+			get => AdapterConfig.CloseTimeout;
+			set => AdapterConfig.CloseTimeout = value;
 		}
 
 		/// <summary>
@@ -160,14 +160,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public TimeSpan OpenTimeout
 		{
-			get => _adapterConfig.OpenTimeout;
-			set => _adapterConfig.OpenTimeout = value;
+			get => AdapterConfig.OpenTimeout;
+			set => AdapterConfig.OpenTimeout = value;
 		}
+
+		protected TConfig AdapterConfig { get; }
 
 		[SuppressMessage("ReSharper", "StaticMemberInGenericType")]
 		private static readonly ProtocolType _protocolType;
-
-		[SuppressMessage("Design", "CA1051:Do not declare visible instance fields")]
-		protected readonly TConfig _adapterConfig;
 	}
 }

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #endregion
 
 using System.ServiceModel;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Moq;
@@ -26,10 +27,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfBasicHttpAdapterFixture
 	{
-		[Fact]
-		// TODO rename everywhere to ProtocolTypeSettingsAreReadFromWmiConfigurationClassId
-		public void ProtocolTypeSettingsAreReadFromRegistry()
+		[SkippableFact]
+		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var mock = new Mock<WcfBasicHttpAdapter<EndpointAddress, BasicHttpRLConfig>> { CallBase = true };
 			var nta = mock.Object as IAdapter;
 			nta.ProtocolType.Name.Should().Be("WCF-BasicHttp");

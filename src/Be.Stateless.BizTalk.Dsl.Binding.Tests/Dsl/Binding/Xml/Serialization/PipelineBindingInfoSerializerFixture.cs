@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,28 +20,32 @@ using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Component;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Dummies.Transforms;
+using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.MicroComponent;
 using Be.Stateless.BizTalk.MicroPipelines;
-using Be.Stateless.BizTalk.Schemas.Xml;
+using Be.Stateless.BizTalk.Schema;
 using BTS;
 using FluentAssertions;
 using Microsoft.BizTalk.Component;
 using Microsoft.BizTalk.Component.Utilities;
+using Microsoft.XLANGs.BaseTypes;
 using Xunit;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 {
 	public class PipelineBindingInfoSerializerFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant1()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
-			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Disassemble.Component<XmlDasmComp>().RecoverableInterchangeProcessing = true;
 			pipeline.Stages.Validate.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -53,9 +57,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 					pl.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; });
 					pl.Stages.Disassemble.Component<XmlDasmComp>(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.RecoverableInterchangeProcessing = true;
 						});
@@ -66,15 +70,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding1.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant2()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
-			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Disassemble.Component<XmlDasmComp>().RecoverableInterchangeProcessing = true;
 			pipeline.Stages.Validate.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -86,9 +92,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 					.Decoder<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; })
 					.Disassembler<XmlDasmComp>(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.RecoverableInterchangeProcessing = true;
 						})
@@ -98,15 +104,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding2.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant3()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
-			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Disassemble.Component<XmlDasmComp>().RecoverableInterchangeProcessing = true;
 			pipeline.Stages.Validate.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -118,9 +126,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 					.FirstDecoder<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; })
 					.FirstDisassembler<XmlDasmComp>(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.RecoverableInterchangeProcessing = true;
 						})
@@ -130,16 +138,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding3.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant4()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
 			pipeline.Stages.Decode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
-			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Disassemble.Component<XmlDasmComp>().RecoverableInterchangeProcessing = true;
 			pipeline.Stages.Validate.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -154,9 +164,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 						.Configure(mpc => { mpc.Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } }; });
 					pl.Stages.Disassemble.Components.ComponentAt<XmlDasmComp>(0).Configure(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.RecoverableInterchangeProcessing = true;
 						});
@@ -168,16 +178,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding4.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant5()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
 			pipeline.Stages.Decode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
-			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Disassemble.Component<XmlDasmComp>().RecoverableInterchangeProcessing = true;
 			pipeline.Stages.Validate.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -192,9 +204,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 						.Configure(mpc => { mpc.Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } }; });
 					pl.Stages.Disassemble.ComponentAt<XmlDasmComp>(0).Configure(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.RecoverableInterchangeProcessing = true;
 						});
@@ -206,16 +218,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding5.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineDslGrammarVariant6()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new ReceivePipeline<XmlReceive>();
 			pipeline.Stages.Decode.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
 			pipeline.Stages.Decode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
-			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Disassemble.Component<XmlDasmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Disassemble.Component<XmlDasmComp>().RecoverableInterchangeProcessing = true;
 			pipeline.Stages.Validate.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -228,9 +242,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 					.DecoderAt<MicroPipelineComponent>(1).Configure(mpc => { mpc.Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } }; })
 					.DisassemblerAt<XmlDasmComp>(0).Configure(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.RecoverableInterchangeProcessing = true;
 						})
@@ -241,9 +255,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding6.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineSerializationIsEmptyWhenDefaultPipelineConfigIsNotOverridden()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var pipeline = new ReceivePipeline<Microsoft.BizTalk.DefaultPipelines.XMLReceive>();
 			var pipelineBindingSerializer = pipeline.GetPipelineBindingInfoSerializer();
 
@@ -252,9 +268,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding.Should().BeEmpty();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceivePipelineSerializationKeepsOnlyStagesWhoseComponentsDefaultConfigHasBeenOverridden()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var pipeline = new ReceivePipeline<Microsoft.BizTalk.DefaultPipelines.XMLReceive>(
 				pl => pl.Disassembler<XmlDasmComp>(c => { c.RecoverableInterchangeProcessing = true; }));
 			var pipelineBindingSerializer = pipeline.GetPipelineBindingInfoSerializer();
@@ -273,10 +291,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 				"</Stages></Root>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void ReceivePipelineSerializationKeepsOnlyStagesWhoseComponentsDefaultConfigHasBeenOverridden2()
+
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var pipeline = ReceivePipeline<XmlReceive>.Configure(
 				pl => pl
 					.FirstDecoder<FailedMessageRoutingEnablerComponent>(
@@ -320,15 +341,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant1()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
-			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Assemble.Component<XmlAsmComp>().AddXMLDeclaration = true;
 			pipeline.Stages.Encode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -340,9 +363,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 					pl.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; });
 					pl.Stages.Assemble.Component<XmlAsmComp>(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.AddXMLDeclaration = true;
 						});
@@ -353,15 +376,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding1.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant2()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
-			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Assemble.Component<XmlAsmComp>().AddXMLDeclaration = true;
 			pipeline.Stages.Encode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -373,9 +398,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 					pl.PreAssembler<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; });
 					pl.Assembler<XmlAsmComp>(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.AddXMLDeclaration = true;
 						});
@@ -386,15 +411,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding2.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant3()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
-			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Assemble.Component<XmlAsmComp>().AddXMLDeclaration = true;
 			pipeline.Stages.Encode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -406,9 +433,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 					pl.FirstPreAssembler<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; });
 					pl.FirstAssembler<XmlAsmComp>(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.AddXMLDeclaration = true;
 						});
@@ -419,16 +446,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding3.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant4()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
 			pipeline.Stages.PreAssemble.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
-			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Assemble.Component<XmlAsmComp>().AddXMLDeclaration = true;
 			pipeline.Stages.Encode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -443,9 +472,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 						.Configure(mpc => { mpc.Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } }; });
 					pl.Stages.Assemble.Components.ComponentAt<XmlAsmComp>(0).Configure(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.AddXMLDeclaration = true;
 						});
@@ -457,16 +486,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding4.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant5()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
 			pipeline.Stages.PreAssemble.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
-			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Assemble.Component<XmlAsmComp>().AddXMLDeclaration = true;
 			pipeline.Stages.Encode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -481,9 +512,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 						.Configure(mpc => { mpc.Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } }; });
 					pl.Stages.Assemble.ComponentAt<XmlAsmComp>(0).Configure(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.AddXMLDeclaration = true;
 						});
@@ -495,16 +526,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding5.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SendPipelineDslGrammarVariant6()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			// not fluent-DSL
 			var pipeline = new SendPipeline<XmlTransmit>();
 			pipeline.Stages.PreAssemble.Component<FailedMessageRoutingEnablerComponent>().Enabled = false;
 			pipeline.Stages.PreAssemble.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
-			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new SchemaList {
-				new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-				new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+			pipeline.Stages.Assemble.Component<XmlAsmComp>().DocumentSpecNames = new() {
+				new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+				new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 			};
 			pipeline.Stages.Assemble.Component<XmlAsmComp>().AddXMLDeclaration = true;
 			pipeline.Stages.Encode.Component<MicroPipelineComponent>().Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } };
@@ -518,9 +551,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 					.Configure(mpc => { mpc.Components = new IMicroComponent[] { new XsltRunner { MapType = typeof(IdentityTransform) } }; })
 					.AssemblerAt<XmlAsmComp>(0).Configure(
 						c => {
-							c.DocumentSpecNames = new SchemaList {
-								new SchemaWithNone(Schema<Any>.AssemblyQualifiedName),
-								new SchemaWithNone(Schema<soap_envelope_1__2.Envelope>.AssemblyQualifiedName)
+							c.DocumentSpecNames = new() {
+								new SchemaWithNone(SchemaMetadata.For<Any>().DocumentSpec.DocSpecStrongName),
+								new SchemaWithNone(SchemaMetadata.For<soap_envelope_1__2.Envelope>().DocumentSpec.DocSpecStrongName)
 							};
 							c.AddXMLDeclaration = true;
 						})
@@ -530,10 +563,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 			binding6.Should().Be(binding);
 		}
 
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SendPipelineSerializationKeepsOnlyStagesWhoseComponentsDefaultConfigHasBeenOverridden2()
+
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var pipeline = SendPipeline<XmlTransmit>.Configure(
 				pl => pl
 					.FirstPreAssembler<FailedMessageRoutingEnablerComponent>(c => { c.Enabled = false; })

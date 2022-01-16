@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,14 +18,13 @@
 
 using System;
 using System.Transactions;
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
+using Be.Stateless.BizTalk.Adapter.Metadata;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Utils;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using FluentAssertions;
-using Microsoft.Adapters.OracleDB;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -38,14 +37,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var ooa = new WcfOracleAdapter.Outbound(
 				a => {
-					a.Address = new OracleDBConnectionUri { DataSourceName = "TNS" };
+					a.Address = new() { DataSourceName = "TNS" };
 					a.IsolationLevel = IsolationLevel.ReadCommitted;
 					a.OutboundBodyLocation = OutboundMessageBodySelection.UseBodyElement;
 					a.PropagateFaultMessage = true;
 					a.SendTimeout = TimeSpan.FromMinutes(2);
 					a.StaticAction = new ActionMapping {
-						new ActionMappingOperation("CreateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/CREATE_TICKET"),
-						new ActionMappingOperation("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
+						new("CreateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/CREATE_TICKET"),
+						new("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
 					};
 					a.UserName = "Scott";
 					a.Password = "Tiger";
@@ -90,19 +89,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var ooa = new WcfOracleAdapter.Outbound(
 				a => {
-					a.Address = new OracleDBConnectionUri { DataSourceName = "TNS" };
+					a.Address = new() { DataSourceName = "TNS" };
 					a.IsolationLevel = IsolationLevel.ReadCommitted;
 					a.OutboundBodyLocation = OutboundMessageBodySelection.UseBodyElement;
 					a.PropagateFaultMessage = true;
 					a.StaticAction = new ActionMapping {
-						new ActionMappingOperation("CreateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/CREATE_TICKET"),
-						new ActionMappingOperation("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
+						new("CreateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/CREATE_TICKET"),
+						new("UpdateTicket", "http://Microsoft.LobServices.OracleDB/2007/03/SCOTT/Procedure/UPDATE_TICKET")
 					};
 					a.UserName = "Scott";
 					a.Password = "Tiger";
 				});
 
-			Action(() => ((ISupportValidation) ooa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) ooa).Validate()).Should().NotThrow();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@ using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
-	public interface IApplicationBindingArtifactLookup : ISupportNamingConvention, IFluentInterface
+	public interface IApplicationBindingArtifactLookup : ISupportNameResolution
 	{
-		IApplicationBindingArtifactLookup ReferencedApplication<T>() where T : IApplicationBinding, IApplicationBindingArtifactLookup, ISupportNamingConvention;
+		IApplicationBindingArtifactLookup ReferencedApplication<T>() where T : IApplicationBinding, IApplicationBindingArtifactLookup, ISupportNameResolution;
 
-		ISupportNamingConvention ReceiveLocation<T>() where T : IReceiveLocation, ISupportNamingConvention;
+		ISupportNameResolution ReceiveLocation<T>() where T : IReceiveLocation, ISupportNameResolution;
 
-		ISupportNamingConvention ReceivePort<T>() where T : IReceivePort, ISupportNamingConvention;
+		ISupportNameResolution ReceivePort<T>() where T : IReceivePort, ISupportNameResolution;
 
-		ISupportNamingConvention SendPort<T>() where T : ISendPort, ISupportNamingConvention;
+		ISupportNameResolution SendPort<T>() where T : ISendPort, ISupportNameResolution;
 	}
 }

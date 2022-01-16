@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,24 +19,27 @@
 using System;
 using System.Globalization;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class SBMessagingAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var defaultScheduledEnqueueTimeUtc = DateTime.UtcNow.Date.AddMonths(1);
 			var adapter = new SBMessagingAdapter.Outbound(
 				a => {
-					a.Address = new Uri("sb://biztalkfactory.servicebus.windows.net/");
+					a.Address = new("sb://biztalkfactory.servicebus.windows.net/");
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
@@ -58,7 +61,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"<CustomBrokeredPropertyNamespace vt=\"8\">urn:schemas.stateless.be:biztalk:service-bus:queue</CustomBrokeredPropertyNamespace>" +
 				"<DefaultCorrelationId vt=\"8\">correlation_id</DefaultCorrelationId>" +
 				$"<DefaultScheduledEnqueueTimeUtc vt=\"7\">{defaultScheduledEnqueueTimeUtc.ToString("G", DateTimeFormatInfo.InvariantInfo)}</DefaultScheduledEnqueueTimeUtc>" +
-				$"<DefaultTimeToLive vt=\"8\">{TimeSpan.MaxValue}</DefaultTimeToLive>" +
+				$"<DefaultTimeToLive vt=\"8\">{TimeSpan.Zero}</DefaultTimeToLive>" +
 				"<DefaultPartitionKey vt=\"8\">partition</DefaultPartitionKey>" +
 				"<UseAcsAuthentication vt=\"11\">-1</UseAcsAuthentication>" +
 				"<UseSasAuthentication vt=\"11\">0</UseSasAuthentication>" +
@@ -68,33 +71,39 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</CustomProps>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void Validate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Outbound();
-			Action(() => ((ISupportValidation) adapter).Validate())
+			Invoking(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"Required property Address (URI) not specified.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateAddress()
 		{
-			var adapter = new SBMessagingAdapter.Outbound(a => { a.Address = new Uri("file://biztalf.factory.servicebus.windows.net/batching/"); });
-			Action(() => ((ISupportValidation) adapter).Validate())
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var adapter = new SBMessagingAdapter.Outbound(a => { a.Address = new("file://biztalk.factory.servicebus.windows.net/batching/"); });
+			Invoking(() => ((ISupportValidation) adapter).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithMessage(@"The specified address is invalid.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapter = new SBMessagingAdapter.Outbound(
 				a => {
-					a.Address = new Uri("sb://biztalkfactory.servicebus.windows.net/");
+					a.Address = new("sb://biztalkfactory.servicebus.windows.net/");
 
 					a.UseAcsAuthentication = true;
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
@@ -103,7 +112,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 					a.CustomBrokeredPropertyNamespace = "urn:schemas.stateless.be:biztalk:service-bus:queue";
 				});
-			Action(() => ((ISupportValidation) adapter).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) adapter).Validate()).Should().NotThrow();
 		}
 	}
 }

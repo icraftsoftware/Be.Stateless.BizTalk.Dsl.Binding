@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,21 +28,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	public abstract class ReceiveLocationBase<TNamingConvention>
 		: IReceiveLocation<TNamingConvention>,
 			ISupportEnvironmentOverride,
-			ISupportNamingConvention,
 			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
 	{
 		protected internal ReceiveLocationBase()
 		{
-			Transport = new ReceiveLocationTransport();
+			Transport = new(this);
 		}
 
 		protected internal ReceiveLocationBase(Action<IReceiveLocation<TNamingConvention>> receiveLocationConfigurator) : this()
 		{
 			if (receiveLocationConfigurator == null) throw new ArgumentNullException(nameof(receiveLocationConfigurator));
 			receiveLocationConfigurator(this);
-			((ISupportValidation) this).Validate();
 		}
 
 		#region IReceiveLocation<TNamingConvention> Members
@@ -59,7 +57,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public SendPipeline SendPipeline { get; set; }
 
-		public ReceiveLocationTransport Transport { get; }
+		public ReceiveLocationTransport<TNamingConvention> Transport { get; }
+
+		public string ResolveName()
+		{
+			return NamingConventionThunk.ComputeReceiveLocationName(this);
+		}
 
 		#endregion
 
@@ -79,30 +82,23 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#endregion
 
-		#region ISupportNamingConvention Members
-
-		string ISupportNamingConvention.Name => NamingConventionThunk.ComputeReceiveLocationName(this);
-
-		#endregion
-
 		#region ISupportValidation Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Receive Location's Name is not defined.");
-			if (ReceivePipeline == null) throw new BindingException("Receive Location's Receive Pipeline is not defined.");
-			Transport.Validate("Receive Location's Transport");
+			if (ReceivePipeline == null) throw new BindingException($"[{ResolveName()}] Receive Location's Receive Pipeline is not defined.");
+			Transport.Validate($"[{ResolveName()}] Receive Location's Transport");
 		}
 
 		#endregion
 
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
+		TVisitor IVisitable<IApplicationBindingVisitor>.Accept<TVisitor>(TVisitor visitor)
 		{
 			visitor.VisitReceiveLocation(this);
+			return visitor;
 		}
 
 		#endregion

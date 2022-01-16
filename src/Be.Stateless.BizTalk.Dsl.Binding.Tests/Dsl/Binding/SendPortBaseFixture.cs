@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,16 +17,19 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Binding.Subscription;
+using Be.Stateless.BizTalk.Explorer;
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Microsoft.BizTalk.DefaultPipelines;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -51,30 +54,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[Fact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
-		{
-			var sendPortMock = new Mock<SendPortBase<string>>(
-				(Action<ISendPort<string>>) (sp => {
-					sp.Name = "Send Port Name";
-					sp.SendPipeline = new SendPipeline<XMLTransmit>();
-					sp.Transport.Adapter = new FileAdapter.Outbound(ifa => { ifa.DestinationFolder = @"c:\file\drops"; });
-					sp.Transport.Host = "Host";
-				})) { CallBase = true };
-			var validatingSendPortMock = sendPortMock.As<ISupportValidation>();
-
-			sendPortMock.Object.Description = "Force Moq to call ctor.";
-
-			validatingSendPortMock.Verify(m => m.Validate(), Times.Once);
-		}
-
-		[Fact]
 		public void EnvironmentOverridesAreAppliedForGivenEnvironment()
 		{
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			sendPortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			sendPortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -87,6 +73,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Never(), ItExpr.IsAny<string>());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ForwardsApplyEnvironmentOverridesToFilter()
 		{
@@ -96,37 +83,44 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
 			sendPortMock.Object.Filter = filterMock.Object;
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveFilterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveFilterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
-		[Fact]
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToReceivePipeline()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receivePipelineMock = new Mock<ReceivePipeline<XMLReceive>> { CallBase = true };
 
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
 			sendPortMock.Object.ReceivePipeline = receivePipelineMock.Object;
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
-		[Fact]
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToSendPipeline()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sendPipelineMock = new Mock<SendPipeline<XMLTransmit>> { CallBase = true };
 
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
 			sendPortMock.Object.SendPipeline = sendPipelineMock.Object;
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ForwardsApplyEnvironmentOverridesToTransport()
 		{
@@ -140,16 +134,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortMock.Object.Name = "Send Port Name";
 			sendPortMock.Object.Transport.Host = "Host";
 			sendPortMock.Object.Transport.Adapter = adapterMock.Object;
-			sendPortMock.Object.BackupTransport.Host = "Host";
-			sendPortMock.Object.BackupTransport.Adapter = backupAdapterMock.Object;
+			sendPortMock.Object.BackupTransport.Value.Host = "Host";
+			sendPortMock.Object.BackupTransport.Value.Adapter = backupAdapterMock.Object;
 
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
 			// indirectly verifies that SendPortBase forwards ApplyEnvironmentOverrides() call to Transport, which forwards it to its adapter
-			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
-			environmentSensitiveBackupAdapterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
+			environmentSensitiveBackupAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void NameIsMandatory()
 		{
@@ -157,11 +152,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			sendPortMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) sendPortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) sendPortMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Send Port's Name is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SendPipelineIsMandatory()
 		{
@@ -169,11 +165,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			sendPortMock.Object.Name = "Send Port Name";
 
-			Action(() => ((ISupportValidation) sendPortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) sendPortMock.Object).Validate())
 				.Should().Throw<BindingException>()
-				.WithMessage("Send Port's Send Pipeline is not defined.");
+				.WithMessage("[Send Port Name] Send Port's Send Pipeline is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportINamingConvention()
 		{
@@ -185,9 +182,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var sendPortMock = new Mock<SendPortBase<object>> { CallBase = true };
 			sendPortMock.Object.Name = conventionMock.Object;
 
-			((ISupportNamingConvention) sendPortMock.Object).Name.Should().Be(name);
+			sendPortMock.Object.ResolveName().Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportStringNamingConvention()
 		{
@@ -196,12 +194,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			sendPortMock.Object.Name = name;
 
-			((ISupportNamingConvention) sendPortMock.Object).Name.Should().Be(name);
+			sendPortMock.Object.ResolveName().Should().Be(name);
 		}
 
-		[Fact]
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
 		public void TransportIsValidated()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapterMock = new Mock<IOutboundAdapter>();
 			var validatingAdapterMock = adapterMock.As<ISupportValidation>();
 
@@ -213,8 +214,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			sendPortMock.Object.SendPipeline = new SendPipeline<XMLTransmit>();
 			sendPortMock.Object.Transport.Host = "Host";
 			sendPortMock.Object.Transport.Adapter = adapterMock.Object;
-			sendPortMock.Object.BackupTransport.Host = "Host";
-			sendPortMock.Object.BackupTransport.Adapter = backupAdapterMock.Object;
+			sendPortMock.Object.BackupTransport.Value.Host = "Host";
+			sendPortMock.Object.BackupTransport.Value.Adapter = backupAdapterMock.Object;
 
 			((ISupportValidation) sendPortMock.Object).Validate();
 

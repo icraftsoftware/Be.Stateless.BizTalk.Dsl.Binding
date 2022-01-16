@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,20 +18,23 @@
 
 using System.ServiceModel;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfNetMsmqAdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var nma = new WcfNetMsmqAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Address = new("net.msmq://localhost/private/service_queue");
 					a.SecurityMode = NetMsmqSecurityMode.Message;
 					a.EnableTransaction = true;
 					a.OrderedProcessing = true;
@@ -66,18 +69,20 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var nma = new WcfNetMsmqAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Address = new("net.msmq://localhost/private/service_queue");
 					a.SecurityMode = NetMsmqSecurityMode.Message;
 					a.EnableTransaction = true;
 					a.OrderedProcessing = true;
 				});
 
-			Action(() => ((ISupportValidation) nma).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) nma).Validate()).Should().NotThrow();
 		}
 	}
 }

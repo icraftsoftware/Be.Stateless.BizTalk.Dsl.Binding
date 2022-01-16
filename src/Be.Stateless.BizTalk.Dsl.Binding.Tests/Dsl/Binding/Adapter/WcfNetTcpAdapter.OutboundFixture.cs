@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,20 +20,23 @@ using System;
 using System.ServiceModel;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfNetTcpAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var nta = new WcfNetTcpAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.SecurityMode = SecurityMode.Message;
 					a.SendTimeout = TimeSpan.FromMinutes(2);
 					a.MessageClientCredentialType = MessageCredentialType.Windows;
@@ -67,18 +70,20 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var nta = new WcfNetTcpAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.SecurityMode = SecurityMode.Message;
 					a.MessageClientCredentialType = MessageCredentialType.Windows;
 				});
 
-			Action(() => ((ISupportValidation) nta).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) nta).Validate()).Should().NotThrow();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -24,9 +25,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class FtpAdapterFixture
 	{
-		[Fact]
-		public void ProtocolTypeSettingsAreReadFromRegistry()
+		[SkippableFact]
+		public void ProtocolTypeSettingsAreReadFromWmiConfigurationClassId()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var mock = new Mock<FtpAdapter> { CallBase = true };
 			var fa = mock.Object as IAdapter;
 			fa.ProtocolType.Name.Should().Be("FTP");

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Adapters.Sql;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
@@ -40,7 +39,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfSqlAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("59b35d03-6a06-4734-a249-ef561254ecf7"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("59b35d03-6a06-4734-a249-ef561254ecf7"));
 		}
 
 		protected WcfSqlAdapter() : base(_protocolType)
@@ -66,8 +65,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool EnableBizTalkCompatibilityMode
 		{
-			get => _bindingConfigurationElement.EnableBizTalkCompatibilityMode;
-			set => _bindingConfigurationElement.EnableBizTalkCompatibilityMode = value;
+			get => BindingElement.EnableBizTalkCompatibilityMode;
+			set => BindingElement.EnableBizTalkCompatibilityMode = value;
 		}
 
 		#endregion
@@ -76,8 +75,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public bool EnablePerformanceCounters
 		{
-			get => _bindingConfigurationElement.EnablePerformanceCounters;
-			set => _bindingConfigurationElement.EnablePerformanceCounters = value;
+			get => BindingElement.EnablePerformanceCounters;
+			set => BindingElement.EnablePerformanceCounters = value;
 		}
 
 		#endregion
@@ -90,8 +89,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public bool UseAmbientTransaction
 		{
-			get => _bindingConfigurationElement.UseAmbientTransaction;
-			set => _bindingConfigurationElement.UseAmbientTransaction = value;
+			get => BindingElement.UseAmbientTransaction;
+			set => BindingElement.UseAmbientTransaction = value;
 		}
 
 		#endregion
@@ -103,8 +102,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public bool UseDatabaseNameInXsdNamespace
 		{
-			get => _bindingConfigurationElement.UseDatabaseNameInXsdNamespace;
-			set => _bindingConfigurationElement.UseDatabaseNameInXsdNamespace = value;
+			get => BindingElement.UseDatabaseNameInXsdNamespace;
+			set => BindingElement.UseDatabaseNameInXsdNamespace = value;
 		}
 
 		#endregion
@@ -120,8 +119,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public bool Encrypt
 		{
-			get => _bindingConfigurationElement.Encrypt;
-			set => _bindingConfigurationElement.Encrypt = value;
+			get => BindingElement.Encrypt;
+			set => BindingElement.Encrypt = value;
 		}
 
 		/// <summary>
@@ -129,8 +128,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public int MaxConnectionPoolSize
 		{
-			get => _bindingConfigurationElement.MaxConnectionPoolSize;
-			set => _bindingConfigurationElement.MaxConnectionPoolSize = value;
+			get => BindingElement.MaxConnectionPoolSize;
+			set => BindingElement.MaxConnectionPoolSize = value;
 		}
 
 		/// <summary>
@@ -138,8 +137,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string WorkstationId
 		{
-			get => _bindingConfigurationElement.WorkstationId;
-			set => _bindingConfigurationElement.WorkstationId = value;
+			get => BindingElement.WorkstationId;
+			set => BindingElement.WorkstationId = value;
 		}
 
 		#endregion
@@ -151,8 +150,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string XmlStoredProcedureRootNodeName
 		{
-			get => _bindingConfigurationElement.XmlStoredProcedureRootNodeName;
-			set => _bindingConfigurationElement.XmlStoredProcedureRootNodeName = value;
+			get => BindingElement.XmlStoredProcedureRootNodeName;
+			set => BindingElement.XmlStoredProcedureRootNodeName = value;
 		}
 
 		/// <summary>
@@ -160,8 +159,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string XmlStoredProcedureRootNodeNamespace
 		{
-			get => _bindingConfigurationElement.XmlStoredProcedureRootNodeNamespace;
-			set => _bindingConfigurationElement.XmlStoredProcedureRootNodeNamespace = value;
+			get => BindingElement.XmlStoredProcedureRootNodeNamespace;
+			set => BindingElement.XmlStoredProcedureRootNodeNamespace = value;
 		}
 
 		#endregion

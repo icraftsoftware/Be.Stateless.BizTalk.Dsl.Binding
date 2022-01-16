@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	/// <summary>
@@ -23,7 +25,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	/// </summary>
 	public enum ServiceState
 	{
-		Indefinite = 0,
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
+		Undefined = 0,
 		Unenlisted = 1,
 		Enlisted = 2,
 		Stopped = Enlisted,

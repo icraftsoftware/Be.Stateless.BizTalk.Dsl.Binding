@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,17 +18,20 @@
 
 using System.Security;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class FtpAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ofa = new FtpAdapter.Outbound(
 				a => {
 					a.Server = "ftp.server.com";
@@ -68,18 +71,22 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</CustomProps>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void Validate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ofa = new FtpAdapter.Outbound();
-			Action(() => ((ISupportValidation) ofa).Validate())
+			Invoking(() => ((ISupportValidation) ofa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("The Server Address is not defined");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ofa = new FtpAdapter.Outbound(
 				a => {
 					a.Server = "ftp.server.com";
@@ -92,7 +99,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 					a.ConnectionLimit = 10;
 				});
-			Action(() => ((ISupportValidation) ofa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) ofa).Validate()).Should().NotThrow();
 		}
 	}
 }

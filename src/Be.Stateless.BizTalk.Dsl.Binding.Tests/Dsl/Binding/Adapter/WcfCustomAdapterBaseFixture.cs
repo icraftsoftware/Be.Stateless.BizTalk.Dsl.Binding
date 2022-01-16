@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
+using Be.Stateless.BizTalk.Install;
 using Be.Stateless.Reflection;
 using FluentAssertions;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
@@ -26,7 +28,7 @@ using Microsoft.BizTalk.Deployment.Binding;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -36,21 +38,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		public void BasicHttpBindingElementIsSupported()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Action(
-					() => {
-						var _ = adapterMock.Object;
-					})
-				.Should().NotThrow();
+			Invoking(() => adapterMock.Object).Should().NotThrow();
 		}
 
 		[Fact]
 		public void BasicHttpsBindingElementIsNotSupported()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpsBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Action(
-					() => {
-						var _ = adapterMock.Object;
-					})
+			Invoking(() => adapterMock.Object)
 				.Should().Throw<TypeInitializationException>()
 				.WithInnerException<BindingException>()
 				.WithMessage("BasicHttpBindingElement has to be used for https addresses as well.");
@@ -61,9 +56,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
 
-			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			adapterMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			adapterMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -83,41 +78,44 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			var environmentSensitiveBindingMock = bindingMock.As<ISupportEnvironmentOverride>();
 
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Reflector.SetField(adapterMock.Object, "_bindingConfigurationElement", bindingMock.Object);
+			Reflector.SetProperty((WcfAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>) adapterMock.Object, "BindingElement", bindingMock.Object);
 
-			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveBindingMock.Verify(b => b.ApplyEnvironmentOverrides("ACC"), Times.Once());
+			environmentSensitiveBindingMock.Verify(b => b.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ValidateCustomBasicHttpBindingWithoutTransportSecurityThrowsWhenSchemeIsHttps()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomTLConfig>>(new ProtocolType()) { CallBase = true };
-			adapterMock.Object.Address = new EndpointAddress("https://services.stateless.be/soap/default");
+			adapterMock.Object.Address = new("https://services.stateless.be/soap/default");
 			adapterMock.Object.Binding.Security.Mode = BasicHttpSecurityMode.None;
-			Action(() => ((ISupportValidation) adapterMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) adapterMock.Object).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
 				.WithMessage("Invalid address scheme; expecting \"http\" scheme.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ValidateCustomBasicHttpBindingWithTransportSecurityDoesNotThrowWhenSchemeIsHttps()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomTLConfig>>(new ProtocolType()) { CallBase = true };
-			adapterMock.Object.Address = new EndpointAddress("https://services.stateless.be/soap/default");
+			adapterMock.Object.Address = new("https://services.stateless.be/soap/default");
 			adapterMock.Object.Binding.Security.Mode = BasicHttpSecurityMode.Transport;
-			Action(() => ((ISupportValidation) adapterMock.Object).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) adapterMock.Object).Validate()).Should().NotThrow();
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ValidateCustomBasicHttpBindingWithTransportSecurityThrowsWhenSchemeIsHttp()
 		{
 			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, BasicHttpBindingElement, CustomTLConfig>>(new ProtocolType()) { CallBase = true };
-			adapterMock.Object.Address = new EndpointAddress("http://services.stateless.be/soap/default");
+			adapterMock.Object.Address = new("http://services.stateless.be/soap/default");
 			adapterMock.Object.Binding.Security.Mode = BasicHttpSecurityMode.Transport;
-			Action(() => ((ISupportValidation) adapterMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) adapterMock.Object).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
 				.WithMessage("Invalid address scheme; expecting \"https\" scheme.");

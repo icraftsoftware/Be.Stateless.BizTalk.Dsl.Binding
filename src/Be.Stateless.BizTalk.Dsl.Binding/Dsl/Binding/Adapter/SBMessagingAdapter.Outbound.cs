@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,8 +58,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string CustomBrokeredPropertyNamespace
 			{
-				get => _adapterConfig.CustomBrokeredPropertyNamespace;
-				set => _adapterConfig.CustomBrokeredPropertyNamespace = value;
+				get => AdapterConfig.CustomBrokeredPropertyNamespace;
+				set => AdapterConfig.CustomBrokeredPropertyNamespace = value;
 			}
 
 			/// <summary>
@@ -68,8 +68,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
 			public string DefaultCorrelationId
 			{
-				get => _adapterConfig.DefaultCorrelationId;
-				set => _adapterConfig.DefaultCorrelationId = value;
+				get => AdapterConfig.DefaultCorrelationId;
+				set => AdapterConfig.DefaultCorrelationId = value;
 			}
 
 			/// <summary>
@@ -78,8 +78,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
 			public string DefaultLabel
 			{
-				get => _adapterConfig.DefaultLabel;
-				set => _adapterConfig.DefaultLabel = value;
+				get => AdapterConfig.DefaultLabel;
+				set => AdapterConfig.DefaultLabel = value;
 			}
 
 			/// <summary>
@@ -91,8 +91,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
 			public string DefaultMessageId
 			{
-				get => _adapterConfig.DefaultMessageId;
-				set => _adapterConfig.DefaultMessageId = value;
+				get => AdapterConfig.DefaultMessageId;
+				set => AdapterConfig.DefaultMessageId = value;
 			}
 
 			/// <summary>
@@ -101,8 +101,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
 			public string DefaultReplyTo
 			{
-				get => _adapterConfig.DefaultReplyTo;
-				set => _adapterConfig.DefaultReplyTo = value;
+				get => AdapterConfig.DefaultReplyTo;
+				set => AdapterConfig.DefaultReplyTo = value;
 			}
 
 			/// <summary>
@@ -111,8 +111,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
 			public string DefaultReplyToSessionId
 			{
-				get => _adapterConfig.DefaultReplyToSessionId;
-				set => _adapterConfig.DefaultReplyToSessionId = value;
+				get => AdapterConfig.DefaultReplyToSessionId;
+				set => AdapterConfig.DefaultReplyToSessionId = value;
 			}
 
 			/// <summary>
@@ -123,10 +123,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// also be in UTC.
 			/// </remarks>
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
-			public DateTime DefaultScheduledEnqueueTimeUtc
+			public DateTime? DefaultScheduledEnqueueTimeUtc
 			{
-				get => _adapterConfig.DefaultScheduledEnqueueTimeUtc;
-				set => _adapterConfig.DefaultScheduledEnqueueTimeUtc = value;
+				get => AdapterConfig.DefaultScheduledEnqueueTimeUtc;
+				set
+				{
+					if (value.HasValue) AdapterConfig.DefaultScheduledEnqueueTimeUtc = value;
+				}
 			}
 
 			/// <summary>
@@ -135,8 +138,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
 			public string DefaultSessionId
 			{
-				get => _adapterConfig.DefaultSessionId;
-				set => _adapterConfig.DefaultSessionId = value;
+				get => AdapterConfig.DefaultSessionId;
+				set => AdapterConfig.DefaultSessionId = value;
 			}
 
 			/// <summary>
@@ -164,8 +167,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
 			public TimeSpan DefaultTimeToLive
 			{
-				get => _adapterConfig.DefaultTimeToLive;
-				set => _adapterConfig.DefaultTimeToLive = value;
+				get => AdapterConfig.DefaultTimeToLive;
+				set => AdapterConfig.DefaultTimeToLive = value;
 			}
 
 			/// <summary>
@@ -174,8 +177,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.brokeredmessage#properties">BrokeredMessage Properties</seealso>
 			public string DefaultPartitionKey
 			{
-				get => _adapterConfig.DefaultPartitionKey;
-				set => _adapterConfig.DefaultPartitionKey = value;
+				get => AdapterConfig.DefaultPartitionKey;
+				set => AdapterConfig.DefaultPartitionKey = value;
 			}
 
 			#endregion
@@ -199,8 +202,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public TimeSpan BatchFlushInterval
 			{
-				get => _adapterConfig.BatchFlushInterval;
-				set => _adapterConfig.BatchFlushInterval = value;
+				get => AdapterConfig.BatchFlushInterval;
+				set => AdapterConfig.BatchFlushInterval = value;
 			}
 
 			/// <summary>
@@ -211,8 +214,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public TimeSpan SendTimeout
 			{
-				get => _adapterConfig.SendTimeout;
-				set => _adapterConfig.SendTimeout = value;
+				get => AdapterConfig.SendTimeout;
+				set => AdapterConfig.SendTimeout = value;
 			}
 
 			/// <summary>
@@ -223,8 +226,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public TimeSpan SessionIdleTimeout
 			{
-				get => _adapterConfig.SessionIdleTimeout;
-				set => _adapterConfig.SessionIdleTimeout = value;
+				get => AdapterConfig.SessionIdleTimeout;
+				set => AdapterConfig.SessionIdleTimeout = value;
 			}
 
 			/// <summary>
@@ -235,8 +238,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public int MaxReceivedMessageSize
 			{
-				get => _adapterConfig.MaxReceivedMessageSize;
-				set => _adapterConfig.MaxReceivedMessageSize = value;
+				get => AdapterConfig.MaxReceivedMessageSize;
+				set => AdapterConfig.MaxReceivedMessageSize = value;
 			}
 
 			#endregion

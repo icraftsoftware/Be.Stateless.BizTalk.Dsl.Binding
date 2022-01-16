@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,21 +27,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	public abstract class ReceivePortBase<TNamingConvention>
 		: IReceivePort<TNamingConvention>,
 			ISupportEnvironmentOverride,
-			ISupportNamingConvention,
 			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
 	{
 		protected internal ReceivePortBase()
 		{
-			_receiveLocations = new ReceiveLocationCollection<TNamingConvention>(this);
+			_receiveLocations = new(this);
 		}
 
 		protected internal ReceivePortBase(Action<IReceivePort<TNamingConvention>> receivePortConfigurator) : this()
 		{
 			if (receivePortConfigurator == null) throw new ArgumentNullException(nameof(receivePortConfigurator));
 			receivePortConfigurator(this);
-			((ISupportValidation) this).Validate();
 		}
 
 		#region IReceivePort<TNamingConvention> Members
@@ -55,6 +53,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public TNamingConvention Name { get; set; }
 
 		public IReceiveLocationCollection<TNamingConvention> ReceiveLocations => _receiveLocations;
+
+		public string ResolveName()
+		{
+			return NamingConventionThunk.ComputeReceivePortName(this);
+		}
 
 		#endregion
 
@@ -70,19 +73,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#endregion
 
-		#region ISupportNamingConvention Members
-
-		string ISupportNamingConvention.Name => NamingConventionThunk.ComputeReceivePortName(this);
-
-		#endregion
-
 		#region ISupportValidation Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Receive Port's Name is not defined.");
-			if (!_receiveLocations.Any()) throw new BindingException("Receive Port has no Receive Locations.");
+			if (!_receiveLocations.Any()) throw new BindingException($"[{ResolveName()}] Receive Port's Receive Locations are not defined.");
+			((ISupportValidation) _receiveLocations).Validate();
 			ComputeIsTwoWay();
 		}
 
@@ -90,11 +87,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
+		TVisitor IVisitable<IApplicationBindingVisitor>.Accept<TVisitor>(TVisitor visitor)
 		{
 			visitor.VisitReceivePort(this);
-			((IVisitable<IApplicationBindingVisitor>) _receiveLocations).Accept(visitor);
+			return ((IVisitable<IApplicationBindingVisitor>) _receiveLocations).Accept(visitor);
 		}
 
 		#endregion
@@ -105,10 +101,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		private bool ComputeIsTwoWay()
 		{
-			if (!_receiveLocations.Any()) throw new BindingException("Receive Port has no Receive Location.");
 			var isOneWay = _receiveLocations.All(rl => rl.SendPipeline == null);
 			var isTwoWay = _receiveLocations.All(rl => rl.SendPipeline != null);
-			if (!isOneWay && !isTwoWay) throw new BindingException("Receive Port has a mix of one-way and two-way Receive Locations.");
+			if (!isOneWay && !isTwoWay) throw new BindingException($"[{ResolveName()}] Receive Port defines a mix of one-way and two-way Receive Locations.");
 			return isTwoWay;
 		}
 

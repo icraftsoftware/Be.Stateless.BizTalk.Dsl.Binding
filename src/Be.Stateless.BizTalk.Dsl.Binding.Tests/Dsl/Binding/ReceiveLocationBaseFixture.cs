@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,15 +16,17 @@
 
 #endregion
 
-using System;
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Explorer;
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Microsoft.BizTalk.DefaultPipelines;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -43,30 +45,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[Fact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
-		{
-			var receiveLocationMock = new Mock<ReceiveLocationBase<string>>(
-				(Action<IReceiveLocation<string>>) (rl => {
-					rl.Name = "Receive Location Name";
-					rl.ReceivePipeline = new ReceivePipeline<XMLReceive>();
-					rl.Transport.Adapter = new FileAdapter.Inbound(ifa => { ifa.ReceiveFolder = @"c:\file\drops"; });
-					rl.Transport.Host = "Host";
-				})) { CallBase = true };
-			var validatingReceiveLocationBindingMock = receiveLocationMock.As<ISupportValidation>();
-
-			receiveLocationMock.Object.Description = "Force Moq to call ctor.";
-
-			validatingReceiveLocationBindingMock.Verify(m => m.Validate(), Times.Once);
-		}
-
-		[Fact]
 		public void EnvironmentOverridesAreAppliedForGivenEnvironment()
 		{
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			receiveLocationMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			receiveLocationMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -79,32 +64,39 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receiveLocationMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Never(), ItExpr.IsAny<string>());
 		}
 
-		[Fact]
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToReceivePipeline()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var receivePipelineMock = new Mock<ReceivePipeline<XMLReceive>> { CallBase = true };
 
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 			receiveLocationMock.Object.ReceivePipeline = receivePipelineMock.Object;
 
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
-		[Fact]
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
 		public void ForwardsApplyEnvironmentOverridesToSendPipeline()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var sendPipelineMock = new Mock<SendPipeline<XMLTransmit>> { CallBase = true };
 
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 			receiveLocationMock.Object.SendPipeline = sendPipelineMock.Object;
 
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ForwardsApplyEnvironmentOverridesToTransport()
 		{
@@ -116,34 +108,37 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receiveLocationMock.Object.Transport.Host = "Host";
 			receiveLocationMock.Object.Transport.Adapter = adapterMock.Object;
 
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
 			// indirectly verifies that ReceiveLocationBase forwards ApplyEnvironmentOverrides() call to Transport, which forwards it to its adapter
-			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void NameIsMandatory()
 		{
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 			receiveLocationMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Receive Location's Name is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ReceivePipelineIsMandatory()
 		{
 			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
 			receiveLocationMock.Object.Name = "Receive Location Name";
 
-			Action(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receiveLocationMock.Object).Validate())
 				.Should().Throw<BindingException>()
-				.WithMessage("Receive Location's Receive Pipeline is not defined.");
+				.WithMessage("[Receive Location Name] Receive Location's Receive Pipeline is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportINamingConvention()
 		{
@@ -155,9 +150,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var receiveLocationMock = new Mock<ReceiveLocationBase<object>> { CallBase = true };
 			receiveLocationMock.Object.Name = conventionMock.Object;
 
-			((ISupportNamingConvention) receiveLocationMock.Object).Name.Should().Be(name);
+			receiveLocationMock.Object.ResolveName().Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportStringNamingConvention()
 		{
@@ -166,12 +162,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			receiveLocationMock.Object.Name = name;
 
-			((ISupportNamingConvention) receiveLocationMock.Object).Name.Should().Be(name);
+			receiveLocationMock.Object.ResolveName().Should().Be(name);
 		}
 
-		[Fact]
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
 		public void TransportIsValidated()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var adapterMock = new Mock<IInboundAdapter>();
 			var validatingAdapterMock = adapterMock.As<ISupportValidation>();
 

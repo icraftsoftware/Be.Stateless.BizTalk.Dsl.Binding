@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	internal class ReceiveLocationCollection<TNamingConvention>
 		: List<IReceiveLocation<TNamingConvention>>,
 			IReceiveLocationCollection<TNamingConvention>,
+			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
 	{
@@ -57,11 +58,21 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#endregion
 
+		#region ISupportValidation Members
+
+		void ISupportValidation.Validate()
+		{
+			this.Cast<ISupportValidation>().ForEach(rl => rl.Validate());
+		}
+
+		#endregion
+
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
+		TVisitor IVisitable<IApplicationBindingVisitor>.Accept<TVisitor>(TVisitor visitor)
 		{
 			this.Cast<IVisitable<IApplicationBindingVisitor>>().ForEach(rl => rl.Accept(visitor));
+			return visitor;
 		}
 
 		#endregion

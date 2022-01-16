@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	public abstract class SendPortBase<TNamingConvention>
 		: ISendPort<TNamingConvention>,
 			ISupportEnvironmentOverride,
-			ISupportNamingConvention,
 			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
@@ -39,24 +38,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		protected internal SendPortBase()
 		{
 			Priority = Priority.Normal;
-			Transport = new SendPortTransport();
+			Transport = new(this);
+			BackupTransport = new(() => new(this));
 		}
 
 		protected internal SendPortBase(Action<ISendPort<TNamingConvention>> sendPortConfigurator) : this()
 		{
 			if (sendPortConfigurator == null) throw new ArgumentNullException(nameof(sendPortConfigurator));
 			sendPortConfigurator(this);
-			((ISupportValidation) this).Validate();
 		}
 
 		#region ISendPort<TNamingConvention> Members
 
 		public IApplicationBinding<TNamingConvention> ApplicationBinding { get; internal set; }
-
-		public SendPortTransport BackupTransport
-		{
-			get { return _backupTransport ??= new SendPortTransport(); }
-		}
 
 		public string Description { get; set; }
 
@@ -78,7 +72,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public bool StopSendingOnOrderedDeliveryFailure { get; set; }
 
-		public SendPortTransport Transport { get; }
+		public SendPortTransport<TNamingConvention> Transport { get; }
+
+		public Lazy<SendPortTransport<TNamingConvention>> BackupTransport { get; }
+
+		public string ResolveName()
+		{
+			return NamingConventionThunk.ComputeSendPortName(this);
+		}
 
 		#endregion
 
@@ -95,37 +96,30 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 				((ISupportEnvironmentOverride) ReceivePipeline)?.ApplyEnvironmentOverrides(environment);
 				((ISupportEnvironmentOverride) SendPipeline)?.ApplyEnvironmentOverrides(environment);
 				((ISupportEnvironmentOverride) Transport).ApplyEnvironmentOverrides(environment);
-				((ISupportEnvironmentOverride) _backupTransport)?.ApplyEnvironmentOverrides(environment);
+				if (BackupTransport.IsValueCreated) ((ISupportEnvironmentOverride) BackupTransport.Value).ApplyEnvironmentOverrides(environment);
 			}
 		}
 
 		#endregion
 
-		#region ISupportNamingConvention Members
-
-		string ISupportNamingConvention.Name => NamingConventionThunk.ComputeSendPortName(this);
-
-		#endregion
-
 		#region ISupportValidation Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Send Port's Name is not defined.");
-			if (SendPipeline == null) throw new BindingException("Send Port's Send Pipeline is not defined.");
-			Transport.Validate("Send Port's Primary Transport");
-			_backupTransport?.Validate("Send Port's Backup Transport");
+			if (SendPipeline == null) throw new BindingException($"[{ResolveName()}] Send Port's Send Pipeline is not defined.");
+			Transport.Validate($"[{ResolveName()}] Send Port's Primary Transport");
+			if (BackupTransport.IsValueCreated) BackupTransport.Value.Validate($"[{ResolveName()}] Send Port's Backup Transport");
 		}
 
 		#endregion
 
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		public void Accept(IApplicationBindingVisitor visitor)
+		TVisitor IVisitable<IApplicationBindingVisitor>.Accept<TVisitor>(TVisitor visitor)
 		{
-			if (visitor == null) throw new ArgumentNullException(nameof(visitor));
 			visitor.VisitSendPort(this);
+			return visitor;
 		}
 
 		#endregion
@@ -133,7 +127,5 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global", Justification = "Public DSL API.")]
 		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = "Public DSL API.")]
 		protected virtual void ApplyEnvironmentOverrides(string environment) { }
-
-		private SendPortTransport _backupTransport;
 	}
 }

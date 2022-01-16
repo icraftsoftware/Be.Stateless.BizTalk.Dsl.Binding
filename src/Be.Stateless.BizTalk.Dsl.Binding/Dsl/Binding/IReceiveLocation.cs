@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,8 +24,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	public interface IReceiveLocation : IFluentInterface { }
 
 	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public DSL API.")]
-	public interface IReceiveLocation<TNamingConvention> : IReceiveLocation, IObjectBinding<TNamingConvention> where TNamingConvention : class
+	public interface IReceiveLocation<TNamingConvention> : IReceiveLocation, IObjectBinding<TNamingConvention>
+		where TNamingConvention : class
 	{
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 		bool Enabled { get; set; }
 
 		ReceivePipeline ReceivePipeline { get; set; }
@@ -34,6 +36,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		SendPipeline SendPipeline { get; set; }
 
-		ReceiveLocationTransport Transport { get; }
+		ReceiveLocationTransport<TNamingConvention> Transport { get; }
 	}
 }

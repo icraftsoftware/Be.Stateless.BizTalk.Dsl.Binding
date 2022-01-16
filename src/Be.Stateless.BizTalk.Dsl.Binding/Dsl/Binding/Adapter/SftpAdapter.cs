@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 #endregion
 
-using System;
+extern alias ExplorerOM;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Microsoft.BizTalk.Component.Interop;
@@ -29,27 +29,26 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static SftpAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("f75aeff5-ebc7-4e7c-a753-fdd68ab45c95"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("f75aeff5-ebc7-4e7c-a753-fdd68ab45c95"));
 		}
 
 		protected SftpAdapter() : base(_protocolType)
 		{
-			_adapterConfig = new TConfig();
+			AdapterConfig = new();
 		}
 
 		#region Base Class Member Overrides
 
 		protected override void Save(IPropertyBag propertyBag)
 		{
-			_adapterConfig.Save(propertyBag as Microsoft.BizTalk.ExplorerOM.IPropertyBag);
+			AdapterConfig.Save(propertyBag as ExplorerOM::Microsoft.BizTalk.ExplorerOM.IPropertyBag);
 		}
 
 		#endregion
 
+		protected TConfig AdapterConfig { get; }
+
 		[SuppressMessage("ReSharper", "StaticMemberInGenericType")]
 		private static readonly ProtocolType _protocolType;
-
-		[SuppressMessage("Design", "CA1051:Do not declare visible instance fields")]
-		protected readonly TConfig _adapterConfig;
 	}
 }

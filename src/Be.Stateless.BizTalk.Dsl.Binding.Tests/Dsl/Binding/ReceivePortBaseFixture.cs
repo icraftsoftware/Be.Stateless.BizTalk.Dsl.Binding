@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,14 +16,16 @@
 
 #endregion
 
-using System;
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dsl.Pipeline;
+using Be.Stateless.BizTalk.Install;
+using Be.Stateless.Reflection;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -32,33 +34,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		[Fact]
 		public void AcceptsAndPropagatesVisitor()
 		{
+			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = false };
 			var receivePortMock = new Mock<ReceivePortBase<string>> { CallBase = true };
-
-			var receiveLocationCollectionMock = new Mock<ReceiveLocationCollection<string>>(receivePortMock.Object) { CallBase = false };
-			var visitableReceiveLocationCollectionMock = receiveLocationCollectionMock.As<IVisitable<IApplicationBindingVisitor>>();
-			Reflection.Reflector.SetField(receivePortMock.Object, "_receiveLocations", receiveLocationCollectionMock.Object);
-
+			receivePortMock.Object.ReceiveLocations.Add(receiveLocationMock.Object);
 			var visitorMock = new Mock<IApplicationBindingVisitor>();
 
 			((IVisitable<IApplicationBindingVisitor>) receivePortMock.Object).Accept(visitorMock.Object);
 
 			visitorMock.Verify(m => m.VisitReceivePort(receivePortMock.Object), Times.Once);
-			visitableReceiveLocationCollectionMock.Verify(m => m.Accept(visitorMock.Object), Times.Once);
-		}
-
-		[Fact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
-		{
-			var receivePortMock = new Mock<ReceivePortBase<string>>(
-				(Action<IReceivePort<string>>) (rp => {
-					rp.Name = "Receive Port Name";
-					rp.ReceiveLocations.Add(new Mock<ReceiveLocationBase<string>>().Object);
-				})) { CallBase = true };
-			var validatingReceivePortMock = receivePortMock.As<ISupportValidation>();
-
-			receivePortMock.Object.Description = "Force Moq to call ctor.";
-
-			validatingReceivePortMock.Verify(m => m.Validate(), Times.Once);
+			visitorMock.Verify(m => m.VisitReceiveLocation(receiveLocationMock.Object), Times.Once);
 		}
 
 		[Fact]
@@ -66,9 +50,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var receivePortMock = new Mock<ReceivePortBase<string>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) receivePortMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) receivePortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			receivePortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			receivePortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -81,6 +65,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePortMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Never(), ItExpr.IsAny<string>());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void NameIsMandatory()
 		{
@@ -88,11 +73,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			receivePortMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) receivePortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receivePortMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Receive Port's Name is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ReceiveLocationIsMandatory()
 		{
@@ -100,11 +86,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			receivePortMock.Object.Name = "Receive Port Name";
 
-			Action(() => ((ISupportValidation) receivePortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receivePortMock.Object).Validate())
 				.Should().Throw<BindingException>()
-				.WithMessage("Receive Port has no Receive Locations.");
+				.WithMessage("[Receive Port Name] Receive Port's Receive Locations are not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void ReceivePortCannotMixOneWayAndTwoWayReceiveLocations()
 		{
@@ -119,11 +106,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePortMock.Object.Name = "Receive Port Name";
 			receivePortMock.Object.ReceiveLocations.Add(rl1.Object, rl2.Object);
 
-			Action(() => ((ISupportValidation) receivePortMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) receivePortMock.Object).Validate())
 				.Should().Throw<BindingException>()
-				.WithMessage("Receive Port has a mix of one-way and two-way Receive Locations.");
+				.WithMessage("[Receive Port Name] Receive Port defines a mix of one-way and two-way Receive Locations.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportINamingConvention()
 		{
@@ -135,9 +123,28 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var receivePortMock = new Mock<ReceivePortBase<object>> { CallBase = true };
 			receivePortMock.Object.Name = conventionMock.Object;
 
-			((ISupportNamingConvention) receivePortMock.Object).Name.Should().Be(name);
+			receivePortMock.Object.ResolveName().Should().Be(name);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[Fact]
+		public void SupportsAndPropagatesISupportValidation()
+		{
+			var receivePortMock = new Mock<ReceivePortBase<string>> { CallBase = true };
+			receivePortMock.Object.Name = "Receive Port Name";
+			receivePortMock.As<ISupportValidation>();
+
+			var receiveLocationCollectionMock = new Mock<ReceiveLocationCollection<string>>(receivePortMock.Object);
+			receiveLocationCollectionMock.As<ISupportValidation>();
+			receiveLocationCollectionMock.Object.Add(new Mock<IReceiveLocation<string>>().Object);
+			Reflector.SetField(receivePortMock.Object, "_receiveLocations", receiveLocationCollectionMock.Object);
+
+			((ISupportValidation) receivePortMock.Object).Validate();
+
+			receiveLocationCollectionMock.As<ISupportValidation>().Verify(m => m.Validate(), Times.Once);
+		}
+
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void SupportStringNamingConvention()
 		{
@@ -146,7 +153,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 			receivePortMock.Object.Name = name;
 
-			((ISupportNamingConvention) receivePortMock.Object).Name.Should().Be(name);
+			receivePortMock.Object.ResolveName().Should().Be(name);
 		}
 	}
 }

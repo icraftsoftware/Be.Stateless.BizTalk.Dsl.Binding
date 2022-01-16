@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,23 +16,32 @@
 
 #endregion
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
+using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
+using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
-	public sealed class SendPortTransport : TransportBase<IOutboundAdapter>
+	public sealed class SendPortTransport<TNamingConvention> : TransportBase<IOutboundAdapter>
+		where TNamingConvention : class
 	{
 		#region Nested Type: UnknownOutboundAdapter
 
-		internal class UnknownOutboundAdapter : UnknownAdapter, IOutboundAdapter
+		private class UnknownOutboundAdapter : UnknownAdapter, IOutboundAdapter
 		{
 			public static readonly IOutboundAdapter Instance = new UnknownOutboundAdapter();
 		}
 
 		#endregion
 
-		public SendPortTransport()
+		public SendPortTransport(ISendPort<TNamingConvention> sendPort) : this()
+		{
+			SendPort = sendPort ?? throw new ArgumentNullException(nameof(sendPort));
+		}
+
+		private SendPortTransport()
 		{
 			Adapter = UnknownOutboundAdapter.Instance;
 			RetryPolicy = RetryPolicy.Default;
@@ -48,9 +57,20 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			(ServiceWindow as ISupportEnvironmentOverride)?.ApplyEnvironmentOverrides(environment);
 		}
 
+		public override string ResolveHost()
+		{
+			var name = Host?.ResolveHost(this);
+			if (name.IsNullOrEmpty())
+				throw new BindingException(
+					$"{(ReferenceEquals(SendPort.Transport, this) ? "Primary" : "Backup")} Transport's Host could not be resolved for SendPort '{SendPort.ResolveName()}'.");
+			return name;
+		}
+
 		#endregion
 
 		public RetryPolicy RetryPolicy { get; set; }
+
+		public ISendPort<TNamingConvention> SendPort { get; }
 
 		/// <summary>
 		/// <see cref="ServiceWindow"/> restricts the <see cref="SendPortBase{TNamingConvention}"/> to work during certain hours

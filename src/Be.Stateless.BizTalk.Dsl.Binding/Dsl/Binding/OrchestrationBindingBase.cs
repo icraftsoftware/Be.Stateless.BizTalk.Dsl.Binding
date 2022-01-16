@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	public abstract class OrchestrationBindingBase<T>
 		: IOrchestrationBinding,
 			ISupportEnvironmentOverride,
-			ISupportNamingConvention,
 			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where T : BTXService
@@ -52,7 +51,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			#region IOrchestrationPortBinding Members
 
 			// unbound ports, (i.e. GetActualPort() returning null) have been caught by OrchestrationBindingBase<T>'s ISupportValidation.Validate()
-			public string ActualPortName => ((ISupportNamingConvention) _orchestrationBinding.GetActualPort(_logicalPort.Name)).Name;
+			public string ActualPortName => _orchestrationBinding.GetActualPort(_logicalPort.Name).ResolveName();
 
 			public bool IsInbound => _logicalPort.Polarity == Polarity.implements;
 
@@ -70,19 +69,29 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public IApplicationBinding ApplicationBinding { get; set; }
 
-		// TODO ?? fetch <om:Property Name='AnalystComments' from <om:Element Type='ServiceDeclaration' ??
 		public string Description { get; set; }
 
-		public string Host { get; set; }
+		public HostResolutionPolicy Host { get; set; }
 
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		public Type Type => typeof(T);
 
-		[SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		public IOrchestrationPortBinding[] PortBindings => LogicalPorts.Select(lp => new PortBindingInfo(this, lp)).Cast<IOrchestrationPortBinding>().ToArray();
 
 		public ServiceState State { get; set; }
+
+		public string ResolveHost()
+		{
+			var name = Host?.ResolveHost(this);
+			if (name.IsNullOrEmpty()) throw new BindingException($"Host could not be resolved for Orchestration '{ResolveName()}'.");
+			return name;
+		}
+
+		public string ResolveName()
+		{
+			return typeof(T).FullName;
+		}
 
 		#endregion
 
@@ -98,20 +107,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#endregion
 
-		#region ISupportNamingConvention Members
-
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		string ISupportNamingConvention.Name => typeof(T).FullName;
-
-		#endregion
-
 		#region ISupportValidation Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		[SuppressMessage("ReSharper", "CommentTypo")]
+		[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
 		void ISupportValidation.Validate()
 		{
-			if (Host.IsNullOrEmpty()) throw new BindingException("Orchestration's Host is not defined.");
+			if (Host == null) throw new BindingException("Orchestration's Host is not defined.");
 
 			// validate that all logical ports are bound
 			var unboundPorts = LogicalPorts
@@ -140,10 +142,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 				if (isLogicalPortTwoWay && !isActualPortTwoWay)
 					throw new BindingException(
-						$"Orchestration's two-way logical port '{logicalPort.Name}' is bound to one-way port '{((ISupportNamingConvention) actualPort).Name}'.");
+						$"Orchestration's two-way logical port '{logicalPort.Name}' is bound to one-way port '{actualPort.ResolveName()}'.");
 				if (!isLogicalPortTwoWay && isActualPortTwoWay)
 					throw new BindingException(
-						$"Orchestration's one-way logical port '{logicalPort.Name}' is bound to two-way port '{((ISupportNamingConvention) actualPort).Name}'.");
+						$"Orchestration's one-way logical port '{logicalPort.Name}' is bound to two-way port '{actualPort.ResolveName()}'.");
 			}
 		}
 
@@ -151,10 +153,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
+		TVisitor IVisitable<IApplicationBindingVisitor>.Accept<TVisitor>(TVisitor visitor)
 		{
 			visitor.VisitOrchestration(this);
+			return visitor;
 		}
 
 		#endregion
@@ -163,7 +165,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			get
 			{
-				// TODO ensure we get private types as well
 				// see also https://docs.microsoft.com/en-us/dotnet/api/system.web.services.description.operationflow
 				return ((PortInfo[]) Reflector.GetField(typeof(T), "_portInfo"))
 					// filter out direct ports
@@ -171,12 +172,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			}
 		}
 
-		private object GetActualPort(string name)
+		private ISupportNameResolution GetActualPort(string name)
 		{
 			var portBindingType = GetType().GetInterfaces().SingleOrDefault(i => i.Namespace == GetType().Namespace) ?? GetType();
 			var portProperty = portBindingType.GetProperty(name);
 			var port = portProperty!.GetValue(this);
-			return port;
+			return (ISupportNameResolution) port;
 		}
 
 		[SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global", Justification = "Public DSL API.")]

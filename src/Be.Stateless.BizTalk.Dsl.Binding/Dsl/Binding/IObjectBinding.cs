@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,9 +16,12 @@
 
 #endregion
 
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
-	public interface IObjectBinding<TNamingConvention> : IFluentInterface where TNamingConvention : class
+	public interface IObjectBinding<TNamingConvention> : ISupportNameResolution
+		where TNamingConvention : class
 	{
 		string Description { get; set; }
 

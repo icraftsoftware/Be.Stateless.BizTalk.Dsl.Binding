@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,19 +25,22 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 using CustomBindingElement = Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration.CustomBindingElement;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfCustomAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeCustomBindingToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<CustomBindingElement>(
 				a => {
 					a.OpenTimeout = TimeSpan.FromMinutes(33);
@@ -78,13 +81,15 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</CustomProps>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<NetTcpBindingElement>(
 				a => {
 					const int tenMegaBytes = 1024 * 1024 * 10;
-					a.Address = new EndpointAddress("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Binding.MaxReceivedMessageSize = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxArrayLength = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxStringContentLength = tenMegaBytes;
@@ -122,12 +127,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateCustomBasicHttpBindingWithTransportSecurity()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<BasicHttpBindingElement>(
 				a => {
-					a.Address = new EndpointAddress("https://services.stateless.be/soap/default");
+					a.Address = new("https://services.stateless.be/soap/default");
 					a.Binding.Security.Mode = BasicHttpSecurityMode.Transport;
 					a.Binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Certificate;
 					a.EndpointBehaviors = new[] {
@@ -146,29 +153,33 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 						X509FindType.FindBySubjectDistinguishedName,
 						"*.services.party.be");
 				});
-			Action(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateCustomBinding()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<CustomBindingElement>(
 				a => {
-					a.Address = new EndpointAddress("https://localhost/biztalk.factory/service.svc");
+					a.Address = new("https://localhost/biztalk.factory/service.svc");
 					a.Binding.Add(
 						new MtomMessageEncodingElement { MessageVersion = MessageVersion.Soap11 },
 						new HttpsTransportElement { RequireClientCertificate = true });
 				});
-			Action(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wca = new WcfCustomAdapter.Outbound<NetTcpBindingElement>(
 				a => {
 					const int tenMegaBytes = 1024 * 1024 * 10;
-					a.Address = new EndpointAddress("net.tcp://localhost/biztalk.factory/service.svc");
+					a.Address = new("net.tcp://localhost/biztalk.factory/service.svc");
 					a.Binding.MaxReceivedMessageSize = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxArrayLength = tenMegaBytes;
 					a.Binding.ReaderQuotas.MaxStringContentLength = tenMegaBytes;
@@ -178,7 +189,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.StaticAction = "http://services.biztalk.net/mail/2011/11/IMailService/SendMessage";
 				});
 
-			Action(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wca).Validate()).Should().NotThrow();
 		}
 	}
 }

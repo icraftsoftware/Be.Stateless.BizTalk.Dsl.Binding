@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 	[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public DSL API.")]
-	public interface IReceiveLocationCollection<TNamingConvention> : IFluentInterface, IEnumerable<IReceiveLocation<TNamingConvention>> where TNamingConvention : class
+	public interface IReceiveLocationCollection<TNamingConvention> : IFluentInterface, IEnumerable<IReceiveLocation<TNamingConvention>>
+		where TNamingConvention : class
 	{
 		IReceiveLocationCollection<TNamingConvention> Add(IReceiveLocation<TNamingConvention> receiveLocation);
 

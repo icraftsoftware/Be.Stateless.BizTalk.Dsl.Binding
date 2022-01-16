@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Convention
 {
-	public interface INamingConvention<TNamingConvention> where TNamingConvention : class
+	public interface INamingConvention<TNamingConvention>
+		where TNamingConvention : class
 	{
 		string ComputeApplicationName(IApplicationBinding<TNamingConvention> application);
 

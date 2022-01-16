@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
@@ -38,7 +37,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfCustomAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("af081f69-38ca-4d5b-87df-f0344b12557a"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("af081f69-38ca-4d5b-87df-f0344b12557a"));
 		}
 
 		protected WcfCustomAdapter() : base(_protocolType) { }

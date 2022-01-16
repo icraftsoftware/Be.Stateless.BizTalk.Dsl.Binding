@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	{
 		protected internal ApplicationBindingBase()
 		{
-			_referencedApplications = new ReferencedApplicationBindingCollection();
-			_receivePorts = new ReceivePortCollection<TNamingConvention>(this);
-			_sendPorts = new SendPortCollection<TNamingConvention>(this);
-			_orchestrations = new OrchestrationBindingCollection<TNamingConvention>(this);
+			_referencedApplications = new();
+			_receivePorts = new(this);
+			_sendPorts = new(this);
+			_orchestrations = new(this);
 			Timestamp = DateTime.Now;
 		}
 
@@ -64,35 +64,34 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		public DateTime Timestamp { get; internal set; }
 
+		public string ResolveName()
+		{
+			return NamingConventionThunk.ComputeApplicationName(this);
+		}
+
 		#endregion
 
 		#region IApplicationBindingArtifactLookup Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		IApplicationBindingArtifactLookup IApplicationBindingArtifactLookup.ReferencedApplication<T>()
 		{
 			return ReferencedApplications.OfType<T>().Single();
 		}
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		ISupportNamingConvention IApplicationBindingArtifactLookup.ReceiveLocation<T>()
+		ISupportNameResolution IApplicationBindingArtifactLookup.ReceiveLocation<T>()
 		{
 			return ReceivePorts.Select(rp => rp.ReceiveLocations).SelectMany(rl => rl).OfType<T>().Single();
 		}
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		ISupportNamingConvention IApplicationBindingArtifactLookup.ReceivePort<T>()
+		ISupportNameResolution IApplicationBindingArtifactLookup.ReceivePort<T>()
 		{
 			return ReceivePorts.OfType<T>().Single();
 		}
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		ISupportNamingConvention IApplicationBindingArtifactLookup.SendPort<T>()
+		ISupportNameResolution IApplicationBindingArtifactLookup.SendPort<T>()
 		{
 			return SendPorts.OfType<T>().Single();
 		}
-
-		string ISupportNamingConvention.Name => NamingConventionThunk.ComputeApplicationName(this);
 
 		#endregion
 
@@ -107,24 +106,26 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		#region ISupportValidation Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Application's Name is not defined.");
+			((ISupportValidation) _referencedApplications).Validate();
+			((ISupportValidation) _receivePorts).Validate();
+			((ISupportValidation) _sendPorts).Validate();
+			((ISupportValidation) _orchestrations).Validate();
 		}
 
 		#endregion
 
 		#region IVisitable<IApplicationBindingVisitor> Members
 
-		[SuppressMessage("Design", "CA1033:Interface methods should be callable by child types")]
-		void IVisitable<IApplicationBindingVisitor>.Accept(IApplicationBindingVisitor visitor)
+		TVisitor IVisitable<IApplicationBindingVisitor>.Accept<TVisitor>(TVisitor visitor)
 		{
 			((IVisitable<IApplicationBindingVisitor>) _referencedApplications).Accept(visitor);
 			visitor.VisitApplicationBinding(this);
 			((IVisitable<IApplicationBindingVisitor>) _receivePorts).Accept(visitor);
 			((IVisitable<IApplicationBindingVisitor>) _sendPorts).Accept(visitor);
-			((IVisitable<IApplicationBindingVisitor>) _orchestrations).Accept(visitor);
+			return ((IVisitable<IApplicationBindingVisitor>) _orchestrations).Accept(visitor);
 		}
 
 		#endregion

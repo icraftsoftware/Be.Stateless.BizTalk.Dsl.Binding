@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 
 		#endregion
 
-		private XmlWriterSettings XmlWriterSettings => new XmlWriterSettings { Indent = false, Encoding = Encoding.UTF8, OmitXmlDeclaration = true };
+		private XmlWriterSettings XmlWriterSettings => new() { Indent = false, Encoding = Encoding.UTF8, OmitXmlDeclaration = true };
 
 		[SuppressMessage("ReSharper", "InvertIf")]
 		private void Serialize(XmlWriter writer)
@@ -87,34 +87,29 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 
 		private Document CreatePipelineDocument()
 		{
-			var visitor = new PipelineBindingDocumentBuilderVisitor();
-			_pipeline.Accept(visitor);
-			var document = visitor.Document;
-
+			var document = _pipeline.Accept(new PipelineBindingDocumentBuilder()).Document;
 			// compact binding, i.e. get rid of not-configured stages, i.e. stages without component or stages for which none
 			// of its components' default configuration has been overridden
 			document.Stages.Cast<Stage>()
 				.Where(s => s.Components.Count == 0 || s.Components.Cast<ComponentBinding>().All(c => c.Properties.Count == 0))
 				.ToArray()
 				.ForEach(s => document.Stages.Remove(s));
-
 			return document.Stages.Count == 0 ? null : document;
 		}
 
-		[SuppressMessage("Performance", "CA1822:Mark members as static")]
 		private XmlSerializer CreateXmlSerializer()
 		{
 			var overrides = new XmlAttributeOverrides();
 
-			overrides.Add<Document>(new XmlAttributes { XmlType = new XmlTypeAttribute("Root") });
+			overrides.Add<Document>(new() { XmlType = new("Root") });
 			overrides.Ignore<Document>(d => d.Description);
 			overrides.Ignore<Document>(d => d.MajorVersion);
 			overrides.Ignore<Document>(d => d.MinorVersion);
 			overrides.Ignore<Document>(d => d.PolicyFilePath);
 
-			overrides.Add<Stage>(s => s.Components, new XmlAttributes { XmlArrayItems = { new XmlArrayItemAttribute("Component", typeof(ComponentBinding)) } });
+			overrides.Add<Stage>(s => s.Components, new() { XmlArrayItems = { new XmlArrayItemAttribute("Component", typeof(ComponentBinding)) } });
 
-			overrides.Add<ComponentInfo>(ci => ci.QualifiedNameOrClassId, new XmlAttributes { XmlAttribute = new XmlAttributeAttribute("Name") });
+			overrides.Add<ComponentInfo>(ci => ci.QualifiedNameOrClassId, new() { XmlAttribute = new("Name") });
 			overrides.Ignore<ComponentInfo>(ci => ci.CachedDisplayName);
 			overrides.Ignore<ComponentInfo>(ci => ci.CachedIsManaged);
 			overrides.Ignore<ComponentInfo>(ci => ci.ComponentName);

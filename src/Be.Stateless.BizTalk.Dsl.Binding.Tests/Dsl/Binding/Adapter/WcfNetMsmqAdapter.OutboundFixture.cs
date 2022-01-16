@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,21 +22,24 @@ using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfNetMsmqAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var nma = new WcfNetMsmqAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Address = new("net.msmq://localhost/private/service_queue");
 					a.Identity = EndpointIdentityFactory.CreateCertificateIdentity(
 						StoreLocation.LocalMachine,
 						StoreName.TrustedPeople,
@@ -89,12 +92,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var nma = new WcfNetMsmqAdapter.Outbound(
 				a => {
-					a.Address = new EndpointAddress("net.msmq://localhost/private/service_queue");
+					a.Address = new("net.msmq://localhost/private/service_queue");
 					a.SecurityMode = NetMsmqSecurityMode.Message;
 					a.UseSourceJournal = true;
 					a.DeadLetterQueue = DeadLetterQueue.Custom;
@@ -102,7 +107,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.StaticAction = "http://biztalk.stateless.be/action";
 				});
 
-			Action(() => ((ISupportValidation) nma).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) nma).Validate()).Should().NotThrow();
 		}
 	}
 }

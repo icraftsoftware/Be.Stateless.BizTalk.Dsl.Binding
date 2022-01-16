@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,20 +21,23 @@ using System.ServiceModel;
 using System.Text;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfBasicHttpAdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var bha = new WcfBasicHttpAdapter.Inbound(
 				a => {
-					a.Address = new Uri("/biztalk.factory/service.svc", UriKind.Relative);
+					a.Address = new("/biztalk.factory/service.svc", UriKind.Relative);
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.MessageClientCredentialType = BasicHttpMessageCredentialType.Certificate;
 					a.SecurityMode = BasicHttpSecurityMode.Message;
@@ -71,19 +74,21 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var bha = new WcfBasicHttpAdapter.Inbound(
 				a => {
-					a.Address = new Uri("/biztalk.factory/service.svc", UriKind.Relative);
+					a.Address = new("/biztalk.factory/service.svc", UriKind.Relative);
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("service_spn");
 					a.MessageClientCredentialType = BasicHttpMessageCredentialType.Certificate;
 					a.SecurityMode = BasicHttpSecurityMode.Message;
 					a.TextEncoding = Encoding.Unicode;
 				});
 
-			Action(() => ((ISupportValidation) bha).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) bha).Validate()).Should().NotThrow();
 		}
 	}
 }

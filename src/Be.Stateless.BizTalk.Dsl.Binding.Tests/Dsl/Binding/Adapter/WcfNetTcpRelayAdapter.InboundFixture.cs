@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,24 +18,26 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.ServiceModel;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfNetTcpRelayAdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wnt = new WcfNetTcpRelayAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("sb://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("sb://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.MaxConcurrentCalls = 201;
 					a.MaxReceivedMessageSize = 64512;
@@ -43,7 +45,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.SuspendRequestMessageOnFailure = true;
 					a.IncludeExceptionDetailInFaults = true;
 
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
@@ -88,23 +90,27 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				;
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void Validate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wnt = new WcfNetTcpRelayAdapter.Inbound(
-				a => { a.Address = new EndpointAddress("https://biztalk.factory.servicebus.windows.net/batch-queue"); });
-			Action(() => ((ISupportValidation) wnt).Validate())
+				a => { a.Address = new("https://biztalk.factory.servicebus.windows.net/batch-queue"); });
+			Invoking(() => ((ISupportValidation) wnt).Validate())
 				.Should().Throw<ArgumentException>()
 				.WithInnerException<ArgumentException>()
 				.WithMessage("Invalid address scheme; expecting \"sb\" scheme.*");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wnt = new WcfNetTcpRelayAdapter.Inbound(
 				a => {
-					a.Address = new EndpointAddress("sb://biztalk.factory.servicebus.windows.net/batch-queue");
+					a.Address = new("sb://biztalk.factory.servicebus.windows.net/batch-queue");
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.MaxConcurrentCalls = 201;
 					a.MaxReceivedMessageSize = 64512;
@@ -112,7 +118,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.SuspendRequestMessageOnFailure = true;
 					a.IncludeExceptionDetailInFaults = true;
 
-					a.StsUri = new Uri("https://biztalk.factory-sb.accesscontrol.windows.net/");
+					a.StsUri = new("https://biztalk.factory-sb.accesscontrol.windows.net/");
 					a.IssuerName = "issuer_name";
 					a.IssuerSecret = "issuer_secret";
 
@@ -120,7 +126,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ServiceDisplayName = "display_name";
 				});
 
-			Action(() => ((ISupportValidation) wnt).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wnt).Validate()).Should().NotThrow();
 		}
 	}
 }

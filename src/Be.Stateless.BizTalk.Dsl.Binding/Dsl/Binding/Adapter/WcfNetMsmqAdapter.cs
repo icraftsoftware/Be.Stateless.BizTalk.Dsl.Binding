@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Security;
 using System.ServiceModel;
@@ -44,7 +43,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfNetMsmqAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("36f48beb-64aa-4c80-b396-1f2ba53bed84"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("36f48beb-64aa-4c80-b396-1f2ba53bed84"));
 		}
 
 		protected WcfNetMsmqAdapter() : base(_protocolType)
@@ -84,8 +83,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MessageCredentialType MessageClientCredentialType
 		{
-			get => _adapterConfig.MessageClientCredentialType;
-			set => _adapterConfig.MessageClientCredentialType = value;
+			get => AdapterConfig.MessageClientCredentialType;
+			set => AdapterConfig.MessageClientCredentialType = value;
 		}
 
 		/// <summary>
@@ -105,8 +104,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public SecurityAlgorithmSuiteValue AlgorithmSuite
 		{
-			get => _adapterConfig.AlgorithmSuite;
-			set => _adapterConfig.AlgorithmSuite = value;
+			get => AdapterConfig.AlgorithmSuite;
+			set => AdapterConfig.AlgorithmSuite = value;
 		}
 
 		#endregion
@@ -129,8 +128,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public NetMsmqSecurityMode SecurityMode
 		{
-			get => _adapterConfig.SecurityMode;
-			set => _adapterConfig.SecurityMode = value;
+			get => AdapterConfig.SecurityMode;
+			set => AdapterConfig.SecurityMode = value;
 		}
 
 		/// <summary>
@@ -149,8 +148,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MsmqAuthenticationMode MsmqAuthenticationMode
 		{
-			get => _adapterConfig.MsmqAuthenticationMode;
-			set => _adapterConfig.MsmqAuthenticationMode = value;
+			get => AdapterConfig.MsmqAuthenticationMode;
+			set => AdapterConfig.MsmqAuthenticationMode = value;
 		}
 
 		/// <summary>
@@ -178,8 +177,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public ProtectionLevel MsmqProtectionLevel
 		{
-			get => _adapterConfig.MsmqProtectionLevel;
-			set => _adapterConfig.MsmqProtectionLevel = value;
+			get => AdapterConfig.MsmqProtectionLevel;
+			set => AdapterConfig.MsmqProtectionLevel = value;
 		}
 
 		/// <summary>
@@ -191,8 +190,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MsmqSecureHashAlgorithm MsmqSecureHashAlgorithm
 		{
-			get => _adapterConfig.MsmqSecureHashAlgorithm;
-			set => _adapterConfig.MsmqSecureHashAlgorithm = value;
+			get => AdapterConfig.MsmqSecureHashAlgorithm;
+			set => AdapterConfig.MsmqSecureHashAlgorithm = value;
 		}
 
 		/// <summary>
@@ -205,8 +204,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public MsmqEncryptionAlgorithm MsmqEncryptionAlgorithm
 		{
-			get => _adapterConfig.MsmqEncryptionAlgorithm;
-			set => _adapterConfig.MsmqEncryptionAlgorithm = value;
+			get => AdapterConfig.MsmqEncryptionAlgorithm;
+			set => AdapterConfig.MsmqEncryptionAlgorithm = value;
 		}
 
 		#endregion
@@ -215,8 +214,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public string ServiceCertificate
 		{
-			get => _adapterConfig.ServiceCertificate;
-			set => _adapterConfig.ServiceCertificate = value;
+			get => AdapterConfig.ServiceCertificate;
+			set => AdapterConfig.ServiceCertificate = value;
 		}
 
 		#endregion
@@ -242,8 +241,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public bool EnableTransaction
 		{
-			get => _adapterConfig.EnableTransaction;
-			set => _adapterConfig.EnableTransaction = value;
+			get => AdapterConfig.EnableTransaction;
+			set => AdapterConfig.EnableTransaction = value;
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,14 +16,12 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Deployment.Binding;
@@ -53,7 +51,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 	{
 		static WcfWebHttpAdapter()
 		{
-			_protocolType = GetProtocolTypeFromConfigurationClassId(new Guid("e5b2de81-de67-4559-869b-20925949a1e0"));
+			_protocolType = GetProtocolTypeFromConfigurationClassId(new("e5b2de81-de67-4559-869b-20925949a1e0"));
 		}
 
 		protected WcfWebHttpAdapter() : base(_protocolType)
@@ -90,8 +88,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public int MaxReceivedMessageSize
 		{
-			get => _adapterConfig.MaxReceivedMessageSize;
-			set => _adapterConfig.MaxReceivedMessageSize = value;
+			get => AdapterConfig.MaxReceivedMessageSize;
+			set => AdapterConfig.MaxReceivedMessageSize = value;
 		}
 
 		#endregion
@@ -127,8 +125,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public Microsoft.BizTalk.Adapter.Wcf.Config.WebHttpSecurityMode SecurityMode
 		{
-			get => _adapterConfig.SecurityMode;
-			set => _adapterConfig.SecurityMode = value;
+			get => AdapterConfig.SecurityMode;
+			set => AdapterConfig.SecurityMode = value;
 		}
 
 		#endregion
@@ -137,8 +135,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		public string ServiceCertificate
 		{
-			get => _adapterConfig.ServiceCertificate;
-			set => _adapterConfig.ServiceCertificate = value;
+			get => AdapterConfig.ServiceCertificate;
+			set => AdapterConfig.ServiceCertificate = value;
 		}
 
 		#endregion
@@ -196,8 +194,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </remarks>
 		public HttpClientCredentialType TransportClientCredentialType
 		{
-			get => _adapterConfig.TransportClientCredentialType;
-			set => _adapterConfig.TransportClientCredentialType = value;
+			get => AdapterConfig.TransportClientCredentialType;
+			set => AdapterConfig.TransportClientCredentialType = value;
 		}
 
 		#endregion
@@ -206,7 +204,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 		protected override void Save(IPropertyBag propertyBag)
 		{
-			_adapterConfig.EndpointBehaviorConfiguration = EndpointBehaviors.GetEndpointBehaviorElementXml();
+			AdapterConfig.EndpointBehaviorConfiguration = EndpointBehaviors.GetEndpointBehaviorElementXml();
 			base.Save(propertyBag);
 		}
 
@@ -219,8 +217,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </summary>
 		public string HttpHeaders
 		{
-			get => _adapterConfig.HttpHeaders;
-			set => _adapterConfig.HttpHeaders = value;
+			get => AdapterConfig.HttpHeaders;
+			set => AdapterConfig.HttpHeaders = value;
 		}
 
 		#endregion
@@ -260,13 +258,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// specify that using <see cref="VariableMapping"/>.
 		/// </para>
 		/// </remarks>
-		/// <seealso cref="Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata.HttpUrlMapping"/>
-		/// <seealso cref="HttpUrlMappingOperation"/>
-		[SuppressMessage("Design", "CA1056:URI-like properties should not be strings")]
+		/// <seealso cref="Be.Stateless.BizTalk.Adapter.Metadata.HttpUrlMapping"/>
+		/// <seealso cref="Be.Stateless.BizTalk.Adapter.Metadata.HttpUrlMappingOperation"/>
 		public string HttpUrlMapping
 		{
-			get => _adapterConfig.HttpMethodAndUrl;
-			set => _adapterConfig.HttpMethodAndUrl = value;
+			get => AdapterConfig.HttpMethodAndUrl;
+			set => AdapterConfig.HttpMethodAndUrl = value;
 		}
 
 		#endregion
@@ -282,12 +279,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// already defined/promoted this property as part of your solution. You must also provide the namespace for the property
 		/// in the Property Namespace field.
 		/// </remarks>
-		/// <seealso cref="Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata.HttpUrlMapping"/>
-		/// <seealso cref="HttpUrlMappingOperation"/>
+		/// <seealso cref="Be.Stateless.BizTalk.Adapter.Metadata.VariableMapping"/>
+		/// <seealso cref="Be.Stateless.BizTalk.Adapter.Metadata.VariablePropertyMapping"/>
 		public string VariableMapping
 		{
-			get => _adapterConfig.VariablePropertyMapping;
-			set => _adapterConfig.VariablePropertyMapping = value;
+			get => AdapterConfig.VariablePropertyMapping;
+			set => AdapterConfig.VariablePropertyMapping = value;
 		}
 
 		#endregion

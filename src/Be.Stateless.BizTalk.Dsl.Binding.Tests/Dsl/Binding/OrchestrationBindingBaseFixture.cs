@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,15 +17,17 @@
 #endregion
 
 using System;
-using System.Linq;
-using Be.Stateless.BizTalk.Dsl.Binding.CodeDom;
+using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.BizTalk.Dummies.Bindings;
+using Be.Stateless.BizTalk.Explorer;
+using Be.Stateless.BizTalk.Install;
 using Be.Stateless.BizTalk.Orchestrations.Bound;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -43,9 +45,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[Fact]
-		public void AutomaticallyValidatesOnConfiguratorAction()
+		public void AutomaticallyValidatesOnConfiguratorInvoking()
 		{
-			var orchestrationBindingMock = new Mock<ProcessOrchestrationBinding>((Action<IProcessOrchestrationBinding>) (o => { })) { CallBase = true };
+			var orchestrationBindingMock = new Mock<ProcessOrchestrationBinding>((Action<IProcessOrchestrationBinding>) (_ => { })) { CallBase = true };
 			var validatingOrchestrationBindingMock = orchestrationBindingMock.As<ISupportValidation>();
 			validatingOrchestrationBindingMock.Setup(o => o.Validate()).Verifiable();
 
@@ -54,13 +56,19 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			validatingOrchestrationBindingMock.Verify(m => m.Validate(), Times.Once);
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
-		public void DirectPortsHaveNoMatchingPropertyInGeneratedOrchestrationBinding()
+		public void DelegatesHostNameResolutionToHostResolutionPolicy()
 		{
-			var assembly = typeof(Process).CompileToDynamicAssembly();
-			var orchestrationBinding = assembly.CreateInstance($"{typeof(Process).FullName}OrchestrationBinding");
+			var sut = new Mock<HostResolutionPolicy> { CallBase = true };
 
-			orchestrationBinding!.GetType().GetProperties().Any(p => p.Name.StartsWith("Direct")).Should().BeFalse();
+			var orchestrationBindingMock = new Mock<OrchestrationBindingBase<Process>> { CallBase = true };
+			orchestrationBindingMock.Object.Host = sut.Object;
+
+			sut.Setup(p => p.ResolveHost(orchestrationBindingMock.Object)).Returns("name");
+			orchestrationBindingMock.Object.ResolveHost();
+
+			sut.Verify(p => p.ResolveHost(orchestrationBindingMock.Object));
 		}
 
 		[Fact]
@@ -68,9 +76,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var orchestrationBindingMock = new Mock<OrchestrationBindingBase<Process>> { CallBase = true };
 
-			((ISupportEnvironmentOverride) orchestrationBindingMock.Object).ApplyEnvironmentOverrides("ACC");
+			((ISupportEnvironmentOverride) orchestrationBindingMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			orchestrationBindingMock.Protected().Verify(nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides), Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			orchestrationBindingMock.Protected().Verify(
+				nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides),
+				Times.Once(),
+				ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
 		[Fact]
@@ -83,41 +94,46 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBindingMock.Protected().Verify(nameof(ISupportEnvironmentOverride.ApplyEnvironmentOverrides), Times.Never(), ItExpr.IsAny<string>());
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void HostIsMandatory()
 		{
 			var orchestrationBindingMock = new Mock<OrchestrationBindingBase<Process>> { CallBase = true };
 			orchestrationBindingMock.Object.Description = "Force Moq to call ctor.";
 
-			Action(() => ((ISupportValidation) orchestrationBindingMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBindingMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's Host is not defined.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void LogicalOneWayReceivePortMustBeBoundToOneWayReceivePort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			IProcessOrchestrationBinding orchestrationBinding = new ProcessOrchestrationBinding { Host = "Host" };
 			orchestrationBinding.ReceivePort = new TwoWayReceivePort();
 			orchestrationBinding.SendPort = new OneWaySendPort();
 			orchestrationBinding.SolicitResponsePort = new TwoWaySendPort();
 			orchestrationBinding.RequestResponsePort = new TwoWayReceivePort();
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's one-way logical port 'ReceivePort' is bound to two-way port 'TwoWayReceivePort'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void LogicalOneWaySendPortMustBeBoundToOneWaySendPort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			IProcessOrchestrationBinding orchestrationBinding = new ProcessOrchestrationBinding { Host = "Host" };
 			orchestrationBinding.ReceivePort = new OneWayReceivePort();
 			orchestrationBinding.SendPort = new TwoWaySendPort();
 			orchestrationBinding.SolicitResponsePort = new TwoWaySendPort();
 			orchestrationBinding.RequestResponsePort = new TwoWayReceivePort();
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's one-way logical port 'SendPort' is bound to two-way port 'TwoWaySendPort'.");
 		}
@@ -129,35 +145,39 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			orchestrationBinding.ReceivePort = new Mock<ReceivePort>().Object;
 			orchestrationBinding.SendPort = new Mock<SendPort>().Object;
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage($"The '{typeof(Process).FullName}' orchestration has unbound logical ports: 'RequestResponsePort', 'SolicitResponsePort'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void LogicalRequestResponsePortMustBeBoundToTwoWayReceivePort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			IProcessOrchestrationBinding orchestrationBinding = new ProcessOrchestrationBinding { Host = "Host" };
 			orchestrationBinding.ReceivePort = new OneWayReceivePort();
 			orchestrationBinding.SendPort = new OneWaySendPort();
 			orchestrationBinding.SolicitResponsePort = new TwoWaySendPort();
 			orchestrationBinding.RequestResponsePort = new OneWayReceivePort();
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's two-way logical port 'RequestResponsePort' is bound to one-way port 'OneWayReceivePort'.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void LogicalSolicitResponsePortMustBeBoundToTwoWaySendPort()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			IProcessOrchestrationBinding orchestrationBinding = new ProcessOrchestrationBinding { Host = "Host" };
 			orchestrationBinding.ReceivePort = new OneWayReceivePort();
 			orchestrationBinding.SendPort = new OneWaySendPort();
 			orchestrationBinding.SolicitResponsePort = new OneWaySendPort();
 			orchestrationBinding.RequestResponsePort = new TwoWayReceivePort();
 
-			Action(() => ((ISupportValidation) orchestrationBinding).Validate())
+			Invoking(() => ((ISupportValidation) orchestrationBinding).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Orchestration's two-way logical port 'SolicitResponsePort' is bound to one-way port 'OneWaySendPort'.");
 		}
@@ -166,6 +186,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public void OperationName()
 		{
 			ProcessOrchestrationBinding.SolicitResponsePort.Operations.SolicitResponseOperation.Name.Should().NotBeEmpty();
+		}
+
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[Fact]
+		public void ThrowsWhenHostNameCannotBeResolved()
+		{
+			var orchestrationBindingMock = new Mock<OrchestrationBindingBase<Process>> { CallBase = true };
+			orchestrationBindingMock.Object.Host = new Mock<HostResolutionPolicy> { CallBase = true }.Object;
+
+			Invoking(() => orchestrationBindingMock.Object.ResolveHost())
+				.Should().Throw<BindingException>()
+				.WithMessage($"Host could not be resolved for Orchestration '{typeof(Process).FullName}'.");
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,26 +19,29 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel;
+using Be.Stateless.BizTalk.Adapter.Metadata;
 using Be.Stateless.BizTalk.ContextProperties;
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
 using Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 using WebHttpSecurityMode = Microsoft.BizTalk.Adapter.Wcf.Config.WebHttpSecurityMode;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class WcfWebHttpAdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wha = new WcfWebHttpAdapter.Inbound(
 				a => {
-					a.Address = new Uri("/dummy.svc", UriKind.Relative);
+					a.Address = new("/dummy.svc", UriKind.Relative);
 
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.SecurityMode = WebHttpSecurityMode.Transport;
@@ -48,11 +51,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.AddMessageBodyForHttpVerbs = "GET,HEAD";
 					a.HttpHeaders = "Content-Type: application/json\r\nReferer: http://www.my.org/";
 					a.HttpUrlMapping = new HttpUrlMapping {
-						new HttpUrlMappingOperation("AddCustomer", "POST", "/Customer/{id}"),
-						new HttpUrlMappingOperation("DeleteCustomer", "DELETE", "/Customer/{id}")
+						new("AddCustomer", "POST", "/Customer/{id}"),
+						new("DeleteCustomer", "DELETE", "/Customer/{id}")
 					};
 					a.VariableMapping = new VariableMapping {
-						new VariablePropertyMapping("id", BizTalkFactoryProperties.ReceiverName)
+						new("id", BizTalkFactoryProperties.MapTypeName)
 					};
 
 					a.MaxConcurrentCalls = 400;
@@ -77,8 +80,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</HttpMethodAndUrl>" +
 				"<VariablePropertyMapping vt=\"8\">" + (
 					"&lt;BtsVariablePropertyMapping&gt;" +
-					$"&lt;Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.ReceiverName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.ReceiverName.Namespace}\" /&gt;" +
-					"&lt;/BtsVariablePropertyMapping&gt;") +
+					$"&lt;Variable Name=\"id\" PropertyName=\"{BizTalkFactoryProperties.MapTypeName.Name}\" PropertyNamespace=\"{BizTalkFactoryProperties.MapTypeName.Namespace}\" /&gt;"
+					+ "&lt;/BtsVariablePropertyMapping&gt;") +
 				"</VariablePropertyMapping>" +
 				"<AddMessageBodyForHttpVerbs vt=\"8\">" + (
 					"GET,HEAD") +
@@ -109,12 +112,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var wha = new WcfWebHttpAdapter.Inbound(
 				a => {
-					a.Address = new Uri("/dummy.svc", UriKind.Relative);
+					a.Address = new("/dummy.svc", UriKind.Relative);
 
 					a.Identity = EndpointIdentityFactory.CreateSpnIdentity("spn_name");
 					a.SecurityMode = WebHttpSecurityMode.Transport;
@@ -124,17 +129,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.AddMessageBodyForHttpVerbs = "GET,HEAD";
 					a.HttpHeaders = "Content-Type: application/json\r\nReferer: http://www.my.org/";
 					a.HttpUrlMapping = new HttpUrlMapping {
-						new HttpUrlMappingOperation("AddCustomer", "POST", "/Customer/{id}"),
-						new HttpUrlMappingOperation("DeleteCustomer", "DELETE", "/Customer/{id}")
+						new("AddCustomer", "POST", "/Customer/{id}"),
+						new("DeleteCustomer", "DELETE", "/Customer/{id}")
 					};
 					a.VariableMapping = new VariableMapping {
-						new VariablePropertyMapping("id", BizTalkFactoryProperties.ReceiverName)
+						new("id", BizTalkFactoryProperties.MapTypeName)
 					};
 
 					a.MaxConcurrentCalls = 400;
 				});
 
-			Action(() => ((ISupportValidation) wha).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) wha).Validate()).Should().NotThrow();
 		}
 	}
 }

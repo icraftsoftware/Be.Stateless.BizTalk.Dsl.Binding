@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,66 +17,77 @@
 #endregion
 
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class FileAdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void CredentialsAreCompatibleWithNetworkFolder()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ifa = new FileAdapter.Inbound(
 				a => {
 					a.ReceiveFolder = @"\\server\folder";
 					a.NetworkCredentials.UserName = "user";
 					a.NetworkCredentials.Password = "pwd";
 				});
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().NotThrow();
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void CredentialsAreNotCompatibleWithLocalFolder()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ifa = new FileAdapter.Inbound(
 				a => {
 					a.ReceiveFolder = @"c:\file\drops";
 					a.NetworkCredentials.UserName = "user";
 					a.NetworkCredentials.Password = "pwd";
 				});
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Alternate credentials to access the file folder cannot be supplied while accessing local drive or a mapped network drive.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void FileNameIsRequired()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ifa = new FileAdapter.Inbound(
 				a => {
 					a.ReceiveFolder = @"\\server";
 					a.FileMask = string.Empty;
 				});
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Inbound file adapter has no source file mask.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ReceiveFolderIsRequired()
 		{
-			var ifa = new FileAdapter.Inbound(a => { });
-			Action(() => ((ISupportValidation) ifa).Validate())
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var ifa = new FileAdapter.Inbound(_ => { });
+			Invoking(() => ((ISupportValidation) ifa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Inbound file adapter has no source folder.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ifa = new FileAdapter.Inbound(a => { a.ReceiveFolder = @"c:\file\drops"; });
 			var xml = ifa.GetAdapterBindingInfoSerializer().Serialize();
 

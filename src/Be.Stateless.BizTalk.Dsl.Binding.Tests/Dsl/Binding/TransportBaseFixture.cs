@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,12 +16,15 @@
 
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
+using Be.Stateless.BizTalk.Explorer;
+using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
@@ -36,9 +39,9 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var environmentSensitiveAdapterMock = adapterMock.As<ISupportEnvironmentOverride>();
 
 			transportMock.Object.Adapter = adapterMock.Object;
-			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides("ACC");
+			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides("ACC"), Times.Once);
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
 		[Fact]
@@ -74,33 +77,38 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var transportMock = new Mock<TransportBase<IAdapter>> { CallBase = true };
 			var environmentSensitiveTransportMock = transportMock.As<ISupportEnvironmentOverride>();
 
-			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides("ACC");
+			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			transportMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == "ACC"));
+			transportMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void TransportAdapterIsMandatory()
 		{
 			var transportMock = new Mock<TransportBase<IAdapter>> { CallBase = true };
 			transportMock.Object.Host = "Host";
 
-			Action(() => ((ISupportValidation) transportMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) transportMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Adapter is not defined.");
 		}
 
-		[Fact]
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
 		public void TransportHostIsMandatory()
 		{
-			var transportMock = new Mock<TransportBase<IAdapter>> { CallBase = true };
-			transportMock.Object.Adapter = new FileAdapter.Outbound(a => { });
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			Action(() => ((ISupportValidation) transportMock.Object).Validate())
+			var transportMock = new Mock<TransportBase<IAdapter>> { CallBase = true };
+			transportMock.Object.Adapter = new FileAdapter.Outbound(_ => { });
+
+			Invoking(() => ((ISupportValidation) transportMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Host is not defined.");
 		}
 
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
 		[Fact]
 		public void TransportUnknownAdapterIsInvalid()
 		{
@@ -110,7 +118,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			var adapterMock = new Mock<TransportBase<IAdapter>.UnknownAdapter>();
 			transportMock.Object.Adapter = adapterMock.Object;
 
-			Action(() => ((ISupportValidation) transportMock.Object).Validate())
+			Invoking(() => ((ISupportValidation) transportMock.Object).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage("Transport's Adapter is not defined.");
 		}

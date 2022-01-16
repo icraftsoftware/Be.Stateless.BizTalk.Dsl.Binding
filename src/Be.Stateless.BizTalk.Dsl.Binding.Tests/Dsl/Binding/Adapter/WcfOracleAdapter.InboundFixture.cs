@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using FluentAssertions;
 using Microsoft.Adapters.OracleDB;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
@@ -36,7 +36,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var ioa = new WcfOracleAdapter.Inbound(
 				a => {
-					a.Address = new OracleDBConnectionUri { DataSourceName = "TNS", PollingId = "ticket" };
+					a.Address = new() { DataSourceName = "TNS", PollingId = "ticket" };
 					a.InboundOperationType = InboundOperation.Polling;
 					a.PolledDataAvailableStatement = "SELECT COUNT(1) FROM EVENTS";
 					a.PollingInterval = TimeSpan.FromHours(2);
@@ -95,7 +95,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			var ioa = new WcfOracleAdapter.Inbound(
 				a => {
-					a.Address = new OracleDBConnectionUri { DataSourceName = "TNS", PollingId = "ticket" };
+					a.Address = new() { DataSourceName = "TNS", PollingId = "ticket" };
 					a.InboundOperationType = InboundOperation.Polling;
 					a.PolledDataAvailableStatement = "SELECT COUNT(1) FROM EVENTS";
 					a.PollingInterval = TimeSpan.FromHours(2);
@@ -110,7 +110,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					};
 				});
 
-			Action(() => ((ISupportValidation) ioa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) ioa).Validate()).Should().NotThrow();
 		}
 	}
 }

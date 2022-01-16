@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,18 +19,16 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel.Configuration;
 using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration
 {
-	[SuppressMessage("Usage", "CA2237:Mark ISerializable types with serializable")]
 	public class WcfBindingRegistry : Dictionary<Type, string>
 	{
 		static WcfBindingRegistry()
 		{
-			_instance = new WcfBindingRegistry();
+			_instance = new();
 
 			var machineConfiguration = ConfigurationManager.OpenMachineConfiguration();
 			var modelSectionGroup = ServiceModelSectionGroup.GetSectionGroup(machineConfiguration);

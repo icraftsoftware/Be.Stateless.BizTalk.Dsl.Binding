@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			{
 				// see Microsoft.BizTalk.Adapter.Sftp.SftpRLConfig.Validate()
 				// see Microsoft.BizTalk.Adapter.Wcf.Config.RLConfig.ValidateBinding()
-				var binding = _adapterConfig.CreateBinding(new SftpRHConfig());
+				var binding = AdapterConfig.CreateBinding(new SftpRHConfig());
 				binding.CreateBindingElements();
 				// see Microsoft.BizTalk.Adapter.Wcf.Config.RLConfig.ValidateAddress()
 				AdapterConfigValidationHelper.ValidateAddress(GetAddress(), UriKind.Absolute, binding.Scheme, null);
@@ -91,8 +91,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public bool EnableTimeComparison
 			{
-				get => _adapterConfig.EnableTimeComparison;
-				set => _adapterConfig.EnableTimeComparison = value;
+				get => AdapterConfig.EnableTimeComparison;
+				set => AdapterConfig.EnableTimeComparison = value;
 			}
 
 			/// <summary>
@@ -108,14 +108,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public TimeSpan PollingInterval
 			{
-				get => BuildTimeSpan(_adapterConfig.PollingInterval, _adapterConfig.PollingIntervalUnit);
+				get => BuildTimeSpan(AdapterConfig.PollingInterval, AdapterConfig.PollingIntervalUnit);
 				set
 				{
 					UnbuildTimeSpan(
 						value,
 						(i, u) => {
-							_adapterConfig.PollingInterval = i;
-							_adapterConfig.PollingIntervalUnit = u;
+							AdapterConfig.PollingInterval = i;
+							AdapterConfig.PollingIntervalUnit = u;
 						});
 				}
 			}
@@ -142,8 +142,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public int RedownloadInterval
 			{
-				get => _adapterConfig.RedownloadInterval;
-				set => _adapterConfig.RedownloadInterval = value;
+				get => AdapterConfig.RedownloadInterval;
+				set => AdapterConfig.RedownloadInterval = value;
 			}
 
 			/// <summary>
@@ -154,8 +154,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public bool RetainAfterDownload
 			{
-				get => _adapterConfig.RetainAfterDownload;
-				set => _adapterConfig.RetainAfterDownload = value;
+				get => AdapterConfig.RetainAfterDownload;
+				set => AdapterConfig.RetainAfterDownload = value;
 			}
 
 			#endregion
@@ -184,8 +184,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public int ConnectionLimit
 			{
-				get => _adapterConfig.ConnectionLimit;
-				set => _adapterConfig.ConnectionLimit = value;
+				get => AdapterConfig.ConnectionLimit;
+				set => AdapterConfig.ConnectionLimit = value;
 			}
 
 			/// <summary>
@@ -193,8 +193,39 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string Log
 			{
-				get => _adapterConfig.Log;
-				set => _adapterConfig.Log = value;
+				get => AdapterConfig.Log;
+				set => AdapterConfig.Log = value;
+			}
+
+			/// <summary>
+			/// The maximum connection reuse time allows connections to be gracefully closed and removed from the pool after a
+			/// connection has been in use for a specific amount of time.
+			/// </summary>
+			/// <remarks>
+			/// <para>
+			/// A value of <c>0</c> or less indicates that this behaviour is disabled.
+			/// </para>
+			/// <para>
+			/// It defaults to <c>0</c>.
+			/// </para>
+			/// </remarks>
+			public TimeSpan MaxConnectionReuseTime
+			{
+				get => TimeSpan.FromSeconds(AdapterConfig.MaxConnectionReuseTimeInSeconds);
+				set => AdapterConfig.MaxConnectionReuseTimeInSeconds = (int) value.TotalSeconds;
+			}
+
+			/// <summary>
+			/// Specify the transfer mode.
+			/// </summary>
+			/// <remarks>
+			/// When <see cref="TransferMode"/> is set to <see cref="Microsoft.BizTalk.Adapter.Sftp.TransferMode.ASCII"/>, it
+			/// allows to not only transfer but also to convert text files to the format used by the target platform.
+			/// </remarks>
+			public TransferMode TransferMode
+			{
+				get => AdapterConfig.TransferMode;
+				set => AdapterConfig.TransferMode = value;
 			}
 
 			#endregion
@@ -206,8 +237,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string ProxyAddress
 			{
-				get => _adapterConfig.ProxyAddress;
-				set => _adapterConfig.ProxyAddress = value;
+				get => AdapterConfig.ProxyAddress;
+				set => AdapterConfig.ProxyAddress = value;
 			}
 
 			/// <summary>
@@ -218,8 +249,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public int ProxyPort
 			{
-				get => _adapterConfig.ProxyPort;
-				set => _adapterConfig.ProxyPort = value;
+				get => AdapterConfig.ProxyPort;
+				set => AdapterConfig.ProxyPort = value;
 			}
 
 			/// <summary>
@@ -230,8 +261,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public ProxyType ProxyType
 			{
-				get => _adapterConfig.ProxyType;
-				set => _adapterConfig.ProxyType = value;
+				get => AdapterConfig.ProxyType;
+				set => AdapterConfig.ProxyType = value;
 			}
 
 			/// <summary>
@@ -239,8 +270,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string ProxyUserName
 			{
-				get => _adapterConfig.ProxyUserName;
-				set => _adapterConfig.ProxyUserName = value;
+				get => AdapterConfig.ProxyUserName;
+				set => AdapterConfig.ProxyUserName = value;
 			}
 
 			/// <summary>
@@ -248,8 +279,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string ProxyPassword
 			{
-				get => _adapterConfig.ProxyPassword;
-				set => _adapterConfig.ProxyPassword = value;
+				get => AdapterConfig.ProxyPassword;
+				set => AdapterConfig.ProxyPassword = value;
 			}
 
 			#endregion
@@ -267,8 +298,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public DSL API.")]
 			public bool AcceptAnySshServerHostKey
 			{
-				get => _adapterConfig.AccessAnySSHServerHostKey;
-				set => _adapterConfig.AccessAnySSHServerHostKey = value;
+				get => AdapterConfig.AccessAnySSHServerHostKey;
+				set => AdapterConfig.AccessAnySSHServerHostKey = value;
 			}
 
 			/// <summary>
@@ -291,8 +322,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public ClientAuthenticationMode ClientAuthenticationMode
 			{
-				get => _adapterConfig.ClientAuthenticationMode;
-				set => _adapterConfig.ClientAuthenticationMode = value;
+				get => AdapterConfig.ClientAuthenticationMode;
+				set => AdapterConfig.ClientAuthenticationMode = value;
 			}
 
 			/// <summary>
@@ -303,8 +334,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public EncryptionCipher EncryptionCipher
 			{
-				get => _adapterConfig.EncryptionCipher;
-				set => _adapterConfig.EncryptionCipher = value;
+				get => AdapterConfig.EncryptionCipher;
+				set => AdapterConfig.EncryptionCipher = value;
 			}
 
 			/// <summary>
@@ -313,8 +344,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string KeyExchangeAlgorithmSelectionPolicy
 			{
-				get => _adapterConfig.KexPolicy;
-				set => _adapterConfig.KexPolicy = value;
+				get => AdapterConfig.KexPolicy;
+				set => AdapterConfig.KexPolicy = value;
 			}
 
 			/// <summary>
@@ -323,8 +354,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string PrivateKeyFile
 			{
-				get => _adapterConfig.PrivateKeyFile;
-				set => _adapterConfig.PrivateKeyFile = value;
+				get => AdapterConfig.PrivateKeyFile;
+				set => AdapterConfig.PrivateKeyFile = value;
 			}
 
 			/// <summary>
@@ -332,8 +363,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string PrivateKeyPassword
 			{
-				get => _adapterConfig.PrivateKeyPassword;
-				set => _adapterConfig.PrivateKeyPassword = value;
+				get => AdapterConfig.PrivateKeyPassword;
+				set => AdapterConfig.PrivateKeyPassword = value;
 			}
 
 			/// <summary>
@@ -343,8 +374,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string SshServerHostKeyFingerPrint
 			{
-				get => _adapterConfig.SSHServerHostKey;
-				set => _adapterConfig.SSHServerHostKey = value;
+				get => AdapterConfig.SSHServerHostKey;
+				set => AdapterConfig.SSHServerHostKey = value;
 			}
 
 			/// <summary>
@@ -352,8 +383,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string AffiliateApplicationName
 			{
-				get => _adapterConfig.AffiliateApplicationName;
-				set => _adapterConfig.AffiliateApplicationName = value;
+				get => AdapterConfig.AffiliateApplicationName;
+				set => AdapterConfig.AffiliateApplicationName = value;
 			}
 
 			/// <summary>
@@ -361,8 +392,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string UserName
 			{
-				get => _adapterConfig.UserName;
-				set => _adapterConfig.UserName = value;
+				get => AdapterConfig.UserName;
+				set => AdapterConfig.UserName = value;
 			}
 
 			/// <summary>
@@ -371,8 +402,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string Password
 			{
-				get => _adapterConfig.Password;
-				set => _adapterConfig.Password = value;
+				get => AdapterConfig.Password;
+				set => AdapterConfig.Password = value;
 			}
 
 			#endregion
@@ -384,8 +415,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string ServerAddress
 			{
-				get => _adapterConfig.ServerAddress;
-				set => _adapterConfig.ServerAddress = value;
+				get => AdapterConfig.ServerAddress;
+				set => AdapterConfig.ServerAddress = value;
 			}
 
 			/// <summary>
@@ -396,8 +427,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public int Port
 			{
-				get => _adapterConfig.Port;
-				set => _adapterConfig.Port = value;
+				get => AdapterConfig.Port;
+				set => AdapterConfig.Port = value;
 			}
 
 			/// <summary>
@@ -405,8 +436,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string FolderPath
 			{
-				get => _adapterConfig.FolderPath;
-				set => _adapterConfig.FolderPath = value;
+				get => AdapterConfig.FolderPath;
+				set => AdapterConfig.FolderPath = value;
 			}
 
 			/// <summary>
@@ -414,8 +445,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </summary>
 			public string FileMask
 			{
-				get => _adapterConfig.FileMask;
-				set => _adapterConfig.FileMask = value;
+				get => AdapterConfig.FileMask;
+				set => AdapterConfig.FileMask = value;
 			}
 
 			#endregion

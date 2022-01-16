@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,18 +20,21 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class Pop3AdapterInboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "StringLiteralTypo")]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ipa = new Pop3Adapter.Inbound(
 				a => {
 					a.MailServer = "pop3.world.com";
@@ -66,9 +69,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				"</CustomProps>");
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void Validate()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ipa = new Pop3Adapter.Inbound(
 				a => {
 					a.MailServer = "pop3.world.com";
@@ -80,16 +85,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ErrorThreshold = 50;
 					a.PollingInterval = TimeSpan.FromSeconds(15);
 				});
-			Action(() => ((ISupportValidation) ipa).Validate())
+			Invoking(() => ((ISupportValidation) ipa).Validate())
 				.Should().Throw<BindingException>()
 				.WithMessage(
 					@"The format of the user name property is invalid for SPA authentication scheme. Make sure that the user name is specified as either <domain-name>\<user-name> or <machine-name>\<user-name>.");
 		}
 
-		[Fact]
+		[SkippableFact]
 		[SuppressMessage("ReSharper", "StringLiteralTypo")]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var ipa = new Pop3Adapter.Inbound(
 				a => {
 					a.MailServer = "pop3.world.com";
@@ -101,7 +108,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.ErrorThreshold = 50;
 					a.PollingInterval = TimeSpan.FromSeconds(15);
 				});
-			Action(() => ((ISupportValidation) ipa).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) ipa).Validate()).Should().NotThrow();
 		}
 	}
 }

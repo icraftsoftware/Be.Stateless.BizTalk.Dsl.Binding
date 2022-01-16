@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization
 
 		#endregion
 
-		private XmlWriterSettings XmlWriterSettings => new XmlWriterSettings { Indent = false, Encoding = Encoding.UTF8, OmitXmlDeclaration = true };
+		private XmlWriterSettings XmlWriterSettings => new() { Indent = false, Encoding = Encoding.UTF8, OmitXmlDeclaration = true };
 
 		private void Serialize(XmlWriter xmlWriter)
 		{

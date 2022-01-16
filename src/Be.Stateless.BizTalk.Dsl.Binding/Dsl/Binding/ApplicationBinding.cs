@@ -24,7 +24,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
 	public class ApplicationBinding : ApplicationBindingBase<string>
 	{
-		protected internal ApplicationBinding() { }
+		protected ApplicationBinding() { }
 
 		public ApplicationBinding(Action<IApplicationBinding<string>> applicationBindingConfigurator) : base(applicationBindingConfigurator) { }
 

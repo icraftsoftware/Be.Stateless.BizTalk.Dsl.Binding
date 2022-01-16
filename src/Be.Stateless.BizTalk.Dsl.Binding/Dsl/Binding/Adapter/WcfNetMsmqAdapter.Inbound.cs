@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,8 +72,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool DisableLocationOnFailure
 			{
-				get => _adapterConfig.DisableLocationOnFailure;
-				set => _adapterConfig.DisableLocationOnFailure = value;
+				get => AdapterConfig.DisableLocationOnFailure;
+				set => AdapterConfig.DisableLocationOnFailure = value;
 			}
 
 			#endregion
@@ -114,8 +114,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public InboundMessageBodySelection InboundBodyLocation
 			{
-				get => _adapterConfig.InboundBodyLocation;
-				set => _adapterConfig.InboundBodyLocation = value;
+				get => AdapterConfig.InboundBodyLocation;
+				set => AdapterConfig.InboundBodyLocation = value;
 			}
 
 			/// <summary>
@@ -141,8 +141,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public string InboundBodyPathExpression
 			{
-				get => _adapterConfig.InboundBodyPathExpression;
-				set => _adapterConfig.InboundBodyPathExpression = value;
+				get => AdapterConfig.InboundBodyPathExpression;
+				set => AdapterConfig.InboundBodyPathExpression = value;
 			}
 
 			/// <summary>
@@ -177,8 +177,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public MessageBodyFormat InboundNodeEncoding
 			{
-				get => _adapterConfig.InboundNodeEncoding;
-				set => _adapterConfig.InboundNodeEncoding = value;
+				get => AdapterConfig.InboundNodeEncoding;
+				set => AdapterConfig.InboundNodeEncoding = value;
 			}
 
 			#endregion
@@ -187,8 +187,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public bool SuspendRequestMessageOnFailure
 			{
-				get => _adapterConfig.SuspendMessageOnFailure;
-				set => _adapterConfig.SuspendMessageOnFailure = value;
+				get => AdapterConfig.SuspendMessageOnFailure;
+				set => AdapterConfig.SuspendMessageOnFailure = value;
 			}
 
 			#endregion
@@ -197,8 +197,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public int MaxConcurrentCalls
 			{
-				get => _adapterConfig.MaxConcurrentCalls;
-				set => _adapterConfig.MaxConcurrentCalls = value;
+				get => AdapterConfig.MaxConcurrentCalls;
+				set => AdapterConfig.MaxConcurrentCalls = value;
 			}
 
 			#endregion
@@ -207,8 +207,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 
 			public int MaxReceivedMessageSize
 			{
-				get => _adapterConfig.MaxReceivedMessageSize;
-				set => _adapterConfig.MaxReceivedMessageSize = value;
+				get => AdapterConfig.MaxReceivedMessageSize;
+				set => AdapterConfig.MaxReceivedMessageSize = value;
 			}
 
 			#endregion
@@ -235,8 +235,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </remarks>
 			public bool OrderedProcessing
 			{
-				get => _adapterConfig.OrderedProcessing;
-				set => _adapterConfig.OrderedProcessing = value;
+				get => AdapterConfig.OrderedProcessing;
+				set => AdapterConfig.OrderedProcessing = value;
 			}
 
 			#endregion

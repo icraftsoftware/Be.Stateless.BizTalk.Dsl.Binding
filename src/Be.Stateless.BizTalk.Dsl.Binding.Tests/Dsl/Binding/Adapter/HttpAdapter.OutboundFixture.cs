@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,17 +18,20 @@
 
 using System;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
+using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
 	public class HttpAdapterOutboundFixture
 	{
-		[Fact]
+		[SkippableFact]
 		public void SerializeToXml()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var oha = new HttpAdapter.Outbound(
 				a => {
 					a.RequestTimeout = TimeSpan.FromMinutes(2);
@@ -56,9 +59,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// TODO Validate()
 		}
 
-		[Fact]
+		[SkippableFact]
 		public void ValidateDoesNotThrow()
 		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
 			var oha = new HttpAdapter.Outbound(
 				a => {
 					a.RequestTimeout = TimeSpan.FromMinutes(2);
@@ -66,7 +71,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 					a.UseSSO = true;
 					a.AffiliateApplicationName = "BizTalk.Factory";
 				});
-			Action(() => ((ISupportValidation) oha).Validate()).Should().NotThrow();
+			Invoking(() => ((ISupportValidation) oha).Validate()).Should().NotThrow();
 		}
 	}
 }

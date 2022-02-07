@@ -25,6 +25,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	public interface IOrchestrationBinding : ISupportHostResolution, ISupportNameResolution
 	{
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 		IApplicationBinding ApplicationBinding { get; set; }
 
 		string Description { get; set; }

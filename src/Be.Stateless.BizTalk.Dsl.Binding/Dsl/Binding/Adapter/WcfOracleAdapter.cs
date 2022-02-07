@@ -180,7 +180,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// Notice that not performing operations in a transactional context is advisable only for operations that do not make
 		/// changes to the database. For operations that update data in the database, we recommend setting the property to
 		/// <c>True</c> otherwise you might either experience message loss or duplicate messages depending on whether you are
-		/// performing inbound or outbound operations. 
+		/// performing inbound or outbound operations.
 		/// </para>
 		/// </remarks>
 		public bool UseAmbientTransaction
@@ -396,7 +396,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <para>
 		/// The advantage of not having scheme name included in the namespace is that if there is a table with same name (for
 		/// example, EMP) in two different schemas then the same XML can be used to perform the simple SQL operations (Insert,
-		/// Update, Delete, Select) on both tables. 
+		/// Update, Delete, Select) on both tables.
 		/// </para>
 		/// <para>
 		/// For example, if the <see cref="UseSchemaInNameSpace"/> property is <c>True</c>, the namespace for these operations on
@@ -414,7 +414,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// the generated schema. So, if there are two tables with the same name in two different Oracle schemas, and they are
 		/// added to the same BizTalk project, the BizTalk project will fail to build and deploy. If you want to include such
 		/// schemas in the same BizTalk project, you must manually edit them to include the Oracle schema name in the XML
-		/// namespace. 
+		/// namespace.
 		/// <para>
 		/// The default is True; the schema name is included in the namespace.
 		/// </para>

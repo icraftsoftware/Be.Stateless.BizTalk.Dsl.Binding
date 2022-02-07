@@ -16,19 +16,18 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Be.Stateless.BizTalk.Dsl.Binding
+namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor.Pipeline
 {
-	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
-	public interface IOrchestrationBindingCollection : IFluentInterface, IEnumerable<IOrchestrationBinding>
+	internal abstract class VisitorPipelineStage<TNamingConvention>
+		where TNamingConvention : class
 	{
-		[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public DSL API.")]
-		IOrchestrationBindingCollection Add(IOrchestrationBinding orchestrationBinding);
+		private protected VisitorPipelineStage(VisitorPipeline<TNamingConvention> visitorPipeline)
+		{
+			VisitorPipeline = visitorPipeline;
+		}
 
-		IOrchestrationBindingCollection Add(params IOrchestrationBinding[] orchestrationBindings);
+		private protected VisitorPipeline<TNamingConvention> VisitorPipeline { get; }
 
-		T Find<T>() where T : IOrchestrationBinding;
+		internal abstract void Accept<T>(T visitor) where T : IApplicationBindingVisitor;
 	}
 }

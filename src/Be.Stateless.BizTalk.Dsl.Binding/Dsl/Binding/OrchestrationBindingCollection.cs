@@ -25,7 +25,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	internal class OrchestrationBindingCollection<TNamingConvention>
 		: List<IOrchestrationBinding>,
 			IOrchestrationBindingCollection,
-			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
 	{
@@ -54,15 +53,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public T Find<T>() where T : IOrchestrationBinding
 		{
 			return (T) this.Single(ob => ob.GetType() == typeof(T));
-		}
-
-		#endregion
-
-		#region ISupportValidation Members
-
-		void ISupportValidation.Validate()
-		{
-			this.Cast<ISupportValidation>().ForEach(ob => ob.Validate());
 		}
 
 		#endregion

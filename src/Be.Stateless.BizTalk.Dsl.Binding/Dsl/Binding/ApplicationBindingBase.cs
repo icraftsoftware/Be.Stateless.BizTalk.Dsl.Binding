@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
+using Be.Stateless.BizTalk.Dsl.Binding.Visitor.Pipeline;
 using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding
@@ -38,6 +39,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			_receivePorts = new(this);
 			_sendPorts = new(this);
 			_orchestrations = new(this);
+			_visitorPipeline = new VisitorPipeline<TNamingConvention>(this);
 			Timestamp = DateTime.Now;
 		}
 
@@ -109,10 +111,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		void ISupportValidation.Validate()
 		{
 			if (Name == null) throw new BindingException("Application's Name is not defined.");
-			((ISupportValidation) _referencedApplications).Validate();
-			((ISupportValidation) _receivePorts).Validate();
-			((ISupportValidation) _sendPorts).Validate();
-			((ISupportValidation) _orchestrations).Validate();
 		}
 
 		#endregion
@@ -121,11 +119,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		TVisitor IVisitable<IApplicationBindingVisitor>.Accept<TVisitor>(TVisitor visitor)
 		{
-			((IVisitable<IApplicationBindingVisitor>) _referencedApplications).Accept(visitor);
-			visitor.VisitApplicationBinding(this);
-			((IVisitable<IApplicationBindingVisitor>) _receivePorts).Accept(visitor);
-			((IVisitable<IApplicationBindingVisitor>) _sendPorts).Accept(visitor);
-			return ((IVisitable<IApplicationBindingVisitor>) _orchestrations).Accept(visitor);
+			_visitorPipeline.Accept(visitor);
+			return visitor;
 		}
 
 		#endregion
@@ -138,5 +133,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		private readonly ReceivePortCollection<TNamingConvention> _receivePorts;
 		private readonly ReferencedApplicationBindingCollection _referencedApplications;
 		private readonly SendPortCollection<TNamingConvention> _sendPorts;
+		private readonly VisitorPipeline<TNamingConvention> _visitorPipeline;
 	}
 }

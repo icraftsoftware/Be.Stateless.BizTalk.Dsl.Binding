@@ -17,21 +17,20 @@
 #endregion
 
 using System;
-using Be.Stateless.BizTalk.Install;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 {
 	/// <summary>
-	/// <see cref="IApplicationBindingVisitor"/> implementation that ensures that environment overrides are applied.
+	/// <see cref="IApplicationBindingVisitor"/> implementation that ensures that application bindings are validated.
 	/// </summary>
-	internal class EnvironmentOverrideApplicator : IApplicationBindingVisitor
+	public class ApplicationBindingValidator : IApplicationBindingVisitor
 	{
 		#region IApplicationBindingVisitor Members
 
 		public void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding) where TNamingConvention : class
 		{
 			if (applicationBinding == null) throw new ArgumentNullException(nameof(applicationBinding));
-			((ISupportEnvironmentOverride) applicationBinding).ApplyEnvironmentOverrides(Environment);
+			((ISupportValidation) applicationBinding).Validate();
 		}
 
 		public void VisitReferencedApplicationBinding(IVisitable<IApplicationBindingVisitor> referencedApplicationBinding)
@@ -43,29 +42,27 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		public void VisitOrchestration(IOrchestrationBinding orchestrationBinding)
 		{
 			if (orchestrationBinding == null) throw new ArgumentNullException(nameof(orchestrationBinding));
-			((ISupportEnvironmentOverride) orchestrationBinding).ApplyEnvironmentOverrides(Environment);
+			((ISupportValidation) orchestrationBinding).Validate();
 		}
 
 		public void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort) where TNamingConvention : class
 		{
 			if (receivePort == null) throw new ArgumentNullException(nameof(receivePort));
-			((ISupportEnvironmentOverride) receivePort).ApplyEnvironmentOverrides(Environment);
+			((ISupportValidation) receivePort).Validate();
 		}
 
 		public void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation) where TNamingConvention : class
 		{
 			if (receiveLocation == null) throw new ArgumentNullException(nameof(receiveLocation));
-			((ISupportEnvironmentOverride) receiveLocation).ApplyEnvironmentOverrides(Environment);
+			((ISupportValidation) receiveLocation).Validate();
 		}
 
 		public void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort) where TNamingConvention : class
 		{
 			if (sendPort == null) throw new ArgumentNullException(nameof(sendPort));
-			((ISupportEnvironmentOverride) sendPort).ApplyEnvironmentOverrides(Environment);
+			((ISupportValidation) sendPort).Validate();
 		}
 
 		#endregion
-
-		private string Environment => DeploymentContext.TargetEnvironment;
 	}
 }

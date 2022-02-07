@@ -153,7 +153,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// client X.509 certificates must be installed in the Trusted Root Certification Authorities certificate store of this
 		/// computer so that the clients can be authenticated to this receive
 		/// </description>
-		/// location. 
+		/// location.
 		/// </item>
 		/// </list>
 		/// </para>
@@ -277,7 +277,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <term><see cref="EndToEndBasicHttpSecurityMode.TransportWithMessageCredential"/></term>
 		/// <description>
 		/// Integrity, confidentiality, and service authentication are provided by the HTTPS transport. To use this mode, you
-		/// must set up Secure Sockets Layer (SSL) in Microsoft Internet Information Services (IIS). 
+		/// must set up Secure Sockets Layer (SSL) in Microsoft Internet Information Services (IIS).
 		/// </description>
 		/// </item>
 		/// </list>

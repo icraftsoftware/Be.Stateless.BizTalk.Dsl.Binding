@@ -25,7 +25,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	internal class SendPortCollection<TNamingConvention>
 		: List<ISendPort<TNamingConvention>>,
 			ISendPortCollection<TNamingConvention>,
-			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
 	{
@@ -54,15 +53,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public ISendPort<TNamingConvention> Find<T>() where T : ISendPort<TNamingConvention>
 		{
 			return this.OfType<T>().Single();
-		}
-
-		#endregion
-
-		#region ISupportValidation Members
-
-		void ISupportValidation.Validate()
-		{
-			this.Cast<ISupportValidation>().ForEach(sp => sp.Validate());
 		}
 
 		#endregion

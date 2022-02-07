@@ -39,8 +39,7 @@ namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 			{
 				var applicationBinding = new T();
 				applicationBinding.ReferencedApplications.Add(referencedApplications);
-				// ensure application bindings are settled for target environment
-				applicationBinding.Accept(new EnvironmentOverrideApplicator());
+				applicationBinding.Accept(new ApplicationBindingValidator());
 				_cache[DeploymentContext.TargetEnvironment] = applicationBinding;
 			}
 			return _cache[DeploymentContext.TargetEnvironment];

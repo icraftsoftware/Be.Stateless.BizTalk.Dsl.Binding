@@ -25,7 +25,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 	internal class ReceiveLocationCollection<TNamingConvention>
 		: List<IReceiveLocation<TNamingConvention>>,
 			IReceiveLocationCollection<TNamingConvention>,
-			ISupportValidation,
 			IVisitable<IApplicationBindingVisitor>
 		where TNamingConvention : class
 	{
@@ -54,15 +53,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		public IReceiveLocation<TNamingConvention> Find<T>() where T : IReceiveLocation<TNamingConvention>
 		{
 			return this.OfType<T>().Single();
-		}
-
-		#endregion
-
-		#region ISupportValidation Members
-
-		void ISupportValidation.Validate()
-		{
-			this.Cast<ISupportValidation>().ForEach(rl => rl.Validate());
 		}
 
 		#endregion

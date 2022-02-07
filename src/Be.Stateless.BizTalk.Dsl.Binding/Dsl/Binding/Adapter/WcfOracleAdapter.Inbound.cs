@@ -385,7 +385,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			/// </para>
 			/// <para>
 			/// This property is applicable both for polling on tables and views and polling using stored procedures, functions,
-			/// or packaged procedures or functions. 
+			/// or packaged procedures or functions.
 			/// </para>
 			/// <para>
 			/// It defaults to <c>False</c>.

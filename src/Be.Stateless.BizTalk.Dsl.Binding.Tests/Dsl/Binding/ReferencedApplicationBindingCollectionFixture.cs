@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,22 +34,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			((IVisitable<IApplicationBindingVisitor>) referencedApplicationBindingCollection).Accept(visitorMock.Object);
 
 			visitorMock.Verify(m => m.VisitReferencedApplicationBinding(applicationBindingMock.Object), Times.Once);
-		}
-
-		[Fact]
-		public void SupportsAndPropagatesISupportValidation()
-		{
-			var applicationBindingMock = new Mock<IApplicationBinding>();
-			applicationBindingMock.As<ISupportValidation>();
-
-			var referencedApplicationBindingCollectionMock = new Mock<ReferencedApplicationBindingCollection> { CallBase = true };
-			referencedApplicationBindingCollectionMock.As<ISupportValidation>();
-
-			referencedApplicationBindingCollectionMock.Object.Add(applicationBindingMock.Object);
-
-			((ISupportValidation) referencedApplicationBindingCollectionMock.Object).Validate();
-
-			applicationBindingMock.As<ISupportValidation>().Verify(m => m.Validate(), Times.Once);
 		}
 	}
 }

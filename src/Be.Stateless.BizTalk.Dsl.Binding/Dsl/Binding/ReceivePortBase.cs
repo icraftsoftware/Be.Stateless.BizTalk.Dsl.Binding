@@ -79,7 +79,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			if (Name == null) throw new BindingException("Receive Port's Name is not defined.");
 			if (!_receiveLocations.Any()) throw new BindingException($"[{ResolveName()}] Receive Port's Receive Locations are not defined.");
-			((ISupportValidation) _receiveLocations).Validate();
 			ComputeIsTwoWay();
 		}
 
@@ -103,7 +102,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			var isOneWay = _receiveLocations.All(rl => rl.SendPipeline == null);
 			var isTwoWay = _receiveLocations.All(rl => rl.SendPipeline != null);
-			if (!isOneWay && !isTwoWay) throw new BindingException($"[{ResolveName()}] Receive Port defines a mix of one-way and two-way Receive Locations.");
+			if (!isOneWay && !isTwoWay) throw new BindingException($"[{ResolveName()}] Receive Port cannot define both one-way and two-way Receive Locations.");
 			return isTwoWay;
 		}
 

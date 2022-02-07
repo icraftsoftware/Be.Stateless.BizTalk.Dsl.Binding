@@ -43,18 +43,23 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 	/// </para>
 	/// </remarks>
 	[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = "Public DSL API.")]
-	public class BindingInfoBuilder : ApplicationBindingVisitor
+	public class BindingInfoBuilder : IApplicationBindingVisitor
 	{
-		#region Base Class Member Overrides
+		#region IApplicationBindingVisitor Members
 
-		protected internal override void VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
+		void IApplicationBindingVisitor.VisitApplicationBinding<TNamingConvention>(IApplicationBinding<TNamingConvention> applicationBinding)
 			where TNamingConvention : class
 		{
 			ApplicationName = applicationBinding.ResolveName();
 			BindingInfo = CreateBindingInfo(applicationBinding);
 		}
 
-		protected internal override void VisitOrchestration(IOrchestrationBinding orchestrationBinding)
+		void IApplicationBindingVisitor.VisitReferencedApplicationBinding(IVisitable<IApplicationBindingVisitor> referencedApplicationBinding)
+		{
+			// skip ReferencedApplicationBinding
+		}
+
+		void IApplicationBindingVisitor.VisitOrchestration(IOrchestrationBinding orchestrationBinding)
 		{
 			var moduleRef = CreateOrFindModuleRef(orchestrationBinding);
 			// a ModuleRef just created has no ServiceRef in its Services collection yet
@@ -63,16 +68,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			moduleRef.Services.Add(serviceRef);
 		}
 
-		protected internal override void VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
-			where TNamingConvention : class
-		{
-			var visitedReceiveLocation = CreateReceiveLocation(receiveLocation);
-			if (_lastVisitedReceivePort.ReceiveLocations.Cast<BtsReceiveLocation>().Any(rl => rl.Name == visitedReceiveLocation.Name))
-				throw new BindingException($"Duplicate receive location name: '{visitedReceiveLocation.Name}'.");
-			_lastVisitedReceivePort.ReceiveLocations.Add(visitedReceiveLocation);
-		}
-
-		protected internal override void VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
+		void IApplicationBindingVisitor.VisitReceivePort<TNamingConvention>(IReceivePort<TNamingConvention> receivePort)
 			where TNamingConvention : class
 		{
 			_lastVisitedReceivePort = CreateReceivePort(receivePort);
@@ -81,7 +77,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			BindingInfo.ReceivePortCollection.Add(_lastVisitedReceivePort);
 		}
 
-		protected internal override void VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
+		void IApplicationBindingVisitor.VisitReceiveLocation<TNamingConvention>(IReceiveLocation<TNamingConvention> receiveLocation)
+			where TNamingConvention : class
+		{
+			var visitedReceiveLocation = CreateReceiveLocation(receiveLocation);
+			if (_lastVisitedReceivePort.ReceiveLocations.Cast<BtsReceiveLocation>().Any(rl => rl.Name == visitedReceiveLocation.Name))
+				throw new BindingException($"Duplicate receive location name: '{visitedReceiveLocation.Name}'.");
+			_lastVisitedReceivePort.ReceiveLocations.Add(visitedReceiveLocation);
+		}
+
+		void IApplicationBindingVisitor.VisitSendPort<TNamingConvention>(ISendPort<TNamingConvention> sendPort)
 			where TNamingConvention : class
 		{
 			var visitedSendPort = CreateSendPort(sendPort);
@@ -302,7 +307,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 			var transportInfo = new Microsoft.BizTalk.Deployment.Binding.TransportInfo {
 				Address = transport.Adapter.Address,
 				FromTime = transport.ServiceWindow.StartTime,
-				// ordered delivery is meaningful only for a SendPort's primary transport 
+				// ordered delivery is meaningful only for a SendPort's primary transport
 				OrderedDelivery = ReferenceEquals(transport.SendPort.Transport, transport) && transport.SendPort.OrderedDelivery,
 				// is it the SendPort's primary transport
 				Primary = ReferenceEquals(transport.SendPort.Transport, transport),

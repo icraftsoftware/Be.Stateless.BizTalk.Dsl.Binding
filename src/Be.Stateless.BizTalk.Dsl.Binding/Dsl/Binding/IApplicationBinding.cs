@@ -23,7 +23,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	public interface IApplicationBinding : IFluentInterface
 	{
-		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public DSL API.")]
+		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public DSL API.")]
 		IOrchestrationBindingCollection Orchestrations { get; }
 
 		[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public DSL API.")]

@@ -29,7 +29,6 @@ namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 		[SkippableFact]
 		public void GenerateApplicationBindingForTargetEnvironment()
 		{
-			// TODO fix it not to skip it on build server
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			Invoking(() => GenerateApplicationBindingForTargetEnvironment("ANYWHERE"))

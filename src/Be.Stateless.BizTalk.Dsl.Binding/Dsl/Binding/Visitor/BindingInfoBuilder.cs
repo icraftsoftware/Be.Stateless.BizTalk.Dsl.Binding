@@ -18,12 +18,12 @@
 
 extern alias ExplorerOM;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.Dsl.Binding.Xml.Serialization.Extensions;
 using Be.Stateless.BizTalk.Dsl.Pipeline;
 using Be.Stateless.Extensions;
+using Be.Stateless.Reflection.Extensions;
 using ExplorerOM::Microsoft.BizTalk.ExplorerOM;
 using Microsoft.BizTalk.Deployment.Binding;
 using BtsReceiveLocation = Microsoft.BizTalk.Deployment.Binding.ReceiveLocation;
@@ -122,24 +122,18 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 		{
 			var serviceAssemblyName = orchestrationBinding.Type.Assembly.GetName();
 			var name = serviceAssemblyName.Name;
+			var culture = serviceAssemblyName.GetCultureName();
+			var publicKeyToken = serviceAssemblyName.GetPublicKeyTokenString();
 			var version = serviceAssemblyName.Version.ToString();
-			// see BizTalkFactory.Management.Automation.BtsCatalog.ExportBinding, BizTalkFactory.Management.Automation
-			var culture = serviceAssemblyName.CultureInfo == null || serviceAssemblyName.CultureInfo.Name.IsNullOrEmpty()
-				? "neutral"
-				: serviceAssemblyName.CultureInfo.Name;
-			var publicKeyTokenBytes = serviceAssemblyName.GetPublicKeyToken();
-			// see BizTalkFactory.Management.Automation.BtsCatalog.ExportBinding, BizTalkFactory.Management.Automation
-			var publicKeyToken = publicKeyTokenBytes == null || publicKeyTokenBytes.Length == 0
-				? null
-				: publicKeyTokenBytes.Aggregate(string.Empty, (k, token) => k + token.ToString("x2", CultureInfo.InvariantCulture));
-			var module = BindingInfo.ModuleRefCollection.Find(name, version, culture, publicKeyToken);
-			return module ?? new ModuleRef(name, version, culture, publicKeyToken);
+			var module = BindingInfo.ModuleRefCollection.Find(name, version, culture, publicKeyToken)
+				?? new ModuleRef(name, version, culture, publicKeyToken);
+			return module;
 		}
 
 		protected internal virtual ServiceRef CreateServiceRef(IOrchestrationBinding orchestrationBinding)
 		{
 			// see https://docs.microsoft.com/en-us/dotnet/api/microsoft.biztalk.deployment.binding.serviceref
-			var serviceRef = new ServiceRef {
+			var service = new ServiceRef {
 				Description = orchestrationBinding.Description,
 				Host = new() {
 					Name = orchestrationBinding.ResolveHost()
@@ -155,12 +149,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor
 				TrackingOption = OrchestrationTrackingTypes.None
 			};
 			// ensure service ref port collection is initialized even if there are only direct ports
-			var serviceRefPorts = serviceRef.Ports;
+			var serviceRefPorts = service.Ports;
 			foreach (var portBinding in orchestrationBinding.PortBindings)
 			{
 				serviceRefPorts.Add(CreateServicePortRef(portBinding));
 			}
-			return serviceRef;
+			return service;
 		}
 
 		protected virtual ServicePortRef CreateServicePortRef(IOrchestrationPortBinding portBinding)

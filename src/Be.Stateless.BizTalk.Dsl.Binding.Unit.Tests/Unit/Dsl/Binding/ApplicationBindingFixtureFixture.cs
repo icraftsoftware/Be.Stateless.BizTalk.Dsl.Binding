@@ -17,7 +17,6 @@
 #endregion
 
 using Be.Stateless.BizTalk.Dsl.Binding;
-using Be.Stateless.BizTalk.Explorer;
 using FluentAssertions;
 using Xunit;
 using static FluentAssertions.FluentActions;
@@ -26,11 +25,9 @@ namespace Be.Stateless.BizTalk.Unit.Dsl.Binding
 {
 	public class ApplicationBindingFixtureFixture : ApplicationBindingFixture<ApplicationBindingFixtureFixture.Application>
 	{
-		[SkippableFact]
+		[Fact]
 		public void GenerateApplicationBindingForTargetEnvironment()
 		{
-			Skip.IfNot(BizTalkServerGroup.IsConfigured);
-
 			Invoking(() => GenerateApplicationBindingForTargetEnvironment("ANYWHERE"))
 				.Should().Throw<BindingException>()
 				.WithMessage("[ReceivePort] Receive Port's Receive Locations are not defined.");

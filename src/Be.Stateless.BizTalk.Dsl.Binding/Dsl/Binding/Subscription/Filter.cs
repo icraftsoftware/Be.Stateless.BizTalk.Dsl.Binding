@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -55,8 +55,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		}
 
 		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = "Public DSL API.")]
-		[SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Public DSL API.")]
-		public static bool operator false(Filter filter)
+		public static bool operator false(Filter _)
 		{
 			// see https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/expressions#user-defined-conditional-logical-operators
 			// see https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/false-operator
@@ -72,8 +71,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		}
 
 		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = "Public DSL API.")]
-		[SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Public DSL API.")]
-		public static bool operator true(Filter filter)
+		public static bool operator true(Filter _)
 		{
 			// see https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/expressions#user-defined-conditional-logical-operators
 			// see https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/true-operator

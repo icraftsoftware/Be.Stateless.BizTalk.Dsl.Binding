@@ -37,9 +37,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		[Fact]
 		public void BooleanContextPropertyBasedFilter()
 		{
-			// filter's predicate cannot be made of only a boolean property, as in:
+			// filter's predicate cannot be made of only a boolean property, assumed to be true, as in:
 			// var filter = new Filter(() => BtsProperties.AckRequired);
-			// embedded C# DSL requires comparison operator and value to be explicit written as follows:
+
+			// embedded C# DSL requires comparison operator and value to be explicitly written as follows:
 			var filter = new Filter(() => BtsProperties.AckRequired == true);
 
 			filter.ToString().Should().Be(
@@ -114,19 +115,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 
 			filter.ToString().Should().Be(
 				string.Format(
-					"<Filter>"
-					+ "<Group><Statement Property=\"{0}\" Operator=\"{1}\" Value=\"{2}\" /><Statement Property=\"{3}\" Operator=\"{4}\" Value=\"{5}\" /></Group>"
-					+ "<Group><Statement Property=\"{6}\" Operator=\"{7}\" Value=\"{8}\" /><Statement Property=\"{3}\" Operator=\"{4}\" Value=\"{5}\" /></Group>"
-					+ "</Filter>",
-					BizTalkFactoryProperties.MapTypeName.Type.FullName,
-					(int) FilterOperator.Equals,
-					senderNameToken,
+					"<Filter><Group>" + (
+						$"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" />" +
+						"<Statement Property=\"{0}\" Operator=\"{1}\" Value=\"{2}\" />") +
+					"</Group><Group>" + (
+						$"<Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{retryCountToken}\" />" +
+						"<Statement Property=\"{0}\" Operator=\"{1}\" Value=\"{2}\" />") +
+					"</Group></Filter>",
 					BtsProperties.MessageType.Type.FullName,
 					(int) FilterOperator.Equals,
-					SchemaMetadata.For<Any>().MessageType,
-					BtsProperties.ActualRetryCount.Type.FullName,
-					(int) FilterOperator.GreaterThan,
-					retryCountToken));
+					SchemaMetadata.For<Any>().MessageType));
 		}
 
 		[Fact]
@@ -141,19 +139,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 
 			filter.ToString().Should().Be(
 				string.Format(
-					"<Filter>"
-					+ "<Group><Statement Property=\"{0}\" Operator=\"{1}\" Value=\"{2}\" /><Statement Property=\"{3}\" Operator=\"{4}\" Value=\"{5}\" /></Group>"
-					+ "<Group><Statement Property=\"{0}\" Operator=\"{1}\" Value=\"{2}\" /><Statement Property=\"{6}\" Operator=\"{7}\" Value=\"{8}\" /></Group>"
-					+ "</Filter>",
+					"<Filter><Group>" + (
+						"<Statement Property=\"{0}\" Operator=\"{1}\" Value=\"{2}\" />" +
+						$"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" />") +
+					"</Group><Group>" + (
+						"<Statement Property=\"{0}\" Operator=\"{1}\" Value=\"{2}\" />" +
+						$"<Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{retryCountToken}\" />") +
+					"</Group></Filter>",
 					BtsProperties.MessageType.Type.FullName,
 					(int) FilterOperator.Equals,
-					SchemaMetadata.For<Any>().MessageType,
-					BizTalkFactoryProperties.MapTypeName.Type.FullName,
-					(int) FilterOperator.Equals,
-					senderNameToken,
-					BtsProperties.ActualRetryCount.Type.FullName,
-					(int) FilterOperator.GreaterThan,
-					retryCountToken));
+					SchemaMetadata.For<Any>().MessageType));
 		}
 
 		[Fact]
@@ -193,11 +188,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			);
 
 			filter.ToString().Should().Be(
-				"<Filter>"
-				+ $"<Group><Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{token1}\" /></Group>"
-				+ $"<Group><Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{token2}\" />"
-				+ $"<Statement Property=\"{BtsProperties.MessageType.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{SchemaMetadata.For<Any>().MessageType}\" /></Group>"
-				+ "</Filter>");
+				"<Filter><Group>" + (
+					$"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{token1}\" />") +
+				"</Group><Group>" + (
+					$"<Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{token2}\" />" +
+					$"<Statement Property=\"{BtsProperties.MessageType.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{SchemaMetadata.For<Any>().MessageType}\" />") +
+				"</Group></Filter>");
 		}
 
 		[Fact]
@@ -208,10 +204,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			var filter = new Filter(() => BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken);
 
 			filter.ToString().Should().Be(
-				"<Filter>"
-				+ $"<Group><Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" /></Group>"
-				+ $"<Group><Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{retryCountToken}\" /></Group>"
-				+ "</Filter>");
+				"<Filter><Group>" + (
+					$"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{senderNameToken}\" />") +
+				"</Group><Group>" + (
+					$"<Statement Property=\"{BtsProperties.ActualRetryCount.Type.FullName}\" Operator=\"{(int) FilterOperator.GreaterThan}\" Value=\"{retryCountToken}\" />") +
+				"</Group></Filter>");
 		}
 
 		[Fact]
@@ -227,6 +224,30 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		}
 
 		[Fact]
+		public void EqualsInstanceFieldFilter()
+		{
+			var value = new InstanceTokens().Field;
+			var filter = new Filter(() => SBMessagingProperties.LockToken == value);
+
+			filter.ToString().Should().Be(
+				"<Filter>"
+				+ $"<Group><Statement Property=\"{SBMessagingProperties.LockToken.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{value}\" /></Group>"
+				+ "</Filter>");
+		}
+
+		[Fact]
+		public void EqualsInstancePropertyFilter()
+		{
+			var value = new InstanceTokens().Property;
+			var filter = new Filter(() => SBMessagingProperties.LockToken == value);
+
+			filter.ToString().Should().Be(
+				"<Filter>"
+				+ $"<Group><Statement Property=\"{SBMessagingProperties.LockToken.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{value}\" /></Group>"
+				+ "</Filter>");
+		}
+
+		[Fact]
 		[SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
 		public void EqualsNullBasedFilterIsNotSupported()
 		{
@@ -234,9 +255,52 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 
 			Invoking(() => filter.ToString())
 				.Should().Throw<NotSupportedException>()
-				.WithMessage(
-					"Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.MapTypeName == null)\" because filter value can be null only if the operator is exists.")
+				.WithMessage("Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.MapTypeName == null)\" because filter value can be null only if the operator is exists.")
 				.WithInnerException<TpmException>();
+		}
+
+		[Fact]
+		public void EqualsStaticConstantFilter()
+		{
+			var filter = new Filter(() => SBMessagingProperties.LockToken == StaticTokens.Constant);
+
+			filter.ToString().Should().Be(
+				"<Filter>"
+				+ $"<Group><Statement Property=\"{SBMessagingProperties.LockToken.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{StaticTokens.Constant}\" /></Group>"
+				+ "</Filter>");
+		}
+
+		[Fact]
+		public void EqualsStaticFieldFilter()
+		{
+			var filter = new Filter(() => SBMessagingProperties.LockToken == StaticTokens.Field);
+
+			filter.ToString().Should().Be(
+				"<Filter>"
+				+ $"<Group><Statement Property=\"{SBMessagingProperties.LockToken.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{StaticTokens.Field}\" /></Group>"
+				+ "</Filter>");
+		}
+
+		[Fact]
+		public void EqualsStaticMethodFilter()
+		{
+			var filter = new Filter(() => SBMessagingProperties.LockToken == StaticTokens.Method());
+
+			filter.ToString().Should().Be(
+				"<Filter>"
+				+ $"<Group><Statement Property=\"{SBMessagingProperties.LockToken.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{StaticTokens.Method()}\" /></Group>"
+				+ "</Filter>");
+		}
+
+		[Fact]
+		public void EqualsStaticPropertyFilter()
+		{
+			var filter = new Filter(() => SBMessagingProperties.LockToken == StaticTokens.Property);
+
+			filter.ToString().Should().Be(
+				"<Filter>"
+				+ $"<Group><Statement Property=\"{SBMessagingProperties.LockToken.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{StaticTokens.Property}\" /></Group>"
+				+ "</Filter>");
 		}
 
 		[SkippableFact]
@@ -334,8 +398,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 
 			Invoking(() => filter.ToString())
 				.Should().Throw<NotSupportedException>()
-				.WithMessage(
-					"Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.MapTypeName > null)\" because filter value can be null only if the operator is exists.")
+				.WithMessage("Cannot translate FilterPredicate \"() => (BizTalkFactoryProperties.MapTypeName > null)\" because filter value can be null only if the operator is exists.")
 				.WithInnerException<TpmException>();
 		}
 
@@ -444,6 +507,32 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				"<Filter><Group>"
 				+ $"<Statement Property=\"{BizTalkFactoryProperties.MapTypeName.Type.FullName}\" Operator=\"{(int) FilterOperator.Exists}\" />"
 				+ "</Group></Filter>");
+		}
+
+		private class InstanceTokens
+		{
+			[SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Local")]
+			public string Property => "InstanceTokens.Property";
+
+			[SuppressMessage("ReSharper", "ConvertToConstant.Local")]
+			[SuppressMessage("ReSharper", "InconsistentNaming")]
+			public readonly string Field = "InstanceTokens.Field";
+		}
+
+		private static class StaticTokens
+		{
+			public static string Property => "StaticTokens.Property";
+
+			public static string Method()
+			{
+				return "StaticTokens.Method";
+			}
+
+			[SuppressMessage("ReSharper", "InconsistentNaming")]
+			public const string Constant = "StaticTokens.Constant";
+
+			[SuppressMessage("ReSharper", "ConvertToConstant.Local")]
+			public static readonly string Field = "StaticTokens.Field";
 		}
 
 		public static IEnumerable<object> ConjunctionFilters

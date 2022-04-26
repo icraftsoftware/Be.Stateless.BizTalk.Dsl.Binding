@@ -22,6 +22,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
 using Be.Stateless.Extensions;
@@ -155,8 +156,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					? property.Type.FullName
 					: throw new NotSupportedException($"Cannot translate property Expression \"{expression}\" because it evaluates to null.");
 			}
-			throw new NotSupportedException(
-				$"Cannot translate property Expression \"{expression}\" because only MessageContextProperty<T, TR>-derived type's member access expressions are supported.");
+			throw new NotSupportedException($"Cannot translate property Expression \"{expression}\" because only MessageContextProperty<T, TR>-derived type's member access expressions are supported.");
 		}
 
 		private static string TranslateValueExpression(Expression expression)
@@ -180,6 +180,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		[SuppressMessage("ReSharper", "InvertIf")]
 		private static string TranslateValueExpression(MemberExpression expression)
 		{
+			// handle static members
+			if (expression.Expression == null)
+			{
+				return expression.Member switch {
+					FieldInfo { IsStatic: true } fieldInfo => (string) fieldInfo.GetValue(fieldInfo.DeclaringType),
+					PropertyInfo propertyInfo when propertyInfo.GetGetMethod().IsStatic => (string) propertyInfo.GetValue(propertyInfo.DeclaringType),
+					_ => throw new NotSupportedException($"Cannot translate MemberExpression \"{expression}\" because {expression.Member.Name} is not static.")
+				};
+			}
+
 			// handle IReceivePort<TNamingConvention>.Name and ISendPort<TNamingConvention>.Name
 			var containingObjectType = expression.Expression.Type;
 			if (containingObjectType.IsSubclassOfGenericType(typeof(IReceivePort<>)) || containingObjectType.IsSubclassOfGenericType(typeof(ISendPort<>)))
@@ -201,9 +211,11 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 
 		private static string TranslateValueExpression(MethodCallExpression expression)
 		{
-			return expression.Object is ConstantExpression constantExpression
-				? TranslateValueExpression(constantExpression)
-				: throw new NotSupportedException($"Cannot translate MemberExpression \"{expression}\" because {expression.NodeType} node is not supported.");
+			return expression.Object == null && expression.Method.IsStatic && !expression.Method.GetParameters().Any()
+				? (string) expression.Method.Invoke(null, null)
+				: expression.Object is ConstantExpression constantExpression
+					? TranslateValueExpression(constantExpression)
+					: throw new NotSupportedException($"Cannot translate MemberExpression \"{expression}\" because {expression.NodeType} node is not supported.");
 		}
 
 		[SuppressMessage("ReSharper", "InvertIf")]
@@ -219,20 +231,10 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				}
 
 				var method = expression.Method;
-				if (method != null)
+				// handle implicit string cast operator
+				if (method.IsStatic && method.IsSpecialName && method.ReturnType == typeof(string) && method.Name == "op_Implicit")
 				{
-					// handle cast operator to INamingConvention<TNamingConvention>
-					var declaringType = method.DeclaringType;
-					if (declaringType != null && declaringType.IsSubclassOfGenericType(typeof(INamingConvention<>)))
-					{
-						if (expression.Operand is MemberExpression memberExpression) return TranslateValueExpression(memberExpression);
-					}
-
-					// handle implicit cast operator to string
-					if (method.IsStatic && method.Name == "op_Implicit" && method.ReturnType == typeof(string))
-					{
-						return (string) Expression.Lambda(expression).Compile().DynamicInvoke();
-					}
+					return (string) Expression.Lambda(expression).Compile().DynamicInvoke();
 				}
 			}
 

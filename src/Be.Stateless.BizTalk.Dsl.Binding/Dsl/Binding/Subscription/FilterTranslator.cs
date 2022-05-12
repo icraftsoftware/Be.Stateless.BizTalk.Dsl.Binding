@@ -231,6 +231,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				}
 
 				var method = expression.Method;
+
+				// handle cast operator to INamingConvention<TNamingConvention>
+				var declaringType = method.DeclaringType;
+				if (declaringType != null && declaringType.IsSubclassOfGenericType(typeof(INamingConvention<>)))
+				{
+					if (expression.Operand is MemberExpression memberExpression) return TranslateValueExpression(memberExpression);
+				}
+
 				// handle implicit string cast operator
 				if (method.IsStatic && method.IsSpecialName && method.ReturnType == typeof(string) && method.Name == "op_Implicit")
 				{

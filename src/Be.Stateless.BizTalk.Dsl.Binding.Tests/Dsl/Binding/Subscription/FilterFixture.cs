@@ -19,11 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.Banking;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Dummies.Bindings;
 using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Install;
 using Be.Stateless.BizTalk.Schema;
+using Be.Stateless.Finance;
 using FluentAssertions;
 using Microsoft.BizTalk.B2B.PartnerManagement;
 using Microsoft.XLANGs.BaseTypes;
@@ -318,12 +320,72 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 		}
 
 		[SkippableFact]
+		public void EqualsToReceivePortNameWithDetailedNamingConvention()
+		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var receivePort = new BankingSampleApplication().ReceivePorts.Find<Banking.Invoice.TaxAgencyReceivePort>();
+
+			var filter = new Filter(() => BtsProperties.ReceivePortName == new BankingSampleApplication().ReceivePorts.Find<Banking.Invoice.TaxAgencyReceivePort>().Name);
+
+			filter.ToString().Should().Be(
+				"<Filter><Group>"
+				+ $"<Statement Property=\"{BtsProperties.ReceivePortName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{receivePort.ResolveName()}\" />"
+				+ "</Group></Filter>");
+		}
+
+		[SkippableFact]
+		public void EqualsToReceivePortNameWithSimpleNamingConvention()
+		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var receivePort = new FinanceSampleApplication().ReceivePorts.Find<Finance.Invoice.TaxAgencyReceivePort>();
+
+			var filter = new Filter(() => BtsProperties.ReceivePortName == new FinanceSampleApplication().ReceivePorts.Find<Finance.Invoice.TaxAgencyReceivePort>().Name);
+
+			filter.ToString().Should().Be(
+				"<Filter><Group>"
+				+ $"<Statement Property=\"{BtsProperties.ReceivePortName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{receivePort.ResolveName()}\" />"
+				+ "</Group></Filter>");
+		}
+
+		[SkippableFact]
 		public void EqualsToSendPortName()
 		{
 			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
 			var sendPort = new TestApplication().SendPorts.Find<TwoWaySendPort>();
 			var filter = new Filter(() => BtsProperties.SendPortName == sendPort.Name);
+
+			filter.ToString().Should().Be(
+				"<Filter><Group>"
+				+ $"<Statement Property=\"{BtsProperties.SendPortName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{sendPort.ResolveName()}\" />"
+				+ "</Group></Filter>");
+		}
+
+		[SkippableFact]
+		public void EqualsToSendPortNameWithDetailedNamingConvention()
+		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var sendPort = new BankingSampleApplication().SendPorts.Find<Banking.Invoice.BankSendPort>();
+
+			var filter = new Filter(() => BtsProperties.SendPortName == new BankingSampleApplication().SendPorts.Find<Banking.Invoice.BankSendPort>().Name);
+
+			filter.ToString().Should().Be(
+				"<Filter><Group>"
+				+ $"<Statement Property=\"{BtsProperties.SendPortName.Type.FullName}\" Operator=\"{(int) FilterOperator.Equals}\" Value=\"{sendPort.ResolveName()}\" />"
+				+ "</Group></Filter>");
+		}
+
+		[SkippableFact]
+		public void EqualsToSendPortNameWithSimpleNamingConvention()
+		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var sendPort = new FinanceSampleApplication().SendPorts.Find<Finance.Income.BankSendPort>();
+
+			var filter = new Filter(() => BtsProperties.SendPortName == new FinanceSampleApplication().SendPorts.Find<Finance.Income.BankSendPort>().Name);
 
 			filter.ToString().Should().Be(
 				"<Filter><Group>"

@@ -73,10 +73,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		/// </summary>
 		/// <remarks>
 		/// <para>
-		/// Internally, BizTalk Server assigns a priority to every subscription. Priority can be any number from 1 (highest
-		/// priority) to 10 (lowest priority). Because the default priority is 7 for activating subscriptions and 5 for
-		/// correlating subscriptions, correlating messages will be delivered earlier than activating subscriptionsInternally,
-		/// BizTalk Server assigns a priority to every subscription. Priority can be any number from 1 (<see
+		/// Internally, BizTalk Server assigns a priority to every subscription. Priority can be any number from 1 (<see
 		/// cref="Binding.Priority.Highest"/> priority) to 10 (<see cref="Binding.Priority.Lowest"/> priority). Because the
 		/// default priority is 7 for activating subscriptions and 5 for correlating subscriptions, correlating messages will be
 		/// delivered earlier than activating subscriptions.

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management;
-using Be.Stateless.Extensions;
 using Microsoft.BizTalk.Adapter.Sftp;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Deployment.Binding;
@@ -66,11 +65,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			Save(propertyBag);
 		}
 
-		void ISupportEnvironmentOverride.ApplyEnvironmentOverrides(string environment)
-		{
-			if (!environment.IsNullOrEmpty()) ApplyEnvironmentOverrides(environment);
-		}
-
 		void ISupportValidation.Validate()
 		{
 			Validate();
@@ -84,8 +78,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		{
 			return null;
 		}
-
-		protected virtual void ApplyEnvironmentOverrides(string environment) { }
 
 		protected abstract void Save(IPropertyBag propertyBag);
 

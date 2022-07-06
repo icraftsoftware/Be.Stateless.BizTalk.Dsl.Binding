@@ -99,10 +99,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		void ISupportEnvironmentOverride.ApplyEnvironmentOverrides(string environment)
 		{
-			if (!environment.IsNullOrEmpty())
-			{
-				ApplyEnvironmentOverrides(environment);
-			}
+			if (!environment.IsNullOrEmpty()) ApplyEnvironmentOverrides(environment);
 		}
 
 		#endregion
@@ -131,8 +128,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			foreach (var logicalPort in LogicalPorts)
 			{
 				var operationFlow = logicalPort.Operations.First().OperationFlow;
-				if (operationFlow != OperationFlow.OneWay && operationFlow != OperationFlow.RequestResponse)
-					throw new NotSupportedException("Unexpected OperationFlow enumeration value.");
+				if (operationFlow != OperationFlow.OneWay && operationFlow != OperationFlow.RequestResponse) throw new NotSupportedException("Unexpected OperationFlow enumeration value.");
 				var isLogicalPortTwoWay = operationFlow != OperationFlow.OneWay;
 
 				var actualPort = GetActualPort(logicalPort.Name);

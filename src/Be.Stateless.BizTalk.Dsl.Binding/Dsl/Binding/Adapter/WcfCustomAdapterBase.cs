@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
@@ -56,16 +55,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 			// ensure binding is configured before validation
 			AdapterConfig.BindingConfiguration = BindingElement.GetBindingElementXml(BindingElement.Name);
 			base.Validate();
-		}
-
-		#endregion
-
-		#region Base Class Member Overrides
-
-		[SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
-		protected override void ApplyEnvironmentOverrides(string environment)
-		{
-			(Binding as ISupportEnvironmentOverride)?.ApplyEnvironmentOverrides(environment);
 		}
 
 		#endregion

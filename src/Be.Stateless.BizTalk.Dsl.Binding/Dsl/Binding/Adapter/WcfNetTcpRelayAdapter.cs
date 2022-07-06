@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// cref="NetTcpBinding.MaxBufferSize"/> property is always equal to the value of this property.
 		/// </para>
 		/// <para>
-		/// It defaults to roughly <see cref="ushort"/>.<see cref="ushort.MaxValue"/>, 65536.
+		/// It defaults to roughly <see cref="ushort.MaxValue">UInt16.MaxValue</see>, 65536.
 		/// </para>
 		/// </remarks>
 		public int MaxReceivedMessageSize

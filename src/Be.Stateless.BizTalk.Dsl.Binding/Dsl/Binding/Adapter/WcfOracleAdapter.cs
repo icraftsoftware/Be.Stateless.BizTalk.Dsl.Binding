@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -233,7 +233,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// This is an ODP.NET property that is used for performance tuning.
 		/// </para>
 		/// <para>
-		/// It defaults to 65536, roughly <see cref="ushort.MaxValue"/>.
+		/// It defaults to 65536, roughly <see cref="ushort.MaxValue">UInt16.MaxValue</see>.
 		/// </para>
 		/// </remarks>
 		public long DataFetchSize

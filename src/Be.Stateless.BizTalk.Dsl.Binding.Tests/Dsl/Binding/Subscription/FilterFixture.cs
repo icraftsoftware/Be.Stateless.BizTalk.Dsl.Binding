@@ -104,14 +104,14 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 			actualFilter.ToString().Should().Be(expectedFilter.ToString());
 		}
 
+		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		[Fact]
 		public void ConjunctionIsDistributedOverDisjunctionOfFilters()
 		{
 			const string senderNameToken = "BizTalkFactory.Batching";
 			const int retryCountToken = 3;
 			var filter = new Filter(
-				() => (
-						BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken)
+				() => (BizTalkFactoryProperties.MapTypeName == senderNameToken || BtsProperties.ActualRetryCount > retryCountToken)
 					&& BtsProperties.MessageType == SchemaMetadata.For<Any>().MessageType
 			);
 
@@ -129,6 +129,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 					SchemaMetadata.For<Any>().MessageType));
 		}
 
+		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		[Fact]
 		public void ConjunctionIsDistributedOverDisjunctionOfFiltersAndDistributionIsCommutative()
 		{
@@ -178,6 +179,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				.WithMessage("Cannot translate FilterPredicate \"False\" because Constant node is not supported.");
 		}
 
+		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		[Fact]
 		public void DisjunctionOfConjunctionsOfFilters()
 		{
@@ -198,6 +200,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Subscription
 				"</Group></Filter>");
 		}
 
+		[SuppressMessage("ReSharper", "ArrangeRedundantParentheses")]
 		[Fact]
 		public void DisjunctionOfFilters()
 		{

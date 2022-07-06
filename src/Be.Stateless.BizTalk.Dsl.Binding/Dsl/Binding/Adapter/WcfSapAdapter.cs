@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -104,8 +104,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// Also, the SAP system has special values for representing minimum and maximum values for the DATS, TIMS, and NUMC
 		/// fields for which there is no equivalent .NET type. For example, the minimum and maximum values for a DATS field are
 		/// 00000000 and 99999999 respectively, for which there is no equivalent .NET type <see cref="DateTime"/>. Moreover,
-		/// converting the minimum and maximum values for DATS fields to <see cref="DateTime"/>.<see cref="DateTime.MinValue"/>
-		/// and <see cref="DateTime"/>.<see cref="DateTime.MaxValue"/> is not feasible because the minimum or maximum value for
+		/// converting the minimum and maximum values for DATS fields to <see cref="DateTime.MinValue">DateTime.MinValue</see>
+		/// and <see cref="DateTime.MaxValue">DateTime.MaxValue</see> is not feasible because the minimum or maximum value for
 		/// DATS field and minimum or maximum value for a .NET <see cref="DateTime"/> type are not the same.
 		/// </para>
 		/// </summary>
@@ -122,16 +122,16 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <term><see cref="SapDataTypesBehavior.DateTimeMaxToDats"/></term>
 		/// <description>
 		/// Specifies the behavior the adapter should follow to send a DATS value when the adapter client sends the value <see
-		/// cref="DateTime"/>.<see cref="DateTime.MaxValue"/>, which is "9999-12-31T23:59:59.9999999". You could set this to the
+		/// cref="DateTime.MaxValue">DateTime.MaxValue</see>, which is "9999-12-31T23:59:59.9999999". You could set this to the
 		/// following values:
 		/// <list type="bullet">
 		/// <item>
 		/// "ERROR" &#8212; When set to this, the adapter throws an error if the client program sends the <see
-		/// cref="DateTime"/>.<see cref="DateTime.MaxValue"/>.
+		/// cref="DateTime.MaxValue">DateTime.MaxValue</see>.
 		/// </item>
 		/// <item>
 		/// &lt;VALUE&gt; &#8212; When set to this, the adapter sends the specified value to SAP if the client program sends the
-		/// <see cref="DateTime"/>.<see cref="DateTime.MaxValue"/> value.
+		/// <see cref="DateTime.MaxValue">DateTime.MaxValue</see> value.
 		/// </item>
 		/// </list>
 		/// Default is 99991231.
@@ -141,55 +141,55 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <term><see cref="SapDataTypesBehavior.DateTimeMaxToTims"/></term>
 		/// <description>
 		/// Specifies the behavior the adapter should follow to send a TIMS value when the adapter client sends the value <see
-		/// cref="DateTime"/>.<see cref="DateTime.MaxValue"/>, which is "9999-12-31T23:59:59.9999999". You could set this to the
-		/// following values:
+		/// cref="DateTime.MaxValue">DateTime.MaxValue</see>, which is "9999-12-31T23:59:59.9999999". You could set this to the
+      /// following values:
 		/// <list type="bullet">
 		/// <item>
 		/// "ERROR" &#8212; When set to this, the adapter throws an error if the client program sends the <see
-		/// cref="DateTime"/>.<see cref="DateTime.MaxValue"/> value.
+      /// cref="DateTime.MaxValue">DateTime.MaxValue</see> value.
 		/// </item>
 		/// <item>
 		/// &lt;VALUE&gt; &#8212; When set to this, the adapter sends the specified value to SAP if the client program sends the
-		/// <see cref="DateTime"/>.<see cref="DateTime.MaxValue"/> value.
+		/// <see cref="DateTime.MaxValue">DateTime.MaxValue</see> value.
 		/// </item>
 		/// </list>
 		/// Default is 235959.
 		/// </description>
 		/// </item>
 		/// <item>
-		/// <term><see cref="SapDataTypesBehavior.DateTimeMinToDats"/></term>
+		/// <term><see cref="SapDataTypesBehavior.DateTimeMinToDats">SapDataTypesBehavior.DateTimeMinToDats</see></term>
 		/// <description>
 		/// Specifies the behavior the adapter should follow to send a DATS value when the adapter client sends the value <see
-		/// cref="DateTime"/>.<see cref="DateTime.MinValue"/>, which is "0001-01-01T00:00:00". You could set this to the
-		/// following values:
+		/// cref="DateTime.MinValue">DateTime.MinValue</see>, which is "0001-01-01T00:00:00". You could set this to the following
+      /// values:
 		/// <list type="bullet">
 		/// <item>
 		/// "ERROR" &#8212; When set to this, the adapter throws an error if the client program sends the <see
-		/// cref="DateTime"/>.<see cref="DateTime.MinValue"/> value.
+      /// cref="DateTime.MinValue">DateTime.MinValue</see> value.
 		/// </item>
 		/// <item>
 		/// &lt;VALUE&gt; &#8212; When set to this, the adapter sends the specified value to SAP if the client program sends the
 		/// When set to this, the adapter sends the specified value to SAP if the client program sends the <see
-		/// cref="DateTime"/>.<see cref="DateTime.MinValue"/> value.
+      /// cref="DateTime.MinValue">DateTime.MinValue</see> value.
 		/// </item>
 		/// </list>
 		/// Default is 00010101.
 		/// </description>
 		/// </item>
 		/// <item>
-		/// <term><see cref="SapDataTypesBehavior.DateTimeMinToTims"/></term>
+		/// <term><see cref="SapDataTypesBehavior.DateTimeMinToTims">SapDataTypesBehavior.DateTimeMinToTims</see></term>
 		/// <description>
 		/// Specifies the behavior the adapter should follow to send a TIMS value when the adapter client sends the value <see
-		/// cref="DateTime"/>.<see cref="DateTime.MinValue"/>, which is "0001-01-01T00:00:00". You could set this to the
-		/// following values:
+		/// cref="DateTime.MinValue">DateTime.MinValue</see>, which is "0001-01-01T00:00:00". You could set this to the following
+      /// values:
 		/// <list type="bullet">
 		/// <item>
 		/// "ERROR" &#8212; When set to this, the adapter throws an error if the client program sends the <see
-		/// cref="DateTime"/>.<see cref="DateTime.MinValue"/> value
+      /// cref="DateTime.MinValue">DateTime.MinValue</see> value
 		/// </item>
 		/// <item>
 		/// &lt;VALUE&gt; &#8212; When set to this, the adapter sends the specified value to SAP if the client program sends the
-		/// <see cref="DateTime"/>.<see cref="DateTime.MinValue"/> value.
+		/// <see cref="DateTime.MinValue">DateTime.MinValue</see> value.
 		/// </item>
 		/// </list>
 		/// Default is 000000.

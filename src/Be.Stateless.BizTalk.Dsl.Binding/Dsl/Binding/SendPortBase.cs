@@ -93,6 +93,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			{
 				ApplyEnvironmentOverrides(environment);
 				(Filter as ISupportEnvironmentOverride)?.ApplyEnvironmentOverrides(environment);
+				((ISupportEnvironmentOverride) ReceivePipeline)?.ApplyEnvironmentOverrides(environment);
+				((ISupportEnvironmentOverride) SendPipeline)?.ApplyEnvironmentOverrides(environment);
 				((ISupportEnvironmentOverride) Transport).ApplyEnvironmentOverrides(environment);
 				if (BackupTransport.IsValueCreated) ((ISupportEnvironmentOverride) BackupTransport.Value).ApplyEnvironmentOverrides(environment);
 			}

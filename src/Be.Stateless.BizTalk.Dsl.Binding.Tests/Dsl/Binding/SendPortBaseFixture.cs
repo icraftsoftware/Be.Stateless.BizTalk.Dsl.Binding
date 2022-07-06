@@ -53,40 +53,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			visitorMock.Verify(m => m.VisitSendPort(sendPortMock.Object), Times.Once);
 		}
 
-		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
-		[SkippableFact]
-		public void DoesNotForwardApplyEnvironmentOverridesToReceivePipeline()
-		{
-			Skip.IfNot(BizTalkServerGroup.IsConfigured);
-
-			var receivePipelineMock = new Mock<ReceivePipeline<XMLReceive>> { CallBase = true };
-			var environmentSensitiveReceivePipelineMock = receivePipelineMock.As<ISupportEnvironmentOverride>();
-
-			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
-			sendPortMock.Object.ReceivePipeline = receivePipelineMock.Object;
-
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
-
-			environmentSensitiveReceivePipelineMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Never);
-		}
-
-		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
-		[SkippableFact]
-		public void DoesNotForwardApplyEnvironmentOverridesToSendPipeline()
-		{
-			Skip.IfNot(BizTalkServerGroup.IsConfigured);
-
-			var sendPipelineMock = new Mock<SendPipeline<XMLTransmit>> { CallBase = true };
-			var environmentSensitiveSendPipelineMock = sendPipelineMock.As<ISupportEnvironmentOverride>();
-
-			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
-			sendPortMock.Object.SendPipeline = sendPipelineMock.Object;
-
-			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
-
-			environmentSensitiveSendPipelineMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Never);
-		}
-
 		[Fact]
 		public void EnvironmentOverridesAreAppliedForGivenEnvironment()
 		{
@@ -123,20 +89,59 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
-		[Fact]
-		public void ForwardsApplyEnvironmentOverridesToTransports()
+		[SkippableFact]
+		public void ForwardsApplyEnvironmentOverridesToReceivePipeline()
 		{
-			var retryPolicyMock = new Mock<RetryPolicy>();
-			var environmentSensitiveRetryPolicyMock = retryPolicyMock.As<ISupportEnvironmentOverride>();
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var receivePipelineMock = new Mock<ReceivePipeline<XMLReceive>> { CallBase = true };
 
 			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
-			sendPortMock.Object.Transport.RetryPolicy = retryPolicyMock.Object;
-			sendPortMock.Object.BackupTransport.Value.RetryPolicy = retryPolicyMock.Object;
+			sendPortMock.Object.ReceivePipeline = receivePipelineMock.Object;
 
 			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			// indirectly verifies that SendPortBase forwards ApplyEnvironmentOverrides() call to Transport and BackupTransport, which forward it to their RetryPolicy and ServiceWindow
-			environmentSensitiveRetryPolicyMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Exactly(2));
+			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
+		}
+
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
+		public void ForwardsApplyEnvironmentOverridesToSendPipeline()
+		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var sendPipelineMock = new Mock<SendPipeline<XMLTransmit>> { CallBase = true };
+
+			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
+			sendPortMock.Object.SendPipeline = sendPipelineMock.Object;
+
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
+
+			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
+		}
+
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[Fact]
+		public void ForwardsApplyEnvironmentOverridesToTransport()
+		{
+			var backupAdapterMock = new Mock<IOutboundAdapter>();
+			var environmentSensitiveBackupAdapterMock = backupAdapterMock.As<ISupportEnvironmentOverride>();
+
+			var adapterMock = new Mock<IOutboundAdapter>();
+			var environmentSensitiveAdapterMock = adapterMock.As<ISupportEnvironmentOverride>();
+
+			var sendPortMock = new Mock<SendPortBase<string>> { CallBase = true };
+			sendPortMock.Object.Name = "Send Port Name";
+			sendPortMock.Object.Transport.Host = "Host";
+			sendPortMock.Object.Transport.Adapter = adapterMock.Object;
+			sendPortMock.Object.BackupTransport.Value.Host = "Host";
+			sendPortMock.Object.BackupTransport.Value.Adapter = backupAdapterMock.Object;
+
+			((ISupportEnvironmentOverride) sendPortMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
+
+			// indirectly verifies that SendPortBase forwards ApplyEnvironmentOverrides() call to Transport, which forwards it to its adapter
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
+			environmentSensitiveBackupAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
 		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]

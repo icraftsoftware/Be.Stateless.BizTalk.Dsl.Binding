@@ -22,6 +22,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
+using Be.Stateless.Linq.Extensions;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Deployment.Binding;
@@ -208,6 +209,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		{
 			AdapterConfig.EndpointBehaviorConfiguration = EndpointBehaviors.GetEndpointBehaviorElementXml();
 			base.Save(propertyBag);
+		}
+
+		#endregion
+
+		#region Base Class Member Overrides
+
+		[SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+		protected override void ApplyEnvironmentOverrides(string environment)
+		{
+			base.ApplyEnvironmentOverrides(environment);
+			EndpointBehaviors.Select(eb => eb as ISupportEnvironmentOverride).ForEach(eb => eb.ApplyEnvironmentOverrides(environment));
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2022 François Chabot
+// Copyright © 2012 - 2020 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ using Microsoft.BizTalk.Deployment.Binding;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 {
-	public interface IAdapter : ISupportValidation
+	public interface IAdapter : ISupportEnvironmentOverride, ISupportValidation
 	{
 		string Address { get; }
 

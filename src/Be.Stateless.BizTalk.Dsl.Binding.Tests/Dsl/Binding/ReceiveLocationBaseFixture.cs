@@ -19,7 +19,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
 using Be.Stateless.BizTalk.Dsl.Binding.Convention;
-using Be.Stateless.BizTalk.Dsl.Binding.Scheduling;
 using Be.Stateless.BizTalk.Explorer;
 using Be.Stateless.BizTalk.Install;
 using FluentAssertions;
@@ -45,40 +44,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			visitorMock.Verify(m => m.VisitReceiveLocation(receiveLocationMock.Object), Times.Once);
 		}
 
-		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
-		[SkippableFact]
-		public void DoesNotForwardApplyEnvironmentOverridesToReceivePipeline()
-		{
-			Skip.IfNot(BizTalkServerGroup.IsConfigured);
-
-			var receivePipelineMock = new Mock<ReceivePipeline<XMLReceive>> { CallBase = true };
-			var environmentSensitiveReceivePipelineMock = receivePipelineMock.As<ISupportEnvironmentOverride>();
-
-			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
-			receiveLocationMock.Object.ReceivePipeline = receivePipelineMock.Object;
-
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
-
-			environmentSensitiveReceivePipelineMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Never);
-		}
-
-		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
-		[SkippableFact]
-		public void DoesNotForwardApplyEnvironmentOverridesToSendPipeline()
-		{
-			Skip.IfNot(BizTalkServerGroup.IsConfigured);
-
-			var sendPipelineMock = new Mock<SendPipeline<XMLTransmit>> { CallBase = true };
-			var environmentSensitiveSendPipelineMock = sendPipelineMock.As<ISupportEnvironmentOverride>();
-
-			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
-			receiveLocationMock.Object.SendPipeline = sendPipelineMock.Object;
-
-			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
-
-			environmentSensitiveSendPipelineMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Never);
-		}
-
 		[Fact]
 		public void EnvironmentOverridesAreAppliedForGivenEnvironment()
 		{
@@ -100,19 +65,53 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		}
 
 		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
-		[Fact]
-		public void ForwardsApplyEnvironmentOverridesToTransport()
+		[SkippableFact]
+		public void ForwardsApplyEnvironmentOverridesToReceivePipeline()
 		{
-			var scheduleMock = new Mock<Schedule>();
-			var environmentSensitiveScheduleMock = scheduleMock.As<ISupportEnvironmentOverride>();
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
 
-			var receiveLocationMock = new Mock<ReceiveLocationBase<object>> { CallBase = true };
-			receiveLocationMock.Object.Transport.Schedule = scheduleMock.Object;
+			var receivePipelineMock = new Mock<ReceivePipeline<XMLReceive>> { CallBase = true };
+
+			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
+			receiveLocationMock.Object.ReceivePipeline = receivePipelineMock.Object;
 
 			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			// indirectly verifies that ReceiveLocationBase forwards ApplyEnvironmentOverrides() call to Transport, which forwards it to its Schedule
-			environmentSensitiveScheduleMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
+			receivePipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
+		}
+
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[SkippableFact]
+		public void ForwardsApplyEnvironmentOverridesToSendPipeline()
+		{
+			Skip.IfNot(BizTalkServerGroup.IsConfigured);
+
+			var sendPipelineMock = new Mock<SendPipeline<XMLTransmit>> { CallBase = true };
+
+			var receiveLocationMock = new Mock<ReceiveLocationBase<string>> { CallBase = true };
+			receiveLocationMock.Object.SendPipeline = sendPipelineMock.Object;
+
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
+
+			sendPipelineMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
+		}
+
+		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
+		[Fact]
+		public void ForwardsApplyEnvironmentOverridesToTransport()
+		{
+			var adapterMock = new Mock<IInboundAdapter>();
+			var environmentSensitiveAdapterMock = adapterMock.As<ISupportEnvironmentOverride>();
+
+			var receiveLocationMock = new Mock<ReceiveLocationBase<object>> { CallBase = true };
+			receiveLocationMock.Object.Name = "Receive Location Name";
+			receiveLocationMock.Object.Transport.Host = "Host";
+			receiveLocationMock.Object.Transport.Adapter = adapterMock.Object;
+
+			((ISupportEnvironmentOverride) receiveLocationMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
+
+			// indirectly verifies that ReceiveLocationBase forwards ApplyEnvironmentOverrides() call to Transport, which forwards it to its adapter
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
 		}
 
 		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]

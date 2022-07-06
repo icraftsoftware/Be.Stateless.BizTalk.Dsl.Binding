@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -109,6 +109,12 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		#endregion
 
 		#region Base Class Member Overrides
+
+		protected override void ApplyEnvironmentOverrides(string environment)
+		{
+			base.ApplyEnvironmentOverrides(environment);
+			(BindingElement as ISupportEnvironmentOverride)?.ApplyEnvironmentOverrides(environment);
+		}
 
 		protected override string GetAddress()
 		{

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.BizTalk.Install
 {
+	// TODO move to Dsl.Binding.Conventions assembly
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Convention Public API.")]
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Convention Public API.")]
 	public static class TargetEnvironment

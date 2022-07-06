@@ -22,6 +22,7 @@ using System.Runtime.CompilerServices;
 
 namespace Be.Stateless.BizTalk.Install
 {
+	// TODO move to Dsl.Binding.Conventions assembly
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 	public static class EnvironmentDependentValue
 	{

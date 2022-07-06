@@ -21,6 +21,7 @@ using Be.Stateless.Extensions;
 
 namespace Be.Stateless.BizTalk.Install
 {
+	// TODO move to Dsl.Binding assembly
 	public static class DeploymentContext
 	{
 		public static Type EnvironmentSettingOverridesType { get; internal set; }

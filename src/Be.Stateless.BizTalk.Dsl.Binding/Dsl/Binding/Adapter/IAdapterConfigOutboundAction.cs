@@ -75,15 +75,17 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// </term>
 		/// <description>
 		/// <code><![CDATA[
-		/// using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Metadata;
+		/// using Be.Stateless.BizTalk.Adapter.Metadata;
 		/// 
 		/// ...
 		/// 
 		/// adapter.StaticAction = new ActionMapping {
-		///   new ActionMappingOperation("UpdateIntervention",
-		///   "http://Microsoft.LobServices.OracleDB/2007/03/TICKETING/Procedure/UPDATE_INTERVENTION"), new
-		///   ActionMappingOperation("UpdateOperation",
-		///   "http://Microsoft.LobServices.OracleDB/2007/03/TICKETING/Procedure/UPDATE_OPERATION")
+		///   new ActionMappingOperation(
+		///     "UpdateIntervention",
+		///     "http://Microsoft.LobServices.OracleDB/2007/03/TICKETING/Procedure/UPDATE_INTERVENTION"),
+		///   new ActionMappingOperation(
+		///     "UpdateOperation",
+		///     "http://Microsoft.LobServices.OracleDB/2007/03/TICKETING/Procedure/UPDATE_OPERATION")
 		/// }; ]]></code>
 		/// </description>
 		/// </item>

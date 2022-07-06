@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,13 +20,10 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
-using Be.Stateless.BizTalk.Install;
-using Be.Stateless.Reflection;
 using FluentAssertions;
 using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Microsoft.BizTalk.Deployment.Binding;
 using Moq;
-using Moq.Protected;
 using Xunit;
 using static FluentAssertions.FluentActions;
 
@@ -49,40 +46,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 				.Should().Throw<TypeInitializationException>()
 				.WithInnerException<BindingException>()
 				.WithMessage("BasicHttpBindingElement has to be used for https addresses as well.");
-		}
-
-		[Fact]
-		public void EnvironmentOverridesAreAppliedForGivenEnvironment()
-		{
-			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-
-			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
-
-			adapterMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Once(), ItExpr.Is<string>(v => v == TargetEnvironment.ACCEPTANCE));
-		}
-
-		[Fact]
-		public void EnvironmentOverridesAreSkippedWhenNoGivenEnvironment()
-		{
-			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-
-			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides(string.Empty);
-
-			adapterMock.Protected().Verify("ApplyEnvironmentOverrides", Times.Never(), ItExpr.IsAny<string>());
-		}
-
-		[Fact]
-		public void ForwardsApplyEnvironmentOverridesToBindingElement()
-		{
-			var bindingMock = new Mock<NetMsmqBindingElement> { CallBase = true };
-			var environmentSensitiveBindingMock = bindingMock.As<ISupportEnvironmentOverride>();
-
-			var adapterMock = new Mock<WcfCustomAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>>(new ProtocolType()) { CallBase = true };
-			Reflector.SetProperty((WcfAdapterBase<EndpointAddress, NetMsmqBindingElement, CustomRLConfig>) adapterMock.Object, "BindingElement", bindingMock.Object);
-
-			((ISupportEnvironmentOverride) adapterMock.Object).ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
-
-			environmentSensitiveBindingMock.Verify(b => b.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once());
 		}
 
 		[SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]

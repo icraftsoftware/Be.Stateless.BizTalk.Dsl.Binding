@@ -41,7 +41,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			transportMock.Object.Adapter = adapterMock.Object;
 			environmentSensitiveTransportMock.Object.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE);
 
-			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Once);
+			environmentSensitiveAdapterMock.Verify(m => m.ApplyEnvironmentOverrides(TargetEnvironment.ACCEPTANCE), Times.Never);
 		}
 
 		[Fact]

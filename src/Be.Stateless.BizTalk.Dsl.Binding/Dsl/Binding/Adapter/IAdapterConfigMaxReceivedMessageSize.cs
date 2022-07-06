@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// exposure to denial of service (DoS) attacks.
 		/// </summary>
 		/// <remarks>
-		/// It defaults to roughly <see cref="ushort"/>.<see cref="ushort.MaxValue"/>, 65536.
+		/// It defaults to roughly <see cref="ushort.MaxValue">UInt16.MaxValue</see>, 65536.
 		/// </remarks>
 		int MaxReceivedMessageSize { get; set; }
 	}

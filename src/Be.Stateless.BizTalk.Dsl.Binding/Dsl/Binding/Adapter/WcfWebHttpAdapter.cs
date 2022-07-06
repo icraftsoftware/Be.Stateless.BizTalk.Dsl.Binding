@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -79,11 +79,13 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <remarks>
 		/// <para>
 		/// The WCF-WebHttp adapter leverages the <see cref="WebHttpBinding"/> class in the buffered transfer mode to communicate
-		/// with an endpoint. For the buffered transport mode, the <see cref="WebHttpBinding.MaxBufferSize"/> property is always
-		/// equal to the value of this property.
+		/// with an endpoint. For the buffered transport mode, the <see
+		/// cref="WebHttpBinding.MaxBufferSize">WebHttpBinding.MaxBufferSize</see> property is always equal to the value of this
+		/// property.
 		/// </para>
 		/// <para>
-		/// It defaults to <see cref="ushort.MaxValue"/> and cannot exceed <see cref="int.MaxValue"/>.
+		/// It defaults to <see cref="ushort.MaxValue">UInt16.MaxValue</see> and cannot exceed <see
+		/// cref="int.MaxValue">Int32.MaxValue</see>.
 		/// </para>
 		/// </remarks>
 		public int MaxReceivedMessageSize
@@ -232,7 +234,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <remarks>
 		/// <para>
 		/// The incoming HTTP Method and the URL sub-path are matched against a set of HTTP method and the URI Template. If a
-		/// match is found, the adapter promotes the <see cref="BTS"/>.<see cref="BTS.Operation"/> property to the BizTalk
+		/// match is found, the adapter promotes the <see cref="BTS.Operation">BTS.Operation</see> property to the BizTalk
 		/// Message Context with the value specified in the message.
 		/// </para>
 		/// <para>

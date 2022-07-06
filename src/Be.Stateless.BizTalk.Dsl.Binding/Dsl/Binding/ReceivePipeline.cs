@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Dsl.Pipeline;
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = "Public DSL API.")]
-	public class ReceivePipeline<T> : ReceivePipeline, ISupportEnvironmentOverride, ITypeDescriptor
+	public class ReceivePipeline<T> : ReceivePipeline, ITypeDescriptor
 		where T : Microsoft.BizTalk.PipelineOM.ReceivePipeline, new()
 	{
 		public static ReceivePipeline<T> Configure(Action<ReceivePipeline<T>> receivePipelineConfigurator)
@@ -42,15 +42,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			receivePipelineConfigurator(this);
 		}
 
-		#region ISupportEnvironmentOverride Members
-
-		void ISupportEnvironmentOverride.ApplyEnvironmentOverrides(string environment)
-		{
-			ApplyEnvironmentOverrides(environment);
-		}
-
-		#endregion
-
 		#region ITypeDescriptor Members
 
 		string ITypeDescriptor.FullName => typeof(T).FullName;
@@ -58,8 +49,5 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		string ITypeDescriptor.AssemblyQualifiedName => typeof(T).AssemblyQualifiedName;
 
 		#endregion
-
-		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = "Public DSL API.")]
-		protected virtual void ApplyEnvironmentOverrides(string environment) { }
 	}
 }

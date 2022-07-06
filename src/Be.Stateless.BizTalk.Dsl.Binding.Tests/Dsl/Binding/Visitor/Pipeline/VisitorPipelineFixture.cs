@@ -16,15 +16,8 @@
 
 #endregion
 
-using Be.Stateless.BizTalk.Dsl.Binding.Adapter;
-using Be.Stateless.BizTalk.Explorer;
-using Be.Stateless.BizTalk.MicroPipelines;
-using Be.Stateless.BizTalk.Unit.Dsl.Binding;
-using FluentAssertions;
-using Microsoft.BizTalk.Adapter.Wcf.Config;
 using Moq;
 using Xunit;
-using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor.Pipeline
 {
@@ -42,43 +35,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Visitor.Pipeline
 			sut.Accept(visitorMock.Object);
 
 			stageMock.Verify(m => m.Accept(visitorMock.Object));
-		}
-
-		[SkippableFact]
-		public void ValidationHappensAfterEnvironmentOverrideApplication()
-		{
-			Skip.IfNot(BizTalkServerGroup.IsConfigured);
-
-			using (new DeploymentContextInjectionScope(targetEnvironment: "ANYWHERE"))
-			{
-				IVisitable<IApplicationBindingVisitor> app = new ApplicationBinding(
-					ab => {
-						ab.Name = "Application";
-						ab.SendPorts.Add(new OneWaySendPort());
-					});
-				var visitor = new ApplicationBindingValidator();
-				Invoking(() => app.Accept(visitor)).Should().NotThrow();
-			}
-		}
-
-		private class OneWaySendPort : SendPort
-		{
-			public OneWaySendPort()
-			{
-				Name = "SendPort";
-				SendPipeline = new SendPipeline<XmlTransmit>();
-				Transport.Adapter = new WcfWebHttpAdapter.Outbound(a => { a.Address = new("https://some.domain.com/service/api"); });
-				Transport.Host = "Send Host";
-			}
-
-			#region Base Class Member Overrides
-
-			protected override void ApplyEnvironmentOverrides(string environment)
-			{
-				((WcfWebHttpAdapter.Outbound) Transport.Adapter).SecurityMode = WebHttpSecurityMode.Transport;
-			}
-
-			#endregion
 		}
 	}
 }

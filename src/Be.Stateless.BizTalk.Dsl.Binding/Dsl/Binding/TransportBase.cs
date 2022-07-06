@@ -26,7 +26,7 @@ using Microsoft.BizTalk.Deployment.Binding;
 namespace Be.Stateless.BizTalk.Dsl.Binding
 {
 	public abstract class TransportBase<T> : ISupportEnvironmentOverride, ISupportHostResolution, ISupportValidation
-		where T : class, IAdapter, ISupportEnvironmentOverride, ISupportValidation
+		where T : class, IAdapter, ISupportValidation
 	{
 		#region Nested Type: UnknownAdapter
 
@@ -39,8 +39,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 			public ProtocolType ProtocolType => throw new NotSupportedException();
 
 			public string PublicAddress => throw new NotSupportedException();
-
-			public void ApplyEnvironmentOverrides(string environment) { }
 
 			public void Save(IPropertyBag propertyBag)
 			{
@@ -63,7 +61,6 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 		{
 			if (environment.IsNullOrEmpty()) return;
 			ApplyEnvironmentOverrides(environment);
-			Adapter?.ApplyEnvironmentOverrides(environment);
 		}
 
 		#endregion

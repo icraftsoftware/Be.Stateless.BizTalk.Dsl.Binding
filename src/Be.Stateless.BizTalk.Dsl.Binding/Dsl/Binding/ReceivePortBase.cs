@@ -65,10 +65,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding
 
 		void ISupportEnvironmentOverride.ApplyEnvironmentOverrides(string environment)
 		{
-			if (!environment.IsNullOrEmpty())
-			{
-				ApplyEnvironmentOverrides(environment);
-			}
+			if (!environment.IsNullOrEmpty()) ApplyEnvironmentOverrides(environment);
 		}
 
 		#endregion

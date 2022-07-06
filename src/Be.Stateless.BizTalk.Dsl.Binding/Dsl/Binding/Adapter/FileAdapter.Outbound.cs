@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Be.Stateless.BizTalk.Dsl.Binding.Adapter.Extensions;
 using Be.Stateless.Extensions;
@@ -62,7 +63,8 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.Adapter
 		/// <seealso href="https://docs.microsoft.com/en-us/biztalk/core/configure-the-file-adapter">Configure the File adapter</seealso>
 		public class Outbound : FileAdapter, IOutboundAdapter
 		{
-			private Outbound()
+			[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
+			public Outbound()
 			{
 				FileName = "%MessageID%.xml";
 				Mode = CopyMode.CreateNew;

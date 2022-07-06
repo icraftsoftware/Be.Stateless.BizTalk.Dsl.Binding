@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ namespace Be.Stateless.BizTalk.Dsl.Binding.ServiceModel.Configuration
 		{
 			_instance = new();
 
-			var machineConfiguration = ConfigurationManager.OpenMachineConfiguration();
+			var machineConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
 			var modelSectionGroup = ServiceModelSectionGroup.GetSectionGroup(machineConfiguration);
 			foreach (var binding in modelSectionGroup!.Bindings.BindingCollections)
 			{

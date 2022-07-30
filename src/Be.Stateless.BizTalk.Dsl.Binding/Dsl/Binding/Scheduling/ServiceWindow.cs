@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,9 +23,10 @@ using Microsoft.BizTalk.Deployment.Binding;
 namespace Be.Stateless.BizTalk.Dsl.Binding.Scheduling
 {
 	/// <summary>
-	/// Scheduling properties for a receive location.
+	/// Service window properties for a receive location's transport's <see cref="Schedule"/> or send port's transport.
 	/// </summary>
 	/// <seealso href="https://docs.microsoft.com/en-us/biztalk/core/how-to-configure-scheduling-for-a-receive-location#configure-scheduling-for-a-receive-location">Configure scheduling for a receive location</seealso>
+	/// <seealso href="https://docs.microsoft.com/en-us/biztalk/core/how-to-configure-transport-advanced-options-for-a-send-port#configure-the-transport-options">Configure the transport options</seealso>
 	public class ServiceWindow
 	{
 		static ServiceWindow()
